@@ -1,10 +1,10 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-02-14T11:11:57+11:00
+# @Last modified time: 2020-02-15T11:05:56+11:00
 
 
-APP_NAME := cli
+APP_NAME := provenx-cli
 PLAYGROUND_NAME := playground
 PKGS := $(shell go list ./cmd/... ./pkg/...)
 
