@@ -2,12 +2,13 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-15T12:59:28+11:00
+ * @Last modified time: 2020-02-18T11:30:48+11:00
  */
 
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -23,7 +24,8 @@ var cmdCreateTrie = &cobra.Command{
 	Short: "Create a trie (.pxt) for the given path",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return nil
+		cmd.SilenceUsage = true
+		return errors.New("test")
 	},
 }
 

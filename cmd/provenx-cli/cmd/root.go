@@ -2,13 +2,12 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-15T12:50:49+11:00
+ * @Last modified time: 2020-02-18T11:33:37+11:00
  */
 
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -43,7 +42,7 @@ var cmdRoot = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd
 func Execute() {
 	if err := cmdRoot.Execute(); err != nil {
-		fmt.Println(err)
+		cmdRoot.PrintErr(err)
 		os.Exit(1)
 	}
 }
