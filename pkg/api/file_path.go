@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T16:42:59+11:00
+ * @Last modified time: 2020-02-18T21:54:00+11:00
  */
 
 package api
@@ -26,6 +26,9 @@ var (
 	// DefaultGetFilePathKeyValueStreamConcurrency is the default concurrency for
 	// GetFilePathKeyValueStream
 	DefaultGetFilePathKeyValueStreamConcurrency uint32 = 4
+
+	// FileExtensionTrie is the file extension for a trie
+	FileExtensionTrie = ".pxt"
 
 	// ErrFileSkipped is the error returned when a file is skipped
 	ErrFileSkipped = errors.New("file skipped")
@@ -128,6 +131,11 @@ func GetFilePathKeyValueStream(
 		err := filepath.Walk(path, func(fp string, fi os.FileInfo, err error) error {
 			if err != nil {
 				return err
+			}
+
+			if filepath.Ext(fp) == FileExtensionTrie && !fi.IsDir() {
+				// skip trie files
+				return nil
 			}
 
 			target, err := filepath.Rel(path, fp)

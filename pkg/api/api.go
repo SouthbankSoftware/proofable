@@ -2,14 +2,17 @@
  * @Author: guiguan
  * @Date:   2020-02-15T08:42:02+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T16:59:04+11:00
+ * @Last modified time: 2020-02-18T22:22:40+11:00
  */
 
 package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"io"
+	"os"
 
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/golang/protobuf/ptypes/empty"
@@ -29,7 +32,7 @@ func CreateTrie(ctx context.Context, cli apiPB.APIServiceClient) (
 	return
 }
 
-// DeleteTrie deletes a trie
+// DeleteTrie deletes the given trie
 func DeleteTrie(ctx context.Context, cli apiPB.APIServiceClient, id string) error {
 	_, err := cli.DeleteTrie(ctx, &apiPB.TrieRequest{
 		TrieId: id,
@@ -131,4 +134,102 @@ func SetTrieKeyValues(
 	}
 
 	return
+}
+
+// CreateTrieProof creates a trie proof for the given trie root
+func CreateTrieProof(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	root string,
+) (tp *apiPB.TrieProof, er error) {
+	return cli.CreateTrieProof(ctx, &apiPB.CreateTrieProofRequest{
+		TrieId: id,
+		Root:   root,
+	})
+}
+
+// SubscribeTrieProof subscribes to the given trie proof
+func SubscribeTrieProof(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	trieID,
+	proofID string,
+) (tpCH <-chan *apiPB.TrieProof, errCH <-chan error) {
+	tpChan := make(chan *apiPB.TrieProof)
+	errChan := make(chan error, 1)
+
+	go func() {
+		defer close(tpChan)
+		defer close(errChan)
+
+		var er error
+
+		defer func() {
+			if er != nil {
+				errChan <- er
+			}
+		}()
+
+		subCli, err := cli.SubscribeTrieProof(ctx, &apiPB.TrieProofRequest{
+			TrieId: trieID,
+			Query: &apiPB.TrieProofRequest_ProofId{
+				ProofId: proofID,
+			},
+		})
+		if err != nil {
+			er = err
+			return
+		}
+
+		for {
+			tp, err := subCli.Recv()
+			if err != nil {
+				if errors.Is(err, io.EOF) {
+					break
+				}
+
+				er = err
+				return
+			}
+
+			select {
+			case <-ctx.Done():
+				er = ctx.Err()
+				return
+			case tpChan <- tp:
+			}
+		}
+	}()
+
+	tpCH = tpChan
+	errCH = errChan
+	return
+}
+
+// ExportTrie exports the given trie
+func ExportTrie(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	outputPath string,
+) error {
+	stream, err := cli.ExportTrie(ctx, &apiPB.TrieRequest{
+		TrieId: id,
+	})
+	if err != nil {
+		return err
+	}
+
+	rc := apiPB.NewDataStreamReader(stream, nil)
+	defer rc.Close()
+
+	outFile, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	defer outFile.Close()
+
+	_, err = io.Copy(outFile, rc)
+	return err
 }
