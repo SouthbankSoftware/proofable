@@ -2,12 +2,13 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T14:46:39+11:00
+ * @Last modified time: 2020-02-18T16:42:07+11:00
  */
 
 package api
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -16,7 +17,10 @@ import (
 )
 
 func ExampleGetFilePathKeyValueStream() {
-	kvCH, errCH := GetFilePathKeyValueStream("../../cmd/playground/", 1,
+	kvCH, errCH := GetFilePathKeyValueStream(
+		context.Background(),
+		"../../cmd/playground/",
+		1,
 		func(keyPrefix string, fi os.FileInfo) (kvs []*apiPB.KeyValue, er error) {
 			// use this callback to define the metadata embedding logic and ignored files
 

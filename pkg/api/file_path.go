@@ -2,13 +2,14 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T14:28:23+11:00
+ * @Last modified time: 2020-02-18T16:42:59+11:00
  */
 
 package api
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"io"
 	"os"
@@ -37,8 +38,12 @@ type OnFileInfoFunc func(keyPrefix string, fi os.FileInfo) (kvs []*apiPB.KeyValu
 
 // GetFilePathKeyValueStream returns a key value stream of the file path. When concurrency is 1, the
 // key-value stream is guaranteed to be sorted lexically by key
-func GetFilePathKeyValueStream(path string, concurrency uint32, onFileInfo OnFileInfoFunc) (
-	kvCH <-chan *apiPB.KeyValue, errCH <-chan error) {
+func GetFilePathKeyValueStream(
+	ctx context.Context,
+	path string,
+	concurrency uint32,
+	onFileInfo OnFileInfoFunc,
+) (kvCH <-chan *apiPB.KeyValue, errCH <-chan error) {
 	if concurrency == 0 {
 		concurrency = DefaultGetFilePathKeyValueStreamConcurrency
 	}
@@ -111,6 +116,15 @@ func GetFilePathKeyValueStream(path string, concurrency uint32, onFileInfo OnFil
 			return
 		}
 
+		sendKV := func(kv *apiPB.KeyValue) error {
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			case kvChan <- kv:
+				return nil
+			}
+		}
+
 		err := filepath.Walk(path, func(fp string, fi os.FileInfo, err error) error {
 			if err != nil {
 				return err
@@ -157,9 +171,13 @@ func GetFilePathKeyValueStream(path string, concurrency uint32, onFileInfo OnFil
 							return
 						}
 
-						kvChan <- &apiPB.KeyValue{
+						err = sendKV(&apiPB.KeyValue{
 							Key:   []byte(target),
 							Value: hash,
+						})
+						if err != nil {
+							closeWithErr(err)
+							return
 						}
 					})
 				} else {
@@ -184,7 +202,10 @@ func GetFilePathKeyValueStream(path string, concurrency uint32, onFileInfo OnFil
 			}
 
 			for _, r := range results {
-				kvChan <- r
+				err := sendKV(r)
+				if err != nil {
+					return err
+				}
 			}
 
 			return nil

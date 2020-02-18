@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T11:33:37+11:00
+ * @Last modified time: 2020-02-18T16:02:56+11:00
  */
 
 package cmd
@@ -31,6 +31,8 @@ const (
 
 	nameAPIHostPort     = "api.host-port"
 	viperKeyAPIHostPort = nameAPIHostPort
+	nameAPISecure       = "api.secure"
+	viperKeyAPISecure   = nameAPISecure
 )
 
 var cmdRoot = &cobra.Command{
@@ -53,6 +55,9 @@ func init() {
 	cmdRoot.PersistentFlags().String(nameAPIHostPort,
 		"api.dev.provendb.com:443", "specify the ProvenX API hostPort")
 	viper.BindPFlag(viperKeyAPIHostPort, cmdRoot.PersistentFlags().Lookup(nameAPIHostPort))
+	cmdRoot.PersistentFlags().Bool(nameAPISecure,
+		true, "specify whether the ProvenX API connection is secure with TLS")
+	viper.BindPFlag(nameAPISecure, cmdRoot.PersistentFlags().Lookup(nameAPISecure))
 }
 
 func initConfig() {
