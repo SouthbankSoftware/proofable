@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-18T16:30:55+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T16:55:57+11:00
+ * @Last modified time: 2020-02-19T01:53:00+11:00
  */
 
 package api
@@ -17,7 +17,7 @@ import (
 func InterceptKeyValueStream(
 	ctx context.Context,
 	input <-chan *apiPB.KeyValue,
-	fn func(kv *apiPB.KeyValue),
+	fn func(kv *apiPB.KeyValue) *apiPB.KeyValue,
 ) (output <-chan *apiPB.KeyValue) {
 	ch := make(chan *apiPB.KeyValue)
 
@@ -25,7 +25,7 @@ func InterceptKeyValueStream(
 		defer close(ch)
 
 		for kv := range input {
-			fn(kv)
+			kv = fn(kv)
 
 			select {
 			case <-ctx.Done():

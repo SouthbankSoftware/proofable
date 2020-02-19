@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-15T12:46:44+11:00
+ * @Last modified time: 2020-02-19T11:35:35+11:00
  */
 
 package cmd
@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	nameDotGraphPath           = "dot-graph-path"
-	viperKeyVerifyDotGraphPath = nameVerify + "." + nameDotGraphPath
+	nameDotGraphOutputPath           = "dot-graph." + nameOutputPath
+	viperKeyVerifyDotGraphOutputPath = nameVerify + "." + nameDotGraphOutputPath
 )
 
 var cmdVerify = &cobra.Command{
@@ -25,6 +25,6 @@ var cmdVerify = &cobra.Command{
 func init() {
 	cmdRoot.AddCommand(cmdVerify)
 
-	cmdVerify.PersistentFlags().StringP(nameDotGraphPath, "d", "", "specify the Graphviz Dot Graph (.dot) output path")
-	viper.BindPFlag(viperKeyVerifyDotGraphPath, cmdCreateTrie.PersistentFlags().Lookup(nameDotGraphPath))
+	cmdVerify.PersistentFlags().StringP(nameDotGraphOutputPath, "d", "", "specify the Graphviz Dot Graph (.dot) output path")
+	viper.BindPFlag(viperKeyVerifyDotGraphOutputPath, cmdVerify.PersistentFlags().Lookup(nameDotGraphOutputPath))
 }

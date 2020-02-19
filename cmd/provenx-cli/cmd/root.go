@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T23:05:50+11:00
+ * @Last modified time: 2020-02-19T11:01:08+11:00
  */
 
 package cmd
@@ -11,8 +11,10 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
+	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -26,6 +28,7 @@ const (
 	nameCreate     = "create"
 	nameVerify     = "verify"
 	namePath       = "path"
+	nameInputPath  = "input-path"
 	nameOutputPath = "output-path"
 
 	// local names, viper keys and default values
@@ -39,9 +42,9 @@ const (
 )
 
 var (
-	// ErrSilentExit is the error returned when the CLI should exit silently without printing any
-	// error message
-	ErrSilentExit = errors.New("silent exit")
+	// ErrSilentExitWithNonZeroCode is the error returned when the CLI should exit with non-zero
+	// exit code silently without printing any error message
+	ErrSilentExitWithNonZeroCode = errors.New("silent exit with non-zero code")
 
 	headerGreen = color.New(color.BgHiGreen, color.FgHiWhite, color.Bold).SprintFunc()
 	headerRed   = color.New(color.BgHiRed, color.FgHiWhite, color.Bold).SprintFunc()
@@ -59,7 +62,7 @@ var (
 // This is called by main.main(). It only needs to happen once to the rootCmd
 func Execute() {
 	if err := cmdRoot.Execute(); err != nil {
-		if !errors.Is(err, ErrSilentExit) {
+		if !errors.Is(err, ErrSilentExitWithNonZeroCode) {
 			fmt.Fprintf(color.Error, "%s %s\n", headerRed(" FAIL "), err)
 		}
 
@@ -82,4 +85,35 @@ func initConfig() {
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix(name)
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_", ".", "_"))
+}
+
+func checkOutputPath(name, path string) error {
+	if fi, err := os.Stat(path); err == nil && fi.IsDir() {
+		return fmt.Errorf("the %s cannot be a directory", name)
+	}
+
+	pathDir := filepath.Dir(path)
+	if _, err := os.Stat(pathDir); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func getTriePath(filePath, userTriePath string) (triePath string, er error) {
+	fileInfo, err := os.Stat(filePath)
+	if err != nil {
+		er = err
+		return
+	}
+
+	triePath = userTriePath
+	if triePath == "" {
+		if fileInfo.IsDir() {
+			triePath = filepath.Join(filePath, api.FileExtensionTrie)
+		} else {
+			triePath = filePath + api.FileExtensionTrie
+		}
+	}
+	return
 }

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T08:42:02+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T22:22:40+11:00
+ * @Last modified time: 2020-02-19T01:09:38+11:00
  */
 
 package api
@@ -16,6 +16,7 @@ import (
 
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/golang/protobuf/ptypes/empty"
+	"golang.org/x/sync/errgroup"
 )
 
 // CreateTrie creates a new trie
@@ -42,8 +43,8 @@ func DeleteTrie(ctx context.Context, cli apiPB.APIServiceClient, id string) erro
 
 // WithTrie provides a new trie to the closure that is automatically destroyed when done
 func WithTrie(ctx context.Context, cli apiPB.APIServiceClient,
-	fn func(id string) error) (er error) {
-	id, _, err := CreateTrie(ctx, cli)
+	fn func(id, root string) error) (er error) {
+	id, root, err := CreateTrie(ctx, cli)
 	if err != nil {
 		return err
 	}
@@ -54,7 +55,7 @@ func WithTrie(ctx context.Context, cli apiPB.APIServiceClient,
 		}
 	}()
 
-	return fn(id)
+	return fn(id, root)
 }
 
 // SetTrieKeyValues sets the key-values to the trie
@@ -207,6 +208,133 @@ func SubscribeTrieProof(
 	return
 }
 
+// GetTrieProof gets a trie proof by either proof ID or root. If root is used, the latest proof of
+// that root will be returned
+func GetTrieProof(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	trieID,
+	proofID,
+	trieRoot string,
+) (tp *apiPB.TrieProof, er error) {
+	request := &apiPB.TrieProofRequest{
+		TrieId: trieID,
+	}
+
+	if proofID != "" {
+		request.Query = &apiPB.TrieProofRequest_ProofId{
+			ProofId: proofID,
+		}
+	} else {
+		request.Query = &apiPB.TrieProofRequest_RootFilter{
+			RootFilter: &apiPB.RootFilter{
+				Root: trieRoot,
+			},
+		}
+	}
+
+	return cli.GetTrieProof(ctx, request)
+}
+
+// VerifyTrieProof verifies the given trie proof. When dotGraphOutputPath is non-zero, a Graphviz
+// Dot Graph will be output
+func VerifyTrieProof(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	trieID,
+	proofID string,
+	outputKeyValues bool,
+	dotGraphOutputPath string,
+) (kvCH <-chan *apiPB.KeyValue, rpCH <-chan *apiPB.VerifyProofReply, errCH <-chan error) {
+	kvChan := make(chan *apiPB.KeyValue, 10)
+	rpChan := make(chan *apiPB.VerifyProofReply, 1)
+	errChan := make(chan error, 1)
+
+	go func() {
+		defer close(kvChan)
+		defer close(rpChan)
+		defer close(errChan)
+
+		var er error
+
+		defer func() {
+			if er != nil {
+				errChan <- er
+			}
+		}()
+
+		stream, err := cli.VerifyTrieProof(ctx, &apiPB.VerifyTrieProofRequest{
+			TrieId:          trieID,
+			ProofId:         proofID,
+			OutputKeyValues: outputKeyValues,
+			OutputDotGraph:  dotGraphOutputPath != "",
+		})
+		if err != nil {
+			er = err
+			return
+		}
+
+		sr := apiPB.NewVerifyProofReplyStreamReader(stream)
+		// remember to always close. The optional error will be notified to receivers
+		defer func() {
+			sr.Close(er)
+		}()
+
+		eg, ctx := errgroup.WithContext(ctx)
+
+		if dotGraphOutputPath != "" {
+			eg.Go(func() (er error) {
+				// dot graph
+				outFile, err := os.Create(dotGraphOutputPath)
+				if err != nil {
+					return err
+				}
+				defer func() {
+					err := outFile.Close()
+					if err != nil {
+						er = err
+					}
+				}()
+
+				_, er = io.Copy(outFile, sr.DotGraph)
+				return
+			})
+		}
+
+		eg.Go(func() error {
+			for kv := range sr.KeyValues() {
+				select {
+				case <-ctx.Done():
+					return ctx.Err()
+				case kvChan <- kv:
+				}
+			}
+
+			return nil
+		})
+
+		eg.Go(func() (er error) {
+			for rp := range sr.Reply() {
+				select {
+				case <-ctx.Done():
+					return ctx.Err()
+				case rpChan <- rp:
+				}
+			}
+
+			return nil
+		})
+
+		er = eg.Wait()
+		return
+	}()
+
+	kvCH = kvChan
+	rpCH = rpChan
+	errCH = errChan
+	return
+}
+
 // ExportTrie exports the given trie
 func ExportTrie(
 	ctx context.Context,
@@ -232,4 +360,76 @@ func ExportTrie(
 
 	_, err = io.Copy(outFile, rc)
 	return err
+}
+
+// ImportTrie imports the trie data and creates a new trie. If ID is zero, a new trie ID will be
+// generated, which is recommended when importing
+func ImportTrie(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	path string,
+) (newID, root string, er error) {
+	impCli, err := cli.ImportTrie(ctx)
+	if err != nil {
+		er = err
+		return
+	}
+
+	inFile, err := os.Open(path)
+	if err != nil {
+		er = err
+		return
+	}
+	defer inFile.Close()
+
+	wc := apiPB.NewDataStreamWriter(
+		impCli,
+		func() (md apiPB.DataChunkMetadata, er error) {
+			md = &apiPB.DataChunk_TrieRequest{
+				TrieRequest: &apiPB.TrieRequest{
+					TrieId: id,
+				},
+			}
+			return
+		},
+	)
+	defer func() {
+		// close the stream writer
+		wc.Close()
+
+		tri, err := impCli.CloseAndRecv()
+		if err != nil {
+			er = err
+			return
+		}
+
+		newID = tri.GetId()
+		root = tri.GetRoot()
+	}()
+
+	_, er = io.Copy(wc, inFile)
+	return
+}
+
+// WithImportedTrie provides a new imported trie to the closure that is automatically destroyed when
+// done
+func WithImportedTrie(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	path string,
+	fn func(id, root string) error) (er error) {
+	newID, root, err := ImportTrie(ctx, cli, id, path)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		err := DeleteTrie(ctx, cli, newID)
+		if err != nil && er == nil {
+			er = err
+		}
+	}()
+
+	return fn(newID, root)
 }

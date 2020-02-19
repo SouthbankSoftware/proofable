@@ -2,17 +2,14 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T23:00:42+11:00
+ * @Last modified time: 2020-02-19T02:28:35+11:00
  */
 
 package cmd
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
 
 	"github.com/SouthbankSoftware/provendb-trie/pkg/trienodes"
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
@@ -38,26 +35,14 @@ By default, if the path is a directory, the trie will be created under the direc
 		cmd.SilenceUsage = true
 
 		filePath := args[0]
-		fileInfo, err := os.Stat(filePath)
+		trieOutputPath, err := getTriePath(filePath,
+			viper.GetString(viperKeyCreateTrieOutputPath))
 		if err != nil {
 			return err
 		}
 
-		trieOutputPath := viper.GetString(viperKeyCreateTrieOutputPath)
-		if trieOutputPath == "" {
-			if fileInfo.IsDir() {
-				trieOutputPath = filepath.Join(filePath, api.FileExtensionTrie)
-			} else {
-				trieOutputPath = filePath + api.FileExtensionTrie
-			}
-		}
-
-		if fi, err := os.Stat(trieOutputPath); err == nil && fi.IsDir() {
-			return errors.New("the trie output path cannot be a directory")
-		}
-
-		trieOutputPathDir := filepath.Dir(trieOutputPath)
-		if _, err := os.Stat(trieOutputPathDir); err != nil {
+		err = checkOutputPath("trie output path", trieOutputPath)
+		if err != nil {
 			return err
 		}
 
@@ -68,17 +53,19 @@ By default, if the path is a directory, the trie will be created under the direc
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
-				return api.WithTrie(ctx, cli, func(id string) error {
+				return api.WithTrie(ctx, cli, func(id, _ string) error {
 					kvCH, errCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, nil)
 
 					count := 0
 
 					kvCH = api.InterceptKeyValueStream(ctx, kvCH,
-						func(kv *apiPB.KeyValue) {
+						func(kv *apiPB.KeyValue) *apiPB.KeyValue {
 							fmt.Printf("%s -> %s\n",
 								trienodes.HexOrString(kv.Key), trienodes.HexOrString(kv.Value))
 
 							count++
+
+							return kv
 						})
 
 					root, err := api.SetTrieKeyValues(ctx, cli, id, "", kvCH)
