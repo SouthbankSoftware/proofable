@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-18T21:54:00+11:00
+ * @Last modified time: 2020-02-19T17:28:48+11:00
  */
 
 package api
@@ -19,6 +19,7 @@ import (
 
 	"github.com/SouthbankSoftware/provendb-trie/pkg/trienodes"
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
+	"github.com/karrick/godirwalk"
 	"github.com/korovkin/limiter"
 )
 
@@ -37,7 +38,7 @@ var (
 // OnFileInfoFunc represents the callback function when a file info is available. The returned key
 // of each key-value should contain the passed in key prefix. Return an ErrFileSkipped to skip
 // current file and the walk will continue on the rest
-type OnFileInfoFunc func(keyPrefix string, fi os.FileInfo) (kvs []*apiPB.KeyValue, er error)
+type OnFileInfoFunc func(keyPrefix string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error)
 
 // GetFilePathKeyValueStream returns a key value stream of the file path. When concurrency is 1, the
 // key-value stream is guaranteed to be sorted lexically by key
@@ -128,95 +129,96 @@ func GetFilePathKeyValueStream(
 			}
 		}
 
-		err := filepath.Walk(path, func(fp string, fi os.FileInfo, err error) error {
-			if err != nil {
-				return err
-			}
+		err := godirwalk.Walk(path, &godirwalk.Options{
+			Callback: func(fp string, de *godirwalk.Dirent) error {
+				if !(de.IsRegular() || de.IsDir()) ||
+					de.IsRegular() && filepath.Ext(fp) == FileExtensionTrie {
+					// skip non-regular files (except directories) and trie files
+					return nil
+				}
 
-			if filepath.Ext(fp) == FileExtensionTrie && !fi.IsDir() {
-				// skip trie files
-				return nil
-			}
-
-			target, err := filepath.Rel(path, fp)
-			if err != nil {
-				return err
-			}
-
-			results := []*apiPB.KeyValue(nil)
-
-			if onFileInfo != nil {
-				kvs, err := onFileInfo(target, fi)
+				target, err := filepath.Rel(path, fp)
 				if err != nil {
-					if errors.Is(err, ErrFileSkipped) {
-						// just skip current file
-						return nil
-					}
-
 					return err
 				}
 
-				results = kvs
-			} else {
-				results = []*apiPB.KeyValue{}
-			}
+				results := []*apiPB.KeyValue(nil)
 
-			if !fi.IsDir() {
-				if cLmt != nil {
-					// hash in parallel with limited concurrency
-					cLmt.Execute(func() {
-						// check after potential queueing
-						select {
-						case <-errChan:
-							// already errored, skip
-							return
-						default:
-						}
-
-						hash, err := hashTarget(target, fp)
-						if err != nil {
-							closeWithErr(err)
-							return
-						}
-
-						err = sendKV(&apiPB.KeyValue{
-							Key:   []byte(target),
-							Value: hash,
-						})
-						if err != nil {
-							closeWithErr(err)
-							return
-						}
-					})
-				} else {
-					// hash in series
-					hash, err := hashTarget(target, fp)
+				if onFileInfo != nil {
+					kvs, err := onFileInfo(target, de)
 					if err != nil {
+						if errors.Is(err, ErrFileSkipped) {
+							// just skip current file
+							return nil
+						}
+
 						return err
 					}
 
-					results = append(results, &apiPB.KeyValue{
-						Key:   []byte(target),
-						Value: hash,
+					results = kvs
+				} else {
+					results = []*apiPB.KeyValue{}
+				}
+
+				if de.IsRegular() {
+					if cLmt != nil {
+						// hash in parallel with limited concurrency
+						cLmt.Execute(func() {
+							// check after potential queueing
+							select {
+							case <-errChan:
+								// already errored, skip
+								return
+							default:
+							}
+
+							hash, err := hashTarget(target, fp)
+							if err != nil {
+								closeWithErr(err)
+								return
+							}
+
+							err = sendKV(&apiPB.KeyValue{
+								Key:   []byte(target),
+								Value: hash,
+							})
+							if err != nil {
+								closeWithErr(err)
+								return
+							}
+						})
+					} else {
+						// hash in series
+						hash, err := hashTarget(target, fp)
+						if err != nil {
+							return err
+						}
+
+						results = append(results, &apiPB.KeyValue{
+							Key:   []byte(target),
+							Value: hash,
+						})
+					}
+				}
+
+				if cLmt == nil && len(results) > 1 {
+					// sort results by key lexically if concurency is 1
+					sort.Slice(results, func(i, j int) bool {
+						return bytes.Compare(results[i].Key, results[j].Key) < 0
 					})
 				}
-			}
 
-			if cLmt == nil && len(results) > 1 {
-				// sort results by key lexically if concurency is 1
-				sort.Slice(results, func(i, j int) bool {
-					return bytes.Compare(results[i].Key, results[j].Key) < 0
-				})
-			}
-
-			for _, r := range results {
-				err := sendKV(r)
-				if err != nil {
-					return err
+				for _, r := range results {
+					err := sendKV(r)
+					if err != nil {
+						return err
+					}
 				}
-			}
 
-			return nil
+				return nil
+			},
+			Unsorted:          false,
+			AllowNonDirectory: true,
 		})
 		if err != nil {
 			closeWithErr(err)

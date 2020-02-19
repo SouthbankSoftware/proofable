@@ -33,6 +33,8 @@ github.com/SAP/go-hdb v0.13.1/go.mod h1:etBT+FAi1t5k3K3tf5vQTnosgYmhDkRi8jEnQqCn
 github.com/SermoDigital/jose v0.9.1/go.mod h1:ARgCUhI1MHQH+ONky/PAtmVHQrP5JlGY0F3poXOp/fA=
 github.com/Shopify/sarama v1.23.1/go.mod h1:XLH1GYJnLVE0XCr6KdJGVJRTwY30moWNJ4sERjXX6fs=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
+github.com/SouthbankSoftware/godirwalk v1.15.4-0.20200219064549-47f5e8f24e04 h1:YAn99U521JnHJ8k/EIUIlDw8T+dbmcGJ718Id7c8R2E=
+github.com/SouthbankSoftware/godirwalk v1.15.4-0.20200219064549-47f5e8f24e04/go.mod h1:j4mkqPuvaLI8mp1DroR3P6ad7cyYd4c1qeJ3RV7ULlk=
 github.com/SouthbankSoftware/provendb-anchor v0.0.0-20200210020326-92651c33aa7a h1:j3qr3vz0aVoLwN0zrnVLI0Qns+qRVHSJK4X0orVWghM=
 github.com/SouthbankSoftware/provendb-anchor v0.0.0-20200210020326-92651c33aa7a/go.mod h1:B1kBmnUyOjaOxVeiZ8jIA6szKA5fz2E9RQcUq13IWZU=
 github.com/SouthbankSoftware/provendb-btcspvwallet v0.0.0-20191218032034-27ca8dccb26d h1:kKfKXTadfyFUxMYZzJjvH6XHhZr/gU6YVkOEYFh0Ok4=
@@ -41,6 +43,8 @@ github.com/SouthbankSoftware/provendb-tree v0.0.0-20191213041657-7ca86e009466 h1
 github.com/SouthbankSoftware/provendb-tree v0.0.0-20191213041657-7ca86e009466/go.mod h1:zjiYG2dAHIPcMcG2qUhwFweJ/vzgwp5teV/9dyYzkkA=
 github.com/SouthbankSoftware/provendb-trie v0.0.0-20200210020048-5e925871e3e0 h1:C9YkzdD3HszHU1I86gBX1cyFTMvwGJY7uug3HhzCf8g=
 github.com/SouthbankSoftware/provendb-trie v0.0.0-20200210020048-5e925871e3e0/go.mod h1:b3920HtoXJazA9dmeNGGJBrmm6EraI6MsWlwdK5PLOY=
+github.com/SouthbankSoftware/provendb-trie v0.0.0-20200219060512-36059a13c545 h1:52GEPqmJF7ffTFZVA1FR/JhRqAviY0xjMlqQhwY+OXE=
+github.com/SouthbankSoftware/provendb-trie v0.0.0-20200219060512-36059a13c545/go.mod h1:b3920HtoXJazA9dmeNGGJBrmm6EraI6MsWlwdK5PLOY=
 github.com/SouthbankSoftware/provendb-verify v0.0.0-20190424005136-0b487ec084e1/go.mod h1:G6jVd89OpRY0DLE67Ju4QpPCst0RS2lbqKDK/KyNqLs=
 github.com/SouthbankSoftware/provendb-verify v0.0.0-20190903063752-8e808ae66434/go.mod h1:G6jVd89OpRY0DLE67Ju4QpPCst0RS2lbqKDK/KyNqLs=
 github.com/SouthbankSoftware/provendb-verify v0.0.0-20191213041926-116747edc9ab h1:hdMJN7MCOni4vVCE7SHlsW4dYLBUnCQVVLcRU1kTFpQ=
