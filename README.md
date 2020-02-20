@@ -4,7 +4,7 @@
 
 ## Usage
 
-_**Currently**_, `provenx-cli` connects directly to the dev `provenx-api` with TLS and magic auth token. File metadata is not included in trie generation.
+_**Currently**_, `provenx-cli` connects directly to the dev `provenx-api` with TLS, which can be configured via CLI options, and magic auth token. File metadata is not included in trie generation.
 
 ```bash
 # generate the `provenx-cli` binary
