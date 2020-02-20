@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-19T17:28:48+11:00
+ * @Last modified time: 2020-02-21T01:24:05+11:00
  */
 
 package api
@@ -17,7 +17,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/SouthbankSoftware/provendb-trie/pkg/trienodes"
+	"github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/hasher"
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/karrick/godirwalk"
 	"github.com/korovkin/limiter"
@@ -84,12 +84,12 @@ func GetFilePathKeyValueStream(
 
 		hasherPool := &sync.Pool{
 			New: func() interface{} {
-				return trienodes.NewKeccak()
+				return hasher.NewKeccak()
 			},
 		}
 
 		hashTarget := func(key, fp string) (ha []byte, er error) {
-			hasher := hasherPool.Get().(trienodes.Keccak)
+			hasher := hasherPool.Get().(hasher.Keccak)
 			// always put the hasher back
 			defer hasherPool.Put(hasher)
 			// always reset the hasher for future use

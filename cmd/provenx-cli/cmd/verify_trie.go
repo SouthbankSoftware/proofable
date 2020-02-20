@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-19T13:42:20+11:00
+ * @Last modified time: 2020-02-21T01:21:59+11:00
  */
 
 package cmd
@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/SouthbankSoftware/provendb-trie/pkg/trienodes"
+	tnEnc "github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/encoding"
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/diff"
@@ -116,17 +116,17 @@ var cmdVerifyTrie = &cobra.Command{
 									fmt.Fprintf(color.Output,
 										"%s %s -> %s\n",
 										headerGreen(" PASS "),
-										trienodes.HexOrString(leftKV.Key),
-										trienodes.HexOrString(leftKV.Value))
+										tnEnc.HexOrString(leftKV.Key),
+										tnEnc.HexOrString(leftKV.Value))
 								case diff.KeyValueValueDifferent:
 									changedKV++
 
 									fmt.Fprintf(color.Error,
 										"%s %s -> %s %s\n",
 										headerRed(" FAIL "),
-										trienodes.HexOrString(leftKV.Key),
-										red("- ", trienodes.HexOrString(rightKV.Value)),
-										green("+ ", trienodes.HexOrString(leftKV.Value)))
+										tnEnc.HexOrString(leftKV.Key),
+										red("- ", tnEnc.HexOrString(rightKV.Value)),
+										green("+ ", tnEnc.HexOrString(leftKV.Value)))
 								case diff.KeyValueLeftKeyMissing:
 									missingKV++
 
@@ -134,9 +134,9 @@ var cmdVerifyTrie = &cobra.Command{
 										"%s %s\n",
 										headerRed(" FAIL "),
 										red("- ",
-											trienodes.HexOrString(rightKV.Key),
+											tnEnc.HexOrString(rightKV.Key),
 											" -> ",
-											trienodes.HexOrString(rightKV.Value)))
+											tnEnc.HexOrString(rightKV.Value)))
 								case diff.KeyValueRightKeyMissing:
 									untrackedKV++
 
@@ -144,9 +144,9 @@ var cmdVerifyTrie = &cobra.Command{
 										"%s %s\n",
 										headerRed(" FAIL "),
 										green("+ ",
-											trienodes.HexOrString(leftKV.Key),
+											tnEnc.HexOrString(leftKV.Key),
 											" -> ",
-											trienodes.HexOrString(leftKV.Value)))
+											tnEnc.HexOrString(leftKV.Value)))
 								default:
 									fmt.Fprintf(color.Error,
 										"%s unexpected key-value diff result type: %T\n",

@@ -43,8 +43,8 @@ github.com/SouthbankSoftware/provendb-tree v0.0.0-20191213041657-7ca86e009466 h1
 github.com/SouthbankSoftware/provendb-tree v0.0.0-20191213041657-7ca86e009466/go.mod h1:zjiYG2dAHIPcMcG2qUhwFweJ/vzgwp5teV/9dyYzkkA=
 github.com/SouthbankSoftware/provendb-trie v0.0.0-20200210020048-5e925871e3e0 h1:C9YkzdD3HszHU1I86gBX1cyFTMvwGJY7uug3HhzCf8g=
 github.com/SouthbankSoftware/provendb-trie v0.0.0-20200210020048-5e925871e3e0/go.mod h1:b3920HtoXJazA9dmeNGGJBrmm6EraI6MsWlwdK5PLOY=
-github.com/SouthbankSoftware/provendb-trie v0.0.0-20200219060512-36059a13c545 h1:52GEPqmJF7ffTFZVA1FR/JhRqAviY0xjMlqQhwY+OXE=
-github.com/SouthbankSoftware/provendb-trie v0.0.0-20200219060512-36059a13c545/go.mod h1:b3920HtoXJazA9dmeNGGJBrmm6EraI6MsWlwdK5PLOY=
+github.com/SouthbankSoftware/provendb-trie v0.0.0-20200220141434-383dded17254 h1:KMpYKKYHeL1XtceNOtOMmPz11OF0imN51bKLmw6Pv9E=
+github.com/SouthbankSoftware/provendb-trie v0.0.0-20200220141434-383dded17254/go.mod h1:b3920HtoXJazA9dmeNGGJBrmm6EraI6MsWlwdK5PLOY=
 github.com/SouthbankSoftware/provendb-verify v0.0.0-20190424005136-0b487ec084e1/go.mod h1:G6jVd89OpRY0DLE67Ju4QpPCst0RS2lbqKDK/KyNqLs=
 github.com/SouthbankSoftware/provendb-verify v0.0.0-20190903063752-8e808ae66434/go.mod h1:G6jVd89OpRY0DLE67Ju4QpPCst0RS2lbqKDK/KyNqLs=
 github.com/SouthbankSoftware/provendb-verify v0.0.0-20191213041926-116747edc9ab h1:hdMJN7MCOni4vVCE7SHlsW4dYLBUnCQVVLcRU1kTFpQ=

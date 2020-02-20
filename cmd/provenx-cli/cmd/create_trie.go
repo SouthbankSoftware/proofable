@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-19T02:28:35+11:00
+ * @Last modified time: 2020-02-21T01:19:18+11:00
  */
 
 package cmd
@@ -11,7 +11,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/SouthbankSoftware/provendb-trie/pkg/trienodes"
+	tnEnc "github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/encoding"
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
 	"github.com/fatih/color"
@@ -61,7 +61,7 @@ By default, if the path is a directory, the trie will be created under the direc
 					kvCH = api.InterceptKeyValueStream(ctx, kvCH,
 						func(kv *apiPB.KeyValue) *apiPB.KeyValue {
 							fmt.Printf("%s -> %s\n",
-								trienodes.HexOrString(kv.Key), trienodes.HexOrString(kv.Value))
+								tnEnc.HexOrString(kv.Key), tnEnc.HexOrString(kv.Value))
 
 							count++
 
