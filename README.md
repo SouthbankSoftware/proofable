@@ -12,16 +12,6 @@ _**Currently**_, `provenx-cli` connects directly to the dev `provenx-api` with T
 - [linux](https://storage.googleapis.com/provendb-dev/provenx-cli/provenx-cli_linux_amd64)
 - [windows](https://storage.googleapis.com/provendb-dev/provenx-cli/provenx-cli_windows_amd64.exe)
 
-If you got the following cannot open issue on macOS Catalina:
-
-![Mac Cannot Open Issue](docs/mac_cannot_open_issue.png)
-
-use the following command to fix:
-
-```bash
-xattr -d com.apple.quarantine path/to/provenx-cli_darwin_amd64
-```
-
 ### Build your own binary
 
 ```bash
@@ -49,4 +39,16 @@ make
 
 # verify a trie for a path from a custom trie location
 ./provenx-cli verify trie path/to/the/data -i path/to/the/trie.pxt
+```
+
+## FAQ
+
+### Error: "provenx-cli_darwin_amd64" cannot be opened because the developer cannot be verified
+
+![Mac Cannot Open Issue](docs/mac_cannot_open_issue.png)
+
+Use the following command to fix:
+
+```bash
+xattr -d com.apple.quarantine path/to/provenx-cli_darwin_amd64
 ```
