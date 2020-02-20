@@ -1,7 +1,7 @@
 # @Author: guiguan
 # @Date:   2019-01-29T16:04:55+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-02-20T21:56:07+11:00
+# @Last modified time: 2020-02-21T00:09:40+11:00
 
 platform: linux
 image_resource:
@@ -14,7 +14,6 @@ outputs:
   - name: provenx-cli
 params:
   GIT_ACCESS_TOKEN: ((common.git-access-token))
-  BC_TOKEN: ((provenx-cli.bc-token))
 run:
   path: sh
   args:
