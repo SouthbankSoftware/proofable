@@ -1,0 +1,15 @@
+/local
+/provenx-cli*
+data
+/playground
+*.dot
+*.proof
+*.trie
+*.pxt
+*.pxp
+
+.git
+/.vscode
+/ci
+/docs
+

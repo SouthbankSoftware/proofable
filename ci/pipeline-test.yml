@@ -1,0 +1,102 @@
+# @Author: guiguan, koustubhg
+# @Date:   2019-01-29T13:57:58+11:00
+# @Last modified by:   guiguan
+# @Last modified time: 2020-02-20T21:28:54+11:00
+
+# update pipeline:
+# fly -t dev sp -c pipeline-test.yml -p provenx-cli-test
+
+resource_types:
+  - name: slack-alert
+    type: docker-image
+    source:
+      repository: southbanksoftware/concourse-slack-alert-resource
+  - name: pull-request
+    type: docker-image
+    source:
+      repository: teliaoss/github-pr-resource
+
+resources:
+  - name: slack
+    type: slack-alert
+    source:
+      url: ((common.slack-webook-url))
+  - name: provenx-cli
+    type: pull-request
+    check_every: 5m
+    webhook_token: ((common.webhook-token))
+    source:
+      repository: SouthbankSoftware/provenx-cli
+      access_token: ((common.git-access-token))
+  - name: provendb-anchor
+    type: docker-image
+    source:
+      repository: asia.gcr.io/provendb/provendb-anchor
+      tag: "latest"
+      username: _json_key
+      password: ((common.service-account))
+  - name: provenx-api
+    type: docker-image
+    source:
+      repository: asia.gcr.io/provendb/provenx-api
+      tag: "latest"
+      username: _json_key
+      password: ((common.service-account))
+  - name: golang
+    type: docker-image
+    source:
+      repository: golang
+      tag: 1.13.8
+
+jobs:
+  - name: test
+    plan:
+      - get: provenx-cli
+        trigger: true
+        version: every
+      - put: provenx-cli
+        params:
+          path: provenx-cli
+          status: pending
+      - in_parallel:
+          fail_fast: true
+          limit: 3
+          steps:
+            - get: provendb-anchor
+              params: { save: true }
+            - get: provenx-api
+              params: { save: true }
+            - get: golang
+              params: { save: true }
+      - task: unit-test
+        privileged: true
+        file: provenx-cli/ci/tasks/task-unit-test.yml
+    on_failure:
+      do:
+        - put: slack
+          params:
+            alert_type: failed
+            text: ((slack.guan))
+        - put: provenx-cli
+          params:
+            path: provenx-cli
+            status: failure
+    on_abort:
+      do:
+        - put: slack
+          params:
+            alert_type: failed
+            text: Aborted. ((slack.guan))
+        - put: provenx-cli
+          params:
+            path: provenx-cli
+            status: failure
+    on_success:
+      do:
+        - put: slack
+          params:
+            alert_type: success
+        - put: provenx-cli
+          params:
+            path: provenx-cli
+            status: success

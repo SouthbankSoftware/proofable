@@ -1,0 +1,47 @@
+# @Author: guiguan
+# @Date:   2019-04-03T18:08:16+11:00
+# @Last modified by:   guiguan
+# @Last modified time: 2020-02-20T22:02:13+11:00
+
+platform: linux
+image_resource:
+  type: docker-image
+  source: { repository: alpine/git }
+inputs:
+  - name: provenx-cli
+  - name: provendb-releases
+  - name: version
+  - name: release-darwin_amd64
+  - name: release-linux_amd64
+  - name: release-windows_amd64
+  - name: meta
+outputs:
+  - name: provendb-releases
+run:
+  path: sh
+  args:
+    - -exc
+    - |
+      echo "{\
+      \"version\": \"$(cat version/number)\", \
+      \"commit\": \"$(cat provenx-cli/.git/short_ref)\", \
+      \"build_url\": \"$(cat meta/atc-external-url)/builds/$(cat meta/build-id)\", \
+      \"darwin_amd64\": {\
+      \"generation\": \"$(cat release-darwin_amd64/generation)\", \
+      \"uri\": \"$(cat release-darwin_amd64/url)\"\
+      }, \
+      \"linux_amd64\": {\
+      \"generation\": \"$(cat release-linux_amd64/generation)\", \
+      \"uri\": \"$(cat release-linux_amd64/url)\"\
+      }, \
+      \"windows_amd64\": {\
+      \"generation\": \"$(cat release-windows_amd64/generation)\", \
+      \"uri\": \"$(cat release-windows_amd64/url)\"\
+      }\
+      }" >> provendb-releases/provenx-cli-releases.jsonl
+
+      cd provendb-releases
+      git add .
+      git config --global user.email "developer@southbanksoftware.com"
+      git config --global user.name "Concourse"
+      git commit -m "Adds \`provenx-cli\` build info for v$(cat ../version/number)"

@@ -1,0 +1,42 @@
+# @Author: guiguan, koustubhg
+# @Date:   2019-01-29T16:04:55+11:00
+# @Last modified by:   guiguan
+# @Last modified time: 2020-02-20T11:00:39+11:00
+
+platform: linux
+image_resource:
+  type: docker-image
+  source: { repository: amidos/dcind, tag: latest }
+inputs:
+  - name: provenx-cli
+  - name: provendb-anchor
+  - name: provenx-api
+  - name: golang
+params: { GIT_ACCESS_TOKEN: ((common.git-access-token)) }
+run:
+  path: bash
+  args:
+    - -exc
+    - |
+      source /docker-lib.sh
+      start_docker
+
+      # get images
+      docker load -i provendb-anchor/image
+      docker tag "$(cat provendb-anchor/image-id)" "$(cat provendb-anchor/repository):$(cat provendb-anchor/tag)"
+      docker load -i provenx-api/image
+      docker tag "$(cat provenx-api/image-id)" "$(cat provenx-api/repository):$(cat provenx-api/tag)"
+      docker load -i golang/image
+      docker tag "$(cat golang/image-id)" "$(cat golang/repository):$(cat golang/tag)"
+      docker images
+
+      # cleanup
+      cleanup() {
+        docker stop -t 0 $(docker container ls -a -q) || true
+        docker system prune -a -f || true
+        stop_docker || true
+      }
+      trap cleanup EXIT
+
+      # run logic via docker compose
+      docker-compose -f provenx-cli/ci/tasks/docker-compose-unit-test.yml run --rm tests

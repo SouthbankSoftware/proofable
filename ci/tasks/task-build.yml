@@ -1,0 +1,26 @@
+# @Author: guiguan
+# @Date:   2019-01-29T16:04:55+11:00
+# @Last modified by:   guiguan
+# @Last modified time: 2020-02-20T21:56:07+11:00
+
+platform: linux
+image_resource:
+  type: docker-image
+  source: { repository: golang, tag: 1.13.8 }
+inputs:
+  - name: version
+  - name: provenx-cli
+outputs:
+  - name: provenx-cli
+params:
+  GIT_ACCESS_TOKEN: ((common.git-access-token))
+  BC_TOKEN: ((provenx-cli.bc-token))
+run:
+  path: sh
+  args:
+    - -exc
+    - |
+      export APP_VERSION=$(cat version/number)
+      git config --global url."https://${GIT_ACCESS_TOKEN}:@github.com/".insteadOf "https://github.com/"
+      cd provenx-cli
+      make build-all

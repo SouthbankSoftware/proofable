@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-19T11:01:08+11:00
+ * @Last modified time: 2020-02-20T22:39:21+11:00
  */
 
 package cmd
@@ -51,6 +51,8 @@ var (
 	green       = color.New(color.FgHiGreen).SprintFunc()
 	red         = color.New(color.FgHiRed).SprintFunc()
 
+	// version is set automatically in CI
+	version = "0.0.0"
 	cmdRoot = &cobra.Command{
 		Use:           name,
 		Short:         "ProvenX CLI",
@@ -71,6 +73,8 @@ func Execute() {
 }
 
 func init() {
+	cmdRoot.Version = version
+
 	cobra.OnInitialize(initConfig)
 
 	cmdRoot.PersistentFlags().String(nameAPIHostPort,

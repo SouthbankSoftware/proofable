@@ -1,29 +1,34 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-02-15T11:05:56+11:00
-
+# @Last modified time: 2020-02-20T21:20:04+11:00
 
 APP_NAME := provenx-cli
+APP_VERSION ?= 0.0.0
+PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(APP_NAME)
 PLAYGROUND_NAME := playground
 PKGS := $(shell go list ./cmd/... ./pkg/...)
+LD_FLAGS := -ldflags \
+"-X $(PROJECT_IMPORT_PATH)/cmd/$(APP_NAME)/cmd.version=$(APP_VERSION)"
 
 all: build
 
 .PHONY: run build build-regen generate test test-dev clean playground doc grpcc
 
 run:
-	go run ./cmd/$(APP_NAME)
+	go run $(LD_FLAGS) ./cmd/$(APP_NAME)
 build:
-	go build ./cmd/$(APP_NAME)
+	go build $(LD_FLAGS) ./cmd/$(APP_NAME)
 build-regen: generate build
+build-all:
+	go run github.com/mitchellh/gox -osarch="linux/amd64 windows/amd64 darwin/amd64" $(LD_FLAGS) ./cmd/$(APP_NAME)
 generate:
 	go generate $(PKGS)
 test:
-	go test $(PKGS)
+	go test $(LD_FLAGS) $(PKGS)
 test-dev:
 	# -test.v verbose
-	go test -count=1 -test.v $(PKGS)
+	go test $(LD_FLAGS) -count=1 -test.v $(PKGS)
 clean:
 	go clean -testcache $(PKGS)
 	rm -f $(APP_NAME)* $(PLAYGROUND_NAME)*

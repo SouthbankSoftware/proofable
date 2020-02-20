@@ -1,0 +1,69 @@
+# @Author: guiguan, koustubhg
+# @Date:   2019-01-29T16:05:51+11:00
+# @Last modified by:   guiguan
+# @Last modified time: 2020-02-20T23:03:14+11:00
+
+version: "3.4"
+
+services:
+  tests:
+    image: golang:1.13.8
+    container_name: tests
+    depends_on:
+      - api
+    command: [
+        "/bin/sh",
+        "-c",
+        "git config --global url.\"https://${GIT_ACCESS_TOKEN}:@github.com/\".insteadOf \"https://github.com/\" \
+        && cd /go/provenx-cli \
+        && make test-dev",
+      ]
+    environment:
+      PROVENX_CLI_API_HOST_PORT: "api:10014"
+      PROVENX_CLI_API_SECURE: "false"
+    volumes:
+      - $PWD/provenx-cli:/go/provenx-cli
+    networks:
+      - backend
+  anchor:
+    image: asia.gcr.io/provendb/provendb-anchor:latest
+    container_name: anchor
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -an | grep 10008 > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    ports:
+      - "10008:10008"
+      - "11000:11000"
+    environment:
+      ANCHOR_DISABLE_OPENTRACING: "true"
+      ANCHOR_VERIFIER_URI_PREFIX: "http://anchor:11000"
+    networks:
+      - backend
+  api:
+    image: asia.gcr.io/provendb/provenx-api:latest
+    container_name: api
+    depends_on:
+      - anchor
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -an | grep 10014 > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    ports:
+      - "10014:10014"
+    environment:
+      API_DISABLE_OPENTRACING: "true"
+      API_ANCHOR_HOST_PORT: "anchor:10008"
+      API_DEV_TOKEN: "magic"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1400

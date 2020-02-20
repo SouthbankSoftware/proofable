@@ -10,6 +10,7 @@ require (
 	github.com/google/go-cmp v0.4.0
 	github.com/karrick/godirwalk v1.15.3
 	github.com/korovkin/limiter v0.0.0-20170610225302-6b837f5fd496
+	github.com/mitchellh/gox v1.0.1
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.6.2
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
