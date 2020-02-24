@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-21T01:21:59+11:00
+ * @Last modified time: 2020-02-24T12:13:03+11:00
  */
 
 package cmd
@@ -12,6 +12,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"time"
 
 	tnEnc "github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/encoding"
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
@@ -77,6 +78,27 @@ var cmdVerifyTrie = &cobra.Command{
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
+				var (
+					totalTimeStart,
+					walkTimeStart time.Time
+				)
+
+				totalTimeStart = time.Now()
+
+				defer func() {
+					endTime := time.Now()
+					totalTime := endTime.Sub(totalTimeStart)
+					walkTime := endTime.Sub(walkTimeStart)
+					importTime := totalTime - walkTime
+
+					fmt.Fprintf(color.Output,
+						"%s finished verification in %s\n\t%s\n\t%s\n",
+						headerYellow(" INFO "),
+						yellow(totalTime),
+						yellow("import: ", importTime),
+						yellow("walk: ", walkTime))
+				}()
+
 				return api.WithImportedTrie(ctx, cli, "", trieInputPath,
 					func(id, root string) error {
 						tp, err := api.GetTrieProof(ctx, cli, id, "", root)
@@ -86,8 +108,10 @@ var cmdVerifyTrie = &cobra.Command{
 
 						trieRoot = tp.GetRoot()
 
-						// make sure concurrency is 1
-						leftStream, leftErrCH := api.GetFilePathKeyValueStream(ctx, filePath, 1, nil)
+						walkTimeStart = time.Now()
+
+						// make sure it is ordered
+						leftStream, leftErrCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, true, nil)
 
 						rightStream, rpCH, rightErrCH := api.VerifyTrieProof(ctx, cli, id, tp.GetId(),
 							true, dotGraphOutputPath)

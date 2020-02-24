@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-19T16:05:26+11:00
+ * @Last modified time: 2020-02-21T13:03:24+11:00
  */
 
 package api
@@ -21,6 +21,7 @@ func ExampleGetFilePathKeyValueStream() {
 		context.Background(),
 		"../../cmd/playground/",
 		1,
+		true,
 		func(keyPrefix string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
 			// use this callback to define the metadata embedding logic and ignored files
 

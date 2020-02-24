@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-21T01:19:18+11:00
+ * @Last modified time: 2020-02-24T12:13:30+11:00
  */
 
 package cmd
@@ -54,7 +54,8 @@ By default, if the path is a directory, the trie will be created under the direc
 				defer cancel()
 
 				return api.WithTrie(ctx, cli, func(id, _ string) error {
-					kvCH, errCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, nil)
+					// no need to keep in order
+					kvCH, errCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, false, nil)
 
 					count := 0
 
