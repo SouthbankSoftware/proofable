@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-24T11:58:02+11:00
+ * @Last modified time: 2020-02-24T14:10:51+11:00
  */
 
 package cmd
@@ -46,6 +46,7 @@ var (
 	// exit code silently without printing any error message
 	ErrSilentExitWithNonZeroCode = errors.New("silent exit with non-zero code")
 
+	headerWhite  = color.New(color.BgHiWhite, color.FgHiBlack, color.Bold).SprintFunc()
 	headerGreen  = color.New(color.BgHiGreen, color.FgHiWhite, color.Bold).SprintFunc()
 	headerYellow = color.New(color.BgHiYellow, color.FgHiWhite, color.Bold).SprintFunc()
 	headerRed    = color.New(color.BgHiRed, color.FgHiWhite, color.Bold).SprintFunc()

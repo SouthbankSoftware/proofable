@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-24T12:13:03+11:00
+ * @Last modified time: 2020-02-24T14:12:15+11:00
  */
 
 package cmd
@@ -63,7 +63,7 @@ var cmdVerifyTrie = &cobra.Command{
 		}
 
 		var (
-			trieRoot string
+			triePf *apiPB.TrieProof
 			totalKV,
 			passedKV,
 			changedKV,
@@ -92,11 +92,11 @@ var cmdVerifyTrie = &cobra.Command{
 					importTime := totalTime - walkTime
 
 					fmt.Fprintf(color.Output,
-						"%s finished verification in %s\n\t%s\n\t%s\n",
-						headerYellow(" INFO "),
-						yellow(totalTime),
-						yellow("import: ", importTime),
-						yellow("walk: ", walkTime))
+						"%s finished verification in %s\n\timport: %s\n\twalk: %s\n",
+						headerWhite(" INFO "),
+						totalTime,
+						importTime,
+						walkTime)
 				}()
 
 				return api.WithImportedTrie(ctx, cli, "", trieInputPath,
@@ -106,7 +106,7 @@ var cmdVerifyTrie = &cobra.Command{
 							return err
 						}
 
-						trieRoot = tp.GetRoot()
+						triePf = tp
 
 						walkTimeStart = time.Now()
 
@@ -209,7 +209,7 @@ var cmdVerifyTrie = &cobra.Command{
 					"%s the trie at %s with root %s is falsified: %s\n",
 					headerRed(" FAIL "),
 					red(trieInputPath),
-					red(trieRoot),
+					red(triePf.GetRoot()),
 					err)
 
 				return ErrSilentExitWithNonZeroCode
@@ -225,10 +225,14 @@ var cmdVerifyTrie = &cobra.Command{
 		}
 
 		fmt.Fprintf(color.Output,
-			"%s the trie at %s with root %s is verified\n",
+			"%s the trie at %s with root %s is verified, which is anchored to %s in block %v with transaction %s at %s\n",
 			headerGreen(" PASS "),
 			green(trieInputPath),
-			green(trieRoot))
+			green(triePf.GetRoot()),
+			green(triePf.GetAnchorType()),
+			green(triePf.GetBlockNumber()),
+			green(triePf.GetTxnId()),
+			green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)))
 
 		if passedKV != totalKV {
 			fmt.Fprintf(color.Error,
