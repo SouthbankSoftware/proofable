@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-21T01:24:05+11:00
+ * @Last modified time: 2020-02-24T13:27:43+11:00
  */
 
 package api
@@ -40,23 +40,25 @@ var (
 // current file and the walk will continue on the rest
 type OnFileInfoFunc func(keyPrefix string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error)
 
-// GetFilePathKeyValueStream returns a key value stream of the file path. When concurrency is 1, the
-// key-value stream is guaranteed to be sorted lexically by key
+// GetFilePathKeyValueStream returns a key value stream of the file path. When concurrency is 1 or
+// ordered is true, the key-value stream is guaranteed to be sorted lexically by key; when
+// concurrency is 0, DefaultGetFilePathKeyValueStreamConcurrency is used
 func GetFilePathKeyValueStream(
 	ctx context.Context,
 	path string,
 	concurrency uint32,
+	ordered bool,
 	onFileInfo OnFileInfoFunc,
 ) (kvCH <-chan *apiPB.KeyValue, errCH <-chan error) {
 	if concurrency == 0 {
 		concurrency = DefaultGetFilePathKeyValueStreamConcurrency
 	}
 
-	// keep the channel size low and tweak it when doing benchmark later on. The size could also be
-	// based on the concurrency
-	kvChan := make(chan *apiPB.KeyValue, 10)
+	// keep the channel size low and tweak it when doing benchmark later on
+	kvChan := make(chan *apiPB.KeyValue, 2*concurrency)
 	// error channel should always have size 1
 	errChan := make(chan error, 1)
+	doneChan := make(chan struct{})
 	// make sure the error channel only be closed once
 	closeWithErrOnce := new(sync.Once)
 	closeWithErr := func(err error) {
@@ -66,6 +68,7 @@ func GetFilePathKeyValueStream(
 			}
 
 			close(errChan)
+			close(doneChan)
 		})
 	}
 
@@ -74,12 +77,53 @@ func GetFilePathKeyValueStream(
 		defer close(kvChan)
 		defer closeWithErr(nil)
 
+		sendKV := func(kv *apiPB.KeyValue) bool {
+			select {
+			case <-ctx.Done():
+				closeWithErr(ctx.Err())
+				return false
+			case <-doneChan:
+				return true
+			case kvChan <- kv:
+				return true
+			}
+		}
+
+		asyncKVReducerDoneChan := (chan struct{})(nil)
+		asyncKVChan := (chan (<-chan *apiPB.KeyValue))(nil)
 		cLmt := (*limiter.ConcurrencyLimiter)(nil)
 
 		if concurrency != 1 {
+			if ordered {
+				asyncKVReducerDoneChan = make(chan struct{})
+				defer func() {
+					// wait for async key-value reducer to finish
+					<-asyncKVReducerDoneChan
+				}()
+
+				asyncKVChan = make(chan (<-chan *apiPB.KeyValue), concurrency)
+				// all senders to asyncKVChan should be finished by then
+				defer close(asyncKVChan)
+
+				// start async key-value reducer
+				go func() {
+					defer close(asyncKVReducerDoneChan)
+
+					for aKV := range asyncKVChan {
+						if kv, ok := <-aKV; ok {
+							if !sendKV(kv) {
+								return
+							}
+						}
+					}
+				}()
+			}
+
 			cLmt = limiter.NewConcurrencyLimiter(int(concurrency))
-			// always wait for all worker to finish
+			// wait for all hash worker to finish
 			defer cLmt.Wait()
+		} else {
+			ordered = true
 		}
 
 		hasherPool := &sync.Pool{
@@ -120,15 +164,6 @@ func GetFilePathKeyValueStream(
 			return
 		}
 
-		sendKV := func(kv *apiPB.KeyValue) error {
-			select {
-			case <-ctx.Done():
-				return ctx.Err()
-			case kvChan <- kv:
-				return nil
-			}
-		}
-
 		err := godirwalk.Walk(path, &godirwalk.Options{
 			Callback: func(fp string, de *godirwalk.Dirent) error {
 				if !(de.IsRegular() || de.IsDir()) ||
@@ -162,29 +197,62 @@ func GetFilePathKeyValueStream(
 
 				if de.IsRegular() {
 					if cLmt != nil {
+						asyncKVMapperDoneChan := (chan *apiPB.KeyValue)(nil)
+
+						if asyncKVChan != nil {
+							asyncKVMapperDoneChan = make(chan *apiPB.KeyValue)
+
+							select {
+							case <-ctx.Done():
+								return ctx.Err()
+							case <-doneChan:
+								return errors.New("error has happened during path walking")
+							case asyncKVChan <- asyncKVMapperDoneChan:
+							}
+						}
+
 						// hash in parallel with limited concurrency
 						cLmt.Execute(func() {
+							if asyncKVChan != nil {
+								defer close(asyncKVMapperDoneChan)
+							}
+
 							// check after potential queueing
 							select {
-							case <-errChan:
-								// already errored, skip
+							case <-ctx.Done():
+								// already canceled
+								closeWithErr(ctx.Err())
+								return
+							case <-doneChan:
+								// already terminated due to error, skip
 								return
 							default:
 							}
 
+							// hash operation might take long time
 							hash, err := hashTarget(target, fp)
 							if err != nil {
 								closeWithErr(err)
 								return
 							}
 
-							err = sendKV(&apiPB.KeyValue{
+							kv := &apiPB.KeyValue{
 								Key:   []byte(target),
 								Value: hash,
-							})
-							if err != nil {
-								closeWithErr(err)
-								return
+							}
+
+							if asyncKVChan == nil {
+								sendKV(kv)
+							} else {
+								select {
+								case <-ctx.Done():
+									closeWithErr(ctx.Err())
+									return
+								case <-doneChan:
+									return
+								case asyncKVMapperDoneChan <- kv:
+									return
+								}
 							}
 						})
 					} else {
@@ -209,15 +277,14 @@ func GetFilePathKeyValueStream(
 				}
 
 				for _, r := range results {
-					err := sendKV(r)
-					if err != nil {
-						return err
+					if !sendKV(r) {
+						return errors.New("failed to send key-value during path walking")
 					}
 				}
 
 				return nil
 			},
-			Unsorted:          false,
+			Unsorted:          !ordered,
 			AllowNonDirectory: true,
 		})
 		if err != nil {
