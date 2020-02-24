@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-24T11:39:51+11:00
+ * @Last modified time: 2020-02-24T13:27:43+11:00
  */
 
 package api
@@ -122,6 +122,8 @@ func GetFilePathKeyValueStream(
 			cLmt = limiter.NewConcurrencyLimiter(int(concurrency))
 			// wait for all hash worker to finish
 			defer cLmt.Wait()
+		} else {
+			ordered = true
 		}
 
 		hasherPool := &sync.Pool{
@@ -282,7 +284,7 @@ func GetFilePathKeyValueStream(
 
 				return nil
 			},
-			Unsorted:          false,
+			Unsorted:          !ordered,
 			AllowNonDirectory: true,
 		})
 		if err != nil {
