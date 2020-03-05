@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-24T12:13:30+11:00
+ * @Last modified time: 2020-03-06T01:08:24+11:00
  */
 
 package cmd
@@ -10,17 +10,22 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"time"
 
 	tnEnc "github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/encoding"
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
 	"github.com/fatih/color"
+	"github.com/karrick/godirwalk"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 const (
-	viperKeyCreateTrieOutputPath = nameCreate + "." + nameTrie + "." + nameOutputPath
+	nameIncludeMetadata = "include-metadata"
+
+	viperKeyCreateTrieOutputPath      = nameCreate + "." + nameTrie + "." + nameOutputPath
+	viperKeyCreateTrieIncludeMetadata = nameCreate + "." + nameTrie + "." + nameIncludeMetadata
 )
 
 var cmdCreateTrie = &cobra.Command{
@@ -55,7 +60,10 @@ By default, if the path is a directory, the trie will be created under the direc
 
 				return api.WithTrie(ctx, cli, func(id, _ string) error {
 					// no need to keep in order
-					kvCH, errCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, false, nil)
+					kvCH, errCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, false,
+						func(key string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
+							return
+						})
 
 					count := 0
 
@@ -79,15 +87,16 @@ By default, if the path is a directory, the trie will be created under the direc
 						return err
 					}
 
-					tp, err := api.CreateTrieProof(ctx, cli, id, root)
+					triePf, err := api.CreateTrieProof(ctx, cli, id, root)
 					if err != nil {
 						return err
 					}
 
-					tpCH, errCH := api.SubscribeTrieProof(ctx, cli, id, tp.GetId())
+					tpCH, errCH := api.SubscribeTrieProof(ctx, cli, id, triePf.GetId())
 
 					for tp := range tpCH {
 						fmt.Printf("Creating trie proof: %s\n", tp.GetStatus())
+						triePf = tp
 					}
 
 					err = <-errCH
@@ -101,8 +110,16 @@ By default, if the path is a directory, the trie will be created under the direc
 					}
 
 					fmt.Fprintf(color.Output,
-						"%s the trie has successfully been created at %s with %v key-values and root %s\n",
-						headerGreen(" OK "), green(trieOutputPath), green(count), green(root))
+						"%s the trie has successfully been created at %s with %v key-values and root %s, which is anchored to %s in block %v with transaction %s at %s\n",
+						headerGreen(" OK "),
+						green(trieOutputPath),
+						green(count),
+						green(root),
+						green(triePf.GetAnchorType()),
+						green(triePf.GetBlockNumber()),
+						green(triePf.GetTxnId()),
+						green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
+					)
 
 					return nil
 				})
@@ -113,6 +130,8 @@ By default, if the path is a directory, the trie will be created under the direc
 func init() {
 	cmdCreate.AddCommand(cmdCreateTrie)
 
-	cmdCreateTrie.Flags().StringP(nameOutputPath, "o", "", "specify the trie output path")
+	cmdCreateTrie.Flags().StringP(nameOutputPath, "t", "", "specify the trie output path")
 	viper.BindPFlag(viperKeyCreateTrieOutputPath, cmdCreateTrie.Flags().Lookup(nameOutputPath))
+	cmdCreateTrie.Flags().Bool(nameIncludeMetadata, false, "specify whether to include metadata")
+	viper.BindPFlag(viperKeyCreateTrieIncludeMetadata, cmdCreateTrie.Flags().Lookup(nameIncludeMetadata))
 }

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-24T14:12:15+11:00
+ * @Last modified time: 2020-03-06T01:08:47+11:00
  */
 
 package cmd
@@ -261,6 +261,6 @@ var cmdVerifyTrie = &cobra.Command{
 func init() {
 	cmdVerify.AddCommand(cmdVerifyTrie)
 
-	cmdVerifyTrie.Flags().StringP(nameInputPath, "i", "", "specify the trie output path")
+	cmdVerifyTrie.Flags().StringP(nameInputPath, "t", "", "specify the trie input path")
 	viper.BindPFlag(viperKeyVerifyTrieInputPath, cmdVerifyTrie.Flags().Lookup(nameInputPath))
 }
