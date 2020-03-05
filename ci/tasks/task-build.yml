@@ -1,12 +1,12 @@
 # @Author: guiguan
 # @Date:   2019-01-29T16:04:55+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-02-21T00:09:40+11:00
+# @Last modified time: 2020-03-05T19:32:55+11:00
 
 platform: linux
 image_resource:
   type: docker-image
-  source: { repository: golang, tag: 1.13.8 }
+  source: { repository: golang, tag: 1.14.0 }
 inputs:
   - name: version
   - name: provenx-cli
