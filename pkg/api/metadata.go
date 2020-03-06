@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-03-05T22:05:31+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T23:48:55+11:00
+ * @Last modified time: 2020-03-07T00:07:59+11:00
  */
 
 package api
@@ -34,17 +34,19 @@ func getKeyFromField(keyPrefix string, fdType reflect.StructField, fdValue refle
 	if k, ok := fdType.Tag.Lookup("json"); ok {
 		opts := strings.Split(k, ",")
 
-		if opts[0] == "-" || opts[0] == "" {
+		n := opts[0]
+
+		if n == "-" ||
+			len(opts) > 1 && opts[1] == "omitempty" && fdValue.IsZero() {
 			skipped = true
 			return
 		}
 
-		if len(opts) > 1 && opts[1] == "omitempty" && fdValue.IsZero() {
-			skipped = true
-			return
+		if n == "" {
+			name = fdType.Name
+		} else {
+			name = n
 		}
-
-		name = opts[0]
 	} else {
 		name = fdType.Name
 	}
