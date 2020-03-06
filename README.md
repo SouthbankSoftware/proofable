@@ -29,7 +29,10 @@ make
 ./provenx-cli create trie path/to/the/data
 
 # create a trie for a path in a custom trie location
-./provenx-cli create trie path/to/the/data -o path/to/output/the/trie.pxt
+./provenx-cli create trie path/to/the/data -t path/to/output/the/trie.pxt
+
+# create a trie for a path including metadata
+./provenx-cli create trie path/to/the/data --include-metadata
 
 # verify a trie for a path
 ./provenx-cli verify trie path/to/the/data
@@ -38,7 +41,7 @@ make
 ./provenx-cli verify trie path/to/the/data -d path/to/output/the/dot/graph.dot
 
 # verify a trie for a path from a custom trie location
-./provenx-cli verify trie path/to/the/data -i path/to/the/trie.pxt
+./provenx-cli verify trie path/to/the/data -t path/to/the/trie.pxt
 ```
 
 ## FAQ

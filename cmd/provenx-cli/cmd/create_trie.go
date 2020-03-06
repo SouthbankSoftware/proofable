@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T14:52:32+11:00
+ * @Last modified time: 2020-03-07T00:53:29+11:00
  */
 
 package cmd
@@ -143,7 +143,7 @@ By default, if the path is a directory, the trie will be created under the direc
 					}
 
 					fmt.Fprintf(color.Output,
-						"%s the trie has successfully been created at %s with %v key-values and root %s, which is anchored to %s in block %v with transaction %s at %s\n",
+						"%s the trie has successfully been created at %s with %v key-values and root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s\n",
 						headerGreen(" OK "),
 						green(trieOutputPath),
 						green(count),
@@ -152,7 +152,7 @@ By default, if the path is a directory, the trie will be created under the direc
 						green(triePf.GetBlockNumber()),
 						green(triePf.GetTxnId()),
 						green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
-					)
+						triePf.GetTxnUri())
 
 					return nil
 				})

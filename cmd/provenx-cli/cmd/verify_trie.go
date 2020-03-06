@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T14:41:46+11:00
+ * @Last modified time: 2020-03-07T00:50:33+11:00
  */
 
 package cmd
@@ -243,14 +243,15 @@ var cmdVerifyTrie = &cobra.Command{
 		}
 
 		fmt.Fprintf(color.Output,
-			"%s the trie at %s with root %s is verified, which is anchored to %s in block %v with transaction %s at %s\n",
+			"%s the trie at %s with root %s is verified, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s\n",
 			headerGreen(" PASS "),
 			green(trieInputPath),
 			green(triePf.GetRoot()),
 			green(triePf.GetAnchorType()),
 			green(triePf.GetBlockNumber()),
 			green(triePf.GetTxnId()),
-			green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)))
+			green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
+			triePf.GetTxnUri())
 
 		if passedKV != totalKV {
 			fmt.Fprintf(color.Error,

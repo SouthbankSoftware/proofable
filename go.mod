@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/SouthbankSoftware/provendb-trie v0.0.0-20200220141434-383dded17254
-	github.com/SouthbankSoftware/provenx-api v0.0.0-20200212060654-5b18c8134017
+	github.com/SouthbankSoftware/provenx-api v0.0.0-20200306132704-4e1d057664df
 	github.com/djherbis/times v1.2.0
 	github.com/fatih/color v1.7.0
 	github.com/golang/protobuf v1.3.2
