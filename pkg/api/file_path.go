@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T00:59:16+11:00
+ * @Last modified time: 2020-03-06T14:40:11+11:00
  */
 
 package api
@@ -39,7 +39,7 @@ var (
 // The returned key-values will be added to the result stream, which can be used to generate
 // metadata key-values. Those key-values should be prefixed by the key to indicate their parent
 // hierarchy. Return an ErrFileSkipped to skip current file and the walk will continue on the rest
-type OnFilePathKeyFunc func(key string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error)
+type OnFilePathKeyFunc func(key, fp string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error)
 
 // GetFilePathKeyValueStream returns a key value stream of the file path. When concurrency is 1 or
 // ordered is true, the key-value stream is guaranteed to be sorted lexically by key; when
@@ -171,17 +171,20 @@ func GetFilePathKeyValueStream(
 			return
 		}
 
-		hashKeyAndSend := func(key, fp string, results []*apiPB.KeyValue,
+		process := func(key, fp string, isRegular bool, results []*apiPB.KeyValue,
 			toCH chan<- *apiPB.KeyValue) error {
-			hash, err := hashKey(key, fp)
-			if err != nil {
-				return err
-			}
+			if isRegular {
+				// hash a regular file
+				hash, err := hashKey(key, fp)
+				if err != nil {
+					return err
+				}
 
-			results = append(results, &apiPB.KeyValue{
-				Key:   []byte(key),
-				Value: hash,
-			})
+				results = append(results, &apiPB.KeyValue{
+					Key:   []byte(key),
+					Value: hash,
+				})
+			}
 
 			if ordered && len(results) > 1 {
 				// sort results by key lexically
@@ -218,7 +221,7 @@ func GetFilePathKeyValueStream(
 				results := []*apiPB.KeyValue(nil)
 
 				if onFilePathKey != nil {
-					kvs, err := onFilePathKey(key, de)
+					kvs, err := onFilePathKey(key, fp, de)
 					if err != nil {
 						if errors.Is(err, ErrFileSkipped) {
 							// just skip current file
@@ -231,63 +234,61 @@ func GetFilePathKeyValueStream(
 					results = kvs
 				}
 
-				if de.IsRegular() {
-					if cLmt != nil {
-						// hash in parallel with limited concurrency
+				if cLmt != nil {
+					// hash in parallel with limited concurrency
 
-						// setup mapper for parallel ordered processing
-						asyncKVMapperDoneChan := (chan *apiPB.KeyValue)(nil)
+					// setup mapper for parallel ordered processing
+					asyncKVMapperDoneChan := (chan *apiPB.KeyValue)(nil)
 
-						if asyncKVChan != nil {
-							asyncKVMapperDoneChan = make(chan *apiPB.KeyValue, 1)
+					if asyncKVChan != nil {
+						asyncKVMapperDoneChan = make(chan *apiPB.KeyValue, 1)
 
-							select {
-							case <-ctx.Done():
-								return ctx.Err()
-							case <-doneChan:
-								return errors.New("error has happened during path walking")
-							case asyncKVChan <- asyncKVMapperDoneChan:
-							}
+						select {
+						case <-ctx.Done():
+							return ctx.Err()
+						case <-doneChan:
+							return errors.New("error has happened during path walking")
+						case asyncKVChan <- asyncKVMapperDoneChan:
+						}
+					}
+
+					cLmt.Execute(func() {
+						if asyncKVMapperDoneChan != nil {
+							// always close the mapper channel
+							defer close(asyncKVMapperDoneChan)
 						}
 
-						cLmt.Execute(func() {
-							if asyncKVMapperDoneChan != nil {
-								// always close the mapper channel
-								defer close(asyncKVMapperDoneChan)
-							}
+						// check after potential queueing
+						select {
+						case <-ctx.Done():
+							// already canceled
+							closeWithErr(ctx.Err())
+							return
+						case <-doneChan:
+							// already terminated due to error, skip
+							return
+						default:
+						}
 
-							// check after potential queueing
-							select {
-							case <-ctx.Done():
-								// already canceled
-								closeWithErr(ctx.Err())
-								return
-							case <-doneChan:
-								// already terminated due to error, skip
-								return
-							default:
-							}
+						var toCH chan<- *apiPB.KeyValue
 
-							var toCH chan<- *apiPB.KeyValue
+						if asyncKVMapperDoneChan != nil {
+							toCH = asyncKVMapperDoneChan
+						} else {
+							toCH = kvChan
+						}
 
-							if asyncKVMapperDoneChan != nil {
-								toCH = asyncKVMapperDoneChan
-							} else {
-								toCH = kvChan
-							}
-
-							err := hashKeyAndSend(key, fp, results, toCH)
-							if err != nil {
-								closeWithErr(err)
-								return
-							}
-						})
-					} else {
-						// hash in series
-						err := hashKeyAndSend(key, fp, results, kvChan)
+						err := process(key, fp, de.IsRegular(), results, toCH)
 						if err != nil {
-							return err
+							closeWithErr(err)
+							return
 						}
+					})
+				} else {
+					// hash in series
+					err := process(key, fp, de.IsRegular(), results, kvChan)
+					if err != nil {
+						return err
 					}
 				}
 

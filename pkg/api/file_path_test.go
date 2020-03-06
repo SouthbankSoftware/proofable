@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-21T13:03:24+11:00
+ * @Last modified time: 2020-03-06T14:41:01+11:00
  */
 
 package api
@@ -22,12 +22,12 @@ func ExampleGetFilePathKeyValueStream() {
 		"../../cmd/playground/",
 		1,
 		true,
-		func(keyPrefix string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
+		func(key, fp string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
 			// use this callback to define the metadata embedding logic and ignored files
 
 			kvs = []*apiPB.KeyValue{
-				{Key: []byte(keyPrefix + "/!metadata/2"), Value: []byte("value2")},
-				{Key: []byte(keyPrefix + "/!metadata/1"), Value: []byte("value1")},
+				{Key: []byte(key + "/!metadata/2"), Value: []byte("value2")},
+				{Key: []byte(key + "/!metadata/1"), Value: []byte("value1")},
 			}
 			return
 		})

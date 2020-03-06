@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T01:08:47+11:00
+ * @Last modified time: 2020-03-06T14:41:46+11:00
  */
 
 package cmd
@@ -19,6 +19,7 @@ import (
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/diff"
 	"github.com/fatih/color"
+	"github.com/karrick/godirwalk"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -110,9 +111,6 @@ var cmdVerifyTrie = &cobra.Command{
 
 						walkTimeStart = time.Now()
 
-						// make sure it is ordered
-						leftStream, leftErrCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, true, nil)
-
 						rightStream, rpCH, rightErrCH := api.VerifyTrieProof(ctx, cli, id, tp.GetId(),
 							true, dotGraphOutputPath)
 
@@ -129,6 +127,26 @@ var cmdVerifyTrie = &cobra.Command{
 								return kv
 							})
 
+						trieMetadata, err := getFileTrieRootMetadata(rightStream)
+						if err != nil {
+							return err
+						}
+
+						if trieMetadata.Version != fileTrieVersion {
+							return fmt.Errorf("file trie version mismatched, expected `%v` but got `%v`",
+								fileTrieVersion, trieMetadata.Version)
+						}
+
+						// make sure it is ordered
+						leftStream, leftErrCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, true,
+							func(key, fp string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
+								if trieMetadata.IncludeMetadata {
+									return api.GetFilePathKeyMetadata(key, fp, de)
+								}
+
+								return
+							})
+
 						err = diff.OrderedKeyValueStreams(leftStream, rightStream,
 							func(leftKV, rightKV *apiPB.KeyValue, result diff.KeyValueDiffResult) error {
 								totalKV++
@@ -140,7 +158,7 @@ var cmdVerifyTrie = &cobra.Command{
 									fmt.Fprintf(color.Output,
 										"%s %s -> %s\n",
 										headerGreen(" PASS "),
-										tnEnc.HexOrString(leftKV.Key),
+										api.String(leftKV.Key),
 										tnEnc.HexOrString(leftKV.Value))
 								case diff.KeyValueValueDifferent:
 									changedKV++
@@ -148,7 +166,7 @@ var cmdVerifyTrie = &cobra.Command{
 									fmt.Fprintf(color.Error,
 										"%s %s -> %s %s\n",
 										headerRed(" FAIL "),
-										tnEnc.HexOrString(leftKV.Key),
+										api.String(leftKV.Key),
 										red("- ", tnEnc.HexOrString(rightKV.Value)),
 										green("+ ", tnEnc.HexOrString(leftKV.Value)))
 								case diff.KeyValueLeftKeyMissing:
@@ -158,7 +176,7 @@ var cmdVerifyTrie = &cobra.Command{
 										"%s %s\n",
 										headerRed(" FAIL "),
 										red("- ",
-											tnEnc.HexOrString(rightKV.Key),
+											api.String(rightKV.Key),
 											" -> ",
 											tnEnc.HexOrString(rightKV.Value)))
 								case diff.KeyValueRightKeyMissing:
@@ -168,7 +186,7 @@ var cmdVerifyTrie = &cobra.Command{
 										"%s %s\n",
 										headerRed(" FAIL "),
 										green("+ ",
-											tnEnc.HexOrString(leftKV.Key),
+											api.String(leftKV.Key),
 											" -> ",
 											tnEnc.HexOrString(leftKV.Value)))
 								default:

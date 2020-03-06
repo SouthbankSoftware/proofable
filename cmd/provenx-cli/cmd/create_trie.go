@@ -2,12 +2,13 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T01:08:24+11:00
+ * @Last modified time: 2020-03-06T14:52:32+11:00
  */
 
 package cmd
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"time"
@@ -59,9 +60,35 @@ By default, if the path is a directory, the trie will be created under the direc
 				defer cancel()
 
 				return api.WithTrie(ctx, cli, func(id, _ string) error {
+					includeMetadata := viper.GetBool(viperKeyCreateTrieIncludeMetadata)
+
+					first := true
+
 					// no need to keep in order
 					kvCH, errCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, false,
-						func(key string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
+						func(key, fp string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
+							if first {
+								first = false
+
+								md, err := createFileTrieRootMetadata()
+								if err != nil {
+									er = err
+									return
+								}
+
+								kvs = append(kvs, md...)
+							}
+
+							if includeMetadata {
+								md, err := api.GetFilePathKeyMetadata(key, fp, de)
+								if err != nil {
+									er = err
+									return
+								}
+
+								kvs = append(kvs, md...)
+							}
+
 							return
 						})
 
@@ -69,8 +96,14 @@ By default, if the path is a directory, the trie will be created under the direc
 
 					kvCH = api.InterceptKeyValueStream(ctx, kvCH,
 						func(kv *apiPB.KeyValue) *apiPB.KeyValue {
-							fmt.Printf("%s -> %s\n",
-								tnEnc.HexOrString(kv.Key), tnEnc.HexOrString(kv.Value))
+							keyStr := api.String(kv.Key)
+
+							if bytes.HasPrefix(kv.Key, api.Bytes(api.MetadataPrefix)) {
+								keyStr = headerWhite(keyStr)
+							}
+
+							fmt.Fprintf(color.Output, "%s -> %s\n",
+								keyStr, tnEnc.HexOrString(kv.Value))
 
 							count++
 

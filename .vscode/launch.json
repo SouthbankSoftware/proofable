@@ -21,9 +21,9 @@
             "program": "${workspaceFolder}/cmd/provenx-cli",
             "env": {},
             "args": [
-                "verify",
+                "create",
                 "trie",
-                "pkg",
+                "/Users/guiguan/Downloads",
             ],
             "cwd": "${workspaceFolder}",
         }

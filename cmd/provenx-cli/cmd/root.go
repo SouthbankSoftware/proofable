@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-24T14:10:51+11:00
+ * @Last modified time: 2020-03-06T14:54:00+11:00
  */
 
 package cmd
@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -122,5 +123,48 @@ func getTriePath(filePath, userTriePath string) (triePath string, er error) {
 			triePath = filePath + api.FileExtensionTrie
 		}
 	}
+	return
+}
+
+const (
+	fileTrieVersion = 1
+)
+
+type fileTrieRootMetadata struct {
+	Version         uint32 `json:"version"`
+	IncludeMetadata bool   `json:"includeMetadata"`
+}
+
+func createFileTrieRootMetadata() (kvs []*apiPB.KeyValue, er error) {
+	metadata := &fileTrieRootMetadata{
+		Version:         fileTrieVersion,
+		IncludeMetadata: viper.GetBool(viperKeyCreateTrieIncludeMetadata),
+	}
+
+	return api.MarshalToKeyValues(api.MetadataPrefix, metadata)
+}
+
+func getFileTrieRootMetadata(stream <-chan *apiPB.KeyValue) (
+	md *fileTrieRootMetadata, er error) {
+	getKeyValue := func() (kv *apiPB.KeyValue, er error) {
+		keyValue, ok := <-stream
+		if !ok {
+			er = errors.New("stream is closed")
+			return
+		}
+
+		kv = keyValue
+		return
+	}
+
+	metadata := &fileTrieRootMetadata{}
+
+	err := api.UnmarshalFromKeyValues(api.MetadataPrefix, getKeyValue, metadata)
+	if err != nil {
+		er = err
+		return
+	}
+
+	md = metadata
 	return
 }
