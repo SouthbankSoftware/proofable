@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T14:54:00+11:00
+ * @Last modified time: 2020-03-10T14:59:03+11:00
  */
 
 package cmd
@@ -32,14 +32,18 @@ const (
 	nameInputPath  = "input-path"
 	nameOutputPath = "output-path"
 
-	// local names, viper keys and default values
+	// local names, default values and viper keys
 
-	nameAPIHostPort     = "api.host-port"
+	nameAPIHostPort = "api.host-port"
+	nameAPISecure   = "api.secure"
+	nameDevToken    = "dev-token"
+
+	defaultAPIHostPort = "api.dev.provendb.com:443"
+	defaultAPISecure   = true
+
 	viperKeyAPIHostPort = nameAPIHostPort
-	defaultAPIHostPort  = "api.dev.provendb.com:443"
-	nameAPISecure       = "api.secure"
 	viperKeyAPISecure   = nameAPISecure
-	defaultAPISecure    = true
+	viperKeyDevToken    = nameDevToken
 )
 
 var (
@@ -84,9 +88,18 @@ func init() {
 	cmdRoot.PersistentFlags().String(nameAPIHostPort,
 		defaultAPIHostPort, "specify the ProvenX API hostPort")
 	viper.BindPFlag(viperKeyAPIHostPort, cmdRoot.PersistentFlags().Lookup(nameAPIHostPort))
+
 	cmdRoot.PersistentFlags().Bool(nameAPISecure,
 		defaultAPISecure, "specify whether the ProvenX API connection is secure with TLS")
-	viper.BindPFlag(nameAPISecure, cmdRoot.PersistentFlags().Lookup(nameAPISecure))
+	viper.BindPFlag(viperKeyAPISecure, cmdRoot.PersistentFlags().Lookup(nameAPISecure))
+
+	cmdRoot.PersistentFlags().String(nameDevToken,
+		"", "specify the dev authentication token")
+	err := cmdRoot.PersistentFlags().MarkHidden(nameDevToken)
+	if err != nil {
+		panic(err)
+	}
+	viper.BindPFlag(viperKeyDevToken, cmdRoot.PersistentFlags().Lookup(nameDevToken))
 }
 
 func initConfig() {
