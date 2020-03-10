@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-07T00:50:33+11:00
+ * @Last modified time: 2020-03-10T15:20:47+11:00
  */
 
 package cmd
@@ -57,10 +57,15 @@ var cmdVerifyTrie = &cobra.Command{
 		dotGraphOutputPath := viper.GetString(viperKeyVerifyDotGraphOutputPath)
 
 		if dotGraphOutputPath != "" {
-			err = checkOutputPath("dot graph output path", dotGraphOutputPath)
+			err := checkOutputPath("dot graph output path", dotGraphOutputPath)
 			if err != nil {
 				return err
 			}
+		}
+
+		creds, err := getCreds()
+		if err != nil {
+			return err
 		}
 
 		var (
@@ -74,7 +79,7 @@ var cmdVerifyTrie = &cobra.Command{
 
 		err = api.WithAPIClient(
 			viper.GetString(viperKeyAPIHostPort),
-			viper.GetBool(viperKeyAPISecure),
+			creds,
 			func(cli apiPB.APIServiceClient) error {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()

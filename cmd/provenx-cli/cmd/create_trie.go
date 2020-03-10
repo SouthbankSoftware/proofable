@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-07T00:53:29+11:00
+ * @Last modified time: 2020-03-10T15:19:50+11:00
  */
 
 package cmd
@@ -52,9 +52,14 @@ By default, if the path is a directory, the trie will be created under the direc
 			return err
 		}
 
+		creds, err := getCreds()
+		if err != nil {
+			return err
+		}
+
 		return api.WithAPIClient(
 			viper.GetString(viperKeyAPIHostPort),
-			viper.GetBool(viperKeyAPISecure),
+			creds,
 			func(cli apiPB.APIServiceClient) error {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
@@ -165,6 +170,7 @@ func init() {
 
 	cmdCreateTrie.Flags().StringP(nameOutputPath, "t", "", "specify the trie output path")
 	viper.BindPFlag(viperKeyCreateTrieOutputPath, cmdCreateTrie.Flags().Lookup(nameOutputPath))
+
 	cmdCreateTrie.Flags().Bool(nameIncludeMetadata, false, "specify whether to include metadata")
 	viper.BindPFlag(viperKeyCreateTrieIncludeMetadata, cmdCreateTrie.Flags().Lookup(nameIncludeMetadata))
 }

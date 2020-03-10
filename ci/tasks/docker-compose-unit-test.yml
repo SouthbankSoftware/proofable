@@ -1,7 +1,7 @@
 # @Author: guiguan, koustubhg
 # @Date:   2019-01-29T16:05:51+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-03-05T19:32:55+11:00
+# @Last modified time: 2020-03-10T15:46:46+11:00
 
 version: "3.4"
 
@@ -21,6 +21,7 @@ services:
     environment:
       PROVENX_CLI_API_HOST_PORT: "api:10014"
       PROVENX_CLI_API_SECURE: "false"
+      PROVENX_CLI_DEV_TOKEN: "magic"
     volumes:
       - $PWD/provenx-cli:/go/provenx-cli
     networks:

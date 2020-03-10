@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-19T11:35:35+11:00
+ * @Last modified time: 2020-03-10T11:42:24+11:00
  */
 
 package cmd
@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	nameDotGraphOutputPath           = "dot-graph." + nameOutputPath
+	nameDotGraphOutputPath = "dot-graph." + nameOutputPath
+
 	viperKeyVerifyDotGraphOutputPath = nameVerify + "." + nameDotGraphOutputPath
 )
 
