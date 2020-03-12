@@ -14,6 +14,17 @@
             "args": []
         },
         {
+            "name": "provenx-cli remote",
+            "type": "go",
+            "request": "launch",
+            "mode": "remote",
+            "remotePath": "${workspaceFolder}/cmd/provenx-cli",
+            "program": "${workspaceFolder}/cmd/provenx-cli",
+            "cwd": "${workspaceFolder}",
+            "port": 2345,
+            "host": "127.0.0.1",
+        },
+        {
             "name": "provenx-cli",
             "type": "go",
             "request": "launch",

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-10T15:20:47+11:00
+ * @Last modified time: 2020-03-12T11:51:01+11:00
  */
 
 package cmd
@@ -17,8 +17,8 @@ import (
 	tnEnc "github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/encoding"
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
+	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/diff"
-	"github.com/fatih/color"
 	"github.com/karrick/godirwalk"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -63,7 +63,10 @@ var cmdVerifyTrie = &cobra.Command{
 			}
 		}
 
-		creds, err := getCreds()
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		creds, err := getCreds(ctx)
 		if err != nil {
 			return err
 		}
@@ -81,9 +84,6 @@ var cmdVerifyTrie = &cobra.Command{
 			viper.GetString(viperKeyAPIHostPort),
 			creds,
 			func(cli apiPB.APIServiceClient) error {
-				ctx, cancel := context.WithCancel(context.Background())
-				defer cancel()
-
 				var (
 					totalTimeStart,
 					walkTimeStart time.Time
@@ -97,9 +97,7 @@ var cmdVerifyTrie = &cobra.Command{
 					walkTime := endTime.Sub(walkTimeStart)
 					importTime := totalTime - walkTime
 
-					fmt.Fprintf(color.Output,
-						"%s finished verification in %s\n\timport: %s\n\twalk: %s\n",
-						headerWhite(" INFO "),
+					colorcli.Infolnf("finished verification in %s\n\timport: %s\n\twalk: %s",
 						totalTime,
 						importTime,
 						walkTime)
@@ -160,44 +158,34 @@ var cmdVerifyTrie = &cobra.Command{
 								case diff.KeyValueEqual:
 									passedKV++
 
-									fmt.Fprintf(color.Output,
-										"%s %s -> %s\n",
-										headerGreen(" PASS "),
+									colorcli.Passlnf("%s -> %s",
 										api.String(leftKV.Key),
 										tnEnc.HexOrString(leftKV.Value))
 								case diff.KeyValueValueDifferent:
 									changedKV++
 
-									fmt.Fprintf(color.Error,
-										"%s %s -> %s %s\n",
-										headerRed(" FAIL "),
+									colorcli.Faillnf("%s -> %s %s",
 										api.String(leftKV.Key),
-										red("- ", tnEnc.HexOrString(rightKV.Value)),
-										green("+ ", tnEnc.HexOrString(leftKV.Value)))
+										colorcli.Red("- ", tnEnc.HexOrString(rightKV.Value)),
+										colorcli.Green("+ ", tnEnc.HexOrString(leftKV.Value)))
 								case diff.KeyValueLeftKeyMissing:
 									missingKV++
 
-									fmt.Fprintf(color.Error,
-										"%s %s\n",
-										headerRed(" FAIL "),
-										red("- ",
+									colorcli.Faillnf("%s",
+										colorcli.Red("- ",
 											api.String(rightKV.Key),
 											" -> ",
 											tnEnc.HexOrString(rightKV.Value)))
 								case diff.KeyValueRightKeyMissing:
 									untrackedKV++
 
-									fmt.Fprintf(color.Error,
-										"%s %s\n",
-										headerRed(" FAIL "),
-										green("+ ",
+									colorcli.Faillnf("%s",
+										colorcli.Green("+ ",
 											api.String(leftKV.Key),
 											" -> ",
 											tnEnc.HexOrString(leftKV.Value)))
 								default:
-									fmt.Fprintf(color.Error,
-										"%s unexpected key-value diff result type: %T\n",
-										headerRed(" FAIL "),
+									colorcli.Faillnf("unexpected key-value diff result type: %T",
 										result)
 								}
 
@@ -228,55 +216,45 @@ var cmdVerifyTrie = &cobra.Command{
 			})
 		if err != nil {
 			if verifiable {
-				fmt.Fprintf(color.Error,
-					"%s the trie at %s with root %s is falsified: %s\n",
-					headerRed(" FAIL "),
-					red(trieInputPath),
-					red(triePf.GetRoot()),
+				colorcli.Faillnf("the trie at %s with root %s is falsified: %s",
+					colorcli.Red(trieInputPath),
+					colorcli.Red(triePf.GetRoot()),
 					err)
 
-				return ErrSilentExitWithNonZeroCode
+				return errSilentExitWithNonZeroCode
 			}
 
-			fmt.Fprintf(color.Error,
-				"%s the trie at %s is unverifiable: %s\n",
-				headerRed(" FAIL "),
-				red(trieInputPath),
+			colorcli.Faillnf("the trie at %s is unverifiable: %s",
+				colorcli.Red(trieInputPath),
 				err)
 
-			return ErrSilentExitWithNonZeroCode
+			return errSilentExitWithNonZeroCode
 		}
 
-		fmt.Fprintf(color.Output,
-			"%s the trie at %s with root %s is verified, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s\n",
-			headerGreen(" PASS "),
-			green(trieInputPath),
-			green(triePf.GetRoot()),
-			green(triePf.GetAnchorType()),
-			green(triePf.GetBlockNumber()),
-			green(triePf.GetTxnId()),
-			green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
+		colorcli.Passlnf("the trie at %s with root %s is verified, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+			colorcli.Green(trieInputPath),
+			colorcli.Green(triePf.GetRoot()),
+			colorcli.Green(triePf.GetAnchorType()),
+			colorcli.Green(triePf.GetBlockNumber()),
+			colorcli.Green(triePf.GetTxnId()),
+			colorcli.Green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
 			triePf.GetTxnUri())
 
 		if passedKV != totalKV {
-			fmt.Fprintf(color.Error,
-				"%s the path at %s is falsified: mismatched with trie key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s\n\t%s\n",
-				headerRed(" FAIL "),
-				red(filePath),
+			colorcli.Faillnf("the path at %s is falsified: mismatched with trie key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s\n\t%s",
+				colorcli.Red(filePath),
 				totalKV,
-				green("passed: ", passedKV),
-				red("changed: ", changedKV),
-				red("untracked: ", untrackedKV),
-				red("missing: ", missingKV))
+				colorcli.Green("passed: ", passedKV),
+				colorcli.Red("changed: ", changedKV),
+				colorcli.Red("untracked: ", untrackedKV),
+				colorcli.Red("missing: ", missingKV))
 
-			return ErrSilentExitWithNonZeroCode
+			return errSilentExitWithNonZeroCode
 		}
 
-		fmt.Fprintf(color.Output,
-			"%s the path at %s is verified, which contains %s key-values\n",
-			headerGreen(" PASS "),
-			green(filePath),
-			green(totalKV))
+		colorcli.Passlnf("the path at %s is verified, which contains %s key-values",
+			colorcli.Green(filePath),
+			colorcli.Green(totalKV))
 
 		return nil
 	},

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-10T15:19:50+11:00
+ * @Last modified time: 2020-03-11T21:06:09+11:00
  */
 
 package cmd
@@ -16,7 +16,7 @@ import (
 	tnEnc "github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/encoding"
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
-	"github.com/fatih/color"
+	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
 	"github.com/karrick/godirwalk"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -52,7 +52,10 @@ By default, if the path is a directory, the trie will be created under the direc
 			return err
 		}
 
-		creds, err := getCreds()
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+
+		creds, err := getCreds(ctx)
 		if err != nil {
 			return err
 		}
@@ -61,9 +64,6 @@ By default, if the path is a directory, the trie will be created under the direc
 			viper.GetString(viperKeyAPIHostPort),
 			creds,
 			func(cli apiPB.APIServiceClient) error {
-				ctx, cancel := context.WithCancel(context.Background())
-				defer cancel()
-
 				return api.WithTrie(ctx, cli, func(id, _ string) error {
 					includeMetadata := viper.GetBool(viperKeyCreateTrieIncludeMetadata)
 
@@ -104,10 +104,10 @@ By default, if the path is a directory, the trie will be created under the direc
 							keyStr := api.String(kv.Key)
 
 							if bytes.HasPrefix(kv.Key, api.Bytes(api.MetadataPrefix)) {
-								keyStr = headerWhite(keyStr)
+								keyStr = colorcli.HeaderWhite(keyStr)
 							}
 
-							fmt.Fprintf(color.Output, "%s -> %s\n",
+							colorcli.Printf("%s -> %s\n",
 								keyStr, tnEnc.HexOrString(kv.Value))
 
 							count++
@@ -133,7 +133,7 @@ By default, if the path is a directory, the trie will be created under the direc
 					tpCH, errCH := api.SubscribeTrieProof(ctx, cli, id, triePf.GetId())
 
 					for tp := range tpCH {
-						fmt.Printf("Creating trie proof: %s\n", tp.GetStatus())
+						colorcli.Printf("Creating trie proof: %s\n", tp.GetStatus())
 						triePf = tp
 					}
 
@@ -147,16 +147,14 @@ By default, if the path is a directory, the trie will be created under the direc
 						return err
 					}
 
-					fmt.Fprintf(color.Output,
-						"%s the trie has successfully been created at %s with %v key-values and root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s\n",
-						headerGreen(" OK "),
-						green(trieOutputPath),
-						green(count),
-						green(root),
-						green(triePf.GetAnchorType()),
-						green(triePf.GetBlockNumber()),
-						green(triePf.GetTxnId()),
-						green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
+					colorcli.Oklnf("the trie has successfully been created at %s with %v key-values and root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+						colorcli.Green(trieOutputPath),
+						colorcli.Green(count),
+						colorcli.Green(root),
+						colorcli.Green(triePf.GetAnchorType()),
+						colorcli.Green(triePf.GetBlockNumber()),
+						colorcli.Green(triePf.GetTxnId()),
+						colorcli.Green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
 						triePf.GetTxnUri())
 
 					return nil
