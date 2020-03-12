@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-10T14:59:03+11:00
+ * @Last modified time: 2020-03-12T16:04:47+11:00
  */
 
 package cmd
@@ -16,7 +16,7 @@ import (
 
 	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
-	"github.com/fatih/color"
+	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -34,31 +34,22 @@ const (
 
 	// local names, default values and viper keys
 
-	nameAPIHostPort = "api.host-port"
-	nameAPISecure   = "api.secure"
-	nameDevToken    = "dev-token"
+	nameAPIHostPort                = "api.host-port"
+	nameAPISecure                  = "api.secure"
+	nameProvenDBAPIGatewayEndpoint = "provendb-api-gateway.endpoint"
+	nameDevToken                   = "dev-token"
 
-	defaultAPIHostPort = "api.dev.provendb.com:443"
-	defaultAPISecure   = true
+	defaultAPIHostPort                = "api.dev.provendb.com:443"
+	defaultAPISecure                  = true
+	defaultProvenDBAPIGatewayEndpoint = "https://apigateway.dev.provendb.com"
 
-	viperKeyAPIHostPort = nameAPIHostPort
-	viperKeyAPISecure   = nameAPISecure
-	viperKeyDevToken    = nameDevToken
+	viperKeyAPIHostPort                = nameAPIHostPort
+	viperKeyAPISecure                  = nameAPISecure
+	viperKeyProvenDBAPIGatewayEndpoint = nameProvenDBAPIGatewayEndpoint
+	viperKeyDevToken                   = nameDevToken
 )
 
 var (
-	// ErrSilentExitWithNonZeroCode is the error returned when the CLI should exit with non-zero
-	// exit code silently without printing any error message
-	ErrSilentExitWithNonZeroCode = errors.New("silent exit with non-zero code")
-
-	headerWhite  = color.New(color.BgHiWhite, color.FgHiBlack, color.Bold).SprintFunc()
-	headerGreen  = color.New(color.BgHiGreen, color.FgHiWhite, color.Bold).SprintFunc()
-	headerYellow = color.New(color.BgHiYellow, color.FgHiWhite, color.Bold).SprintFunc()
-	headerRed    = color.New(color.BgHiRed, color.FgHiWhite, color.Bold).SprintFunc()
-	green        = color.New(color.FgHiGreen).SprintFunc()
-	yellow       = color.New(color.FgHiYellow).SprintFunc()
-	red          = color.New(color.FgHiRed).SprintFunc()
-
 	// version is set automatically in CI
 	version = "0.0.0"
 	cmdRoot = &cobra.Command{
@@ -66,14 +57,46 @@ var (
 		Short:         "ProvenX CLI",
 		SilenceErrors: true,
 	}
+	cliConfig *CLIConfig
+
+	// errSilentExitWithNonZeroCode is the error returned when the CLI should exit with non-zero
+	// exit code silently without printing any error message
+	errSilentExitWithNonZeroCode = errors.New("silent exit with non-zero code")
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd
 func Execute() {
-	if err := cmdRoot.Execute(); err != nil {
-		if !errors.Is(err, ErrSilentExitWithNonZeroCode) {
-			fmt.Fprintf(color.Error, "%s %s\n", headerRed(" FAIL "), err)
+	err := cmdRoot.Execute()
+
+	// save cli config
+	changed := false
+
+	if val := viper.GetString(viperKeyAPIHostPort); val != cliConfig.APIHostPort {
+		changed = true
+		cliConfig.APIHostPort = val
+	}
+
+	if val := viper.GetBool(viperKeyAPISecure); val != cliConfig.APISecure {
+		changed = true
+		cliConfig.APISecure = val
+	}
+
+	if val := viper.GetString(viperKeyProvenDBAPIGatewayEndpoint); val != cliConfig.ProvendbAPIGatewayEndpoint {
+		changed = true
+		cliConfig.ProvendbAPIGatewayEndpoint = val
+	}
+
+	if changed {
+		err := cliConfig.Save()
+		if err != nil {
+			colorcli.Faillnf("%s", err)
+		}
+	}
+
+	if err != nil {
+		if !errors.Is(err, errSilentExitWithNonZeroCode) {
+			colorcli.Faillnf("%s", err)
 		}
 
 		os.Exit(1)
@@ -85,17 +108,41 @@ func init() {
 
 	cobra.OnInitialize(initConfig)
 
+	// load cli config
+	cliConfig = new(CLIConfig)
+	err := cliConfig.Load()
+	if err != nil {
+		if os.IsNotExist(err) {
+			cliConfig.APIHostPort = defaultAPIHostPort
+			cliConfig.APISecure = defaultAPISecure
+			cliConfig.ProvendbAPIGatewayEndpoint = defaultProvenDBAPIGatewayEndpoint
+
+			err := cliConfig.Save()
+			if err != nil {
+				panic(err)
+			}
+		} else {
+			panic(err)
+		}
+	}
+
 	cmdRoot.PersistentFlags().String(nameAPIHostPort,
-		defaultAPIHostPort, "specify the ProvenX API hostPort")
+		cliConfig.APIHostPort, "specify the ProvenX API hostPort")
 	viper.BindPFlag(viperKeyAPIHostPort, cmdRoot.PersistentFlags().Lookup(nameAPIHostPort))
 
 	cmdRoot.PersistentFlags().Bool(nameAPISecure,
-		defaultAPISecure, "specify whether the ProvenX API connection is secure with TLS")
+		cliConfig.APISecure, "specify whether the ProvenX API connection is secure with TLS")
 	viper.BindPFlag(viperKeyAPISecure, cmdRoot.PersistentFlags().Lookup(nameAPISecure))
+
+	cmdRoot.PersistentFlags().String(nameProvenDBAPIGatewayEndpoint,
+		cliConfig.ProvendbAPIGatewayEndpoint,
+		"specify the ProvenDB API Gateway endpoint to authenticate with")
+	viper.BindPFlag(viperKeyProvenDBAPIGatewayEndpoint,
+		cmdRoot.PersistentFlags().Lookup(nameProvenDBAPIGatewayEndpoint))
 
 	cmdRoot.PersistentFlags().String(nameDevToken,
 		"", "specify the dev authentication token")
-	err := cmdRoot.PersistentFlags().MarkHidden(nameDevToken)
+	err = cmdRoot.PersistentFlags().MarkHidden(nameDevToken)
 	if err != nil {
 		panic(err)
 	}
