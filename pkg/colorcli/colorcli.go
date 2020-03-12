@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-03-11T16:47:17+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-11T20:51:08+11:00
+ * @Last modified time: 2020-03-12T16:48:07+11:00
  */
 
 package colorcli
@@ -73,7 +73,7 @@ func Warnlnf(format string, a ...interface{}) {
 	Printf("\n")
 }
 
-// Faillnf writes to stderr a formated Fail message with a newline
+// Faillnf writes to stderr a formated fail message with a newline
 func Faillnf(format string, a ...interface{}) {
 	Errorf("%s ", HeaderRed(" FAIL "))
 	Errorf(format, a...)
