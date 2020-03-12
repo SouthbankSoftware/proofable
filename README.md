@@ -4,8 +4,6 @@
 
 ## Usage
 
-_**Currently**_, `provenx-cli` connects directly to the dev `provenx-api` with TLS, which can be configured via CLI options, and magic auth token
-
 ### Download dev binaries
 
 - [mac](https://storage.googleapis.com/provendb-dev/provenx-cli/provenx-cli_darwin_amd64)
@@ -24,6 +22,12 @@ make
 ```bash
 # for help
 ./provenx-cli -h
+
+# authenticate with ProvenDB. You don't have to explicitly run this. When you execute a command that requires authentication, it will be automatically run
+./provenx-cli auth
+
+# remove existing authentication
+./provenx-cli auth -d
 
 # create a trie for a path
 ./provenx-cli create trie path/to/the/data
