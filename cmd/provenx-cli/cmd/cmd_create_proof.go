@@ -25,16 +25,16 @@ import (
 const (
 	nameIncludeMetadata = "include-metadata"
 
-	viperKeyCreateTrieOutputPath      = nameCreate + "." + nameTrie + "." + nameOutputPath
-	viperKeyCreateTrieIncludeMetadata = nameCreate + "." + nameTrie + "." + nameIncludeMetadata
+	viperKeyCreateProofOutputPath      = nameCreate + "." + nameProof + "." + nameOutputPath
+	viperKeyCreateProofIncludeMetadata = nameCreate + "." + nameProof + "." + nameIncludeMetadata
 )
 
-var cmdCreateTrie = &cobra.Command{
-	Use:   fmt.Sprintf("%v <path>", nameTrie),
-	Short: "Create a trie",
-	Long: fmt.Sprintf(`Create a trie (%[1]v) for the given path. The trie proves all the key-values of the path
+var cmdCreateProof = &cobra.Command{
+	Use:   fmt.Sprintf("%v <path>", nameProof),
+	Short: "Create a proof",
+	Long: fmt.Sprintf(`Create a proof (%[1]v) for the given path. The proof can prove all the key-values of the path, i.e. file hashes and metadata
 
-By default, if the path is a directory, the trie will be created under the directory as "%[1]v"; if the path is a file, the trie will be created next to the file as "[filename]%[1]v"
+By default, if the path is a directory, the proof will be created under the directory as "%[1]v"; if the path is a file, the proof will be created next to the file as "[filename]%[1]v"
 `, api.FileExtensionTrie),
 	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -43,12 +43,12 @@ By default, if the path is a directory, the trie will be created under the direc
 
 		filePath := args[0]
 		trieOutputPath, err := getTriePath(filePath,
-			viper.GetString(viperKeyCreateTrieOutputPath))
+			viper.GetString(viperKeyCreateProofOutputPath))
 		if err != nil {
 			return err
 		}
 
-		err = checkOutputPath("trie output path", trieOutputPath)
+		err = checkOutputPath("proof output path", trieOutputPath)
 		if err != nil {
 			return err
 		}
@@ -66,7 +66,7 @@ By default, if the path is a directory, the trie will be created under the direc
 			creds,
 			func(cli apiPB.APIServiceClient) error {
 				return api.WithTrie(ctx, cli, func(id, _ string) error {
-					includeMetadata := viper.GetBool(viperKeyCreateTrieIncludeMetadata)
+					includeMetadata := viper.GetBool(viperKeyCreateProofIncludeMetadata)
 
 					first := true
 
@@ -134,7 +134,7 @@ By default, if the path is a directory, the trie will be created under the direc
 					tpCH, errCH := api.SubscribeTrieProof(ctx, cli, id, triePf.GetId())
 
 					for tp := range tpCH {
-						colorcli.Printf("Creating trie proof: %s\n", tp.GetStatus())
+						colorcli.Printf("Anchoring proof: %s\n", tp.GetStatus())
 						triePf = tp
 					}
 
@@ -148,7 +148,7 @@ By default, if the path is a directory, the trie will be created under the direc
 						return err
 					}
 
-					colorcli.Oklnf("the trie has successfully been created at %s with %v key-values and merkle root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+					colorcli.Oklnf("the proof has successfully been created at %s with %v key-values and merkle root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 						colorcli.Green(trieOutputPath),
 						colorcli.Green(count),
 						colorcli.Green(triePf.GetProofRoot()),
@@ -165,11 +165,11 @@ By default, if the path is a directory, the trie will be created under the direc
 }
 
 func init() {
-	cmdCreate.AddCommand(cmdCreateTrie)
+	cmdCreate.AddCommand(cmdCreateProof)
 
-	cmdCreateTrie.Flags().StringP(nameOutputPath, "t", "", "specify the trie output path")
-	viper.BindPFlag(viperKeyCreateTrieOutputPath, cmdCreateTrie.Flags().Lookup(nameOutputPath))
+	cmdCreateProof.Flags().StringP(nameOutputPath, shorthandProofPath, "", "specify the proof output path")
+	viper.BindPFlag(viperKeyCreateProofOutputPath, cmdCreateProof.Flags().Lookup(nameOutputPath))
 
-	cmdCreateTrie.Flags().Bool(nameIncludeMetadata, false, "specify whether to include metadata")
-	viper.BindPFlag(viperKeyCreateTrieIncludeMetadata, cmdCreateTrie.Flags().Lookup(nameIncludeMetadata))
+	cmdCreateProof.Flags().Bool(nameIncludeMetadata, false, "specify whether to include metadata")
+	viper.BindPFlag(viperKeyCreateProofIncludeMetadata, cmdCreateProof.Flags().Lookup(nameIncludeMetadata))
 }

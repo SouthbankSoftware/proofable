@@ -29,9 +29,9 @@ var (
 	DefaultGetFilePathKeyValueStreamConcurrency uint32 = 4
 
 	// FileExtensionTrie is the file extension for a trie
-	FileExtensionTrie = ".pxt"
+	FileExtensionTrie = ".pxproof"
 	// FileExtensionKeyValuesProof is the file extension for a key-values proof
-	FileExtensionKeyValuesProof = ".pxp"
+	FileExtensionKeyValuesProof = ".pxsubproof"
 
 	// ErrFileSkipped is the error returned when a file is skipped
 	ErrFileSkipped = errors.New("file skipped")
@@ -182,9 +182,13 @@ func GetFilePathKeyValueStream(
 
 		err := godirwalk.Walk(path, &godirwalk.Options{
 			Callback: func(fp string, de *godirwalk.Dirent) error {
-				if !(de.IsRegular() || de.IsDir()) ||
-					de.IsRegular() && filepath.Ext(fp) == FileExtensionTrie {
-					// skip non-regular files (except directories) and trie files
+				if de.IsRegular() {
+					if e := filepath.Ext(fp); e == FileExtensionTrie || e == FileExtensionKeyValuesProof {
+						// skip trie and key-values proof files
+						return nil
+					}
+				} else if !de.IsDir() {
+					// skip non-regular files (except directories)
 					return nil
 				}
 

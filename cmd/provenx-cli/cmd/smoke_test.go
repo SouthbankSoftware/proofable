@@ -20,14 +20,14 @@ func Test_Smoke(t *testing.T) {
 	triePath := filepath.Join(path, api.FileExtensionTrie)
 	defer os.RemoveAll(triePath)
 
-	cmdRoot.SetArgs([]string{"create", "trie", path})
+	cmdRoot.SetArgs([]string{"create", "proof", path})
 
 	err := cmdRoot.Execute()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	cmdRoot.SetArgs([]string{"verify", "trie", path})
+	cmdRoot.SetArgs([]string{"verify", "proof", path})
 
 	err = cmdRoot.Execute()
 	if err != nil {

@@ -5,5 +5,4 @@ data
 *.dot
 *.proof
 *.trie
-*.pxt
-*.pxp
+*.px*

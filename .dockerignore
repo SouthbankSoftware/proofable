@@ -5,8 +5,7 @@ data
 *.dot
 *.proof
 *.trie
-*.pxt
-*.pxp
+*.px*
 
 .git
 /.vscode

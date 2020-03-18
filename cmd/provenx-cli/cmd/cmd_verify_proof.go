@@ -28,13 +28,13 @@ const (
 	// Proof_ETH_TRIE format, it should be 1; for signed Proof_ETH_TRIE_SIGNED, it should be 2
 	anchorKeySepLen = 1
 
-	viperKeyVerifyTrieInputPath = nameVerify + "." + nameTrie + "." + nameInputPath
+	viperKeyVerifyProofInputPath = nameVerify + "." + nameProof + "." + nameInputPath
 )
 
-var cmdVerifyTrie = &cobra.Command{
-	Use:   fmt.Sprintf("%v <path>", nameTrie),
-	Short: "Verify a trie",
-	Long:  fmt.Sprintf(`Verify a trie (%v) for the given path`, api.FileExtensionTrie),
+var cmdVerifyProof = &cobra.Command{
+	Use:   fmt.Sprintf("%v <path>", nameProof),
+	Short: "Verify a proof",
+	Long:  fmt.Sprintf(`Verify a proof (%v) for the given path`, api.FileExtensionTrie),
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// from this point, we should silence usage if error happens
@@ -44,7 +44,7 @@ var cmdVerifyTrie = &cobra.Command{
 
 		filePath := args[0]
 		trieInputPath, err := getTriePath(filePath,
-			viper.GetString(viperKeyVerifyTrieInputPath))
+			viper.GetString(viperKeyVerifyProofInputPath))
 		if err != nil {
 			return err
 		}
@@ -132,7 +132,7 @@ var cmdVerifyTrie = &cobra.Command{
 						}
 
 						if trieMetadata.Version != fileTrieVersion {
-							return fmt.Errorf("file trie version mismatched, expected `%v` but got `%v`",
+							return fmt.Errorf("file proof version mismatched, expected `%v` but got `%v`",
 								fileTrieVersion, trieMetadata.Version)
 						}
 
@@ -172,7 +172,7 @@ var cmdVerifyTrie = &cobra.Command{
 			})
 		if err != nil {
 			if verifiable {
-				colorcli.Faillnf("the trie at %s with merkle root %s is falsified: %s",
+				colorcli.Faillnf("the proof at %s with merkle root %s is falsified: %s",
 					colorcli.Red(trieInputPath),
 					colorcli.Red(triePf.GetProofRoot()),
 					err)
@@ -180,14 +180,14 @@ var cmdVerifyTrie = &cobra.Command{
 				return errSilentExitWithNonZeroCode
 			}
 
-			colorcli.Faillnf("the trie at %s is unverifiable: %s",
+			colorcli.Faillnf("the proof at %s is unverifiable: %s",
 				colorcli.Red(trieInputPath),
 				err)
 
 			return errSilentExitWithNonZeroCode
 		}
 
-		colorcli.Passlnf("the trie at %s with merkle root %s is verified, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+		colorcli.Passlnf("the proof at %s with merkle root %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 			colorcli.Green(trieInputPath),
 			colorcli.Green(triePf.GetProofRoot()),
 			colorcli.Green(triePf.GetAnchorType()),
@@ -197,7 +197,7 @@ var cmdVerifyTrie = &cobra.Command{
 			triePf.GetTxnUri())
 
 		if df.passedKV != df.totalKV {
-			colorcli.Faillnf("the path at %s is falsified: mismatched with trie key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s\n\t%s",
+			colorcli.Faillnf("the path at %s is falsified: mismatched with proof key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s\n\t%s",
 				colorcli.Red(filePath),
 				df.totalKV,
 				colorcli.Green("passed: ", df.passedKV),
@@ -217,8 +217,8 @@ var cmdVerifyTrie = &cobra.Command{
 }
 
 func init() {
-	cmdVerify.AddCommand(cmdVerifyTrie)
+	cmdVerify.AddCommand(cmdVerifyProof)
 
-	cmdVerifyTrie.Flags().StringP(nameInputPath, "t", "", "specify the trie input path")
-	viper.BindPFlag(viperKeyVerifyTrieInputPath, cmdVerifyTrie.Flags().Lookup(nameInputPath))
+	cmdVerifyProof.Flags().StringP(nameInputPath, shorthandProofPath, "", "specify the proof input path")
+	viper.BindPFlag(viperKeyVerifyProofInputPath, cmdVerifyProof.Flags().Lookup(nameInputPath))
 }

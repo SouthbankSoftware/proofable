@@ -32,18 +32,30 @@ func getCLIConfigPath() (pt string, er error) {
 func loadCLIConfig() error {
 	cliConfig = new(CLIConfig)
 
+	changed := false
+
 	err := cliConfig.Load()
 	if err != nil {
 		if os.IsNotExist(err) {
-			cliConfig.APIHostPort = defaultAPIHostPort
 			cliConfig.APISecure = defaultAPISecure
-			cliConfig.ProvendbAPIGatewayEndpoint = defaultProvenDBAPIGatewayEndpoint
 
-			err := cliConfig.Save()
-			if err != nil {
-				return err
-			}
+			changed = true
 		} else {
+			return err
+		}
+	}
+
+	if cliConfig.APIHostPort == "" {
+		cliConfig.APIHostPort = defaultAPIHostPort
+	}
+
+	if cliConfig.ProvendbAPIGatewayEndpoint == "" {
+		cliConfig.ProvendbAPIGatewayEndpoint = defaultProvenDBAPIGatewayEndpoint
+	}
+
+	if changed {
+		err := cliConfig.Save()
+		if err != nil {
 			return err
 		}
 	}

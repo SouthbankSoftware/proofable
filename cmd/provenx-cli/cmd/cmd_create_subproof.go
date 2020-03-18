@@ -22,19 +22,19 @@ import (
 )
 
 const (
-	nameTriePath = "trie-path"
+	nameProofPath = "proof-path"
 
-	viperKeyCreateKvpTriePath   = nameCreate + "." + nameKvp + "." + nameTriePath
-	viperKeyCreateKvpOutputPath = nameCreate + "." + nameKvp + "." + nameOutputPath
+	viperKeyCreateSubproofProofPath  = nameCreate + "." + nameSubproof + "." + nameProofPath
+	viperKeyCreateSubproofOutputPath = nameCreate + "." + nameSubproof + "." + nameOutputPath
 )
 
-var cmdCreateKvp = &cobra.Command{
-	Use:   fmt.Sprintf("%v <key ...>", nameKvp),
-	Short: "Create a key-values proof",
-	Long: fmt.Sprintf(`Create a key-values proof (%v) out from the given trie (%v). The proof proves a subset of key-values of the trie independently
+var cmdCreateSubproof = &cobra.Command{
+	Use:   fmt.Sprintf("%v <key ...>", nameSubproof),
+	Short: "Create a subproof",
+	Long: fmt.Sprintf(`Create a subproof (%v) out of the given proof (%v). The subproof can independently prove a subset of the proof key-values
 
 Each <key> must be a valid key from the output of "%s/%s %s"
-`, api.FileExtensionKeyValuesProof, api.FileExtensionTrie, nameCreate, nameVerify, nameTrie),
+`, api.FileExtensionKeyValuesProof, api.FileExtensionTrie, nameCreate, nameVerify, nameProof),
 	Args: cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// from this point, we should silence usage if error happens
@@ -57,7 +57,7 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 			})
 		}
 
-		triePath := viper.GetString(viperKeyCreateKvpTriePath)
+		triePath := viper.GetString(viperKeyCreateSubproofProofPath)
 		_, err := os.Stat(triePath)
 		if err != nil {
 			return err
@@ -82,7 +82,7 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 							return err
 						}
 
-						kvpOutputPath := viper.GetString(viperKeyCreateKvpOutputPath)
+						kvpOutputPath := viper.GetString(viperKeyCreateSubproofOutputPath)
 
 						err = api.CreateKeyValuesProof(ctx, cli, id, tp.GetId(), filter,
 							kvpOutputPath)
@@ -90,7 +90,7 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 							return err
 						}
 
-						colorcli.Oklnf("the key-values proof has successfully been created at %s with %s key-values and merkle root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+						colorcli.Oklnf("the subproof has successfully been created at %s with %s key-values and merkle root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 							colorcli.Green(kvpOutputPath),
 							colorcli.Green(len(filter.Keys), " or more"),
 							colorcli.Green(tp.GetProofRoot()),
@@ -107,16 +107,16 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 }
 
 func init() {
-	cmdCreate.AddCommand(cmdCreateKvp)
+	cmdCreate.AddCommand(cmdCreateSubproof)
 
-	cmdCreateKvp.Flags().StringP(nameTriePath, "t", "", "specify the trie path")
-	err := cmdCreateKvp.MarkFlagRequired(nameTriePath)
+	cmdCreateSubproof.Flags().StringP(nameProofPath, shorthandProofPath, "", "specify the proof path")
+	err := cmdCreateSubproof.MarkFlagRequired(nameProofPath)
 	if err != nil {
 		panic(err)
 	}
-	viper.BindPFlag(viperKeyCreateKvpTriePath, cmdCreateKvp.Flags().Lookup(nameTriePath))
+	viper.BindPFlag(viperKeyCreateSubproofProofPath, cmdCreateSubproof.Flags().Lookup(nameProofPath))
 
-	cmdCreateKvp.Flags().StringP(nameOutputPath, "p",
-		defaultKvpPath, "specify the proof output path")
-	viper.BindPFlag(viperKeyCreateKvpOutputPath, cmdCreateKvp.Flags().Lookup(nameOutputPath))
+	cmdCreateSubproof.Flags().StringP(nameOutputPath, shorthandSubproofPath,
+		defaultSubproofPath, "specify the subproof output path")
+	viper.BindPFlag(viperKeyCreateSubproofOutputPath, cmdCreateSubproof.Flags().Lookup(nameOutputPath))
 }

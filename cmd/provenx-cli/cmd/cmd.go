@@ -19,19 +19,23 @@ import (
 	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"google.golang.org/grpc/status"
 )
 
 const (
 	// global names
 
 	name           = "provenx-cli"
-	nameTrie       = "trie"
-	nameKvp        = "kvp"
+	nameProof      = "proof"
+	nameSubproof   = "subproof"
 	nameCreate     = "create"
 	nameVerify     = "verify"
 	namePath       = "path"
 	nameInputPath  = "input-path"
 	nameOutputPath = "output-path"
+
+	shorthandProofPath    = "p"
+	shorthandSubproofPath = "s"
 
 	// local names, default values and viper keys
 
@@ -51,7 +55,7 @@ const (
 )
 
 var (
-	defaultKvpPath = "proof" + api.FileExtensionKeyValuesProof
+	defaultSubproofPath = "default" + api.FileExtensionKeyValuesProof
 )
 
 var (
@@ -80,7 +84,11 @@ func Execute() {
 
 	if err != nil {
 		if !errors.Is(err, errSilentExitWithNonZeroCode) {
-			colorcli.Faillnf("%s", err)
+			if s, ok := status.FromError(err); ok {
+				colorcli.Faillnf("%s", s.Message())
+			} else {
+				colorcli.Faillnf("%s", err)
+			}
 		}
 
 		os.Exit(1)
@@ -171,7 +179,7 @@ type fileTrieRootMetadata struct {
 func createFileTrieRootMetadata() (kvs []*apiPB.KeyValue, er error) {
 	metadata := &fileTrieRootMetadata{
 		Version:         fileTrieVersion,
-		IncludeMetadata: viper.GetBool(viperKeyCreateTrieIncludeMetadata),
+		IncludeMetadata: viper.GetBool(viperKeyCreateProofIncludeMetadata),
 	}
 
 	return api.MarshalToKeyValues(api.MetadataPrefix, metadata)

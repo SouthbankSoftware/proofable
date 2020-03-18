@@ -28,15 +28,15 @@ import (
 )
 
 const (
-	viperKeyVerifyKvpInputPath = nameVerify + "." + nameKvp + "." + nameInputPath
+	viperKeyVerifySubproofInputPath = nameVerify + "." + nameSubproof + "." + nameInputPath
 )
 
-var cmdVerifyKvp = &cobra.Command{
-	Use:   fmt.Sprintf("%v <path>", nameKvp),
-	Short: "Verify a key-values proof",
-	Long: fmt.Sprintf(`Verify a key-values proof (%v) against the given <path>
+var cmdVerifySubproof = &cobra.Command{
+	Use:   fmt.Sprintf("%v <path>", nameSubproof),
+	Short: "Verify a subproof",
+	Long: fmt.Sprintf(`Verify a subproof (%v) against the given <path>
 
-The <path> is the root for those keys in the proof, which is also the path that the trie (%v), used to create the proof, is proving for
+The <path> is the root for those keys in the subproof, which is also the path that the proof (%v), used to create the subproof, is proving for
 `,
 		api.FileExtensionKeyValuesProof, api.FileExtensionTrie),
 	Args: cobra.ExactArgs(1),
@@ -47,7 +47,7 @@ The <path> is the root for those keys in the proof, which is also the path that 
 		verifiable := false
 
 		filePath := args[0]
-		kvpInputPath := viper.GetString(viperKeyVerifyKvpInputPath)
+		kvpInputPath := viper.GetString(viperKeyVerifySubproofInputPath)
 
 		et, err := api.GetEthTrieFromKeyValuesProof(kvpInputPath)
 		if err != nil {
@@ -201,7 +201,7 @@ The <path> is the root for those keys in the proof, which is also the path that 
 			})
 		if err != nil {
 			if verifiable {
-				colorcli.Faillnf("the key-values proof at %s with merkle root %s is falsified: %s",
+				colorcli.Faillnf("the subproof at %s with merkle root %s is falsified: %s",
 					colorcli.Red(kvpInputPath),
 					colorcli.Red(merkleRoot),
 					err)
@@ -209,14 +209,14 @@ The <path> is the root for those keys in the proof, which is also the path that 
 				return errSilentExitWithNonZeroCode
 			}
 
-			colorcli.Faillnf("the key-values proof at %s is unverifiable: %s",
+			colorcli.Faillnf("the subproof at %s is unverifiable: %s",
 				colorcli.Red(kvpInputPath),
 				err)
 
 			return errSilentExitWithNonZeroCode
 		}
 
-		colorcli.Passlnf("the key-values proof at %s with merkle root %s is verified, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+		colorcli.Passlnf("the subproof at %s with merkle root %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 			colorcli.Green(kvpInputPath),
 			colorcli.Green(merkleRoot),
 			colorcli.Green(et.AnchorType),
@@ -226,7 +226,7 @@ The <path> is the root for those keys in the proof, which is also the path that 
 			et.TxnURI)
 
 		if df.passedKV != df.totalKV {
-			colorcli.Faillnf("the path at %s is falsified: mismatched with trie key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s",
+			colorcli.Faillnf("the path at %s is falsified: mismatched with subproof key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s",
 				colorcli.Red(filePath),
 				df.totalKV,
 				colorcli.Green("passed: ", df.passedKV),
@@ -245,9 +245,9 @@ The <path> is the root for those keys in the proof, which is also the path that 
 }
 
 func init() {
-	cmdVerify.AddCommand(cmdVerifyKvp)
+	cmdVerify.AddCommand(cmdVerifySubproof)
 
-	cmdVerifyKvp.Flags().StringP(nameInputPath, "p",
-		defaultKvpPath, "specify the proof input path")
-	viper.BindPFlag(viperKeyVerifyKvpInputPath, cmdVerifyKvp.Flags().Lookup(nameInputPath))
+	cmdVerifySubproof.Flags().StringP(nameInputPath, shorthandSubproofPath,
+		defaultSubproofPath, "specify the subproof input path")
+	viper.BindPFlag(viperKeyVerifySubproofInputPath, cmdVerifySubproof.Flags().Lookup(nameInputPath))
 }
