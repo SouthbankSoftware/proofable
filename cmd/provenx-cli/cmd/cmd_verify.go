@@ -1,8 +1,8 @@
 /*
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
- * @Last modified by:   guiguan
- * @Last modified time: 2020-03-10T11:42:24+11:00
+ * @Last modified by:   Michael Harrison
+ * @Last modified time: 2020-03-19T10:28:49+11:00
  */
 
 package cmd
@@ -20,7 +20,7 @@ const (
 
 var cmdVerify = &cobra.Command{
 	Use:   nameVerify,
-	Short: "Verify a target",
+	Short: "Verify a proof or subproof",
 }
 
 func init() {

@@ -1,8 +1,8 @@
 /*
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
- * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:18+11:00
+ * @Last modified by:   Michael Harrison
+ * @Last modified time: 2020-03-19T10:30:31+11:00
  */
 
 package cmd
@@ -30,7 +30,7 @@ const (
 
 var cmdCreateSubproof = &cobra.Command{
 	Use:   fmt.Sprintf("%v <key ...>", nameSubproof),
-	Short: "Create a subproof",
+	Short: "Create a subproof from an existing proof.",
 	Long: fmt.Sprintf(`Create a subproof (%v) out of the given proof (%v). The subproof can independently prove a subset of the proof key-values
 
 Each <key> must be a valid key from the output of "%s/%s %s"

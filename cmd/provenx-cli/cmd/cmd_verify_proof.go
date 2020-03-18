@@ -1,8 +1,8 @@
 /*
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
- * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:17+11:00
+ * @Last modified by:   Michael Harrison
+ * @Last modified time: 2020-03-19T10:32:43+11:00
  */
 
 package cmd
@@ -34,7 +34,7 @@ const (
 var cmdVerifyProof = &cobra.Command{
 	Use:   fmt.Sprintf("%v <path>", nameProof),
 	Short: "Verify a proof",
-	Long:  fmt.Sprintf(`Verify a proof (%v) for the given path`, api.FileExtensionTrie),
+	Long:  fmt.Sprintf(`Verify a proof (%v) for the given path, ensuring the proof exists on the Blockchain and has not been falsified.`, api.FileExtensionTrie),
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// from this point, we should silence usage if error happens
