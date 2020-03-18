@@ -57,10 +57,10 @@ make
 ./provenx-cli create subproof key1_of_the_proof key2_of_the_proof -p path/to/the/proof.pxproof -s path/to/output/the/subproof.pxsubproof
 
 # verify a subproof for a path
-./provenx-cli verify subproof path/to/the/data -s path/to/output/the/subproof.pxsubproof
+./provenx-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof
 
 # verify a subproof for a path and output the subproof's Graphviz Dot Graph
-./provenx-cli verify subproof path/to/the/data -s path/to/output/the/subproof.pxsubproof -d path/to/output/the/dot/graph.dot
+./provenx-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof -d path/to/output/the/dot/graph.dot
 ```
 
 ## FAQ
