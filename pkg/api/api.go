@@ -2,19 +2,21 @@
  * @Author: guiguan
  * @Date:   2020-02-15T08:42:02+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-19T01:09:38+11:00
+ * @Last modified time: 2020-03-18T15:01:18+11:00
  */
 
 package api
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"os"
 
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
+	"github.com/SouthbankSoftware/provenx-cli/pkg/proof"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 	"github.com/golang/protobuf/ptypes/empty"
 	"golang.org/x/sync/errgroup"
 )
@@ -413,7 +415,7 @@ func ImportTrie(
 }
 
 // WithImportedTrie provides a new imported trie to the closure that is automatically destroyed when
-// done
+// done. If ID is zero, a new trie ID will be generated, which is recommended when importing
 func WithImportedTrie(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
@@ -432,4 +434,203 @@ func WithImportedTrie(
 	}()
 
 	return fn(newID, root)
+}
+
+// CreateKeyValuesProof creates a key-values proof for the provided key-values out of the given trie
+// proof. When ProofID is zero, a new trie proof will be created on-the-fly
+func CreateKeyValuesProof(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	trieID,
+	proofID string,
+	filter *apiPB.KeyValuesFilter,
+	outputPath string,
+) (er error) {
+	request := &apiPB.CreateKeyValuesProofRequest{
+		TrieId: trieID,
+		Filter: filter,
+	}
+
+	if proofID != "" {
+		request.TrieProof = &apiPB.CreateKeyValuesProofRequest_ProofId{
+			ProofId: proofID,
+		}
+	} else {
+		// this is equivalent to a nil request
+		request.TrieProof = &apiPB.CreateKeyValuesProofRequest_Request{
+			Request: &apiPB.CreateTrieProofRequest{
+				TrieId: trieID,
+				Root:   "",
+			},
+		}
+	}
+
+	stream, err := cli.CreateKeyValuesProof(ctx, request)
+	if err != nil {
+		return err
+	}
+
+	rc := apiPB.NewDataStreamReader(stream, nil)
+	defer rc.Close()
+
+	outFile, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	defer outFile.Close()
+
+	_, er = io.Copy(outFile, rc)
+	return
+}
+
+// VerifyKeyValuesProof verifies the given key-values proof. When dotGraphOutputPath is non-zero, a
+// Graphviz Dot Graph will be output
+func VerifyKeyValuesProof(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	path string,
+	outputKeyValues bool,
+	dotGraphOutputPath string,
+) (kvCH <-chan *apiPB.KeyValue, rpCH <-chan *apiPB.VerifyProofReply, errCH <-chan error) {
+	kvChan := make(chan *apiPB.KeyValue, 10)
+	rpChan := make(chan *apiPB.VerifyProofReply, 1)
+	errChan := make(chan error, 1)
+
+	go func() {
+		defer close(kvChan)
+		defer close(rpChan)
+		defer close(errChan)
+
+		var er error
+
+		defer func() {
+			if er != nil {
+				errChan <- er
+			}
+		}()
+
+		// stream in the key-values proof
+		inFile, err := os.Open(path)
+		if err != nil {
+			er = err
+			return
+		}
+		defer inFile.Close()
+
+		stream, err := cli.VerifyKeyValuesProof(ctx)
+		if err != nil {
+			er = err
+			return
+		}
+
+		eg, ctx := errgroup.WithContext(ctx)
+
+		eg.Go(func() (er error) {
+			wc := apiPB.NewDataStreamWriter(
+				stream,
+				func() (md apiPB.DataChunkMetadata, er error) {
+					md = &apiPB.DataChunk_VerifyKeyValuesProofRequest{
+						VerifyKeyValuesProofRequest: &apiPB.VerifyKeyValuesProofRequest{
+							OutputKeyValues: outputKeyValues,
+							OutputDotGraph:  dotGraphOutputPath != "",
+						},
+					}
+					return
+				},
+			)
+			defer func() {
+				wc.Close()
+
+				// IMPORTANT: when finish sending the proof, we must call this to notify server-side
+				// that an EOF has been reached, because, otherwise, this CloseSend is only called when
+				// both sending and receiving have finished, which is a deadlock
+				err := stream.CloseSend()
+				if err != nil {
+					er = err
+				}
+			}()
+
+			_, er = io.Copy(wc, inFile)
+			return
+		})
+
+		// stream out the results
+		sr := apiPB.NewVerifyProofReplyStreamReader(stream)
+		// remember to always close. The optional error will be notified to receivers
+		defer func() {
+			sr.Close(er)
+		}()
+
+		if dotGraphOutputPath != "" {
+			eg.Go(func() (er error) {
+				// dot graph
+				outFile, err := os.Create(dotGraphOutputPath)
+				if err != nil {
+					return err
+				}
+				defer func() {
+					err := outFile.Close()
+					if err != nil {
+						er = err
+					}
+				}()
+
+				_, er = io.Copy(outFile, sr.DotGraph)
+				return
+			})
+		}
+
+		eg.Go(func() error {
+			for kv := range sr.KeyValues() {
+				select {
+				case <-ctx.Done():
+					return ctx.Err()
+				case kvChan <- kv:
+				}
+			}
+
+			return nil
+		})
+
+		eg.Go(func() (er error) {
+			for rp := range sr.Reply() {
+				select {
+				case <-ctx.Done():
+					return ctx.Err()
+				case rpChan <- rp:
+				}
+			}
+
+			return nil
+		})
+
+		er = eg.Wait()
+		return
+	}()
+
+	kvCH = kvChan
+	rpCH = rpChan
+	errCH = errChan
+	return
+}
+
+// GetEthTrieFromKeyValuesProof returns the EthTrie from the given key-values proof
+func GetEthTrieFromKeyValuesProof(path string) (et *proof.EthTrie, er error) {
+	f, err := os.Open(path)
+	if err != nil {
+		er = err
+		return
+	}
+	defer f.Close()
+
+	etr := &proof.EthTrie{}
+
+	err = json.NewDecoder(f).Decode(etr)
+	if err != nil {
+		er = err
+		return
+	}
+
+	et = etr
+	return
 }

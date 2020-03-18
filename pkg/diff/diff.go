@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-14T13:21:46+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-14T21:45:43+11:00
+ * @Last modified time: 2020-03-18T15:01:17+11:00
  */
 
 package diff
@@ -11,7 +11,7 @@ import (
 	"bytes"
 	"errors"
 
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 )
 
 var (

@@ -2,17 +2,15 @@
  * @Author: guiguan
  * @Date:   2020-02-18T16:30:55+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T14:04:16+11:00
+ * @Last modified time: 2020-03-18T15:01:17+11:00
  */
 
 package api
 
 import (
 	"context"
-	"reflect"
-	"unsafe"
 
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 )
 
 // InterceptKeyValueStream intercepts the key-value stream with the given callback function
@@ -39,24 +37,4 @@ func InterceptKeyValueStream(
 
 	output = ch
 	return
-}
-
-// String returns the string representation of the byte slice without copying
-func String(bytes []byte) string {
-	hdr := *(*reflect.SliceHeader)(unsafe.Pointer(&bytes))
-	return *(*string)(unsafe.Pointer(&reflect.StringHeader{
-		Data: hdr.Data,
-		Len:  hdr.Len,
-	}))
-}
-
-// Bytes returns the byte slice representation of the string without copying. The byte slice must
-// NOT be changed
-func Bytes(str string) []byte {
-	hdr := *(*reflect.StringHeader)(unsafe.Pointer(&str))
-	return *(*[]byte)(unsafe.Pointer(&reflect.SliceHeader{
-		Data: hdr.Data,
-		Len:  hdr.Len,
-		Cap:  hdr.Len,
-	}))
 }

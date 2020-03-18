@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T14:41:01+11:00
+ * @Last modified time: 2020-03-18T15:01:18+11:00
  */
 
 package api
@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"log"
 
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 	"github.com/karrick/godirwalk"
 )
 

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T11:29:34+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-10T15:10:14+11:00
+ * @Last modified time: 2020-03-18T15:01:17+11:00
  */
 
 package api
@@ -11,7 +11,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )

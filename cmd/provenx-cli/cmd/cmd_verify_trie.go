@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-12T11:51:01+11:00
+ * @Last modified time: 2020-03-18T15:01:17+11:00
  */
 
 package cmd
@@ -14,11 +14,10 @@ import (
 	"os"
 	"time"
 
-	tnEnc "github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/encoding"
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/diff"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 	"github.com/karrick/godirwalk"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -34,7 +33,8 @@ const (
 
 var cmdVerifyTrie = &cobra.Command{
 	Use:   fmt.Sprintf("%v <path>", nameTrie),
-	Short: "Verify a trie (.pxt) for the given path",
+	Short: "Verify a trie",
+	Long:  fmt.Sprintf(`Verify a trie (%v) for the given path`, api.FileExtensionTrie),
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// from this point, we should silence usage if error happens
@@ -73,11 +73,7 @@ var cmdVerifyTrie = &cobra.Command{
 
 		var (
 			triePf *apiPB.TrieProof
-			totalKV,
-			passedKV,
-			changedKV,
-			untrackedKV,
-			missingKV int
+			df     = &differ{}
 		)
 
 		err = api.WithAPIClient(
@@ -144,53 +140,13 @@ var cmdVerifyTrie = &cobra.Command{
 						leftStream, leftErrCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, true,
 							func(key, fp string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
 								if trieMetadata.IncludeMetadata {
-									return api.GetFilePathKeyMetadata(key, fp, de)
+									return api.GetFilePathKeyMetadataKeyValues(key, fp, de)
 								}
 
 								return
 							})
 
-						err = diff.OrderedKeyValueStreams(leftStream, rightStream,
-							func(leftKV, rightKV *apiPB.KeyValue, result diff.KeyValueDiffResult) error {
-								totalKV++
-
-								switch result {
-								case diff.KeyValueEqual:
-									passedKV++
-
-									colorcli.Passlnf("%s -> %s",
-										api.String(leftKV.Key),
-										tnEnc.HexOrString(leftKV.Value))
-								case diff.KeyValueValueDifferent:
-									changedKV++
-
-									colorcli.Faillnf("%s -> %s %s",
-										api.String(leftKV.Key),
-										colorcli.Red("- ", tnEnc.HexOrString(rightKV.Value)),
-										colorcli.Green("+ ", tnEnc.HexOrString(leftKV.Value)))
-								case diff.KeyValueLeftKeyMissing:
-									missingKV++
-
-									colorcli.Faillnf("%s",
-										colorcli.Red("- ",
-											api.String(rightKV.Key),
-											" -> ",
-											tnEnc.HexOrString(rightKV.Value)))
-								case diff.KeyValueRightKeyMissing:
-									untrackedKV++
-
-									colorcli.Faillnf("%s",
-										colorcli.Green("+ ",
-											api.String(leftKV.Key),
-											" -> ",
-											tnEnc.HexOrString(leftKV.Value)))
-								default:
-									colorcli.Faillnf("unexpected key-value diff result type: %T",
-										result)
-								}
-
-								return nil
-							})
+						err = diff.OrderedKeyValueStreams(leftStream, rightStream, df.push)
 						if err != nil {
 							return err
 						}
@@ -216,9 +172,9 @@ var cmdVerifyTrie = &cobra.Command{
 			})
 		if err != nil {
 			if verifiable {
-				colorcli.Faillnf("the trie at %s with root %s is falsified: %s",
+				colorcli.Faillnf("the trie at %s with merkle root %s is falsified: %s",
 					colorcli.Red(trieInputPath),
-					colorcli.Red(triePf.GetRoot()),
+					colorcli.Red(triePf.GetProofRoot()),
 					err)
 
 				return errSilentExitWithNonZeroCode
@@ -231,30 +187,30 @@ var cmdVerifyTrie = &cobra.Command{
 			return errSilentExitWithNonZeroCode
 		}
 
-		colorcli.Passlnf("the trie at %s with root %s is verified, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+		colorcli.Passlnf("the trie at %s with merkle root %s is verified, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 			colorcli.Green(trieInputPath),
-			colorcli.Green(triePf.GetRoot()),
+			colorcli.Green(triePf.GetProofRoot()),
 			colorcli.Green(triePf.GetAnchorType()),
 			colorcli.Green(triePf.GetBlockNumber()),
 			colorcli.Green(triePf.GetTxnId()),
 			colorcli.Green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
 			triePf.GetTxnUri())
 
-		if passedKV != totalKV {
+		if df.passedKV != df.totalKV {
 			colorcli.Faillnf("the path at %s is falsified: mismatched with trie key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s\n\t%s",
 				colorcli.Red(filePath),
-				totalKV,
-				colorcli.Green("passed: ", passedKV),
-				colorcli.Red("changed: ", changedKV),
-				colorcli.Red("untracked: ", untrackedKV),
-				colorcli.Red("missing: ", missingKV))
+				df.totalKV,
+				colorcli.Green("passed: ", df.passedKV),
+				colorcli.Red("changed: ", df.changedKV),
+				colorcli.Red("untracked: ", df.untrackedKV),
+				colorcli.Red("missing: ", df.missingKV))
 
 			return errSilentExitWithNonZeroCode
 		}
 
 		colorcli.Passlnf("the path at %s is verified, which contains %s key-values",
 			colorcli.Green(filePath),
-			colorcli.Green(totalKV))
+			colorcli.Green(df.totalKV))
 
 		return nil
 	},

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-03-05T22:05:31+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-07T00:07:59+11:00
+ * @Last modified time: 2020-03-18T15:01:17+11:00
  */
 
 package api
@@ -17,15 +17,44 @@ import (
 	"sort"
 	"strings"
 
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
+	"github.com/SouthbankSoftware/provenx-cli/pkg/strutil"
 	"github.com/djherbis/times"
 	"github.com/karrick/godirwalk"
 )
 
 const (
-	// MetadataPrefix is the prefix for metadata
-	MetadataPrefix = "\x00@META"
+	metadataPrefixHeader = "\x00"
+	metadataPrefixBody   = "@META"
+
+	// MetadataPrefix is the prefix for a metadata key
+	MetadataPrefix = metadataPrefixHeader + metadataPrefixBody
+	// MetadataSep is the separator for a metadata key
+	MetadataSep = "/"
 )
+
+// NormalizeKey normalizes the given key to make sure that the metadata prefix if presented has the
+// `metadataPrefixHeader`
+func NormalizeKey(key []byte) []byte {
+	bodyIdx := bytes.Index(key, strutil.Bytes(metadataPrefixBody))
+	if bodyIdx == -1 {
+		return key
+	}
+
+	headerIdx := bodyIdx - len(metadataPrefixHeader)
+	if headerIdx < 0 {
+		return append([]byte(metadataPrefixHeader), key...)
+	}
+
+	if bytes.Equal(key[headerIdx:bodyIdx], strutil.Bytes(metadataPrefixHeader)) {
+		return key
+	}
+
+	result := append(key[:0:0], key[:bodyIdx]...)
+	result = append(result, strutil.Bytes(metadataPrefixHeader)...)
+	result = append(result, key[bodyIdx:]...)
+	return result
+}
 
 func getKeyFromField(keyPrefix string, fdType reflect.StructField, fdValue reflect.Value) (
 	skipped bool, key string) {
@@ -51,7 +80,7 @@ func getKeyFromField(keyPrefix string, fdType reflect.StructField, fdValue refle
 		name = fdType.Name
 	}
 
-	key = keyPrefix + "/" + name
+	key = keyPrefix + MetadataSep + name
 	return
 }
 
@@ -91,7 +120,7 @@ func MarshalToKeyValues(keyPrefix string, v interface{}) (kvs []*apiPB.KeyValue,
 			}
 
 			results = append(results, &apiPB.KeyValue{
-				Key:   Bytes(keyStr),
+				Key:   strutil.Bytes(keyStr),
 				Value: val,
 			})
 		}
@@ -161,8 +190,8 @@ func UnmarshalFromKeyValues(
 			return
 		}
 
-		if !bytes.Equal(kv.Key, Bytes(fd.key)) {
-			er = fmt.Errorf("expected key `%v` but got `%v`", fd.key, String(kv.Key))
+		if !bytes.Equal(kv.Key, strutil.Bytes(fd.key)) {
+			er = fmt.Errorf("expected key `%v` but got `%v`", fd.key, strutil.String(kv.Key))
 			return
 		}
 
@@ -187,9 +216,9 @@ type FilePathKeyMetadata struct {
 	BirthTime  int64       `json:"birthTime,omitempty"`
 }
 
-// GetFilePathKeyMetadata gets the metadata for a file path key
-func GetFilePathKeyMetadata(key, fp string, de *godirwalk.Dirent) (
-	kvs []*apiPB.KeyValue, er error) {
+// GetFilePathMetadata gets the metadata for a file path key
+func GetFilePathMetadata(fp string) (
+	md *FilePathKeyMetadata, er error) {
 	fi, err := os.Lstat(fp)
 	if err != nil {
 		er = err
@@ -212,11 +241,24 @@ func GetFilePathKeyMetadata(key, fp string, de *godirwalk.Dirent) (
 		metadata.BirthTime = ts.BirthTime().Unix()
 	}
 
+	md = metadata
+	return
+}
+
+// GetFilePathKeyMetadataKeyValues gets the metadata key-values for a file path key
+func GetFilePathKeyMetadataKeyValues(key, fp string, de *godirwalk.Dirent) (
+	kvs []*apiPB.KeyValue, er error) {
+	md, err := GetFilePathMetadata(fp)
+	if err != nil {
+		er = err
+		return
+	}
+
 	var sep string
 
 	if de.IsDir() {
 		sep = "/"
 	}
 
-	return MarshalToKeyValues(key+sep+MetadataPrefix, metadata)
+	return MarshalToKeyValues(key+sep+MetadataPrefix, md)
 }

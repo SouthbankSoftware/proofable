@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-12T16:04:47+11:00
+ * @Last modified time: 2020-03-18T15:01:17+11:00
  */
 
 package cmd
@@ -14,9 +14,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -26,6 +26,7 @@ const (
 
 	name           = "provenx-cli"
 	nameTrie       = "trie"
+	nameKvp        = "kvp"
 	nameCreate     = "create"
 	nameVerify     = "verify"
 	namePath       = "path"
@@ -50,6 +51,10 @@ const (
 )
 
 var (
+	defaultKvpPath = "proof" + api.FileExtensionKeyValuesProof
+)
+
+var (
 	// version is set automatically in CI
 	version = "0.0.0"
 	cmdRoot = &cobra.Command{
@@ -69,29 +74,8 @@ var (
 func Execute() {
 	err := cmdRoot.Execute()
 
-	// save cli config
-	changed := false
-
-	if val := viper.GetString(viperKeyAPIHostPort); val != cliConfig.APIHostPort {
-		changed = true
-		cliConfig.APIHostPort = val
-	}
-
-	if val := viper.GetBool(viperKeyAPISecure); val != cliConfig.APISecure {
-		changed = true
-		cliConfig.APISecure = val
-	}
-
-	if val := viper.GetString(viperKeyProvenDBAPIGatewayEndpoint); val != cliConfig.ProvendbAPIGatewayEndpoint {
-		changed = true
-		cliConfig.ProvendbAPIGatewayEndpoint = val
-	}
-
-	if changed {
-		err := cliConfig.Save()
-		if err != nil {
-			colorcli.Faillnf("%s", err)
-		}
+	if err := saveCLIConfig(); err != nil {
+		colorcli.Faillnf("%s", err)
 	}
 
 	if err != nil {
@@ -108,22 +92,9 @@ func init() {
 
 	cobra.OnInitialize(initConfig)
 
-	// load cli config
-	cliConfig = new(CLIConfig)
-	err := cliConfig.Load()
+	err := loadCLIConfig()
 	if err != nil {
-		if os.IsNotExist(err) {
-			cliConfig.APIHostPort = defaultAPIHostPort
-			cliConfig.APISecure = defaultAPISecure
-			cliConfig.ProvendbAPIGatewayEndpoint = defaultProvenDBAPIGatewayEndpoint
-
-			err := cliConfig.Save()
-			if err != nil {
-				panic(err)
-			}
-		} else {
-			panic(err)
-		}
+		panic(err)
 	}
 
 	cmdRoot.PersistentFlags().String(nameAPIHostPort,
@@ -141,10 +112,12 @@ func init() {
 		cmdRoot.PersistentFlags().Lookup(nameProvenDBAPIGatewayEndpoint))
 
 	cmdRoot.PersistentFlags().String(nameDevToken,
-		"", "specify the dev authentication token")
-	err = cmdRoot.PersistentFlags().MarkHidden(nameDevToken)
-	if err != nil {
-		panic(err)
+		cliConfig.DevToken, "specify the dev authentication token")
+	if cliConfig.DevToken == "" {
+		err = cmdRoot.PersistentFlags().MarkHidden(nameDevToken)
+		if err != nil {
+			panic(err)
+		}
 	}
 	viper.BindPFlag(viperKeyDevToken, cmdRoot.PersistentFlags().Lookup(nameDevToken))
 }

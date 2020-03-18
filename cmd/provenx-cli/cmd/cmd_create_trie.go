@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-11T21:06:09+11:00
+ * @Last modified time: 2020-03-18T15:01:17+11:00
  */
 
 package cmd
@@ -13,10 +13,10 @@ import (
 	"fmt"
 	"time"
 
-	tnEnc "github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/encoding"
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
 	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
+	"github.com/SouthbankSoftware/provenx-cli/pkg/strutil"
 	"github.com/karrick/godirwalk"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -30,11 +30,12 @@ const (
 )
 
 var cmdCreateTrie = &cobra.Command{
-	Use: fmt.Sprintf("%v <path>", nameTrie),
-	Long: `Create a trie (.pxt) for the given path
+	Use:   fmt.Sprintf("%v <path>", nameTrie),
+	Short: "Create a trie",
+	Long: fmt.Sprintf(`Create a trie (%[1]v) for the given path. The trie proves all the key-values of the path
 
-By default, if the path is a directory, the trie will be created under the directory as ".pxt"; if the path is a file, the trie will be created next to the file as "[filename].pxt"
-`,
+By default, if the path is a directory, the trie will be created under the directory as "%[1]v"; if the path is a file, the trie will be created next to the file as "[filename]%[1]v"
+`, api.FileExtensionTrie),
 	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// from this point, we should silence usage if error happens
@@ -85,7 +86,7 @@ By default, if the path is a directory, the trie will be created under the direc
 							}
 
 							if includeMetadata {
-								md, err := api.GetFilePathKeyMetadata(key, fp, de)
+								md, err := api.GetFilePathKeyMetadataKeyValues(key, fp, de)
 								if err != nil {
 									er = err
 									return
@@ -101,14 +102,14 @@ By default, if the path is a directory, the trie will be created under the direc
 
 					kvCH = api.InterceptKeyValueStream(ctx, kvCH,
 						func(kv *apiPB.KeyValue) *apiPB.KeyValue {
-							keyStr := api.String(kv.Key)
+							keyStr := strutil.String(kv.Key)
 
-							if bytes.HasPrefix(kv.Key, api.Bytes(api.MetadataPrefix)) {
+							if bytes.HasPrefix(kv.Key, strutil.Bytes(api.MetadataPrefix)) {
 								keyStr = colorcli.HeaderWhite(keyStr)
 							}
 
 							colorcli.Printf("%s -> %s\n",
-								keyStr, tnEnc.HexOrString(kv.Value))
+								keyStr, strutil.HexOrString(kv.Value))
 
 							count++
 
@@ -147,10 +148,10 @@ By default, if the path is a directory, the trie will be created under the direc
 						return err
 					}
 
-					colorcli.Oklnf("the trie has successfully been created at %s with %v key-values and root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+					colorcli.Oklnf("the trie has successfully been created at %s with %v key-values and merkle root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 						colorcli.Green(trieOutputPath),
 						colorcli.Green(count),
-						colorcli.Green(root),
+						colorcli.Green(triePf.GetProofRoot()),
 						colorcli.Green(triePf.GetAnchorType()),
 						colorcli.Green(triePf.GetBlockNumber()),
 						colorcli.Green(triePf.GetTxnId()),

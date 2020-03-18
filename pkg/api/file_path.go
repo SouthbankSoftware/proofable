@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-06T14:40:11+11:00
+ * @Last modified time: 2020-03-18T15:01:18+11:00
  */
 
 package api
@@ -17,8 +17,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/SouthbankSoftware/provendb-trie/pkg/trienodes/hasher"
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
+	"github.com/SouthbankSoftware/provenx-cli/pkg/hasher"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 	"github.com/karrick/godirwalk"
 	"github.com/korovkin/limiter"
 )
@@ -30,6 +30,8 @@ var (
 
 	// FileExtensionTrie is the file extension for a trie
 	FileExtensionTrie = ".pxt"
+	// FileExtensionKeyValuesProof is the file extension for a key-values proof
+	FileExtensionKeyValuesProof = ".pxp"
 
 	// ErrFileSkipped is the error returned when a file is skipped
 	ErrFileSkipped = errors.New("file skipped")
@@ -143,32 +145,8 @@ func GetFilePathKeyValueStream(
 			hasher := hasherPool.Get().(hasher.Keccak)
 			// always put the hasher back
 			defer hasherPool.Put(hasher)
-			// always reset the hasher for future use
-			defer hasher.Reset()
 
-			hash := make([]byte, hasher.Size())
-
-			f, err := os.Open(fp)
-			if err != nil {
-				er = err
-				return
-			}
-			defer f.Close()
-
-			_, err = io.Copy(hasher, f)
-			if err != nil {
-				er = err
-				return
-			}
-
-			_, err = hasher.Read(hash)
-			if err != nil {
-				er = err
-				return
-			}
-
-			ha = hash
-			return
+			return HashFile(hasher, fp)
 		}
 
 		process := func(key, fp string, isRegular bool, results []*apiPB.KeyValue,
@@ -305,5 +283,35 @@ func GetFilePathKeyValueStream(
 
 	kvCH = kvChan
 	errCH = errChan
+	return
+}
+
+// HashFile hashes the given file and returns its hash value
+func HashFile(hasher hasher.Keccak, fp string) (ha []byte, er error) {
+	// always reset the hasher for future use
+	defer hasher.Reset()
+
+	hash := make([]byte, hasher.Size())
+
+	f, err := os.Open(fp)
+	if err != nil {
+		er = err
+		return
+	}
+	defer f.Close()
+
+	_, err = io.Copy(hasher, f)
+	if err != nil {
+		er = err
+		return
+	}
+
+	_, err = hasher.Read(hash)
+	if err != nil {
+		er = err
+		return
+	}
+
+	ha = hash
 	return
 }

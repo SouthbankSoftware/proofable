@@ -1,0 +1,326 @@
+/*
+ * @Author: guiguan
+ * @Date:   2020-01-03T14:55:49+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2020-03-18T13:37:46+11:00
+ */
+
+syntax = "proto3";
+
+option go_package = "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api";
+
+package api;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "anchor/anchor.proto";
+
+// APIService represents an API service
+service APIService {
+  // GetTries gets all tries. Admin privilege is required
+  rpc GetTries(google.protobuf.Empty) returns (stream Trie) {}
+  // GetTrie gets a trie
+  rpc GetTrie(TrieRequest) returns (Trie) {}
+  // ImportTrie creates a new trie from existing trie data. If the trie ID is
+  // not provided in the metadata, a new one will be generated
+  rpc ImportTrie(stream DataChunk) returns (Trie) {}
+  // ExportTrie exports a trie's data
+  rpc ExportTrie(TrieRequest) returns (stream DataChunk) {}
+  // CreateTrie creates an empty trie
+  rpc CreateTrie(google.protobuf.Empty) returns (Trie) {}
+  // DeleteTrie deletes a trie. This destroys everything of a trie
+  rpc DeleteTrie(TrieRequest) returns (Trie) {}
+  // GetTrieKeyValues gets key-values of a trie
+  rpc GetTrieKeyValues(TrieKeyValuesRequest) returns (stream KeyValue) {}
+  // GetTrieKeyValue gets a key-value of a trie
+  rpc GetTrieKeyValue(TrieKeyValueRequest) returns (KeyValue) {}
+  // SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to
+  // remove that key. Modifications to a trie will change its root hash
+  rpc SetTrieKeyValues(stream KeyValue) returns (Trie) {}
+  // GetTrieRoots gets roots of a trie. This is a series of roots showing the
+  // modification history of a trie
+  rpc GetTrieRoots(TrieRootsRequest) returns (stream TrieRoot) {}
+  // SetTrieRoot sets the root of a trie to the given one. This will add an
+  // entry in the root history
+  rpc SetTrieRoot(SetTrieRootRequest) returns (Trie) {}
+  // GetTrieProofs gets proofs of a trie
+  rpc GetTrieProofs(TrieProofsRequest) returns (stream TrieProof) {}
+  // GetTrieProof gets a proof of a trie. When not_before is not provided
+  // (either nil or zero), the latest proof will be returned
+  rpc GetTrieProof(TrieProofRequest) returns (TrieProof) {}
+  // SubscribeTrieProof subscribes to proof changes of a trie. When not_before
+  // is not provided (either nil or zero), the latest proof will be returned
+  rpc SubscribeTrieProof(TrieProofRequest) returns (stream TrieProof) {}
+  // CreateTrieProof creates a proof for a trie root
+  rpc CreateTrieProof(CreateTrieProofRequest) returns (TrieProof) {}
+  // DeleteTrieProof deletes a proof of a trie
+  rpc DeleteTrieProof(DeleteTrieProofRequest) returns (TrieProof) {}
+  // VerifyTrieProof verifies a proof for a trie root
+  rpc VerifyTrieProof(VerifyTrieProofRequest)
+      returns (stream VerifyProofReplyChunk) {}
+  // CreateKeyValuesProof creates a proof for the provided key-values. The proof
+  // is self-contained and can be verified independently
+  rpc CreateKeyValuesProof(CreateKeyValuesProofRequest)
+      returns (stream DataChunk) {}
+  // VerifyKeyValuesProof verifies a key-values proof
+  rpc VerifyKeyValuesProof(stream DataChunk)
+      returns (stream VerifyProofReplyChunk) {}
+}
+
+// Trie represents a trie
+message Trie {
+  // Id is the trie ID
+  string id = 1;
+  // Root is the root hash of the trie
+  string root = 2;
+}
+
+// DataChunk represents a data chunk
+message DataChunk {
+  // Data is the data within the DataChunk
+  bytes data = 1;
+  // Metadata is the metadata of the DataChunk stream, which is available in the
+  // first DataChunk
+  oneof metadata {
+    // TrieRequest is the trie request
+    TrieRequest trie_request = 2;
+    // VerifyKeyValuesProofRequest is the request to verify a key-values proof
+    VerifyKeyValuesProofRequest verify_key_values_proof_request = 3;
+  }
+}
+
+// KeyValue represents a key-value
+message KeyValue {
+  // Key is the key of the key-value
+  bytes key = 1;
+  // KeySep is the key separators for chained tries
+  repeated uint32 key_sep = 2;
+  // Value is the value of the key-value
+  bytes value = 3;
+  // Metadata is the metadata of the KeyValue stream, which is available in the
+  // first KeyValue
+  oneof metadata {
+    // TrieKeyValuesRequest is the request to set or get key-values
+    TrieKeyValuesRequest trie_key_values_request = 4;
+  }
+}
+
+// VerifyProofReplyChunk represents a verify proof reply chunk
+message VerifyProofReplyChunk {
+  // Data is the data contained in the chunk
+  oneof data {
+    // KeyValue is one of the key-values contained in the trie when the
+    // OutputKeyValues is true
+    KeyValue key_value = 1;
+    // DotGraphChunk is a chunk of the Graphviz dot graph for the trie when the
+    // OutputDotGraph is true
+    DataChunk dot_graph_chunk = 2;
+    // VerifyProofReply is the verify proof reply, which should be the data in
+    // the last VerifyProofReplyChunk
+    VerifyProofReply reply = 3;
+  }
+}
+
+// Key represents a key
+message Key {
+  // Key is the key of the key-value
+  bytes key = 1;
+  // KeySep is the key separators for chained tries
+  repeated uint32 key_sep = 2;
+}
+
+// TrieRoot represents a trie root
+message TrieRoot {
+  // Root is the root hash of the trie
+  string root = 1;
+  // CreatedAt is the created at timestamp. The timestamp when the root is
+  // created
+  google.protobuf.Timestamp created_at = 2;
+}
+
+// TrieProof represents a trie proof
+message TrieProof {
+  // Id is the ID of the trie proof
+  string id = 1;
+  // Id is the trie ID
+  string trie_id = 2;
+  // Root is the root hash of the trie proven by this proof
+  string root = 3;
+  // CreatedAt is the created at timestamp. The timestamp when the proof is
+  // created
+  google.protobuf.Timestamp created_at = 4;
+  // Status is the anchor batch status of the trie proof
+  anchor.Batch.Status status = 5;
+  // Error is the error message when status is ERROR
+  string error = 6;
+  // AnchorType is the anchor type the trie proof has been submitted to
+  anchor.Anchor.Type anchor_type = 7;
+  // TxnId is the Blockchain transaction ID
+  string txn_id = 8;
+  // TxnUri is the explorer URI for the Blockchain transaction
+  string txn_uri = 12;
+  // BlockTime is the Blockchain's block time
+  uint64 block_time = 9;
+  // BlockNumber is the Blockchain's block number
+  uint64 block_number = 10;
+  // ProofRoot is the root hash of the trie proof, which is the anchor batch's
+  // root hash the proof belongs to
+  string proof_root = 11;
+}
+
+// RootFilter represents a root filter to query a proof
+message RootFilter {
+  // Root is the root hash. When zero, the current root hash of the trie will be
+  // used to retrieve the TrieProof, and the request will be blocked until all
+  // ongoing updates are finished
+  string root = 1;
+  // NotBefore is the not before timestamp. When nil, this constraint is not
+  // used; when zero, the latest TrieProof for the root hash will be returned
+  google.protobuf.Timestamp not_before = 2;
+}
+
+// KeyValuesFilter represents a key-value filter
+message KeyValuesFilter {
+  // Keys are the keys of key-values that should be included in a key-value
+  // proof. Only those trie nodes are on the merkle paths of the given keys will
+  // be included in the proof
+  repeated Key keys = 1;
+}
+
+// TrieRequest represents a trie request
+message TrieRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+}
+
+// TrieKeyValuesRequest represents a trie key-values request. The returned
+// KeyValues are ordered by the keys alphabetically
+message TrieKeyValuesRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // Root is the root hash (optional). When zero, the current root hash of the
+  // trie will be used to retrieve the TrieKeyValues, and the request will be
+  // blocked until all ongoing updates are finished
+  string root = 2;
+}
+
+// TrieKeyValueRequest represents a trie key-value request
+message TrieKeyValueRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // Root is the root hash (optional). When zero, the current root hash of the
+  // trie will be used to retrieve the TrieKeyValues, and the request will be
+  // blocked until all ongoing updates are finished
+  string root = 2;
+  // Key is the key of the key-value
+  Key key = 3;
+}
+
+// TrieRootsRequest represents a trie roots request. The returned TrieRoots are
+// in chronological order
+message TrieRootsRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // RootFilter is the root filter (optional). When nil, all TrieRoots will be
+  // returned
+  RootFilter root_filter = 2;
+}
+
+// SetTrieRootRequest represents a set trie root request
+message SetTrieRootRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // Root is the root hash to set to
+  string root = 2;
+}
+
+// TrieProofsRequest represents a trie proofs request. The returned TrieProofs
+// are ordered by root alphabetically then by created at timestamp
+// chronologically
+message TrieProofsRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // RootFilter is the root filter (optional). When nil, all TrieProofs will be
+  // returned
+  RootFilter root_filter = 2;
+}
+
+// TrieProofRequest represents a trie proof request
+message TrieProofRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // Query is the query to get the TrieProof
+  oneof query {
+    // ProofId is the trie proof ID
+    string proof_id = 2;
+    // RootFilter is the root filter. A nil filter equals a zero filter
+    RootFilter root_filter = 3;
+  }
+}
+
+// CreateTrieProofRequest represents a create trie proof request
+message CreateTrieProofRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // Root is the root hash (optional). When zero, the current root hash of the
+  // trie will be used to create the TrieProof, and the request will be blocked
+  // until all ongoing updates are finished
+  string root = 2;
+}
+
+// DeleteTrieProofRequest represents a delete trie proof request
+message DeleteTrieProofRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // ProofId is the trie proof ID
+  string proof_id = 2;
+}
+
+// VerifyTrieProofRequest represents a verify trie proof request
+message VerifyTrieProofRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // ProofId is the trie proof ID
+  string proof_id = 2;
+  // OutputKeyValues indicates whether to output key-values contained in the
+  // trie
+  bool output_key_values = 3;
+  // OutputDotGraph indicates whether to output a Graphviz dot graph to
+  // visualize the trie
+  bool output_dot_graph = 4;
+}
+
+// CreateKeyValuesProofRequest represents a create key-values proof request
+message CreateKeyValuesProofRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // TrieProof is the trie proof to use
+  oneof trie_proof {
+    // ProofId is the trie proof id
+    string proof_id = 2;
+    // Request is the request to create a new trie proof that is going to prove
+    // the key-values
+    CreateTrieProofRequest request = 3;
+  }
+  // Filter is the key-values filter (optional). When zero, all key-values will
+  // be included in the proof
+  KeyValuesFilter filter = 4;
+}
+
+// VerifyKeyValuesProofRequest represents a verify key-values proof request
+message VerifyKeyValuesProofRequest {
+  // OutputKeyValues indicates whether to output key-values contained in the
+  // trie
+  bool output_key_values = 1;
+  // OutputDotGraph indicates whether to output a Graphviz dot graph to
+  // visualize the trie
+  bool output_dot_graph = 2;
+}
+
+// VerifyProofReply represents a verify proof reply
+message VerifyProofReply {
+  // Verified indicates whether the proof is verified
+  bool verified = 1;
+  // Error is the error message when the proof is falsified
+  string error = 2;
+}

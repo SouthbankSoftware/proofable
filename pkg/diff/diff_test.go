@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-14T13:21:46+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-02-14T23:32:04+11:00
+ * @Last modified time: 2020-03-18T15:01:18+11:00
  */
 
 package diff
@@ -11,7 +11,7 @@ import (
 	"context"
 	"testing"
 
-	apiPB "github.com/SouthbankSoftware/provenx-api/pkg/api/proto"
+	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 	"github.com/google/go-cmp/cmp"
 	"golang.org/x/sync/errgroup"
 )
