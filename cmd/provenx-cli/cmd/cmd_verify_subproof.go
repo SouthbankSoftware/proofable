@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:18+11:00
+ * @Last modified time: 2020-03-19T11:35:33+11:00
  */
 
 package cmd
@@ -201,7 +201,7 @@ The <path> is the root for those keys in the subproof, which is also the path th
 			})
 		if err != nil {
 			if verifiable {
-				colorcli.Faillnf("the subproof at %s with merkle root %s is falsified: %s",
+				colorcli.Faillnf("the subproof at %s with a root hash of %s is falsified: %s",
 					colorcli.Red(kvpInputPath),
 					colorcli.Red(merkleRoot),
 					err)
@@ -216,14 +216,14 @@ The <path> is the root for those keys in the subproof, which is also the path th
 			return errSilentExitWithNonZeroCode
 		}
 
-		colorcli.Passlnf("the subproof at %s with merkle root %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+		colorcli.Passlnf("the subproof at %s with a root hash of %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 			colorcli.Green(kvpInputPath),
 			colorcli.Green(merkleRoot),
 			colorcli.Green(et.AnchorType),
 			colorcli.Green(et.BlockNumber),
 			colorcli.Green(et.TxnID),
 			colorcli.Green(time.Unix(int64(et.BlockTime), 0).Format(time.UnixDate)),
-			et.TxnURI)
+			colorcli.Green(et.TxnURI))
 
 		if df.passedKV != df.totalKV {
 			colorcli.Faillnf("the path at %s is falsified: mismatched with subproof key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s",

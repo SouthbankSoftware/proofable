@@ -1,8 +1,8 @@
 /*
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
- * @Last modified by:   Michael Harrison
- * @Last modified time: 2020-03-19T10:32:43+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2020-03-19T11:34:56+11:00
  */
 
 package cmd
@@ -172,7 +172,7 @@ var cmdVerifyProof = &cobra.Command{
 			})
 		if err != nil {
 			if verifiable {
-				colorcli.Faillnf("the proof at %s with merkle root %s is falsified: %s",
+				colorcli.Faillnf("the proof at %s with a root hash %s is falsified: %s",
 					colorcli.Red(trieInputPath),
 					colorcli.Red(triePf.GetProofRoot()),
 					err)
@@ -187,14 +187,14 @@ var cmdVerifyProof = &cobra.Command{
 			return errSilentExitWithNonZeroCode
 		}
 
-		colorcli.Passlnf("the proof at %s with merkle root %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+		colorcli.Passlnf("the proof at %s with a root hash %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 			colorcli.Green(trieInputPath),
 			colorcli.Green(triePf.GetProofRoot()),
 			colorcli.Green(triePf.GetAnchorType()),
 			colorcli.Green(triePf.GetBlockNumber()),
 			colorcli.Green(triePf.GetTxnId()),
 			colorcli.Green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
-			triePf.GetTxnUri())
+			colorcli.Green(triePf.GetTxnUri()))
 
 		if df.passedKV != df.totalKV {
 			colorcli.Faillnf("the path at %s is falsified: mismatched with proof key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s\n\t%s",

@@ -1,8 +1,8 @@
 /*
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
- * @Last modified by:   Michael Harrison
- * @Last modified time: 2020-03-19T10:30:31+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2020-03-19T11:43:40+11:00
  */
 
 package cmd
@@ -30,8 +30,8 @@ const (
 
 var cmdCreateSubproof = &cobra.Command{
 	Use:   fmt.Sprintf("%v <key ...>", nameSubproof),
-	Short: "Create a subproof from an existing proof.",
-	Long: fmt.Sprintf(`Create a subproof (%v) out of the given proof (%v). The subproof can independently prove a subset of the proof key-values
+	Short: "Create a subproof out of an existing proof",
+	Long: fmt.Sprintf(`Create a subproof (%v) out of an existing proof (%v). The subproof can independently prove a subset of the proof's key-values
 
 Each <key> must be a valid key from the output of "%s/%s %s"
 `, api.FileExtensionKeyValuesProof, api.FileExtensionTrie, nameCreate, nameVerify, nameProof),
@@ -90,7 +90,7 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 							return err
 						}
 
-						colorcli.Oklnf("the subproof has successfully been created at %s with %s key-values and merkle root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+						colorcli.Oklnf("the subproof has successfully been created at %s with %s key-values and a root hash of %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 							colorcli.Green(kvpOutputPath),
 							colorcli.Green(len(filter.Keys), " or more"),
 							colorcli.Green(tp.GetProofRoot()),
@@ -98,7 +98,7 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 							colorcli.Green(tp.GetBlockNumber()),
 							colorcli.Green(tp.GetTxnId()),
 							colorcli.Green(time.Unix(int64(tp.GetBlockTime()), 0).Format(time.UnixDate)),
-							tp.GetTxnUri())
+							colorcli.Green(tp.GetTxnUri()))
 
 						return nil
 					})
