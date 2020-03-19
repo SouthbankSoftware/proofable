@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T11:43:40+11:00
+ * @Last modified time: 2020-03-19T12:04:40+11:00
  */
 
 package cmd
@@ -40,6 +40,8 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 		// from this point, we should silence usage if error happens
 		cmd.SilenceUsage = true
 
+		quiet := viper.GetBool(viperKeyQuiet)
+
 		keyMap := map[string]struct{}{}
 		filter := &apiPB.KeyValuesFilter{}
 
@@ -50,7 +52,9 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 			}
 			keyMap[a] = struct{}{}
 
-			colorcli.Printf("%s\n", a)
+			if !quiet {
+				colorcli.Printf("%s\n", a)
+			}
 
 			filter.Keys = append(filter.Keys, &apiPB.Key{
 				Key: api.NormalizeKey(strutil.Bytes(a)),

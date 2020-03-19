@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T11:35:33+11:00
+ * @Last modified time: 2020-03-19T12:08:12+11:00
  */
 
 package cmd
@@ -64,6 +64,8 @@ The <path> is the root for those keys in the subproof, which is also the path th
 			}
 		}
 
+		quiet := viper.GetBool(viperKeyQuiet)
+
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 
@@ -72,7 +74,9 @@ The <path> is the root for those keys in the subproof, which is also the path th
 			return err
 		}
 
-		df := &differ{}
+		df := &differ{
+			quiet: quiet,
+		}
 
 		err = api.WithAPIClient(
 			viper.GetString(viperKeyAPIHostPort),

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:17+11:00
+ * @Last modified time: 2020-03-19T11:51:45+11:00
  */
 
 package cmd
@@ -43,6 +43,7 @@ const (
 	nameAPISecure                  = "api.secure"
 	nameProvenDBAPIGatewayEndpoint = "provendb-api-gateway.endpoint"
 	nameDevToken                   = "dev-token"
+	nameQuiet                      = "quiet"
 
 	defaultAPIHostPort                = "api.dev.provendb.com:443"
 	defaultAPISecure                  = true
@@ -52,6 +53,7 @@ const (
 	viperKeyAPISecure                  = nameAPISecure
 	viperKeyProvenDBAPIGatewayEndpoint = nameProvenDBAPIGatewayEndpoint
 	viperKeyDevToken                   = nameDevToken
+	viperKeyQuiet                      = nameQuiet
 )
 
 var (
@@ -128,6 +130,10 @@ func init() {
 		}
 	}
 	viper.BindPFlag(viperKeyDevToken, cmdRoot.PersistentFlags().Lookup(nameDevToken))
+
+	cmdRoot.PersistentFlags().Bool(nameQuiet,
+		false, "specify whether to run the CLI in quiet mode with less verbose output")
+	viper.BindPFlag(viperKeyQuiet, cmdRoot.PersistentFlags().Lookup(nameQuiet))
 }
 
 func initConfig() {

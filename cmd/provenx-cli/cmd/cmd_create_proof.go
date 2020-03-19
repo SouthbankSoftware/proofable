@@ -1,8 +1,8 @@
 /*
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
- * @Last modified by:   Michael Harrison
- * @Last modified time: 2020-03-19T10:38:04+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2020-03-19T12:03:46+11:00
  */
 
 package cmd
@@ -53,6 +53,8 @@ By default, if the path is a directory, the proof will be created under the dire
 			return err
 		}
 
+		quiet := viper.GetBool(viperKeyQuiet)
+
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 
@@ -102,16 +104,19 @@ By default, if the path is a directory, the proof will be created under the dire
 
 					kvCH = api.InterceptKeyValueStream(ctx, kvCH,
 						func(kv *apiPB.KeyValue) *apiPB.KeyValue {
-							keyStr := strutil.String(kv.Key)
 
 							if bytes.HasPrefix(kv.Key, strutil.Bytes(api.MetadataPrefix)) {
-								keyStr = colorcli.HeaderWhite(keyStr)
+								colorcli.Printf("%s -> %s\n",
+									colorcli.HeaderWhite(strutil.String(kv.Key)),
+									strutil.HexOrString(kv.Value))
+							} else {
+								count++
+
+								if !quiet {
+									colorcli.Printf("%s -> %s\n",
+										strutil.String(kv.Key), strutil.HexOrString(kv.Value))
+								}
 							}
-
-							colorcli.Printf("%s -> %s\n",
-								keyStr, strutil.HexOrString(kv.Value))
-
-							count++
 
 							return kv
 						})

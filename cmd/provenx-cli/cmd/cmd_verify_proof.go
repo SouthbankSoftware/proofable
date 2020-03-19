@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T11:34:56+11:00
+ * @Last modified time: 2020-03-19T12:07:05+11:00
  */
 
 package cmd
@@ -63,6 +63,8 @@ var cmdVerifyProof = &cobra.Command{
 			}
 		}
 
+		quiet := viper.GetBool(viperKeyQuiet)
+
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 
@@ -73,7 +75,9 @@ var cmdVerifyProof = &cobra.Command{
 
 		var (
 			triePf *apiPB.TrieProof
-			df     = &differ{}
+			df     = &differ{
+				quiet: quiet,
+			}
 		)
 
 		err = api.WithAPIClient(
