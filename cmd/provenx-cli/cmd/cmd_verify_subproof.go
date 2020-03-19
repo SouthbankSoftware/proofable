@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T14:28:36+11:00
+ * @Last modified time: 2020-03-19T17:14:23+11:00
  */
 
 package cmd
@@ -45,9 +45,13 @@ The <path> is the root for those keys in the subproof, which is also the path th
 		cmd.SilenceUsage = true
 
 		verifiable := false
-
 		filePath := args[0]
+
 		kvpInputPath := viper.GetString(viperKeyVerifySubproofInputPath)
+		err := checkFilePath(kvpInputPath, api.FileExtensionKeyValuesProof)
+		if err != nil {
+			return fmt.Errorf("invalid subproof path: %w", err)
+		}
 
 		et, err := api.GetEthTrieFromKeyValuesProof(kvpInputPath)
 		if err != nil {
@@ -56,11 +60,10 @@ The <path> is the root for those keys in the subproof, which is also the path th
 		merkleRoot := hex.EncodeToString(et.Root())
 
 		dotGraphOutputPath := viper.GetString(viperKeyVerifyDotGraphOutputPath)
-
 		if dotGraphOutputPath != "" {
-			err := checkOutputPath("dot graph output path", dotGraphOutputPath)
+			err := checkFilePath(dotGraphOutputPath, api.FileExtensionDotGraph)
 			if err != nil {
-				return err
+				return fmt.Errorf("invalid dot graph output path: %w", err)
 			}
 		}
 

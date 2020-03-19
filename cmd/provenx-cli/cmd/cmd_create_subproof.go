@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T12:04:40+11:00
+ * @Last modified time: 2020-03-19T16:37:38+11:00
  */
 
 package cmd
@@ -10,7 +10,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
@@ -62,9 +61,15 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 		}
 
 		triePath := viper.GetString(viperKeyCreateSubproofProofPath)
-		_, err := os.Stat(triePath)
+		err := checkFilePath(triePath, api.FileExtensionTrie)
 		if err != nil {
-			return err
+			return fmt.Errorf("invalid proof path: %w", err)
+		}
+
+		kvpOutputPath := viper.GetString(viperKeyCreateSubproofOutputPath)
+		err = checkFilePath(kvpOutputPath, api.FileExtensionKeyValuesProof)
+		if err != nil {
+			return fmt.Errorf("invalid subproof output path: %w", err)
 		}
 
 		ctx, cancel := context.WithCancel(context.Background())
@@ -85,8 +90,6 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 						if err != nil {
 							return err
 						}
-
-						kvpOutputPath := viper.GetString(viperKeyCreateSubproofOutputPath)
 
 						err = api.CreateKeyValuesProof(ctx, cli, id, tp.GetId(), filter,
 							kvpOutputPath)

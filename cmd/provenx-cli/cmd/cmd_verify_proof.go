@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T14:28:06+11:00
+ * @Last modified time: 2020-03-19T16:45:47+11:00
  */
 
 package cmd
@@ -11,7 +11,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
@@ -46,20 +45,14 @@ var cmdVerifyProof = &cobra.Command{
 		trieInputPath, err := getTriePath(filePath,
 			viper.GetString(viperKeyVerifyProofInputPath))
 		if err != nil {
-			return err
-		}
-
-		_, err = os.Stat(trieInputPath)
-		if err != nil {
-			return err
+			return fmt.Errorf("invalid proof path: %w", err)
 		}
 
 		dotGraphOutputPath := viper.GetString(viperKeyVerifyDotGraphOutputPath)
-
 		if dotGraphOutputPath != "" {
-			err := checkOutputPath("dot graph output path", dotGraphOutputPath)
+			err := checkFilePath(dotGraphOutputPath, api.FileExtensionDotGraph)
 			if err != nil {
-				return err
+				return fmt.Errorf("invalid dot graph output path: %w", err)
 			}
 		}
 

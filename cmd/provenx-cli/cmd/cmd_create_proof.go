@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T12:03:46+11:00
+ * @Last modified time: 2020-03-19T16:56:43+11:00
  */
 
 package cmd
@@ -45,12 +45,7 @@ By default, if the path is a directory, the proof will be created under the dire
 		trieOutputPath, err := getTriePath(filePath,
 			viper.GetString(viperKeyCreateProofOutputPath))
 		if err != nil {
-			return err
-		}
-
-		err = checkOutputPath("proof output path", trieOutputPath)
-		if err != nil {
-			return err
+			return fmt.Errorf("invalid proof output path: %w", err)
 		}
 
 		quiet := viper.GetBool(viperKeyQuiet)
@@ -107,14 +102,16 @@ By default, if the path is a directory, the proof will be created under the dire
 
 							if bytes.HasPrefix(kv.Key, strutil.Bytes(api.MetadataPrefix)) {
 								colorcli.Printf("%s -> %s\n",
-									colorcli.HeaderWhite(strutil.String(kv.Key)),
+									colorcli.HeaderWhite(
+										strutil.String(strutil.BytesWithoutNullChar(kv.Key))),
 									strutil.HexOrString(kv.Value))
 							} else {
 								count++
 
 								if !quiet {
 									colorcli.Printf("%s -> %s\n",
-										strutil.String(kv.Key), strutil.HexOrString(kv.Value))
+										strutil.String(strutil.BytesWithoutNullChar(kv.Key)),
+										strutil.HexOrString(kv.Value))
 								}
 							}
 
