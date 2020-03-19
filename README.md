@@ -4,7 +4,7 @@
 
 ## TODO
 
-- [ ] code and ux review
+- [x] code and ux review
 - [ ] Linux UAT
 - [ ] Windows UAT
 
