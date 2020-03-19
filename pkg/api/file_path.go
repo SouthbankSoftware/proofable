@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:18+11:00
+ * @Last modified time: 2020-03-19T16:30:39+11:00
  */
 
 package api
@@ -32,6 +32,8 @@ var (
 	FileExtensionTrie = ".pxproof"
 	// FileExtensionKeyValuesProof is the file extension for a key-values proof
 	FileExtensionKeyValuesProof = ".pxsubproof"
+	// FileExtensionDotGraph is the file extension for a Graphviz Dot Graph
+	FileExtensionDotGraph = ".dot"
 
 	// ErrFileSkipped is the error returned when a file is skipped
 	ErrFileSkipped = errors.New("file skipped")

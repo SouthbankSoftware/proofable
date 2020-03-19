@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:18+11:00
+ * @Last modified time: 2020-03-19T17:14:23+11:00
  */
 
 package cmd
@@ -45,9 +45,13 @@ The <path> is the root for those keys in the subproof, which is also the path th
 		cmd.SilenceUsage = true
 
 		verifiable := false
-
 		filePath := args[0]
+
 		kvpInputPath := viper.GetString(viperKeyVerifySubproofInputPath)
+		err := checkFilePath(kvpInputPath, api.FileExtensionKeyValuesProof)
+		if err != nil {
+			return fmt.Errorf("invalid subproof path: %w", err)
+		}
 
 		et, err := api.GetEthTrieFromKeyValuesProof(kvpInputPath)
 		if err != nil {
@@ -56,13 +60,14 @@ The <path> is the root for those keys in the subproof, which is also the path th
 		merkleRoot := hex.EncodeToString(et.Root())
 
 		dotGraphOutputPath := viper.GetString(viperKeyVerifyDotGraphOutputPath)
-
 		if dotGraphOutputPath != "" {
-			err := checkOutputPath("dot graph output path", dotGraphOutputPath)
+			err := checkFilePath(dotGraphOutputPath, api.FileExtensionDotGraph)
 			if err != nil {
-				return err
+				return fmt.Errorf("invalid dot graph output path: %w", err)
 			}
 		}
+
+		quiet := viper.GetBool(viperKeyQuiet)
 
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
@@ -72,7 +77,9 @@ The <path> is the root for those keys in the subproof, which is also the path th
 			return err
 		}
 
-		df := &differ{}
+		df := &differ{
+			quiet: quiet,
+		}
 
 		err = api.WithAPIClient(
 			viper.GetString(viperKeyAPIHostPort),
@@ -201,29 +208,29 @@ The <path> is the root for those keys in the subproof, which is also the path th
 			})
 		if err != nil {
 			if verifiable {
-				colorcli.Faillnf("the subproof at %s with merkle root %s is falsified: %s",
+				colorcli.Faillnf("the subproof at %s with a root hash of %s is falsified: %s",
 					colorcli.Red(kvpInputPath),
 					colorcli.Red(merkleRoot),
-					err)
+					unpackGRPCErr(err))
 
 				return errSilentExitWithNonZeroCode
 			}
 
 			colorcli.Faillnf("the subproof at %s is unverifiable: %s",
 				colorcli.Red(kvpInputPath),
-				err)
+				unpackGRPCErr(err))
 
 			return errSilentExitWithNonZeroCode
 		}
 
-		colorcli.Passlnf("the subproof at %s with merkle root %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+		colorcli.Passlnf("the subproof at %s with a root hash of %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 			colorcli.Green(kvpInputPath),
 			colorcli.Green(merkleRoot),
 			colorcli.Green(et.AnchorType),
 			colorcli.Green(et.BlockNumber),
 			colorcli.Green(et.TxnID),
 			colorcli.Green(time.Unix(int64(et.BlockTime), 0).Format(time.UnixDate)),
-			et.TxnURI)
+			colorcli.Green(et.TxnURI))
 
 		if df.passedKV != df.totalKV {
 			colorcli.Faillnf("the path at %s is falsified: mismatched with subproof key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s",

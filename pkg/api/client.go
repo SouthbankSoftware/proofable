@@ -2,15 +2,12 @@
  * @Author: guiguan
  * @Date:   2020-02-15T11:29:34+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:17+11:00
+ * @Last modified time: 2020-03-19T14:49:46+11:00
  */
 
 package api
 
 import (
-	"crypto/tls"
-	"crypto/x509"
-
 	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -22,14 +19,7 @@ func NewAPIClient(hostPort string, creds credentials.PerRPCCredentials) (
 	secureOpt := grpc.DialOption(nil)
 
 	if creds.RequireTransportSecurity() {
-		rootCAs, err := x509.SystemCertPool()
-		if err != nil {
-			er = err
-			return
-		}
-
-		secureOpt = grpc.WithTransportCredentials(
-			credentials.NewTLS(&tls.Config{RootCAs: rootCAs}))
+		secureOpt = grpc.WithTransportCredentials(credentials.NewTLS(nil))
 	} else {
 		secureOpt = grpc.WithInsecure()
 	}

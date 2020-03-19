@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:17+11:00
+ * @Last modified time: 2020-03-19T17:20:55+11:00
  */
 
 package cmd
@@ -11,7 +11,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
@@ -34,7 +33,7 @@ const (
 var cmdVerifyProof = &cobra.Command{
 	Use:   fmt.Sprintf("%v <path>", nameProof),
 	Short: "Verify a proof",
-	Long:  fmt.Sprintf(`Verify a proof (%v) for the given path`, api.FileExtensionTrie),
+	Long:  fmt.Sprintf(`Verify a proof (%v) for the given path, ensuring the proof exists on the Blockchain and has not been falsified.`, api.FileExtensionTrie),
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// from this point, we should silence usage if error happens
@@ -46,22 +45,18 @@ var cmdVerifyProof = &cobra.Command{
 		trieInputPath, err := getTriePath(filePath,
 			viper.GetString(viperKeyVerifyProofInputPath))
 		if err != nil {
-			return err
-		}
-
-		_, err = os.Stat(trieInputPath)
-		if err != nil {
-			return err
+			return fmt.Errorf("invalid proof path: %w", err)
 		}
 
 		dotGraphOutputPath := viper.GetString(viperKeyVerifyDotGraphOutputPath)
-
 		if dotGraphOutputPath != "" {
-			err := checkOutputPath("dot graph output path", dotGraphOutputPath)
+			err := checkFilePath(dotGraphOutputPath, api.FileExtensionDotGraph)
 			if err != nil {
-				return err
+				return fmt.Errorf("invalid dot graph output path: %w", err)
 			}
 		}
+
+		quiet := viper.GetBool(viperKeyQuiet)
 
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
@@ -73,7 +68,9 @@ var cmdVerifyProof = &cobra.Command{
 
 		var (
 			triePf *apiPB.TrieProof
-			df     = &differ{}
+			df     = &differ{
+				quiet: quiet,
+			}
 		)
 
 		err = api.WithAPIClient(
@@ -172,29 +169,29 @@ var cmdVerifyProof = &cobra.Command{
 			})
 		if err != nil {
 			if verifiable {
-				colorcli.Faillnf("the proof at %s with merkle root %s is falsified: %s",
+				colorcli.Faillnf("the proof at %s with a root hash of %s is falsified: %s",
 					colorcli.Red(trieInputPath),
 					colorcli.Red(triePf.GetProofRoot()),
-					err)
+					unpackGRPCErr(err))
 
 				return errSilentExitWithNonZeroCode
 			}
 
 			colorcli.Faillnf("the proof at %s is unverifiable: %s",
 				colorcli.Red(trieInputPath),
-				err)
+				unpackGRPCErr(err))
 
 			return errSilentExitWithNonZeroCode
 		}
 
-		colorcli.Passlnf("the proof at %s with merkle root %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+		colorcli.Passlnf("the proof at %s with a root hash of %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 			colorcli.Green(trieInputPath),
 			colorcli.Green(triePf.GetProofRoot()),
 			colorcli.Green(triePf.GetAnchorType()),
 			colorcli.Green(triePf.GetBlockNumber()),
 			colorcli.Green(triePf.GetTxnId()),
 			colorcli.Green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
-			triePf.GetTxnUri())
+			colorcli.Green(triePf.GetTxnUri()))
 
 		if df.passedKV != df.totalKV {
 			colorcli.Faillnf("the path at %s is falsified: mismatched with proof key-values\n\ttotal: %v\n\t%s\n\t%s\n\t%s\n\t%s",

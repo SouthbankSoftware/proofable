@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:17+11:00
+ * @Last modified time: 2020-03-19T17:11:28+11:00
  */
 
 package cmd
@@ -43,6 +43,7 @@ const (
 	nameAPISecure                  = "api.secure"
 	nameProvenDBAPIGatewayEndpoint = "provendb-api-gateway.endpoint"
 	nameDevToken                   = "dev-token"
+	nameQuiet                      = "quiet"
 
 	defaultAPIHostPort                = "api.dev.provendb.com:443"
 	defaultAPISecure                  = true
@@ -52,6 +53,7 @@ const (
 	viperKeyAPISecure                  = nameAPISecure
 	viperKeyProvenDBAPIGatewayEndpoint = nameProvenDBAPIGatewayEndpoint
 	viperKeyDevToken                   = nameDevToken
+	viperKeyQuiet                      = nameQuiet
 )
 
 var (
@@ -84,15 +86,19 @@ func Execute() {
 
 	if err != nil {
 		if !errors.Is(err, errSilentExitWithNonZeroCode) {
-			if s, ok := status.FromError(err); ok {
-				colorcli.Faillnf("%s", s.Message())
-			} else {
-				colorcli.Faillnf("%s", err)
-			}
+			colorcli.Faillnf("%s", unpackGRPCErr(err))
 		}
 
 		os.Exit(1)
 	}
+}
+
+func unpackGRPCErr(err error) error {
+	if s, ok := status.FromError(err); ok {
+		return errors.New(s.Message())
+	}
+
+	return err
 }
 
 func init() {
@@ -128,6 +134,10 @@ func init() {
 		}
 	}
 	viper.BindPFlag(viperKeyDevToken, cmdRoot.PersistentFlags().Lookup(nameDevToken))
+
+	cmdRoot.PersistentFlags().Bool(nameQuiet,
+		false, "specify whether to run the CLI in quiet mode with less verbose output")
+	viper.BindPFlag(viperKeyQuiet, cmdRoot.PersistentFlags().Lookup(nameQuiet))
 }
 
 func initConfig() {
@@ -136,14 +146,18 @@ func initConfig() {
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_", ".", "_"))
 }
 
-func checkOutputPath(name, path string) error {
+func checkFilePath(path, ext string) error {
 	if fi, err := os.Stat(path); err == nil && fi.IsDir() {
-		return fmt.Errorf("the %s cannot be a directory", name)
+		return errors.New("file path is a directory")
 	}
 
 	pathDir := filepath.Dir(path)
 	if _, err := os.Stat(pathDir); err != nil {
 		return err
+	}
+
+	if filepath.Ext(path) != ext {
+		return fmt.Errorf("file extension must be `%s`", ext)
 	}
 
 	return nil
@@ -156,14 +170,27 @@ func getTriePath(filePath, userTriePath string) (triePath string, er error) {
 		return
 	}
 
-	triePath = userTriePath
-	if triePath == "" {
+	if userTriePath == "" {
 		if fileInfo.IsDir() {
 			triePath = filepath.Join(filePath, api.FileExtensionTrie)
-		} else {
-			triePath = filePath + api.FileExtensionTrie
+			return
 		}
+
+		triePath = filePath + api.FileExtensionTrie
+		return
 	}
+
+	if fi, err := os.Stat(userTriePath); err == nil && fi.IsDir() {
+		triePath = filepath.Join(userTriePath, fileInfo.Name()+api.FileExtensionTrie)
+		return
+	}
+
+	if filepath.Ext(userTriePath) != api.FileExtensionTrie {
+		er = fmt.Errorf("file extension must be `%s`", api.FileExtensionTrie)
+		return
+	}
+
+	triePath = filepath.Clean(userTriePath)
 	return
 }
 

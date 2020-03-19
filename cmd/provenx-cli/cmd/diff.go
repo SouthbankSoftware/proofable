@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-03-16T17:43:29+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:18+11:00
+ * @Last modified time: 2020-03-19T16:58:12+11:00
  */
 
 package cmd
@@ -15,6 +15,7 @@ import (
 )
 
 type differ struct {
+	quiet bool
 	totalKV,
 	passedKV,
 	changedKV,
@@ -29,14 +30,16 @@ func (d *differ) push(leftKV, rightKV *apiPB.KeyValue, result diff.KeyValueDiffR
 	case diff.KeyValueEqual:
 		d.passedKV++
 
-		colorcli.Passlnf("%s -> %s",
-			strutil.String(leftKV.Key),
-			strutil.HexOrString(leftKV.Value))
+		if !d.quiet {
+			colorcli.Passlnf("%s -> %s",
+				strutil.String(strutil.BytesWithoutNullChar(leftKV.Key)),
+				strutil.HexOrString(leftKV.Value))
+		}
 	case diff.KeyValueValueDifferent:
 		d.changedKV++
 
 		colorcli.Faillnf("%s -> %s %s",
-			strutil.String(leftKV.Key),
+			strutil.String(strutil.BytesWithoutNullChar(leftKV.Key)),
 			colorcli.Red("- ", strutil.HexOrString(rightKV.Value)),
 			colorcli.Green("+ ", strutil.HexOrString(leftKV.Value)))
 	case diff.KeyValueLeftKeyMissing:
@@ -44,7 +47,7 @@ func (d *differ) push(leftKV, rightKV *apiPB.KeyValue, result diff.KeyValueDiffR
 
 		colorcli.Faillnf("%s",
 			colorcli.Red("- ",
-				strutil.String(rightKV.Key),
+				strutil.String(strutil.BytesWithoutNullChar(rightKV.Key)),
 				" -> ",
 				strutil.HexOrString(rightKV.Value)))
 	case diff.KeyValueRightKeyMissing:
@@ -52,7 +55,7 @@ func (d *differ) push(leftKV, rightKV *apiPB.KeyValue, result diff.KeyValueDiffR
 
 		colorcli.Faillnf("%s",
 			colorcli.Green("+ ",
-				strutil.String(leftKV.Key),
+				strutil.String(strutil.BytesWithoutNullChar(leftKV.Key)),
 				" -> ",
 				strutil.HexOrString(leftKV.Value)))
 	default:

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:18+11:00
+ * @Last modified time: 2020-03-19T16:37:38+11:00
  */
 
 package cmd
@@ -10,7 +10,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
@@ -30,8 +29,8 @@ const (
 
 var cmdCreateSubproof = &cobra.Command{
 	Use:   fmt.Sprintf("%v <key ...>", nameSubproof),
-	Short: "Create a subproof",
-	Long: fmt.Sprintf(`Create a subproof (%v) out of the given proof (%v). The subproof can independently prove a subset of the proof key-values
+	Short: "Create a subproof out of an existing proof",
+	Long: fmt.Sprintf(`Create a subproof (%v) out of an existing proof (%v). The subproof can independently prove a subset of the proof's key-values
 
 Each <key> must be a valid key from the output of "%s/%s %s"
 `, api.FileExtensionKeyValuesProof, api.FileExtensionTrie, nameCreate, nameVerify, nameProof),
@@ -39,6 +38,8 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// from this point, we should silence usage if error happens
 		cmd.SilenceUsage = true
+
+		quiet := viper.GetBool(viperKeyQuiet)
 
 		keyMap := map[string]struct{}{}
 		filter := &apiPB.KeyValuesFilter{}
@@ -50,7 +51,9 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 			}
 			keyMap[a] = struct{}{}
 
-			colorcli.Printf("%s\n", a)
+			if !quiet {
+				colorcli.Printf("%s\n", a)
+			}
 
 			filter.Keys = append(filter.Keys, &apiPB.Key{
 				Key: api.NormalizeKey(strutil.Bytes(a)),
@@ -58,9 +61,15 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 		}
 
 		triePath := viper.GetString(viperKeyCreateSubproofProofPath)
-		_, err := os.Stat(triePath)
+		err := checkFilePath(triePath, api.FileExtensionTrie)
 		if err != nil {
-			return err
+			return fmt.Errorf("invalid proof path: %w", err)
+		}
+
+		kvpOutputPath := viper.GetString(viperKeyCreateSubproofOutputPath)
+		err = checkFilePath(kvpOutputPath, api.FileExtensionKeyValuesProof)
+		if err != nil {
+			return fmt.Errorf("invalid subproof output path: %w", err)
 		}
 
 		ctx, cancel := context.WithCancel(context.Background())
@@ -82,15 +91,13 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 							return err
 						}
 
-						kvpOutputPath := viper.GetString(viperKeyCreateSubproofOutputPath)
-
 						err = api.CreateKeyValuesProof(ctx, cli, id, tp.GetId(), filter,
 							kvpOutputPath)
 						if err != nil {
 							return err
 						}
 
-						colorcli.Oklnf("the subproof has successfully been created at %s with %s key-values and merkle root %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+						colorcli.Oklnf("the subproof has successfully been created at %s with %s key-values and a root hash of %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 							colorcli.Green(kvpOutputPath),
 							colorcli.Green(len(filter.Keys), " or more"),
 							colorcli.Green(tp.GetProofRoot()),
@@ -98,7 +105,7 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 							colorcli.Green(tp.GetBlockNumber()),
 							colorcli.Green(tp.GetTxnId()),
 							colorcli.Green(time.Unix(int64(tp.GetBlockTime()), 0).Format(time.UnixDate)),
-							tp.GetTxnUri())
+							colorcli.Green(tp.GetTxnUri()))
 
 						return nil
 					})
