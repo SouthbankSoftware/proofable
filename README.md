@@ -2,12 +2,6 @@
 
 `provenx-cli` is a simple CLI for ProvenX API Service (`provenx-api`)
 
-## TODO
-
-- [x] code and ux review
-- [ ] Linux UAT
-- [ ] Windows UAT
-
 ## Usage
 
 ### Download dev binaries

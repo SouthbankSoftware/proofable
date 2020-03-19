@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T12:07:05+11:00
+ * @Last modified time: 2020-03-19T14:28:06+11:00
  */
 
 package cmd
@@ -179,14 +179,14 @@ var cmdVerifyProof = &cobra.Command{
 				colorcli.Faillnf("the proof at %s with a root hash %s is falsified: %s",
 					colorcli.Red(trieInputPath),
 					colorcli.Red(triePf.GetProofRoot()),
-					err)
+					unpackGRPCErr(err))
 
 				return errSilentExitWithNonZeroCode
 			}
 
 			colorcli.Faillnf("the proof at %s is unverifiable: %s",
 				colorcli.Red(trieInputPath),
-				err)
+				unpackGRPCErr(err))
 
 			return errSilentExitWithNonZeroCode
 		}

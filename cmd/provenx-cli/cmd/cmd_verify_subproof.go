@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T12:08:12+11:00
+ * @Last modified time: 2020-03-19T14:28:36+11:00
  */
 
 package cmd
@@ -208,14 +208,14 @@ The <path> is the root for those keys in the subproof, which is also the path th
 				colorcli.Faillnf("the subproof at %s with a root hash of %s is falsified: %s",
 					colorcli.Red(kvpInputPath),
 					colorcli.Red(merkleRoot),
-					err)
+					unpackGRPCErr(err))
 
 				return errSilentExitWithNonZeroCode
 			}
 
 			colorcli.Faillnf("the subproof at %s is unverifiable: %s",
 				colorcli.Red(kvpInputPath),
-				err)
+				unpackGRPCErr(err))
 
 			return errSilentExitWithNonZeroCode
 		}

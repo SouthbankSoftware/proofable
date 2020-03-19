@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T11:51:45+11:00
+ * @Last modified time: 2020-03-19T12:46:12+11:00
  */
 
 package cmd
@@ -86,15 +86,19 @@ func Execute() {
 
 	if err != nil {
 		if !errors.Is(err, errSilentExitWithNonZeroCode) {
-			if s, ok := status.FromError(err); ok {
-				colorcli.Faillnf("%s", s.Message())
-			} else {
-				colorcli.Faillnf("%s", err)
-			}
+			colorcli.Faillnf("%s", unpackGRPCErr(err))
 		}
 
 		os.Exit(1)
 	}
+}
+
+func unpackGRPCErr(err error) error {
+	if s, ok := status.FromError(err); ok {
+		return errors.New(s.Message())
+	}
+
+	return err
 }
 
 func init() {
