@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-19T16:45:47+11:00
+ * @Last modified time: 2020-03-19T17:20:55+11:00
  */
 
 package cmd
@@ -169,7 +169,7 @@ var cmdVerifyProof = &cobra.Command{
 			})
 		if err != nil {
 			if verifiable {
-				colorcli.Faillnf("the proof at %s with a root hash %s is falsified: %s",
+				colorcli.Faillnf("the proof at %s with a root hash of %s is falsified: %s",
 					colorcli.Red(trieInputPath),
 					colorcli.Red(triePf.GetProofRoot()),
 					unpackGRPCErr(err))
@@ -184,7 +184,7 @@ var cmdVerifyProof = &cobra.Command{
 			return errSilentExitWithNonZeroCode
 		}
 
-		colorcli.Passlnf("the proof at %s with a root hash %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
+		colorcli.Passlnf("the proof at %s with a root hash of %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 			colorcli.Green(trieInputPath),
 			colorcli.Green(triePf.GetProofRoot()),
 			colorcli.Green(triePf.GetAnchorType()),
