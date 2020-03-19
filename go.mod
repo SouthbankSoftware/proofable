@@ -29,4 +29,4 @@ require (
 	google.golang.org/grpc v1.26.0
 )
 
-replace github.com/karrick/godirwalk => github.com/SouthbankSoftware/godirwalk v1.15.4-0.20200219064549-47f5e8f24e04
+replace github.com/karrick/godirwalk => github.com/SouthbankSoftware/godirwalk v1.15.4-0.20200319040501-49f7c4f93f76
