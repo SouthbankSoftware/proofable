@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-01-03T14:55:49+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T13:37:46+11:00
+ * @Last modified time: 2020-03-27T12:19:10+11:00
  */
 
 syntax = "proto3";
@@ -15,7 +15,9 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "anchor/anchor.proto";
 
-// APIService represents an API service
+// APIService is the next generation of a general purpose service that is fast
+// and effective and provides a set of APIs to manipulate trie structures and
+// generate blockchain proofs for any digital assets
 service APIService {
   // GetTries gets all tries. Admin privilege is required
   rpc GetTries(google.protobuf.Empty) returns (stream Trie) {}

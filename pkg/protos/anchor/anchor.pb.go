@@ -25,20 +25,21 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
+// Type represents an anchor type
 type Anchor_Type int32
 
 const (
-	// ethereum
+	// ETH is the anchor type for Ethereum Testnet
 	Anchor_ETH Anchor_Type = 0
-	// ethereum mainnet
+	// ETH_MAINNET is the anchor type for Ethereum Mainnet
 	Anchor_ETH_MAINNET Anchor_Type = 3
-	// ethereum elastos
+	// ETH_ELASTOS is the anchor type for Elastos
 	Anchor_ETH_ELASTOS Anchor_Type = 4
-	// bitcoin
+	// BTC is the anchor type for Bitcoin
 	Anchor_BTC Anchor_Type = 1
-	// bitcoin mainnet
+	// BTC_MAINNET is the anchor type for Bitcoin Mainnet
 	Anchor_BTC_MAINNET Anchor_Type = 5
-	// chainpoint
+	// CHP is the anchor type for Chainpoint (coming soon)
 	Anchor_CHP Anchor_Type = 2
 )
 
@@ -63,17 +64,18 @@ func (x Anchor_Type) String() string {
 	return proto.EnumName(Anchor_Type_name, int32(x))
 }
 func (Anchor_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{1, 0}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{1, 0}
 }
 
+// Status represents an anchor's status
 type Anchor_Status int32
 
 const (
-	// error
+	// Error means the anchor has an error
 	Anchor_ERROR Anchor_Status = 0
-	// stopped
+	// STOPPED means the anchor is stopped
 	Anchor_STOPPED Anchor_Status = 1
-	// running
+	// RUNNING means the anchor is running
 	Anchor_RUNNING Anchor_Status = 2
 )
 
@@ -92,26 +94,29 @@ func (x Anchor_Status) String() string {
 	return proto.EnumName(Anchor_Status_name, int32(x))
 }
 func (Anchor_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{1, 1}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{1, 1}
 }
 
+// Status represents a batch's status
 type Batch_Status int32
 
 const (
-	// error. FLOW: * -> ERROR
+	// ERROR means the batch has an error. FLOW: * -> ERROR
 	Batch_ERROR Batch_Status = 0
-	// batching for more hashes. FLOW: created_at -> BATCHING -> flushed_at
+	// BATCHING means the batch is batching for more hashes. FLOW: created_at ->
+	// BATCHING -> flushed_at
 	Batch_BATCHING Batch_Status = 1
-	// queuing to be processed. FLOW: flushed_at -> QUEUING -> started_at
+	// QUEUING means the batch is queuing to be processed. FLOW: flushed_at ->
+	// QUEUING -> started_at
 	Batch_QUEUING Batch_Status = 2
-	// constructing the merkle roots and submitting hashes. FLOW: started_at ->
-	// PROCESSING -> submitted_at
+	// PROCESSING means the batch is constructing merkle roots and submitting
+	// hashes. FLOW: started_at -> PROCESSING -> submitted_at
 	Batch_PROCESSING Batch_Status = 3
-	// batch root hash is pending to be confirmed. FLOW: submitted_at -> PENDING
-	// -> finalized_at
+	// PENDING means the batch's root hash is pending to be confirmed. FLOW:
+	// submitted_at -> PENDING -> finalized_at
 	Batch_PENDING Batch_Status = 4
-	// batch root hash is confirmed by the anchor. FLOW: finalized_at ->
-	// CONFIRMED
+	// CONFIRMED means the batch's root hash is confirmed by the anchor's
+	// Blockchain. FLOW: finalized_at -> CONFIRMED
 	Batch_CONFIRMED Batch_Status = 5
 )
 
@@ -136,19 +141,21 @@ func (x Batch_Status) String() string {
 	return proto.EnumName(Batch_Status_name, int32(x))
 }
 func (Batch_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{5, 0}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{5, 0}
 }
 
+// Format represents a proof format
 type Proof_Format int32
 
 const (
-	// chainpoint path
+	// CHP_PATH means Chainpoint Path format, which is the format used by
+	// Chainpoint
 	Proof_CHP_PATH Proof_Format = 0
-	// ethereum trie
+	// ETH_TRIE means Ethereum Trie format
 	Proof_ETH_TRIE Proof_Format = 1
-	// signed chainpoint path
+	// CHP_PATH_SIGNED means signed Chainpoint Path format
 	Proof_CHP_PATH_SIGNED Proof_Format = 2
-	// signed ethereum trie
+	// ETH_TRIE_SIGNED means signed Ethereum Trie format
 	Proof_ETH_TRIE_SIGNED Proof_Format = 3
 )
 
@@ -169,13 +176,12 @@ func (x Proof_Format) String() string {
 	return proto.EnumName(Proof_Format_name, int32(x))
 }
 func (Proof_Format) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{7, 0}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{7, 0}
 }
 
-// *
-// Anchor request
+// AnchorRequest represents an anchor request
 type AnchorRequest struct {
-	// anchor type
+	// Type is the anchor type
 	Type                 Anchor_Type `protobuf:"varint,1,opt,name=type,proto3,enum=anchor.Anchor_Type" json:"type,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
 	XXX_unrecognized     []byte      `json:"-"`
@@ -186,7 +192,7 @@ func (m *AnchorRequest) Reset()         { *m = AnchorRequest{} }
 func (m *AnchorRequest) String() string { return proto.CompactTextString(m) }
 func (*AnchorRequest) ProtoMessage()    {}
 func (*AnchorRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{0}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{0}
 }
 func (m *AnchorRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnchorRequest.Unmarshal(m, b)
@@ -213,16 +219,15 @@ func (m *AnchorRequest) GetType() Anchor_Type {
 	return Anchor_ETH
 }
 
-// *
-// Anchor detail
+// Anchor represents an anchor
 type Anchor struct {
-	// anchor type
+	// Type is the anchor type
 	Type Anchor_Type `protobuf:"varint,1,opt,name=type,proto3,enum=anchor.Anchor_Type" json:"type,omitempty"`
-	// anchor status
+	// Status is the anchor status
 	Status Anchor_Status `protobuf:"varint,2,opt,name=status,proto3,enum=anchor.Anchor_Status" json:"status,omitempty"`
-	// the error message when status is ERROR
+	// Error is the error message when the anchor status is ERROR
 	Error string `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
-	// supported proof formats
+	// SupportedFormats are the supported proof formats of the anchor
 	SupportedFormats     []Proof_Format `protobuf:"varint,4,rep,packed,name=supported_formats,json=supportedFormats,proto3,enum=anchor.Proof_Format" json:"supported_formats,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
@@ -233,7 +238,7 @@ func (m *Anchor) Reset()         { *m = Anchor{} }
 func (m *Anchor) String() string { return proto.CompactTextString(m) }
 func (*Anchor) ProtoMessage()    {}
 func (*Anchor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{1}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{1}
 }
 func (m *Anchor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Anchor.Unmarshal(m, b)
@@ -281,18 +286,18 @@ func (m *Anchor) GetSupportedFormats() []Proof_Format {
 	return nil
 }
 
-// *
-// Submit proof request
+// SubmitProofRequest represents a submit proof request
 type SubmitProofRequest struct {
-	// hash to be submitted
+	// Hash is the hash to be submitted
 	Hash string `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
-	// anchor type
+	// AnchorType is the anchor type to be used
 	AnchorType Anchor_Type `protobuf:"varint,2,opt,name=anchor_type,json=anchorType,proto3,enum=anchor.Anchor_Type" json:"anchor_type,omitempty"`
-	// proof format
+	// Format is the proof format to be used
 	Format Proof_Format `protobuf:"varint,3,opt,name=format,proto3,enum=anchor.Proof_Format" json:"format,omitempty"`
-	// whether to skip batching and submit a proof for the hash directly
+	// SkipBatching indicates whether to skip batching and submit a proof for the
+	// hash directly
 	SkipBatching bool `protobuf:"varint,4,opt,name=skip_batching,json=skipBatching,proto3" json:"skip_batching,omitempty"`
-	// whether to include the batch detail in the reply
+	// WithBatch indicates whether to include the batch detail in the reply
 	WithBatch            bool     `protobuf:"varint,5,opt,name=with_batch,json=withBatch,proto3" json:"with_batch,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -303,7 +308,7 @@ func (m *SubmitProofRequest) Reset()         { *m = SubmitProofRequest{} }
 func (m *SubmitProofRequest) String() string { return proto.CompactTextString(m) }
 func (*SubmitProofRequest) ProtoMessage()    {}
 func (*SubmitProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{2}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{2}
 }
 func (m *SubmitProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SubmitProofRequest.Unmarshal(m, b)
@@ -358,12 +363,11 @@ func (m *SubmitProofRequest) GetWithBatch() bool {
 	return false
 }
 
-// *
-// Batch request
+// BatchRequest represents a batch request
 type BatchRequest struct {
-	// batch ID
+	// BatchId is the batch ID
 	BatchId string `protobuf:"bytes,1,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"`
-	// anchor type
+	// AnchorType is the batch's anchor type
 	AnchorType           Anchor_Type `protobuf:"varint,2,opt,name=anchor_type,json=anchorType,proto3,enum=anchor.Anchor_Type" json:"anchor_type,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
 	XXX_unrecognized     []byte      `json:"-"`
@@ -374,7 +378,7 @@ func (m *BatchRequest) Reset()         { *m = BatchRequest{} }
 func (m *BatchRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchRequest) ProtoMessage()    {}
 func (*BatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{3}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{3}
 }
 func (m *BatchRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchRequest.Unmarshal(m, b)
@@ -408,12 +412,12 @@ func (m *BatchRequest) GetAnchorType() Anchor_Type {
 	return Anchor_ETH
 }
 
-// *
-// Subscribe batches request
+// SubscribeBatchesRequest represents a subscribe batches request
 type SubscribeBatchesRequest struct {
-	// batch filter. When nil, all batches will be subscribed; otherwise, only the
-	// given anchor's batches will be subscribed; if batch_id is non-empty, only
-	// the matched batch will be subscribed
+	// Filter is the batch filter. When nil, all batches of all anchors will be
+	// subscribed; otherwise, only the batches of the given anchor will be
+	// subscribed; if batch_id is non-empty, only the matched batch will be
+	// subscribed
 	Filter               *BatchRequest `protobuf:"bytes,1,opt,name=filter,proto3" json:"filter,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -424,7 +428,7 @@ func (m *SubscribeBatchesRequest) Reset()         { *m = SubscribeBatchesRequest
 func (m *SubscribeBatchesRequest) String() string { return proto.CompactTextString(m) }
 func (*SubscribeBatchesRequest) ProtoMessage()    {}
 func (*SubscribeBatchesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{4}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{4}
 }
 func (m *SubscribeBatchesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SubscribeBatchesRequest.Unmarshal(m, b)
@@ -451,40 +455,43 @@ func (m *SubscribeBatchesRequest) GetFilter() *BatchRequest {
 	return nil
 }
 
-// *
-// Batch detail
+// Batch represents a batch
 type Batch struct {
-	// batch ID
+	// Id is the batch ID
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	// anchor type
+	// AnchorType is the batch's anchor type
 	AnchorType Anchor_Type `protobuf:"varint,2,opt,name=anchor_type,json=anchorType,proto3,enum=anchor.Anchor_Type" json:"anchor_type,omitempty"`
-	// proof format. It determines how the merkle tree is constructed for the
-	// batch.
+	// ProofFormat is the batch's proof format, which determines how the merkle
+	// tree is constructed for the batch.
 	ProofFormat Proof_Format `protobuf:"varint,3,opt,name=proof_format,json=proofFormat,proto3,enum=anchor.Proof_Format" json:"proof_format,omitempty"`
-	// batch status. FLOW: created_at -> BATCHING -> flushed_at -> QUEUING ->
-	// started_at -> PROCESSING -> submitted_at -> PENDING -> finalized_at ->
-	// CONFIRMED / ERROR; * -> ERROR; when a batch has not yet reached PENDING and
-	// its anchor has restarted, it will be put back to QUEUING
+	// Status is the batch status. FLOW: created_at -> BATCHING -> flushed_at ->
+	// QUEUING -> started_at -> PROCESSING -> submitted_at -> PENDING ->
+	// finalized_at -> CONFIRMED / ERROR; * -> ERROR; if a batch has not yet
+	// reached PENDING and its anchor has restarted, the batch will be put back to
+	// QUEUING
 	Status Batch_Status `protobuf:"varint,4,opt,name=status,proto3,enum=anchor.Batch_Status" json:"status,omitempty"`
-	// error message when status is ERROR
+	// Error is the error message when status is ERROR
 	Error string `protobuf:"bytes,5,opt,name=error,proto3" json:"error,omitempty"`
-	// number of hashes
+	// Size is the number of hashes contained in the batch
 	Size int64 `protobuf:"varint,6,opt,name=size,proto3" json:"size,omitempty"`
-	// created at timestamp. FLOW: created_at -> BATCHING
+	// CreateAt is the batch's created at timestamp. FLOW: created_at -> BATCHING
 	CreatedAt *timestamp.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	// flushed at timestamp. FLOW: BATCHING -> flushed_at -> QUEUING
+	// FlushedAt is the batch's flushed at timestamp. FLOW: BATCHING -> flushed_at
+	// -> QUEUING
 	FlushedAt *timestamp.Timestamp `protobuf:"bytes,8,opt,name=flushed_at,json=flushedAt,proto3" json:"flushed_at,omitempty"`
-	// started at timestamp. FLOW: QUEUING -> started_at -> PROCESSING
+	// StartedAt is the batch's started at timestamp. FLOW: QUEUING -> started_at
+	// -> PROCESSING
 	StartedAt *timestamp.Timestamp `protobuf:"bytes,9,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
-	// submitted at timestamp. FLOW: PROCESSING -> submitted_at -> PENDING
+	// SubmittedAt is the batch's submitted at timestamp. FLOW: PROCESSING ->
+	// submitted_at -> PENDING
 	SubmittedAt *timestamp.Timestamp `protobuf:"bytes,10,opt,name=submitted_at,json=submittedAt,proto3" json:"submitted_at,omitempty"`
-	// finalized at timestamp. FLOW: * -> finalized_at -> CONFIRMED / ERROR. NOTE:
-	// this is not the real block confirmed time, use the timestamp in the batch
-	// data instead.
+	// FinalizedAt is the batch's finalized at timestamp. FLOW: * -> finalized_at
+	// -> CONFIRMED / ERROR. NOTE: this is not the real block confirmed time, use
+	// the timestamp in the batch data instead
 	FinalizedAt *timestamp.Timestamp `protobuf:"bytes,11,opt,name=finalized_at,json=finalizedAt,proto3" json:"finalized_at,omitempty"`
-	// batch root hash
+	// Hash is the batch's root hash
 	Hash string `protobuf:"bytes,12,opt,name=hash,proto3" json:"hash,omitempty"`
-	// batch data in JSON
+	// Data is the batch data in JSON
 	Data                 string   `protobuf:"bytes,13,opt,name=data,proto3" json:"data,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -495,7 +502,7 @@ func (m *Batch) Reset()         { *m = Batch{} }
 func (m *Batch) String() string { return proto.CompactTextString(m) }
 func (*Batch) ProtoMessage()    {}
 func (*Batch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{5}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{5}
 }
 func (m *Batch) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Batch.Unmarshal(m, b)
@@ -606,16 +613,15 @@ func (m *Batch) GetData() string {
 	return ""
 }
 
-// *
-// Proof request
+// ProofRequest represents a proof request
 type ProofRequest struct {
-	// proof hash
+	// Hash is the hash the proof is proving for
 	Hash string `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
-	// proof batch ID
+	// BatchId is the proof's batch ID
 	BatchId string `protobuf:"bytes,2,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"`
-	// anchor type
+	// AnchorType is the proof's anchor type
 	AnchorType Anchor_Type `protobuf:"varint,3,opt,name=anchor_type,json=anchorType,proto3,enum=anchor.Anchor_Type" json:"anchor_type,omitempty"`
-	// whether to include the proof's batch detail
+	// WithBatch indicates whether to include the proof's batch detail
 	WithBatch            bool     `protobuf:"varint,4,opt,name=with_batch,json=withBatch,proto3" json:"with_batch,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -626,7 +632,7 @@ func (m *ProofRequest) Reset()         { *m = ProofRequest{} }
 func (m *ProofRequest) String() string { return proto.CompactTextString(m) }
 func (*ProofRequest) ProtoMessage()    {}
 func (*ProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{6}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{6}
 }
 func (m *ProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProofRequest.Unmarshal(m, b)
@@ -674,22 +680,21 @@ func (m *ProofRequest) GetWithBatch() bool {
 	return false
 }
 
-// *
-// Proof detail
+// Proof represents a proof
 type Proof struct {
-	// proof hash
+	// Hash is the hash the proof is proving for
 	Hash string `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
-	// proof's batch ID
+	// BatchId is the proof's batch ID
 	BatchId string `protobuf:"bytes,2,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"`
-	// anchor type
+	// AnchorType is the proof's anchor type
 	AnchorType Anchor_Type `protobuf:"varint,3,opt,name=anchor_type,json=anchorType,proto3,enum=anchor.Anchor_Type" json:"anchor_type,omitempty"`
-	// proof status
+	// BatchStatus is the proof's batch status
 	BatchStatus Batch_Status `protobuf:"varint,4,opt,name=batch_status,json=batchStatus,proto3,enum=anchor.Batch_Status" json:"batch_status,omitempty"`
-	// proof format
+	// Format is the proof format
 	Format Proof_Format `protobuf:"varint,5,opt,name=format,proto3,enum=anchor.Proof_Format" json:"format,omitempty"`
-	// proof data in base64
+	// Data is the proof data in base64
 	Data string `protobuf:"bytes,6,opt,name=data,proto3" json:"data,omitempty"`
-	// proof's batch detail
+	// Batch is the proof's batch detail
 	Batch                *Batch   `protobuf:"bytes,7,opt,name=batch,proto3" json:"batch,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -700,7 +705,7 @@ func (m *Proof) Reset()         { *m = Proof{} }
 func (m *Proof) String() string { return proto.CompactTextString(m) }
 func (*Proof) ProtoMessage()    {}
 func (*Proof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{7}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{7}
 }
 func (m *Proof) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Proof.Unmarshal(m, b)
@@ -769,16 +774,15 @@ func (m *Proof) GetBatch() *Batch {
 	return nil
 }
 
-// *
-// Verify proof request
+// VerifyProofRequest represents a verify proof request
 type VerifyProofRequest struct {
-	// anchor type
+	// AnchorType is the proof's anchor type
 	AnchorType Anchor_Type `protobuf:"varint,1,opt,name=anchor_type,json=anchorType,proto3,enum=anchor.Anchor_Type" json:"anchor_type,omitempty"`
-	// proof format. If skipping the signature checking is desired, please use the
-	// corresponding non-signed format, eg. use CHP_PATH instead of
+	// Format is the proof format. If skipping the signature checking is desired,
+	// please use the corresponding non-signed format, eg. use CHP_PATH instead of
 	// CHP_PATH_SIGNED in request
 	Format Proof_Format `protobuf:"varint,2,opt,name=format,proto3,enum=anchor.Proof_Format" json:"format,omitempty"`
-	// proof data in base64
+	// Data is the proof data in base64
 	Data                 string   `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -789,7 +793,7 @@ func (m *VerifyProofRequest) Reset()         { *m = VerifyProofRequest{} }
 func (m *VerifyProofRequest) String() string { return proto.CompactTextString(m) }
 func (*VerifyProofRequest) ProtoMessage()    {}
 func (*VerifyProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{8}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{8}
 }
 func (m *VerifyProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyProofRequest.Unmarshal(m, b)
@@ -830,14 +834,13 @@ func (m *VerifyProofRequest) GetData() string {
 	return ""
 }
 
-// *
-// Verify proof reply
+// VerifyProofReply represents a verify proof reply
 type VerifyProofReply struct {
-	// whether the proof is verified
+	// Verified indicates whether the proof is verified
 	Verified bool `protobuf:"varint,1,opt,name=verified,proto3" json:"verified,omitempty"`
-	// the error message when the proof is falsified
+	// Erorr is the error message when the proof is falsified
 	Error string `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	// provenHash is the hash that is proven by current proof
+	// ProvenHash is the hash the proof is proving for
 	ProvenHash           string   `protobuf:"bytes,3,opt,name=provenHash,proto3" json:"provenHash,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -848,7 +851,7 @@ func (m *VerifyProofReply) Reset()         { *m = VerifyProofReply{} }
 func (m *VerifyProofReply) String() string { return proto.CompactTextString(m) }
 func (*VerifyProofReply) ProtoMessage()    {}
 func (*VerifyProofReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_ca36d3b3879508e6, []int{9}
+	return fileDescriptor_anchor_737838a1cc7d55f2, []int{9}
 }
 func (m *VerifyProofReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyProofReply.Unmarshal(m, b)
@@ -918,20 +921,20 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type AnchorServiceClient interface {
-	// get all anchors
+	// GetAnchors gets all anchors
 	GetAnchors(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (AnchorService_GetAnchorsClient, error)
-	// get an anchor
+	// GetAnchor gets an anchor
 	GetAnchor(ctx context.Context, in *AnchorRequest, opts ...grpc.CallOption) (*Anchor, error)
-	// get a proof
+	// GetProof gets a proof
 	GetProof(ctx context.Context, in *ProofRequest, opts ...grpc.CallOption) (*Proof, error)
-	// submit a proof for the given hash
+	// SubmitProof submits a proof for the given hash
 	SubmitProof(ctx context.Context, in *SubmitProofRequest, opts ...grpc.CallOption) (*Proof, error)
-	// verify the given proof. When the proof is unverifiable, an exception is
-	// thrown
+	// VerifyProof verifies the given proof. When the proof is unverifiable, an
+	// exception is thrown
 	VerifyProof(ctx context.Context, in *VerifyProofRequest, opts ...grpc.CallOption) (*VerifyProofReply, error)
-	// get a batch
+	// GetBatch gets a batch
 	GetBatch(ctx context.Context, in *BatchRequest, opts ...grpc.CallOption) (*Batch, error)
-	// subscribe to batches
+	// SubscribeBatches subscribes to batch status updates
 	SubscribeBatches(ctx context.Context, in *SubscribeBatchesRequest, opts ...grpc.CallOption) (AnchorService_SubscribeBatchesClient, error)
 }
 
@@ -1054,20 +1057,20 @@ func (x *anchorServiceSubscribeBatchesClient) Recv() (*Batch, error) {
 
 // AnchorServiceServer is the server API for AnchorService service.
 type AnchorServiceServer interface {
-	// get all anchors
+	// GetAnchors gets all anchors
 	GetAnchors(*empty.Empty, AnchorService_GetAnchorsServer) error
-	// get an anchor
+	// GetAnchor gets an anchor
 	GetAnchor(context.Context, *AnchorRequest) (*Anchor, error)
-	// get a proof
+	// GetProof gets a proof
 	GetProof(context.Context, *ProofRequest) (*Proof, error)
-	// submit a proof for the given hash
+	// SubmitProof submits a proof for the given hash
 	SubmitProof(context.Context, *SubmitProofRequest) (*Proof, error)
-	// verify the given proof. When the proof is unverifiable, an exception is
-	// thrown
+	// VerifyProof verifies the given proof. When the proof is unverifiable, an
+	// exception is thrown
 	VerifyProof(context.Context, *VerifyProofRequest) (*VerifyProofReply, error)
-	// get a batch
+	// GetBatch gets a batch
 	GetBatch(context.Context, *BatchRequest) (*Batch, error)
-	// subscribe to batches
+	// SubscribeBatches subscribes to batch status updates
 	SubscribeBatches(*SubscribeBatchesRequest, AnchorService_SubscribeBatchesServer) error
 }
 
@@ -1247,9 +1250,9 @@ var _AnchorService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "anchor/anchor.proto",
 }
 
-func init() { proto.RegisterFile("anchor/anchor.proto", fileDescriptor_anchor_ca36d3b3879508e6) }
+func init() { proto.RegisterFile("anchor/anchor.proto", fileDescriptor_anchor_737838a1cc7d55f2) }
 
-var fileDescriptor_anchor_ca36d3b3879508e6 = []byte{
+var fileDescriptor_anchor_737838a1cc7d55f2 = []byte{
 	// 1062 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0x4d, 0x72, 0xdb, 0x46,
 	0x13, 0x15, 0xfe, 0x28, 0xb2, 0x01, 0xca, 0xf8, 0x46, 0xfe, 0x12, 0x98, 0xa9, 0xc4, 0x2a, 0x78,

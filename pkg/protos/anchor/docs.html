@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Protocol Documentation</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic"/>
+    <style>
+      body {
+        width: 60em;
+        margin: 1em auto;
+        color: #222;
+        font-family: "Ubuntu", sans-serif;
+        padding-bottom: 4em;
+      }
+
+      h1 {
+        font-weight: normal;
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 0.5ex;
+      }
+
+      h2 {
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 0.5ex;
+        margin: 1.5em 0;
+      }
+
+      h3 {
+        font-weight: normal;
+        border-bottom: 1px solid #aaa;
+        padding-bottom: 0.5ex;
+      }
+
+      a {
+        text-decoration: none;
+        color: #567e25;
+      }
+
+      table {
+        width: 100%;
+        font-size: 80%;
+        border-collapse: collapse;
+      }
+
+      thead {
+        font-weight: 700;
+        background-color: #dcdcdc;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #fbfbfb;
+      }
+
+      td {
+        border: 1px solid #ccc;
+        padding: 0.5ex 2ex;
+      }
+
+      td p {
+        text-indent: 1em;
+        margin: 0;
+      }
+
+      td p:nth-child(1) {
+        text-indent: 0;  
+      }
+
+       
+      .field-table td:nth-child(1) {  
+        width: 10em;
+      }
+      .field-table td:nth-child(2) {  
+        width: 10em;
+      }
+      .field-table td:nth-child(3) {  
+        width: 6em;
+      }
+      .field-table td:nth-child(4) {  
+        width: auto;
+      }
+
+       
+      .extension-table td:nth-child(1) {  
+        width: 10em;
+      }
+      .extension-table td:nth-child(2) {  
+        width: 10em;
+      }
+      .extension-table td:nth-child(3) {  
+        width: 10em;
+      }
+      .extension-table td:nth-child(4) {  
+        width: 5em;
+      }
+      .extension-table td:nth-child(5) {  
+        width: auto;
+      }
+
+       
+      .enum-table td:nth-child(1) {  
+        width: 10em;
+      }
+      .enum-table td:nth-child(2) {  
+        width: 10em;
+      }
+      .enum-table td:nth-child(3) {  
+        width: auto;
+      }
+
+       
+      .scalar-value-types-table tr {
+        height: 3em;
+      }
+
+       
+      #toc-container ul {
+        list-style-type: none;
+        padding-left: 1em;
+        line-height: 180%;
+        margin: 0;
+      }
+      #toc > li > a {
+        font-weight: bold;
+      }
+
+       
+      .file-heading {
+        width: 100%;
+        display: table;
+        border-bottom: 1px solid #aaa;
+        margin: 4em 0 1.5em 0;
+      }
+      .file-heading h2 {
+        border: none;
+        display: table-cell;
+      }
+      .file-heading a {
+        text-align: right;
+        display: table-cell;
+      }
+
+       
+      .badge {
+        width: 1.6em;
+        height: 1.6em;
+        display: inline-block;
+
+        line-height: 1.6em;
+        text-align: center;
+        font-weight: bold;
+        font-size: 60%;
+
+        color: #89ba48;
+        background-color: #dff0c8;
+
+        margin: 0.5ex 1em 0.5ex -1em;
+        border: 1px solid #fbfbfb;
+        border-radius: 1ex;
+      }
+    </style>
+
+    
+    <link rel="stylesheet" type="text/css" href="stylesheet.css"/>
+  </head>
+
+  <body>
+
+    <h1 id="title">Protocol Documentation</h1>
+
+    <h2>Table of Contents</h2>
+
+    <div id="toc-container">
+      <ul id="toc">
+        
+          
+          <li>
+            <a href="#anchor%2fanchor.proto">anchor/anchor.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#anchor.Anchor"><span class="badge">M</span>Anchor</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.AnchorRequest"><span class="badge">M</span>AnchorRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.Batch"><span class="badge">M</span>Batch</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.BatchRequest"><span class="badge">M</span>BatchRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.Proof"><span class="badge">M</span>Proof</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.ProofRequest"><span class="badge">M</span>ProofRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.SubmitProofRequest"><span class="badge">M</span>SubmitProofRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.SubscribeBatchesRequest"><span class="badge">M</span>SubscribeBatchesRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.VerifyProofReply"><span class="badge">M</span>VerifyProofReply</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.VerifyProofRequest"><span class="badge">M</span>VerifyProofRequest</a>
+                </li>
+              
+              
+                <li>
+                  <a href="#anchor.Anchor.Status"><span class="badge">E</span>Anchor.Status</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.Anchor.Type"><span class="badge">E</span>Anchor.Type</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.Batch.Status"><span class="badge">E</span>Batch.Status</a>
+                </li>
+              
+                <li>
+                  <a href="#anchor.Proof.Format"><span class="badge">E</span>Proof.Format</a>
+                </li>
+              
+              
+              
+                <li>
+                  <a href="#anchor.AnchorService"><span class="badge">S</span>AnchorService</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+        <li><a href="#scalar-value-types">Scalar Value Types</a></li>
+      </ul>
+    </div>
+
+    
+      
+      <div class="file-heading">
+        <h2 id="anchor/anchor.proto">anchor/anchor.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="anchor.Anchor">Anchor</h3>
+        <p>Anchor represents an anchor</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>type</td>
+                  <td><a href="#anchor.Anchor.Type">Anchor.Type</a></td>
+                  <td></td>
+                  <td><p>Type is the anchor type </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#anchor.Anchor.Status">Anchor.Status</a></td>
+                  <td></td>
+                  <td><p>Status is the anchor status </p></td>
+                </tr>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Error is the error message when the anchor status is ERROR </p></td>
+                </tr>
+              
+                <tr>
+                  <td>supported_formats</td>
+                  <td><a href="#anchor.Proof.Format">Proof.Format</a></td>
+                  <td>repeated</td>
+                  <td><p>SupportedFormats are the supported proof formats of the anchor </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="anchor.AnchorRequest">AnchorRequest</h3>
+        <p>AnchorRequest represents an anchor request</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>type</td>
+                  <td><a href="#anchor.Anchor.Type">Anchor.Type</a></td>
+                  <td></td>
+                  <td><p>Type is the anchor type </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="anchor.Batch">Batch</h3>
+        <p>Batch represents a batch</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Id is the batch ID </p></td>
+                </tr>
+              
+                <tr>
+                  <td>anchor_type</td>
+                  <td><a href="#anchor.Anchor.Type">Anchor.Type</a></td>
+                  <td></td>
+                  <td><p>AnchorType is the batch&#39;s anchor type </p></td>
+                </tr>
+              
+                <tr>
+                  <td>proof_format</td>
+                  <td><a href="#anchor.Proof.Format">Proof.Format</a></td>
+                  <td></td>
+                  <td><p>ProofFormat is the batch&#39;s proof format, which determines how the merkle
+tree is constructed for the batch. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#anchor.Batch.Status">Batch.Status</a></td>
+                  <td></td>
+                  <td><p>Status is the batch status. FLOW: created_at -&gt; BATCHING -&gt; flushed_at -&gt;
+QUEUING -&gt; started_at -&gt; PROCESSING -&gt; submitted_at -&gt; PENDING -&gt;
+finalized_at -&gt; CONFIRMED / ERROR; * -&gt; ERROR; if a batch has not yet
+reached PENDING and its anchor has restarted, the batch will be put back to
+QUEUING </p></td>
+                </tr>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Error is the error message when status is ERROR </p></td>
+                </tr>
+              
+                <tr>
+                  <td>size</td>
+                  <td><a href="#int64">int64</a></td>
+                  <td></td>
+                  <td><p>Size is the number of hashes contained in the batch </p></td>
+                </tr>
+              
+                <tr>
+                  <td>created_at</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p>CreateAt is the batch&#39;s created at timestamp. FLOW: created_at -&gt; BATCHING </p></td>
+                </tr>
+              
+                <tr>
+                  <td>flushed_at</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p>FlushedAt is the batch&#39;s flushed at timestamp. FLOW: BATCHING -&gt; flushed_at
+-&gt; QUEUING </p></td>
+                </tr>
+              
+                <tr>
+                  <td>started_at</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p>StartedAt is the batch&#39;s started at timestamp. FLOW: QUEUING -&gt; started_at
+-&gt; PROCESSING </p></td>
+                </tr>
+              
+                <tr>
+                  <td>submitted_at</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p>SubmittedAt is the batch&#39;s submitted at timestamp. FLOW: PROCESSING -&gt;
+submitted_at -&gt; PENDING </p></td>
+                </tr>
+              
+                <tr>
+                  <td>finalized_at</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p>FinalizedAt is the batch&#39;s finalized at timestamp. FLOW: * -&gt; finalized_at
+-&gt; CONFIRMED / ERROR. NOTE: this is not the real block confirmed time, use
+the timestamp in the batch data instead </p></td>
+                </tr>
+              
+                <tr>
+                  <td>hash</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Hash is the batch&#39;s root hash </p></td>
+                </tr>
+              
+                <tr>
+                  <td>data</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Data is the batch data in JSON </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="anchor.BatchRequest">BatchRequest</h3>
+        <p>BatchRequest represents a batch request</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>batch_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>BatchId is the batch ID </p></td>
+                </tr>
+              
+                <tr>
+                  <td>anchor_type</td>
+                  <td><a href="#anchor.Anchor.Type">Anchor.Type</a></td>
+                  <td></td>
+                  <td><p>AnchorType is the batch&#39;s anchor type </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="anchor.Proof">Proof</h3>
+        <p>Proof represents a proof</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>hash</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Hash is the hash the proof is proving for </p></td>
+                </tr>
+              
+                <tr>
+                  <td>batch_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>BatchId is the proof&#39;s batch ID </p></td>
+                </tr>
+              
+                <tr>
+                  <td>anchor_type</td>
+                  <td><a href="#anchor.Anchor.Type">Anchor.Type</a></td>
+                  <td></td>
+                  <td><p>AnchorType is the proof&#39;s anchor type </p></td>
+                </tr>
+              
+                <tr>
+                  <td>batch_status</td>
+                  <td><a href="#anchor.Batch.Status">Batch.Status</a></td>
+                  <td></td>
+                  <td><p>BatchStatus is the proof&#39;s batch status </p></td>
+                </tr>
+              
+                <tr>
+                  <td>format</td>
+                  <td><a href="#anchor.Proof.Format">Proof.Format</a></td>
+                  <td></td>
+                  <td><p>Format is the proof format </p></td>
+                </tr>
+              
+                <tr>
+                  <td>data</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Data is the proof data in base64 </p></td>
+                </tr>
+              
+                <tr>
+                  <td>batch</td>
+                  <td><a href="#anchor.Batch">Batch</a></td>
+                  <td></td>
+                  <td><p>Batch is the proof&#39;s batch detail </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="anchor.ProofRequest">ProofRequest</h3>
+        <p>ProofRequest represents a proof request</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>hash</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Hash is the hash the proof is proving for </p></td>
+                </tr>
+              
+                <tr>
+                  <td>batch_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>BatchId is the proof&#39;s batch ID </p></td>
+                </tr>
+              
+                <tr>
+                  <td>anchor_type</td>
+                  <td><a href="#anchor.Anchor.Type">Anchor.Type</a></td>
+                  <td></td>
+                  <td><p>AnchorType is the proof&#39;s anchor type </p></td>
+                </tr>
+              
+                <tr>
+                  <td>with_batch</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>WithBatch indicates whether to include the proof&#39;s batch detail </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="anchor.SubmitProofRequest">SubmitProofRequest</h3>
+        <p>SubmitProofRequest represents a submit proof request</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>hash</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Hash is the hash to be submitted </p></td>
+                </tr>
+              
+                <tr>
+                  <td>anchor_type</td>
+                  <td><a href="#anchor.Anchor.Type">Anchor.Type</a></td>
+                  <td></td>
+                  <td><p>AnchorType is the anchor type to be used </p></td>
+                </tr>
+              
+                <tr>
+                  <td>format</td>
+                  <td><a href="#anchor.Proof.Format">Proof.Format</a></td>
+                  <td></td>
+                  <td><p>Format is the proof format to be used </p></td>
+                </tr>
+              
+                <tr>
+                  <td>skip_batching</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>SkipBatching indicates whether to skip batching and submit a proof for the
+hash directly </p></td>
+                </tr>
+              
+                <tr>
+                  <td>with_batch</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>WithBatch indicates whether to include the batch detail in the reply </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="anchor.SubscribeBatchesRequest">SubscribeBatchesRequest</h3>
+        <p>SubscribeBatchesRequest represents a subscribe batches request</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>filter</td>
+                  <td><a href="#anchor.BatchRequest">BatchRequest</a></td>
+                  <td></td>
+                  <td><p>Filter is the batch filter. When nil, all batches of all anchors will be
+subscribed; otherwise, only the batches of the given anchor will be
+subscribed; if batch_id is non-empty, only the matched batch will be
+subscribed </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="anchor.VerifyProofReply">VerifyProofReply</h3>
+        <p>VerifyProofReply represents a verify proof reply</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>verified</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>Verified indicates whether the proof is verified </p></td>
+                </tr>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Erorr is the error message when the proof is falsified </p></td>
+                </tr>
+              
+                <tr>
+                  <td>provenHash</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>ProvenHash is the hash the proof is proving for </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="anchor.VerifyProofRequest">VerifyProofRequest</h3>
+        <p>VerifyProofRequest represents a verify proof request</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>anchor_type</td>
+                  <td><a href="#anchor.Anchor.Type">Anchor.Type</a></td>
+                  <td></td>
+                  <td><p>AnchorType is the proof&#39;s anchor type </p></td>
+                </tr>
+              
+                <tr>
+                  <td>format</td>
+                  <td><a href="#anchor.Proof.Format">Proof.Format</a></td>
+                  <td></td>
+                  <td><p>Format is the proof format. If skipping the signature checking is desired,
+please use the corresponding non-signed format, eg. use CHP_PATH instead of
+CHP_PATH_SIGNED in request </p></td>
+                </tr>
+              
+                <tr>
+                  <td>data</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Data is the proof data in base64 </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+        <h3 id="anchor.Anchor.Status">Anchor.Status</h3>
+        <p>Status represents an anchor's status</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>ERROR</td>
+                <td>0</td>
+                <td><p>Error means the anchor has an error</p></td>
+              </tr>
+            
+              <tr>
+                <td>STOPPED</td>
+                <td>1</td>
+                <td><p>STOPPED means the anchor is stopped</p></td>
+              </tr>
+            
+              <tr>
+                <td>RUNNING</td>
+                <td>2</td>
+                <td><p>RUNNING means the anchor is running</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="anchor.Anchor.Type">Anchor.Type</h3>
+        <p>Type represents an anchor type</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>ETH</td>
+                <td>0</td>
+                <td><p>ETH is the anchor type for Ethereum Testnet</p></td>
+              </tr>
+            
+              <tr>
+                <td>ETH_MAINNET</td>
+                <td>3</td>
+                <td><p>ETH_MAINNET is the anchor type for Ethereum Mainnet</p></td>
+              </tr>
+            
+              <tr>
+                <td>ETH_ELASTOS</td>
+                <td>4</td>
+                <td><p>ETH_ELASTOS is the anchor type for Elastos</p></td>
+              </tr>
+            
+              <tr>
+                <td>BTC</td>
+                <td>1</td>
+                <td><p>BTC is the anchor type for Bitcoin</p></td>
+              </tr>
+            
+              <tr>
+                <td>BTC_MAINNET</td>
+                <td>5</td>
+                <td><p>BTC_MAINNET is the anchor type for Bitcoin Mainnet</p></td>
+              </tr>
+            
+              <tr>
+                <td>CHP</td>
+                <td>2</td>
+                <td><p>CHP is the anchor type for Chainpoint (coming soon)</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="anchor.Batch.Status">Batch.Status</h3>
+        <p>Status represents a batch's status</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>ERROR</td>
+                <td>0</td>
+                <td><p>ERROR means the batch has an error. FLOW: * -&gt; ERROR</p></td>
+              </tr>
+            
+              <tr>
+                <td>BATCHING</td>
+                <td>1</td>
+                <td><p>BATCHING means the batch is batching for more hashes. FLOW: created_at -&gt;
+BATCHING -&gt; flushed_at</p></td>
+              </tr>
+            
+              <tr>
+                <td>QUEUING</td>
+                <td>2</td>
+                <td><p>QUEUING means the batch is queuing to be processed. FLOW: flushed_at -&gt;
+QUEUING -&gt; started_at</p></td>
+              </tr>
+            
+              <tr>
+                <td>PROCESSING</td>
+                <td>3</td>
+                <td><p>PROCESSING means the batch is constructing merkle roots and submitting
+hashes. FLOW: started_at -&gt; PROCESSING -&gt; submitted_at</p></td>
+              </tr>
+            
+              <tr>
+                <td>PENDING</td>
+                <td>4</td>
+                <td><p>PENDING means the batch&#39;s root hash is pending to be confirmed. FLOW:
+submitted_at -&gt; PENDING -&gt; finalized_at</p></td>
+              </tr>
+            
+              <tr>
+                <td>CONFIRMED</td>
+                <td>5</td>
+                <td><p>CONFIRMED means the batch&#39;s root hash is confirmed by the anchor&#39;s
+Blockchain. FLOW: finalized_at -&gt; CONFIRMED</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3 id="anchor.Proof.Format">Proof.Format</h3>
+        <p>Format represents a proof format</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>CHP_PATH</td>
+                <td>0</td>
+                <td><p>CHP_PATH means Chainpoint Path format, which is the format used by
+Chainpoint</p></td>
+              </tr>
+            
+              <tr>
+                <td>ETH_TRIE</td>
+                <td>1</td>
+                <td><p>ETH_TRIE means Ethereum Trie format</p></td>
+              </tr>
+            
+              <tr>
+                <td>CHP_PATH_SIGNED</td>
+                <td>2</td>
+                <td><p>CHP_PATH_SIGNED means signed Chainpoint Path format</p></td>
+              </tr>
+            
+              <tr>
+                <td>ETH_TRIE_SIGNED</td>
+                <td>3</td>
+                <td><p>ETH_TRIE_SIGNED means signed Ethereum Trie format</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+
+      
+
+      
+        <h3 id="anchor.AnchorService">AnchorService</h3>
+        <p>AnchorService continuously anchors hashes to Blockchains, which is similar to</p><p>what Chainpoint does, but with much better performance and flexibility. It is</p><p>20x faster and has much higher confirmation throughput and speed than</p><p>Chainpoint</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>GetAnchors</td>
+                <td><a href="#google.protobuf.Empty">.google.protobuf.Empty</a></td>
+                <td><a href="#anchor.Anchor">Anchor</a> stream</td>
+                <td><p>GetAnchors gets all anchors</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetAnchor</td>
+                <td><a href="#anchor.AnchorRequest">AnchorRequest</a></td>
+                <td><a href="#anchor.Anchor">Anchor</a></td>
+                <td><p>GetAnchor gets an anchor</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetProof</td>
+                <td><a href="#anchor.ProofRequest">ProofRequest</a></td>
+                <td><a href="#anchor.Proof">Proof</a></td>
+                <td><p>GetProof gets a proof</p></td>
+              </tr>
+            
+              <tr>
+                <td>SubmitProof</td>
+                <td><a href="#anchor.SubmitProofRequest">SubmitProofRequest</a></td>
+                <td><a href="#anchor.Proof">Proof</a></td>
+                <td><p>SubmitProof submits a proof for the given hash</p></td>
+              </tr>
+            
+              <tr>
+                <td>VerifyProof</td>
+                <td><a href="#anchor.VerifyProofRequest">VerifyProofRequest</a></td>
+                <td><a href="#anchor.VerifyProofReply">VerifyProofReply</a></td>
+                <td><p>VerifyProof verifies the given proof. When the proof is unverifiable, an
+exception is thrown</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetBatch</td>
+                <td><a href="#anchor.BatchRequest">BatchRequest</a></td>
+                <td><a href="#anchor.Batch">Batch</a></td>
+                <td><p>GetBatch gets a batch</p></td>
+              </tr>
+            
+              <tr>
+                <td>SubscribeBatches</td>
+                <td><a href="#anchor.SubscribeBatchesRequest">SubscribeBatchesRequest</a></td>
+                <td><a href="#anchor.Batch">Batch</a> stream</td>
+                <td><p>SubscribeBatches subscribes to batch status updates</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
+    
+
+    <h2 id="scalar-value-types">Scalar Value Types</h2>
+    <table class="scalar-value-types-table">
+      <thead>
+        <tr><td>.proto Type</td><td>Notes</td><td>C++</td><td>Java</td><td>Python</td><td>Go</td><td>C#</td><td>PHP</td><td>Ruby</td></tr>
+      </thead>
+      <tbody>
+        
+          <tr id="double">
+            <td>double</td>
+            <td></td>
+            <td>double</td>
+            <td>double</td>
+            <td>float</td>
+            <td>float64</td>
+            <td>double</td>
+            <td>float</td>
+            <td>Float</td>
+          </tr>
+        
+          <tr id="float">
+            <td>float</td>
+            <td></td>
+            <td>float</td>
+            <td>float</td>
+            <td>float</td>
+            <td>float32</td>
+            <td>float</td>
+            <td>float</td>
+            <td>Float</td>
+          </tr>
+        
+          <tr id="int32">
+            <td>int32</td>
+            <td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead.</td>
+            <td>int32</td>
+            <td>int</td>
+            <td>int</td>
+            <td>int32</td>
+            <td>int</td>
+            <td>integer</td>
+            <td>Bignum or Fixnum (as required)</td>
+          </tr>
+        
+          <tr id="int64">
+            <td>int64</td>
+            <td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead.</td>
+            <td>int64</td>
+            <td>long</td>
+            <td>int/long</td>
+            <td>int64</td>
+            <td>long</td>
+            <td>integer/string</td>
+            <td>Bignum</td>
+          </tr>
+        
+          <tr id="uint32">
+            <td>uint32</td>
+            <td>Uses variable-length encoding.</td>
+            <td>uint32</td>
+            <td>int</td>
+            <td>int/long</td>
+            <td>uint32</td>
+            <td>uint</td>
+            <td>integer</td>
+            <td>Bignum or Fixnum (as required)</td>
+          </tr>
+        
+          <tr id="uint64">
+            <td>uint64</td>
+            <td>Uses variable-length encoding.</td>
+            <td>uint64</td>
+            <td>long</td>
+            <td>int/long</td>
+            <td>uint64</td>
+            <td>ulong</td>
+            <td>integer/string</td>
+            <td>Bignum or Fixnum (as required)</td>
+          </tr>
+        
+          <tr id="sint32">
+            <td>sint32</td>
+            <td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s.</td>
+            <td>int32</td>
+            <td>int</td>
+            <td>int</td>
+            <td>int32</td>
+            <td>int</td>
+            <td>integer</td>
+            <td>Bignum or Fixnum (as required)</td>
+          </tr>
+        
+          <tr id="sint64">
+            <td>sint64</td>
+            <td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s.</td>
+            <td>int64</td>
+            <td>long</td>
+            <td>int/long</td>
+            <td>int64</td>
+            <td>long</td>
+            <td>integer/string</td>
+            <td>Bignum</td>
+          </tr>
+        
+          <tr id="fixed32">
+            <td>fixed32</td>
+            <td>Always four bytes. More efficient than uint32 if values are often greater than 2^28.</td>
+            <td>uint32</td>
+            <td>int</td>
+            <td>int</td>
+            <td>uint32</td>
+            <td>uint</td>
+            <td>integer</td>
+            <td>Bignum or Fixnum (as required)</td>
+          </tr>
+        
+          <tr id="fixed64">
+            <td>fixed64</td>
+            <td>Always eight bytes. More efficient than uint64 if values are often greater than 2^56.</td>
+            <td>uint64</td>
+            <td>long</td>
+            <td>int/long</td>
+            <td>uint64</td>
+            <td>ulong</td>
+            <td>integer/string</td>
+            <td>Bignum</td>
+          </tr>
+        
+          <tr id="sfixed32">
+            <td>sfixed32</td>
+            <td>Always four bytes.</td>
+            <td>int32</td>
+            <td>int</td>
+            <td>int</td>
+            <td>int32</td>
+            <td>int</td>
+            <td>integer</td>
+            <td>Bignum or Fixnum (as required)</td>
+          </tr>
+        
+          <tr id="sfixed64">
+            <td>sfixed64</td>
+            <td>Always eight bytes.</td>
+            <td>int64</td>
+            <td>long</td>
+            <td>int/long</td>
+            <td>int64</td>
+            <td>long</td>
+            <td>integer/string</td>
+            <td>Bignum</td>
+          </tr>
+        
+          <tr id="bool">
+            <td>bool</td>
+            <td></td>
+            <td>bool</td>
+            <td>boolean</td>
+            <td>boolean</td>
+            <td>bool</td>
+            <td>bool</td>
+            <td>boolean</td>
+            <td>TrueClass/FalseClass</td>
+          </tr>
+        
+          <tr id="string">
+            <td>string</td>
+            <td>A string must always contain UTF-8 encoded or 7-bit ASCII text.</td>
+            <td>string</td>
+            <td>String</td>
+            <td>str/unicode</td>
+            <td>string</td>
+            <td>string</td>
+            <td>string</td>
+            <td>String (UTF-8)</td>
+          </tr>
+        
+          <tr id="bytes">
+            <td>bytes</td>
+            <td>May contain any arbitrary sequence of bytes.</td>
+            <td>string</td>
+            <td>ByteString</td>
+            <td>str</td>
+            <td>[]byte</td>
+            <td>ByteString</td>
+            <td>string</td>
+            <td>String (ASCII-8BIT)</td>
+          </tr>
+        
+      </tbody>
+    </table>
+  </body>
+</html>
+

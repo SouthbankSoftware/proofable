@@ -41,7 +41,7 @@ func (m *Trie) Reset()         { *m = Trie{} }
 func (m *Trie) String() string { return proto.CompactTextString(m) }
 func (*Trie) ProtoMessage()    {}
 func (*Trie) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{0}
+	return fileDescriptor_api_dce56ca72950abf4, []int{0}
 }
 func (m *Trie) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Trie.Unmarshal(m, b)
@@ -95,7 +95,7 @@ func (m *DataChunk) Reset()         { *m = DataChunk{} }
 func (m *DataChunk) String() string { return proto.CompactTextString(m) }
 func (*DataChunk) ProtoMessage()    {}
 func (*DataChunk) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{1}
+	return fileDescriptor_api_dce56ca72950abf4, []int{1}
 }
 func (m *DataChunk) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DataChunk.Unmarshal(m, b)
@@ -256,7 +256,7 @@ func (m *KeyValue) Reset()         { *m = KeyValue{} }
 func (m *KeyValue) String() string { return proto.CompactTextString(m) }
 func (*KeyValue) ProtoMessage()    {}
 func (*KeyValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{2}
+	return fileDescriptor_api_dce56ca72950abf4, []int{2}
 }
 func (m *KeyValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KeyValue.Unmarshal(m, b)
@@ -394,7 +394,7 @@ func (m *VerifyProofReplyChunk) Reset()         { *m = VerifyProofReplyChunk{} }
 func (m *VerifyProofReplyChunk) String() string { return proto.CompactTextString(m) }
 func (*VerifyProofReplyChunk) ProtoMessage()    {}
 func (*VerifyProofReplyChunk) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{3}
+	return fileDescriptor_api_dce56ca72950abf4, []int{3}
 }
 func (m *VerifyProofReplyChunk) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyProofReplyChunk.Unmarshal(m, b)
@@ -572,7 +572,7 @@ func (m *Key) Reset()         { *m = Key{} }
 func (m *Key) String() string { return proto.CompactTextString(m) }
 func (*Key) ProtoMessage()    {}
 func (*Key) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{4}
+	return fileDescriptor_api_dce56ca72950abf4, []int{4}
 }
 func (m *Key) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Key.Unmarshal(m, b)
@@ -622,7 +622,7 @@ func (m *TrieRoot) Reset()         { *m = TrieRoot{} }
 func (m *TrieRoot) String() string { return proto.CompactTextString(m) }
 func (*TrieRoot) ProtoMessage()    {}
 func (*TrieRoot) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{5}
+	return fileDescriptor_api_dce56ca72950abf4, []int{5}
 }
 func (m *TrieRoot) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieRoot.Unmarshal(m, b)
@@ -693,7 +693,7 @@ func (m *TrieProof) Reset()         { *m = TrieProof{} }
 func (m *TrieProof) String() string { return proto.CompactTextString(m) }
 func (*TrieProof) ProtoMessage()    {}
 func (*TrieProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{6}
+	return fileDescriptor_api_dce56ca72950abf4, []int{6}
 }
 func (m *TrieProof) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieProof.Unmarshal(m, b)
@@ -815,7 +815,7 @@ func (m *RootFilter) Reset()         { *m = RootFilter{} }
 func (m *RootFilter) String() string { return proto.CompactTextString(m) }
 func (*RootFilter) ProtoMessage()    {}
 func (*RootFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{7}
+	return fileDescriptor_api_dce56ca72950abf4, []int{7}
 }
 func (m *RootFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RootFilter.Unmarshal(m, b)
@@ -864,7 +864,7 @@ func (m *KeyValuesFilter) Reset()         { *m = KeyValuesFilter{} }
 func (m *KeyValuesFilter) String() string { return proto.CompactTextString(m) }
 func (*KeyValuesFilter) ProtoMessage()    {}
 func (*KeyValuesFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{8}
+	return fileDescriptor_api_dce56ca72950abf4, []int{8}
 }
 func (m *KeyValuesFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KeyValuesFilter.Unmarshal(m, b)
@@ -904,7 +904,7 @@ func (m *TrieRequest) Reset()         { *m = TrieRequest{} }
 func (m *TrieRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieRequest) ProtoMessage()    {}
 func (*TrieRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{9}
+	return fileDescriptor_api_dce56ca72950abf4, []int{9}
 }
 func (m *TrieRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieRequest.Unmarshal(m, b)
@@ -949,7 +949,7 @@ func (m *TrieKeyValuesRequest) Reset()         { *m = TrieKeyValuesRequest{} }
 func (m *TrieKeyValuesRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieKeyValuesRequest) ProtoMessage()    {}
 func (*TrieKeyValuesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{10}
+	return fileDescriptor_api_dce56ca72950abf4, []int{10}
 }
 func (m *TrieKeyValuesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieKeyValuesRequest.Unmarshal(m, b)
@@ -1002,7 +1002,7 @@ func (m *TrieKeyValueRequest) Reset()         { *m = TrieKeyValueRequest{} }
 func (m *TrieKeyValueRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieKeyValueRequest) ProtoMessage()    {}
 func (*TrieKeyValueRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{11}
+	return fileDescriptor_api_dce56ca72950abf4, []int{11}
 }
 func (m *TrieKeyValueRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieKeyValueRequest.Unmarshal(m, b)
@@ -1060,7 +1060,7 @@ func (m *TrieRootsRequest) Reset()         { *m = TrieRootsRequest{} }
 func (m *TrieRootsRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieRootsRequest) ProtoMessage()    {}
 func (*TrieRootsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{12}
+	return fileDescriptor_api_dce56ca72950abf4, []int{12}
 }
 func (m *TrieRootsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieRootsRequest.Unmarshal(m, b)
@@ -1109,7 +1109,7 @@ func (m *SetTrieRootRequest) Reset()         { *m = SetTrieRootRequest{} }
 func (m *SetTrieRootRequest) String() string { return proto.CompactTextString(m) }
 func (*SetTrieRootRequest) ProtoMessage()    {}
 func (*SetTrieRootRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{13}
+	return fileDescriptor_api_dce56ca72950abf4, []int{13}
 }
 func (m *SetTrieRootRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetTrieRootRequest.Unmarshal(m, b)
@@ -1161,7 +1161,7 @@ func (m *TrieProofsRequest) Reset()         { *m = TrieProofsRequest{} }
 func (m *TrieProofsRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieProofsRequest) ProtoMessage()    {}
 func (*TrieProofsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{14}
+	return fileDescriptor_api_dce56ca72950abf4, []int{14}
 }
 func (m *TrieProofsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieProofsRequest.Unmarshal(m, b)
@@ -1214,7 +1214,7 @@ func (m *TrieProofRequest) Reset()         { *m = TrieProofRequest{} }
 func (m *TrieProofRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieProofRequest) ProtoMessage()    {}
 func (*TrieProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{15}
+	return fileDescriptor_api_dce56ca72950abf4, []int{15}
 }
 func (m *TrieProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieProofRequest.Unmarshal(m, b)
@@ -1365,7 +1365,7 @@ func (m *CreateTrieProofRequest) Reset()         { *m = CreateTrieProofRequest{}
 func (m *CreateTrieProofRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateTrieProofRequest) ProtoMessage()    {}
 func (*CreateTrieProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{16}
+	return fileDescriptor_api_dce56ca72950abf4, []int{16}
 }
 func (m *CreateTrieProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateTrieProofRequest.Unmarshal(m, b)
@@ -1414,7 +1414,7 @@ func (m *DeleteTrieProofRequest) Reset()         { *m = DeleteTrieProofRequest{}
 func (m *DeleteTrieProofRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteTrieProofRequest) ProtoMessage()    {}
 func (*DeleteTrieProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{17}
+	return fileDescriptor_api_dce56ca72950abf4, []int{17}
 }
 func (m *DeleteTrieProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteTrieProofRequest.Unmarshal(m, b)
@@ -1469,7 +1469,7 @@ func (m *VerifyTrieProofRequest) Reset()         { *m = VerifyTrieProofRequest{}
 func (m *VerifyTrieProofRequest) String() string { return proto.CompactTextString(m) }
 func (*VerifyTrieProofRequest) ProtoMessage()    {}
 func (*VerifyTrieProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{18}
+	return fileDescriptor_api_dce56ca72950abf4, []int{18}
 }
 func (m *VerifyTrieProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyTrieProofRequest.Unmarshal(m, b)
@@ -1539,7 +1539,7 @@ func (m *CreateKeyValuesProofRequest) Reset()         { *m = CreateKeyValuesProo
 func (m *CreateKeyValuesProofRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateKeyValuesProofRequest) ProtoMessage()    {}
 func (*CreateKeyValuesProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{19}
+	return fileDescriptor_api_dce56ca72950abf4, []int{19}
 }
 func (m *CreateKeyValuesProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateKeyValuesProofRequest.Unmarshal(m, b)
@@ -1697,7 +1697,7 @@ func (m *VerifyKeyValuesProofRequest) Reset()         { *m = VerifyKeyValuesProo
 func (m *VerifyKeyValuesProofRequest) String() string { return proto.CompactTextString(m) }
 func (*VerifyKeyValuesProofRequest) ProtoMessage()    {}
 func (*VerifyKeyValuesProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{20}
+	return fileDescriptor_api_dce56ca72950abf4, []int{20}
 }
 func (m *VerifyKeyValuesProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyKeyValuesProofRequest.Unmarshal(m, b)
@@ -1746,7 +1746,7 @@ func (m *VerifyProofReply) Reset()         { *m = VerifyProofReply{} }
 func (m *VerifyProofReply) String() string { return proto.CompactTextString(m) }
 func (*VerifyProofReply) ProtoMessage()    {}
 func (*VerifyProofReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6d362cca6cc03151, []int{21}
+	return fileDescriptor_api_dce56ca72950abf4, []int{21}
 }
 func (m *VerifyProofReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyProofReply.Unmarshal(m, b)
@@ -2840,9 +2840,9 @@ var _APIService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "api/api.proto",
 }
 
-func init() { proto.RegisterFile("api/api.proto", fileDescriptor_api_6d362cca6cc03151) }
+func init() { proto.RegisterFile("api/api.proto", fileDescriptor_api_dce56ca72950abf4) }
 
-var fileDescriptor_api_6d362cca6cc03151 = []byte{
+var fileDescriptor_api_dce56ca72950abf4 = []byte{
 	// 1296 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x57, 0xdb, 0x8e, 0xda, 0x56,
 	0x17, 0xc6, 0x03, 0x03, 0x66, 0xc1, 0x0c, 0x64, 0x87, 0x99, 0x21, 0xf0, 0xff, 0x0a, 0xf5, 0x45,
