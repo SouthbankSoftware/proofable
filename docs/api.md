@@ -253,7 +253,7 @@ viewed as a snapshot of all the key-values contained in the trie
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  | Id is the ID of the trie proof |
-| trie_id | [string](#string) |  | Id is the trie ID |
+| trie_id | [string](#string) |  | TrieId is the trie ID |
 | root | [string](#string) |  | Root is the root hash of the trie proven by this proof |
 | created_at | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | CreatedAt is the created at timestamp. The timestamp when the proof is created |
 | status | [anchor.Batch.Status](#anchor.Batch.Status) |  | Status is the anchor batch status of the trie proof |
@@ -456,9 +456,9 @@ that key-value
 | GetTrieProof | [TrieProofRequest](#api.TrieProofRequest) | [TrieProof](#api.TrieProof) | GetTrieProof gets a proof of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned |
 | SubscribeTrieProof | [TrieProofRequest](#api.TrieProofRequest) | [TrieProof](#api.TrieProof) stream | SubscribeTrieProof subscribes to proof changes of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned |
 | CreateTrieProof | [CreateTrieProofRequest](#api.CreateTrieProofRequest) | [TrieProof](#api.TrieProof) | CreateTrieProof creates a proof for a trie root |
-| DeleteTrieProof | [DeleteTrieProofRequest](#api.DeleteTrieProofRequest) | [TrieProof](#api.TrieProof) | DeleteTrieProof deletes a proof of a trie |
+| DeleteTrieProof | [DeleteTrieProofRequest](#api.DeleteTrieProofRequest) | [TrieProof](#api.TrieProof) | DeleteTrieProof deletes a proof for a trie root |
 | VerifyTrieProof | [VerifyTrieProofRequest](#api.VerifyTrieProofRequest) | [VerifyProofReplyChunk](#api.VerifyProofReplyChunk) stream | VerifyTrieProof verifies a proof for a trie root |
-| CreateKeyValuesProof | [CreateKeyValuesProofRequest](#api.CreateKeyValuesProofRequest) | [DataChunk](#api.DataChunk) stream | CreateKeyValuesProof creates a proof for the provided key-values. The proof is self-contained and can be verified independently |
+| CreateKeyValuesProof | [CreateKeyValuesProofRequest](#api.CreateKeyValuesProofRequest) | [DataChunk](#api.DataChunk) stream | CreateKeyValuesProof creates a proof for the provided key-values out of a trie proof. The new proof is self-contained and can be verified independently |
 | VerifyKeyValuesProof | [DataChunk](#api.DataChunk) stream | [VerifyProofReplyChunk](#api.VerifyProofReplyChunk) stream | VerifyKeyValuesProof verifies a key-values proof |
 
  

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-01-03T14:55:49+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-27T18:08:56+11:00
+ * @Last modified time: 2020-03-28T00:17:14+11:00
  */
 
 syntax = "proto3";
@@ -59,13 +59,14 @@ service APIService {
   rpc SubscribeTrieProof(TrieProofRequest) returns (stream TrieProof) {}
   // CreateTrieProof creates a proof for a trie root
   rpc CreateTrieProof(CreateTrieProofRequest) returns (TrieProof) {}
-  // DeleteTrieProof deletes a proof of a trie
+  // DeleteTrieProof deletes a proof for a trie root
   rpc DeleteTrieProof(DeleteTrieProofRequest) returns (TrieProof) {}
   // VerifyTrieProof verifies a proof for a trie root
   rpc VerifyTrieProof(VerifyTrieProofRequest)
       returns (stream VerifyProofReplyChunk) {}
-  // CreateKeyValuesProof creates a proof for the provided key-values. The proof
-  // is self-contained and can be verified independently
+  // CreateKeyValuesProof creates a proof for the provided key-values out of a
+  // trie proof. The new proof is self-contained and can be verified
+  // independently
   rpc CreateKeyValuesProof(CreateKeyValuesProofRequest)
       returns (stream DataChunk) {}
   // VerifyKeyValuesProof verifies a key-values proof
@@ -153,7 +154,7 @@ message TrieRoot {
 message TrieProof {
   // Id is the ID of the trie proof
   string id = 1;
-  // Id is the trie ID
+  // TrieId is the trie ID
   string trie_id = 2;
   // Root is the root hash of the trie proven by this proof
   string root = 3;

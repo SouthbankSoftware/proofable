@@ -729,7 +729,7 @@ blocked until all ongoing updates are finished </p></td>
                   <td>trie_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Id is the trie ID </p></td>
+                  <td><p>TrieId is the trie ID </p></td>
                 </tr>
               
                 <tr>
@@ -1250,7 +1250,7 @@ is not provided (either nil or zero), the latest proof will be returned</p></td>
                 <td>DeleteTrieProof</td>
                 <td><a href="#api.DeleteTrieProofRequest">DeleteTrieProofRequest</a></td>
                 <td><a href="#api.TrieProof">TrieProof</a></td>
-                <td><p>DeleteTrieProof deletes a proof of a trie</p></td>
+                <td><p>DeleteTrieProof deletes a proof for a trie root</p></td>
               </tr>
             
               <tr>
@@ -1264,8 +1264,9 @@ is not provided (either nil or zero), the latest proof will be returned</p></td>
                 <td>CreateKeyValuesProof</td>
                 <td><a href="#api.CreateKeyValuesProofRequest">CreateKeyValuesProofRequest</a></td>
                 <td><a href="#api.DataChunk">DataChunk</a> stream</td>
-                <td><p>CreateKeyValuesProof creates a proof for the provided key-values. The proof
-is self-contained and can be verified independently</p></td>
+                <td><p>CreateKeyValuesProof creates a proof for the provided key-values out of a
+trie proof. The new proof is self-contained and can be verified
+independently</p></td>
               </tr>
             
               <tr>
