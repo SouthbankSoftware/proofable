@@ -257,7 +257,7 @@
 
       
         <h3 id="anchor.Anchor">Anchor</h3>
-        <p>Anchor represents an anchor</p>
+        <p>Anchor represents an anchor of a Blockchain, through which a hash can be</p><p>anchored to that Blockchain</p>
 
         
           <table class="field-table">
@@ -302,7 +302,7 @@
         
       
         <h3 id="anchor.AnchorRequest">AnchorRequest</h3>
-        <p>AnchorRequest represents an anchor request</p>
+        <p>AnchorRequest represents a request to get information for the given anchor</p><p>type</p>
 
         
           <table class="field-table">
@@ -326,7 +326,7 @@
         
       
         <h3 id="anchor.Batch">Batch</h3>
-        <p>Batch represents a batch</p>
+        <p>Batch represents a batch of hashes. When hash stream comes in, Anchor Service</p><p>will try to process them in batches, just like Blockchain processes</p><p>transactions in blocks. This makes utilization of expensive resources, such</p><p>as making Bitcoin transaction, more economic. Each batch's root hash will be</p><p>embedded in a transaction made to the Blockchain</p>
 
         
           <table class="field-table">
@@ -475,7 +475,7 @@ the timestamp in the batch data instead </p></td>
         
       
         <h3 id="anchor.Proof">Proof</h3>
-        <p>Proof represents a proof</p>
+        <p>Proof represents a Blockchain proof of a hash, which is a Merkle path from</p><p>the hash to the root hash of the proof's batch</p>
 
         
           <table class="field-table">
@@ -639,7 +639,7 @@ hash directly </p></td>
         
       
         <h3 id="anchor.SubscribeBatchesRequest">SubscribeBatchesRequest</h3>
-        <p>SubscribeBatchesRequest represents a subscribe batches request</p>
+        <p>SubscribeBatchesRequest represents a subscription request for batch</p><p>information</p>
 
         
           <table class="field-table">
@@ -914,7 +914,7 @@ Chainpoint</p></td>
 
       
         <h3 id="anchor.AnchorService">AnchorService</h3>
-        <p>AnchorService continuously anchors hashes to Blockchains, which is similar to</p><p>what Chainpoint does, but with much better performance and flexibility. It is</p><p>20x faster and has much higher confirmation throughput and speed than</p><p>Chainpoint</p>
+        <p>AnchorService continuously anchors hashes to Blockchains, which is similar to</p><p>what Chainpoint does, but with much better performance and flexibility. It</p><p>supports multiple anchor types and proof formats. Digital signing can be also</p><p>done at the Merkle root level.</p>
         <table class="enum-table">
           <thead>
             <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>

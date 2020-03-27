@@ -369,7 +369,7 @@ until all ongoing updates are finished </p></td>
         
       
         <h3 id="api.DataChunk">DataChunk</h3>
-        <p>DataChunk represents a data chunk</p>
+        <p>DataChunk represents a chunk of data transmitted in a gRPC stream</p>
 
         
           <table class="field-table">
@@ -438,7 +438,7 @@ until all ongoing updates are finished </p></td>
         
       
         <h3 id="api.Key">Key</h3>
-        <p>Key represents a key</p>
+        <p>Key represents a key of a key-value pair</p>
 
         
           <table class="field-table">
@@ -605,7 +605,7 @@ used; when zero, the latest TrieProof for the root hash will be returned </p></t
         
       
         <h3 id="api.Trie">Trie</h3>
-        <p>Trie represents a trie</p>
+        <p>Trie represents a dictionary of key-values that can be built incrementally,</p><p>whose root hash at any given time can be also dervied efficiently. Once the</p><p>root hash is proven to a Blockchain, every key-value is also proven</p>
 
         
           <table class="field-table">
@@ -709,7 +709,7 @@ blocked until all ongoing updates are finished </p></td>
         
       
         <h3 id="api.TrieProof">TrieProof</h3>
-        <p>TrieProof represents a trie proof</p>
+        <p>TrieProof represents a proof for a trie at a certain root, which can be</p><p>viewed as a snapshot of all the key-values contained in the trie</p>
 
         
           <table class="field-table">
@@ -906,7 +906,7 @@ returned </p></td>
         
       
         <h3 id="api.TrieRoot">TrieRoot</h3>
-        <p>TrieRoot represents a trie root</p>
+        <p>TrieRoot represents a root of a trie. Each modification made to the trie will</p><p>lead to a new trie root</p>
 
         
           <table class="field-table">
@@ -1034,7 +1034,7 @@ visualize the trie </p></td>
         
       
         <h3 id="api.VerifyProofReplyChunk">VerifyProofReplyChunk</h3>
-        <p>VerifyProofReplyChunk represents a verify proof reply chunk</p>
+        <p>VerifyProofReplyChunk represents a chunk of data in the verify proof reply</p><p>stream</p>
 
         
           <table class="field-table">
@@ -1128,7 +1128,7 @@ visualize the trie </p></td>
 
       
         <h3 id="api.APIService">APIService</h3>
-        <p>APIService is the next generation of a general purpose service that is fast</p><p>and effective and provides a set of APIs to manipulate trie structures and</p><p>generate blockchain proofs for any digital assets</p>
+        <p>APIService is a general purpose proving service that is fast and effective.</p><p>It provides a set of APIs to manipulate trie structures and generate</p><p>blockchain proofs for any digital assets. A trie is a dictionary of</p><p>key-values that can be built incrementally, whose root hash at any given time</p><p>can be also dervied efficiently. Once the root hash is proven to a</p><p>Blockchain, every key-value is also proven, so as the digital asset stored in</p><p>that key-value</p>
         <table class="enum-table">
           <thead>
             <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>

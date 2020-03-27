@@ -80,7 +80,7 @@ CreateTrieProofRequest represents a create trie proof request
 <a name="api.DataChunk"></a>
 
 ### DataChunk
-DataChunk represents a data chunk
+DataChunk represents a chunk of data transmitted in a gRPC stream
 
 
 | Field | Type | Label | Description |
@@ -113,7 +113,7 @@ DeleteTrieProofRequest represents a delete trie proof request
 <a name="api.Key"></a>
 
 ### Key
-Key represents a key
+Key represents a key of a key-value pair
 
 
 | Field | Type | Label | Description |
@@ -194,7 +194,9 @@ SetTrieRootRequest represents a set trie root request
 <a name="api.Trie"></a>
 
 ### Trie
-Trie represents a trie
+Trie represents a dictionary of key-values that can be built incrementally,
+whose root hash at any given time can be also dervied efficiently. Once the
+root hash is proven to a Blockchain, every key-value is also proven
 
 
 | Field | Type | Label | Description |
@@ -244,7 +246,8 @@ KeyValues are ordered by the keys alphabetically
 <a name="api.TrieProof"></a>
 
 ### TrieProof
-TrieProof represents a trie proof
+TrieProof represents a proof for a trie at a certain root, which can be
+viewed as a snapshot of all the key-values contained in the trie
 
 
 | Field | Type | Label | Description |
@@ -320,7 +323,8 @@ TrieRequest represents a trie request
 <a name="api.TrieRoot"></a>
 
 ### TrieRoot
-TrieRoot represents a trie root
+TrieRoot represents a root of a trie. Each modification made to the trie will
+lead to a new trie root
 
 
 | Field | Type | Label | Description |
@@ -385,7 +389,8 @@ VerifyProofReply represents a verify proof reply
 <a name="api.VerifyProofReplyChunk"></a>
 
 ### VerifyProofReplyChunk
-VerifyProofReplyChunk represents a verify proof reply chunk
+VerifyProofReplyChunk represents a chunk of data in the verify proof reply
+stream
 
 
 | Field | Type | Label | Description |
@@ -426,9 +431,13 @@ VerifyTrieProofRequest represents a verify trie proof request
 <a name="api.APIService"></a>
 
 ### APIService
-APIService is the next generation of a general purpose service that is fast
-and effective and provides a set of APIs to manipulate trie structures and
-generate blockchain proofs for any digital assets
+APIService is a general purpose proving service that is fast and effective.
+It provides a set of APIs to manipulate trie structures and generate
+blockchain proofs for any digital assets. A trie is a dictionary of
+key-values that can be built incrementally, whose root hash at any given time
+can be also dervied efficiently. Once the root hash is proven to a
+Blockchain, every key-value is also proven, so as the digital asset stored in
+that key-value
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|

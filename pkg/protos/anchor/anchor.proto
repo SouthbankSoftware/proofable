@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2019-08-05T10:53:28+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-27T13:49:43+11:00
+ * @Last modified time: 2020-03-27T18:29:51+11:00
  */
 
 syntax = "proto3";
@@ -19,9 +19,9 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
 // AnchorService continuously anchors hashes to Blockchains, which is similar to
-// what Chainpoint does, but with much better performance and flexibility. It is
-// 20x faster and has much higher confirmation throughput and speed than
-// Chainpoint
+// what Chainpoint does, but with much better performance and flexibility. It
+// supports multiple anchor types and proof formats. Digital signing can be also
+// done at the Merkle root level.
 service AnchorService {
   // GetAnchors gets all anchors
   rpc GetAnchors(google.protobuf.Empty) returns (stream Anchor) {}
@@ -40,13 +40,8 @@ service AnchorService {
   rpc SubscribeBatches(SubscribeBatchesRequest) returns (stream Batch) {}
 }
 
-// AnchorRequest represents an anchor request
-message AnchorRequest {
-  // Type is the anchor type
-  Anchor.Type type = 1;
-}
-
-// Anchor represents an anchor
+// Anchor represents an anchor of a Blockchain, through which a hash can be
+// anchored to that Blockchain
 message Anchor {
   // Type represents an anchor type
   enum Type {
@@ -82,39 +77,11 @@ message Anchor {
   repeated Proof.Format supported_formats = 4;
 }
 
-// SubmitProofRequest represents a submit proof request
-message SubmitProofRequest {
-  // Hash is the hash to be submitted
-  string hash = 1;
-  // AnchorType is the anchor type to be used
-  Anchor.Type anchor_type = 2;
-  // Format is the proof format to be used
-  Proof.Format format = 3;
-  // SkipBatching indicates whether to skip batching and submit a proof for the
-  // hash directly
-  bool skip_batching = 4;
-  // WithBatch indicates whether to include the batch detail in the reply
-  bool with_batch = 5;
-}
-
-// BatchRequest represents a batch request
-message BatchRequest {
-  // BatchId is the batch ID
-  string batch_id = 1;
-  // AnchorType is the batch's anchor type
-  Anchor.Type anchor_type = 2;
-}
-
-// SubscribeBatchesRequest represents a subscribe batches request
-message SubscribeBatchesRequest {
-  // Filter is the batch filter. When nil, all batches of all anchors will be
-  // subscribed; otherwise, only the batches of the given anchor will be
-  // subscribed; if batch_id is non-empty, only the matched batch will be
-  // subscribed
-  BatchRequest filter = 1;
-}
-
-// Batch represents a batch
+// Batch represents a batch of hashes. When hash stream comes in, Anchor Service
+// will try to process them in batches, just like Blockchain processes
+// transactions in blocks. This makes utilization of expensive resources, such
+// as making Bitcoin transaction, more economic. Each batch's root hash will be
+// embedded in a transaction made to the Blockchain
 message Batch {
   // Id is the batch ID
   string id = 1;
@@ -174,19 +141,8 @@ message Batch {
   string data = 13;
 }
 
-// ProofRequest represents a proof request
-message ProofRequest {
-  // Hash is the hash the proof is proving for
-  string hash = 1;
-  // BatchId is the proof's batch ID
-  string batch_id = 2;
-  // AnchorType is the proof's anchor type
-  Anchor.Type anchor_type = 3;
-  // WithBatch indicates whether to include the proof's batch detail
-  bool with_batch = 4;
-}
-
-// Proof represents a proof
+// Proof represents a Blockchain proof of a hash, which is a Merkle path from
+// the hash to the root hash of the proof's batch
 message Proof {
   // Hash is the hash the proof is proving for
   string hash = 1;
@@ -216,6 +172,40 @@ message Proof {
   Batch batch = 7;
 }
 
+// AnchorRequest represents a request to get information for the given anchor
+// type
+message AnchorRequest {
+  // Type is the anchor type
+  Anchor.Type type = 1;
+}
+
+// ProofRequest represents a proof request
+message ProofRequest {
+  // Hash is the hash the proof is proving for
+  string hash = 1;
+  // BatchId is the proof's batch ID
+  string batch_id = 2;
+  // AnchorType is the proof's anchor type
+  Anchor.Type anchor_type = 3;
+  // WithBatch indicates whether to include the proof's batch detail
+  bool with_batch = 4;
+}
+
+// SubmitProofRequest represents a submit proof request
+message SubmitProofRequest {
+  // Hash is the hash to be submitted
+  string hash = 1;
+  // AnchorType is the anchor type to be used
+  Anchor.Type anchor_type = 2;
+  // Format is the proof format to be used
+  Proof.Format format = 3;
+  // SkipBatching indicates whether to skip batching and submit a proof for the
+  // hash directly
+  bool skip_batching = 4;
+  // WithBatch indicates whether to include the batch detail in the reply
+  bool with_batch = 5;
+}
+
 // VerifyProofRequest represents a verify proof request
 message VerifyProofRequest {
   // AnchorType is the proof's anchor type
@@ -236,4 +226,22 @@ message VerifyProofReply {
   string error = 2;
   // ProvenHash is the hash the proof is proving for
   string provenHash = 3;
+}
+
+// BatchRequest represents a batch request
+message BatchRequest {
+  // BatchId is the batch ID
+  string batch_id = 1;
+  // AnchorType is the batch's anchor type
+  Anchor.Type anchor_type = 2;
+}
+
+// SubscribeBatchesRequest represents a subscription request for batch
+// information
+message SubscribeBatchesRequest {
+  // Filter is the batch filter. When nil, all batches of all anchors will be
+  // subscribed; otherwise, only the batches of the given anchor will be
+  // subscribed; if batch_id is non-empty, only the matched batch will be
+  // subscribed
+  BatchRequest filter = 1;
 }

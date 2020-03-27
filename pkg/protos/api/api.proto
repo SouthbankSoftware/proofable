@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2020-01-03T14:55:49+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-27T12:19:10+11:00
+ * @Last modified time: 2020-03-27T18:08:56+11:00
  */
 
 syntax = "proto3";
@@ -15,9 +15,13 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "anchor/anchor.proto";
 
-// APIService is the next generation of a general purpose service that is fast
-// and effective and provides a set of APIs to manipulate trie structures and
-// generate blockchain proofs for any digital assets
+// APIService is a general purpose proving service that is fast and effective.
+// It provides a set of APIs to manipulate trie structures and generate
+// blockchain proofs for any digital assets. A trie is a dictionary of
+// key-values that can be built incrementally, whose root hash at any given time
+// can be also dervied efficiently. Once the root hash is proven to a
+// Blockchain, every key-value is also proven, so as the digital asset stored in
+// that key-value
 service APIService {
   // GetTries gets all tries. Admin privilege is required
   rpc GetTries(google.protobuf.Empty) returns (stream Trie) {}
@@ -69,7 +73,9 @@ service APIService {
       returns (stream VerifyProofReplyChunk) {}
 }
 
-// Trie represents a trie
+// Trie represents a dictionary of key-values that can be built incrementally,
+// whose root hash at any given time can be also dervied efficiently. Once the
+// root hash is proven to a Blockchain, every key-value is also proven
 message Trie {
   // Id is the trie ID
   string id = 1;
@@ -77,7 +83,7 @@ message Trie {
   string root = 2;
 }
 
-// DataChunk represents a data chunk
+// DataChunk represents a chunk of data transmitted in a gRPC stream
 message DataChunk {
   // Data is the data within the DataChunk
   bytes data = 1;
@@ -107,7 +113,8 @@ message KeyValue {
   }
 }
 
-// VerifyProofReplyChunk represents a verify proof reply chunk
+// VerifyProofReplyChunk represents a chunk of data in the verify proof reply
+// stream
 message VerifyProofReplyChunk {
   // Data is the data contained in the chunk
   oneof data {
@@ -123,7 +130,7 @@ message VerifyProofReplyChunk {
   }
 }
 
-// Key represents a key
+// Key represents a key of a key-value pair
 message Key {
   // Key is the key of the key-value
   bytes key = 1;
@@ -131,7 +138,8 @@ message Key {
   repeated uint32 key_sep = 2;
 }
 
-// TrieRoot represents a trie root
+// TrieRoot represents a root of a trie. Each modification made to the trie will
+// lead to a new trie root
 message TrieRoot {
   // Root is the root hash of the trie
   string root = 1;
@@ -140,7 +148,8 @@ message TrieRoot {
   google.protobuf.Timestamp created_at = 2;
 }
 
-// TrieProof represents a trie proof
+// TrieProof represents a proof for a trie at a certain root, which can be
+// viewed as a snapshot of all the key-values contained in the trie
 message TrieProof {
   // Id is the ID of the trie proof
   string id = 1;

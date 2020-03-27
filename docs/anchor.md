@@ -38,7 +38,8 @@
 <a name="anchor.Anchor"></a>
 
 ### Anchor
-Anchor represents an anchor
+Anchor represents an anchor of a Blockchain, through which a hash can be
+anchored to that Blockchain
 
 
 | Field | Type | Label | Description |
@@ -56,7 +57,8 @@ Anchor represents an anchor
 <a name="anchor.AnchorRequest"></a>
 
 ### AnchorRequest
-AnchorRequest represents an anchor request
+AnchorRequest represents a request to get information for the given anchor
+type
 
 
 | Field | Type | Label | Description |
@@ -71,7 +73,11 @@ AnchorRequest represents an anchor request
 <a name="anchor.Batch"></a>
 
 ### Batch
-Batch represents a batch
+Batch represents a batch of hashes. When hash stream comes in, Anchor Service
+will try to process them in batches, just like Blockchain processes
+transactions in blocks. This makes utilization of expensive resources, such
+as making Bitcoin transaction, more economic. Each batch&#39;s root hash will be
+embedded in a transaction made to the Blockchain
 
 
 | Field | Type | Label | Description |
@@ -114,7 +120,8 @@ BatchRequest represents a batch request
 <a name="anchor.Proof"></a>
 
 ### Proof
-Proof represents a proof
+Proof represents a Blockchain proof of a hash, which is a Merkle path from
+the hash to the root hash of the proof&#39;s batch
 
 
 | Field | Type | Label | Description |
@@ -172,7 +179,8 @@ SubmitProofRequest represents a submit proof request
 <a name="anchor.SubscribeBatchesRequest"></a>
 
 ### SubscribeBatchesRequest
-SubscribeBatchesRequest represents a subscribe batches request
+SubscribeBatchesRequest represents a subscription request for batch
+information
 
 
 | Field | Type | Label | Description |
@@ -287,9 +295,9 @@ Format represents a proof format
 
 ### AnchorService
 AnchorService continuously anchors hashes to Blockchains, which is similar to
-what Chainpoint does, but with much better performance and flexibility. It is
-20x faster and has much higher confirmation throughput and speed than
-Chainpoint
+what Chainpoint does, but with much better performance and flexibility. It
+supports multiple anchor types and proof formats. Digital signing can be also
+done at the Merkle root level.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
