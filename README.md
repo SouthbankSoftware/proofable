@@ -30,9 +30,9 @@ This is a hello world example written in Go that demonstrates how to:
 
 - verify the subproof independently
 
-The packages in [`pkg`](pkg) altogether resembles a Go SDK for ProvenX, which provides great convenience when consuming `provenx-api`
+The packages in [`pkg`](https://github.com/SouthbankSoftware/provenx-cli/tree/master/pkg) altogether resembles a Go SDK for ProvenX, which provides great convenience when consuming `provenx-api`
 
-You can find the complete example source code [here](docs/example.go), which can be run as:
+You can find the complete example source code [here](https://github.com/SouthbankSoftware/provenx-cli/tree/master/docs/example.go), which can be run as:
 
 ```go
 go run docs/example.go
@@ -52,7 +52,7 @@ creds, err := authcli.AuthenticateForGRPC(ctx,
 
 ### Step 2: create a gRPC client
 
-This step creates a gRPC client (`cli`) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using [`NewAPIClient`](pkg/api/client.go), but in that case, you have to manually destroy the client after use
+This step creates a gRPC client (`cli`) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using [`NewAPIClient`](https://github.com/SouthbankSoftware/provenx-cli/tree/master/pkg/api/client.go), but in that case, you have to manually destroy the client after use
 
 ```go
 api.WithAPIClient(
@@ -65,7 +65,7 @@ api.WithAPIClient(
 
 ### Step 3: create an empty trie
 
-This step creates an empty trie, which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](pkg/api/api.go), but in that case, you have to manually destroy the trie using [`DeleteTrie`](pkg/api/api.go) or wait for `provenx-api` to garbage collect it
+This step creates an empty trie, which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](https://github.com/SouthbankSoftware/provenx-cli/tree/master/pkg/api/api.go), but in that case, you have to manually destroy the trie using [`DeleteTrie`](https://github.com/SouthbankSoftware/provenx-cli/tree/master/pkg/api/api.go) or wait for `provenx-api` to garbage collect it
 
 ```go
 api.WithTrie(ctx, cli, func(id, root string) error {
@@ -75,7 +75,7 @@ api.WithTrie(ctx, cli, func(id, root string) error {
 
 ### Step 4: set the key-values we want to prove
 
-This step sets a bunch of key-values that we want to prove in the trie we have just created. In this case, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`GetTrieKeyValues`](pkg/api/api.go), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`SetTrieKeyValues`](pkg/api/api.go) calls as a way to build up a large trie incrementally
+This step sets a bunch of key-values that we want to prove in the trie we have just created. In this case, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`GetTrieKeyValues`](https://github.com/SouthbankSoftware/provenx-cli/tree/master/pkg/api/api.go), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`SetTrieKeyValues`](https://github.com/SouthbankSoftware/provenx-cli/tree/master/pkg/api/api.go) calls as a way to build up a large trie incrementally
 
 ```go
 root, err := api.SetTrieKeyValues(ctx, cli, id, root,
