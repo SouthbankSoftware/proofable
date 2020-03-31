@@ -447,7 +447,7 @@ that key-value
 | ExportTrie | [TrieRequest](#api.TrieRequest) | [DataChunk](#api.DataChunk) stream | ExportTrie exports a trie&#39;s data |
 | CreateTrie | [.google.protobuf.Empty](#google.protobuf.Empty) | [Trie](#api.Trie) | CreateTrie creates an empty trie |
 | DeleteTrie | [TrieRequest](#api.TrieRequest) | [Trie](#api.Trie) | DeleteTrie deletes a trie. This destroys everything of a trie |
-| GetTrieKeyValues | [TrieKeyValuesRequest](#api.TrieKeyValuesRequest) | [KeyValue](#api.KeyValue) stream | GetTrieKeyValues gets key-values of a trie |
+| GetTrieKeyValues | [TrieKeyValuesRequest](#api.TrieKeyValuesRequest) | [KeyValue](#api.KeyValue) stream | GetTrieKeyValues gets key-values of a trie. The returned KeyValues are ordered by the keys alphabetically |
 | GetTrieKeyValue | [TrieKeyValueRequest](#api.TrieKeyValueRequest) | [KeyValue](#api.KeyValue) | GetTrieKeyValue gets a key-value of a trie |
 | SetTrieKeyValues | [KeyValue](#api.KeyValue) stream | [Trie](#api.Trie) | SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to remove that key. Modifications to a trie will change its root hash |
 | GetTrieRoots | [TrieRootsRequest](#api.TrieRootsRequest) | [TrieRoot](#api.TrieRoot) stream | GetTrieRoots gets roots of a trie. This is a series of roots showing the modification history of a trie |

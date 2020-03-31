@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-08-05T10:53:28+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:04:17+11:00
+ * @Last modified time: 2020-04-01T00:15:41+11:00
  */
 
 syntax = "proto3";
@@ -68,11 +68,11 @@ message Anchor {
     ETH_MAINNET = 3;
     // ETH_ELASTOS is the anchor type for Elastos
     ETH_ELASTOS = 4;
-    // BTC is the anchor type for Bitcoin
+    // BTC is the anchor type for Bitcoin Testnet
     BTC = 1;
     // BTC_MAINNET is the anchor type for Bitcoin Mainnet
     BTC_MAINNET = 5;
-    // CHP is the anchor type for Chainpoint (coming soon)
+    // CHP is the anchor type for Chainpoint (planned)
     CHP = 2;
   }
   // Type is the anchor type

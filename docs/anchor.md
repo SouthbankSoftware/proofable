@@ -251,9 +251,9 @@ Type represents an anchor type
 | ETH | 0 | ETH is the anchor type for Ethereum Testnet |
 | ETH_MAINNET | 3 | ETH_MAINNET is the anchor type for Ethereum Mainnet |
 | ETH_ELASTOS | 4 | ETH_ELASTOS is the anchor type for Elastos |
-| BTC | 1 | BTC is the anchor type for Bitcoin |
+| BTC | 1 | BTC is the anchor type for Bitcoin Testnet |
 | BTC_MAINNET | 5 | BTC_MAINNET is the anchor type for Bitcoin Mainnet |
-| CHP | 2 | CHP is the anchor type for Chainpoint (coming soon) |
+| CHP | 2 | CHP is the anchor type for Chainpoint (planned) |
 
 
 
