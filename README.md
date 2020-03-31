@@ -1,70 +1,244 @@
-# provenx-cli
+# ProvenX
 
-`provenx-cli` is a simple CLI for ProvenX API Service (`provenx-api`)
+[ProvenX](https://provenx.provendb.com/) is a framework for proving any digital asset to Blockchains. Overall, it consists:
 
-## Usage
+- CLI (`provenx-cli`): the command-line interface (CLI) for API Service (`provenx-api`). At the moment, it supports proving a file-system to Ethereum
 
-### Download dev binaries
+  [Documentation](docs/cli.md)
 
-- [mac](https://storage.googleapis.com/provendb-dev/provenx-cli/provenx-cli_darwin_amd64)
-- [linux](https://storage.googleapis.com/provendb-dev/provenx-cli/provenx-cli_linux_amd64)
-- [windows](https://storage.googleapis.com/provendb-dev/provenx-cli/provenx-cli_windows_amd64.exe)
+- API Service (`provenx-api`): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A trie is a dictionary of key-values that can be built incrementally, whose root hash at any given time can be also dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is also proven, so as the digital asset stored in that key-value
 
-### Build your own binary
+  [gRPC Protocol Documentation](docs/api.html)
 
-```bash
-# generate the `provenx-cli` binary
-make
+- Anchor Service (`provendb-anchor`): the service continuously anchors hashes to Blockchains, which is similar to what Chainpoint does, but with much better performance and flexibility. It supports multiple anchor types and proof formats. Digital signing can be also done at the Merkle root level. It is consumed by `provenx-api`, and is not directly public-accessible at the moment
+
+  [gRPC Protocol Documentation](docs/anchor.html)
+
+## Example
+
+This is a hello world example written in Go that demonstrates how to:
+
+- authenticate with ProvenDB
+
+- prove a bunch of key-values to Ethereum Testnet within a minute
+
+- create a proof for them
+
+- verify the proof
+
+- extract a subproof for just one key-value out of the proof
+
+- verify the subproof independently
+
+The packages in [`pkg`](pkg) altogether resembles a Go SDK for ProvenX, which provides great convenience when consuming `provenx-api`
+
+You can find the complete example source code [here](docs/example.go), which can be run as:
+
+```go
+go run docs/example.go
 ```
 
-### Examples
+### Step 1: authenticate with ProvenDB
 
-```bash
-# for help
-./provenx-cli -h
+This step will authenticate with ProvenDB so you can access `provenx-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is at `~/Library/Application\ Support/ProvenDB/auth.json`. The next time, when you invoke `AuthenticateForGRPC`, it will automatically use the saved token without prompting you to go through the authentication steps again
 
-# authenticate with ProvenDB. You don't have to explicitly run this. When you execute a command that requires authentication, it will be automatically run
-./provenx-cli auth
-
-# remove existing authentication
-./provenx-cli auth -d
-
-# create a proof for a path
-./provenx-cli create proof path/to/the/data
-
-# create a proof for a path in a custom location
-./provenx-cli create proof path/to/the/data -p path/to/output/the/proof.pxproof
-
-# create a proof for a path including metadata
-./provenx-cli create proof path/to/the/data --include-metadata
-
-# verify a proof for a path
-./provenx-cli verify proof path/to/the/data
-
-# verify a proof for a path and output the proof's Graphviz Dot Graph
-./provenx-cli verify proof path/to/the/data -d path/to/output/the/dot/graph.dot
-
-# verify a proof for a path from a custom location
-./provenx-cli verify proof path/to/the/data -p path/to/the/proof.pxproof
-
-# create a subproof out of a proof
-./provenx-cli create subproof key1_of_the_proof key2_of_the_proof -p path/to/the/proof.pxproof -s path/to/output/the/subproof.pxsubproof
-
-# verify a subproof for a path
-./provenx-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof
-
-# verify a subproof for a path and output the subproof's Graphviz Dot Graph
-./provenx-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof -d path/to/output/the/dot/graph.dot
+```go
+creds, err := authcli.AuthenticateForGRPC(ctx,
+    "https://apigateway.dev.provendb.com",
+    true,
+    "",
+)
 ```
 
-## FAQ
+### Step 2: create a gRPC client
 
-### Error: "provenx-cli_darwin_amd64" cannot be opened because the developer cannot be verified
+This step creates a gRPC client (`cli`) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using [`NewAPIClient`](pkg/api/client.go), but in that case, you have to manually destroy the client after use
 
-![Mac Cannot Open Issue](docs/images/mac_cannot_open_issue.png)
-
-Use the following command to fix:
-
-```bash
-xattr -d com.apple.quarantine path/to/provenx-cli_darwin_amd64
+```go
+api.WithAPIClient(
+    "api.dev.provendb.com:443",
+    creds,
+    func(cli apiPB.APIServiceClient) error {
+        // make use of the `cli` in this closure
+    })
 ```
+
+### Step 3: create an empty trie
+
+This step creates an empty trie, which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](pkg/api/api.go), but in that case, you have to manually destroy the trie using [`DeleteTrie`](pkg/api/api.go) or wait for `provenx-api` to garbage collect it
+
+```go
+api.WithTrie(ctx, cli, func(id, root string) error {
+    // make use of the trie, identified by the `id`, in this closure. The root will always be 0000000000000000000000000000000000000000000000000000000000000000 for an empty trie
+})
+```
+
+### Step 4: set the key-values we want to prove
+
+This step sets a bunch of key-values that we want to prove in the trie we have just created. In this case, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`GetTrieKeyValues`](pkg/api/api.go), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`SetTrieKeyValues`](pkg/api/api.go) calls as a way to build up a large trie incrementally
+
+```go
+root, err := api.SetTrieKeyValues(ctx, cli, id, root,
+    []*apiPB.KeyValue{
+        {Key: []byte("balcony/wind/speed"), Value: []byte("11km/h")},
+        {Key: []byte("balcony/wind/direction"), Value: []byte("N")},
+        {Key: []byte("living_room/temp"), Value: []byte("24.8℃")},
+        {Key: []byte("living_room/Co2"), Value: []byte("564ppm")},
+    })
+```
+
+### Step 5: create a proof for the key-values
+
+This step creates a proof, a.k.a. trie proof, to prove the trie at the given root. The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values
+
+```go
+triePf, err := api.CreateTrieProof(ctx, cli, id, root)
+```
+
+### Step 6: wait for the proof to be anchored to Ethereum
+
+This step waits the proof we have just created until it is anchored to Ethereum, during which we output the anchoring progress
+
+```go
+tpCH, errCH := api.SubscribeTrieProof(ctx, cli, id, triePf.GetId())
+
+for tp := range tpCH {
+    log.Printf("Anchoring proof: %s\n", tp.GetStatus())
+    triePf = tp
+}
+
+// always check error from the error channel
+err = <-errCH
+```
+
+### Step 7: verify the proof
+
+This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof
+
+```go
+kvCH, rpCH, errCH := api.VerifyTrieProof(ctx, cli, id, triePf.GetId(),
+    true, "proof.dot")
+
+// strip the anchor trie part from each key
+// ... logic omitted here ...
+
+log.Println("key-values contained in the proof:")
+for kv := range kvCH {
+    log.Printf("\t%s -> %s\n",
+        strutil.String(kv.Key), strutil.String(kv.Value))
+}
+
+// always check error from the error channel
+err = <-errCH
+if err != nil {
+    return err
+}
+
+rp := <-rpCH
+if !rp.GetVerified() {
+    return fmt.Errorf("falsified proof: %s", rp.GetError())
+}
+
+log.Printf("the proof with a root hash of %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s\n",
+    triePf.GetProofRoot(),
+    triePf.GetAnchorType(),
+    triePf.GetBlockNumber(),
+    triePf.GetTxnId(),
+    time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate),
+    triePf.GetTxnUri(),
+)
+```
+
+This step will output the key-values contained in the proof:
+
+```zsh
+balcony/wind/direction -> N
+balcony/wind/speed -> 11km/h
+living_room/Co2 -> 564ppm
+living_room/temp -> 24.8℃
+```
+
+and a summary:
+
+```zsh
+the proof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH in block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue Mar 31 15:33:10 AEDT 2020, which can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232
+```
+
+and a Graphviz Dot Graph (`proof.dot`):
+
+![Proof Dot Graph](docs/images/example_proof.dot)
+
+### Step 8: extract a subproof for just one key-value out of the proof
+
+This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key `living_room/Co2` only and nothing else. A subproof file named `living_room_Co2.pxsubproof` will be created in current working directory
+
+```go
+api.CreateKeyValuesProof(ctx, cli, id, triePf.GetId(),
+    &apiPB.KeyValuesFilter{
+        Keys: []*apiPB.Key{
+            {Key: []byte("living_room/Co2")},
+        },
+    },
+    "living_room_Co2.pxsubproof")
+```
+
+### Step 9: verify the subproof independently
+
+This step independently verifies the subproof we have just created. The only needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof
+
+```go
+kvCH, rpCH, errCH := api.VerifyKeyValuesProof(ctx, cli,
+    "living_room_Co2.pxsubproof",
+    true, "living_room_Co2_subproof.dot")
+
+// strip the anchor trie part from each key
+// ... logic omitted here ...
+
+log.Println("key-values contained in the subproof:")
+for kv := range kvCH {
+    log.Printf("\t%s -> %s\n",
+        strutil.String(kv.Key), strutil.String(kv.Value))
+}
+
+// always check error from the error channel
+err = <-errCH
+if err != nil {
+    return err
+}
+
+rp := <-rpCH
+if !rp.GetVerified() {
+    return fmt.Errorf("falsified subproof: %s", rp.GetError())
+}
+
+et, err := api.GetEthTrieFromKeyValuesProof("living_room_Co2.pxsubproof")
+if err != nil {
+    return err
+}
+merkleRoot := hex.EncodeToString(et.Root())
+
+log.Printf("the subproof with a root hash of %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s\n",
+    merkleRoot,
+    et.AnchorType,
+    et.BlockNumber,
+    et.TxnID,
+    time.Unix(int64(et.BlockTime), 0).Format(time.UnixDate),
+    et.TxnURI,
+)
+```
+
+This step will output the key-values contained in the subproof:
+
+```zsh
+living_room/Co2 -> 564ppm
+```
+
+and a summary:
+
+```zsh
+the subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH in block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue Mar 31 15:33:10 AEDT 2020, which can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232
+```
+
+and a Graphviz Dot Graph (`proof.dot`):
+
+![Subproof Dot Graph](docs/images/example_subproof.dot)

@@ -1,8 +1,25 @@
 /*
+ * provenx-cli
+ * Copyright (C) 2020  Southbank Software Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
  * @Author: guiguan
  * @Date:   2020-02-15T08:42:02+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-18T15:01:18+11:00
+ * @Last modified time: 2020-03-31T14:34:22+11:00
  */
 
 package api
@@ -60,7 +77,8 @@ func WithTrie(ctx context.Context, cli apiPB.APIServiceClient,
 	return fn(id, root)
 }
 
-// SetTrieKeyValues sets the key-values to the trie
+// SetTrieKeyValues sets the key-values to the trie. When root is zero (""), the current root hash
+// of the trie will be used, and the request will be blocked until all ongoing updates are finished
 func SetTrieKeyValues(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
@@ -139,7 +157,86 @@ func SetTrieKeyValues(
 	return
 }
 
-// CreateTrieProof creates a trie proof for the given trie root
+// GetTrieKeyValues gets the key-values of the trie at the given root. When root is zero (""), the
+// current root hash of the trie will be used, and the request will be blocked until all ongoing
+// updates are finished
+func GetTrieKeyValues(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	root string,
+) (kvCH <-chan *apiPB.KeyValue, errCH <-chan error) {
+	kvChan := make(chan *apiPB.KeyValue, 10)
+	errChan := make(chan error, 1)
+
+	go func() {
+		defer close(kvChan)
+		defer close(errChan)
+
+		var er error
+
+		defer func() {
+			if er != nil {
+				errChan <- er
+			}
+		}()
+
+		getCli, err := cli.GetTrieKeyValues(ctx, &apiPB.TrieKeyValuesRequest{
+			TrieId: id,
+			Root:   root,
+		})
+		if err != nil {
+			er = err
+			return
+		}
+
+		for {
+			kv, err := getCli.Recv()
+			if err != nil {
+				if errors.Is(err, io.EOF) {
+					break
+				}
+
+				er = err
+				return
+			}
+
+			select {
+			case <-ctx.Done():
+				er = ctx.Err()
+				return
+			case kvChan <- kv:
+			}
+		}
+
+		return
+	}()
+
+	kvCH = kvChan
+	errCH = errChan
+	return
+}
+
+// GetTrieKeyValue get a key-value of the trie at the given root. When root is zero (""), the
+// current root hash of the trie will be used, and the request will be blocked until all ongoing
+// updates are finished
+func GetTrieKeyValue(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	root string,
+	key *apiPB.Key,
+) (kv *apiPB.KeyValue, er error) {
+	return cli.GetTrieKeyValue(ctx, &apiPB.TrieKeyValueRequest{
+		TrieId: id,
+		Root:   root,
+		Key:    key,
+	})
+}
+
+// CreateTrieProof creates a trie proof for the given trie root. When root is zero (""), the current
+// root hash of the trie will be used, and the request will be blocked until all ongoing updates are
+// finished
 func CreateTrieProof(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
@@ -210,7 +307,7 @@ func SubscribeTrieProof(
 	return
 }
 
-// GetTrieProof gets a trie proof by either proof ID or root. If root is used, the latest proof of
+// GetTrieProof gets a trie proof by either proof ID or root. If by root, the latest proof of
 // that root will be returned
 func GetTrieProof(
 	ctx context.Context,
