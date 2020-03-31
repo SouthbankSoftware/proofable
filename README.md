@@ -14,7 +14,7 @@ ProvenX is a framework for proving any digital asset to Blockchains. Overall, it
 
   [gRPC Protocol Documentation](docs/anchor.html)
 
-GitHub Repo: https://github.com/SouthbankSoftware/provenx
+[GitHub Repo](https://github.com/SouthbankSoftware/provenx)
 
 ## Example
 

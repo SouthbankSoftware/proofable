@@ -1,6 +1,6 @@
-# provenx-cli
+# [provenx-cli](https://github.com/SouthbankSoftware/provenx/tree/master/cmd/provenx-cli)
 
-`provenx-cli` is the command-line interface (CLI) for ProvenX API Service (`provenx-api`). At the moment, it supports proving a file-system to Ethereum
+`provenx-cli` is the command-line interface (CLI) for [ProvenX](https://provenx.provendb.com/) API Service (`provenx-api`). At the moment, it supports proving a file-system to Ethereum
 
 Test status
 
