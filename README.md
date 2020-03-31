@@ -75,7 +75,7 @@ api.WithTrie(ctx, cli, func(id, root string) error {
 
 ### Step 4: set the key-values we want to prove
 
-This step sets a bunch of key-values that we want to prove in the trie we have just created. In this case, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`GetTrieKeyValues`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg/api/api.go), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`SetTrieKeyValues`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg/api/api.go) calls as a way to build up a large trie incrementally
+This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`GetTrieKeyValues`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg/api/api.go), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`SetTrieKeyValues`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg/api/api.go) calls as a way to build up a large trie incrementally
 
 ```go
 root, err := api.SetTrieKeyValues(ctx, cli, id, root,
@@ -170,7 +170,7 @@ and a Graphviz Dot Graph (`proof.dot`):
 
 ### Step 8: extract a subproof for just one key-value out of the proof
 
-This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key `living_room/Co2` only and nothing else. A subproof file named `living_room_Co2.pxsubproof` will be created in current working directory
+This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key `living_room/Co2` only and nothing else. A subproof file named `living_room_Co2.pxsubproof` will be created in current working directory. You could also create a subproof for multiple key-values
 
 ```go
 api.CreateKeyValuesProof(ctx, cli, id, triePf.GetId(),
@@ -239,6 +239,6 @@ and a summary:
 the subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH in block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue Mar 31 15:33:10 AEDT 2020, which can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232
 ```
 
-and a Graphviz Dot Graph (`proof.dot`):
+and a Graphviz Dot Graph (`living_room_Co2_subproof.dot`):
 
 ![Subproof Dot Graph](docs/images/example_subproof.svg)
