@@ -1,6 +1,6 @@
-# ProvenX
+# [ProvenX](https://provenx.provendb.com/)
 
-[ProvenX](https://provenx.provendb.com/) is a framework for proving any digital asset to Blockchains. Overall, it consists:
+ProvenX is a framework for proving any digital asset to Blockchains. Overall, it consists:
 
 - CLI (`provenx-cli`): the command-line interface (CLI) for API Service (`provenx-api`). At the moment, it supports proving a file-system to Ethereum
 
@@ -13,6 +13,8 @@
 - Anchor Service (`provendb-anchor`): the service continuously anchors hashes to Blockchains, which is similar to what Chainpoint does, but with much better performance and flexibility. It supports multiple anchor types and proof formats. Digital signing can be also done at the Merkle root level. It is consumed by `provenx-api`, and is not directly public-accessible at the moment
 
   [gRPC Protocol Documentation](docs/anchor.html)
+
+GitHub Repo: https://github.com/SouthbankSoftware/provenx
 
 ## Example
 

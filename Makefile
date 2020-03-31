@@ -1,4 +1,4 @@
-# provenx-cli
+# provenx
 # Copyright (C) 2020  Southbank Software Ltd.
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-03-31T12:49:13+11:00
+# @Last modified time: 2020-03-31T17:03:20+11:00
 
 APP_NAME := provenx-cli
 APP_VERSION ?= 0.0.0

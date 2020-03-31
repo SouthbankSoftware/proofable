@@ -2,6 +2,14 @@
 
 `provenx-cli` is the command-line interface (CLI) for ProvenX API Service (`provenx-api`). At the moment, it supports proving a file-system to Ethereum
 
+Test status
+
+[![provenx-cli-test](https://concourse.provendb.com/api/v1/pipelines/provenx-cli-test/jobs/test/badge)](http://concourse.provendb.com/teams/main/pipelines/provenx-cli-test)
+
+Deploy status
+
+[![provenx-cli-deploy](https://concourse.provendb.com/api/v1/pipelines/provenx-cli-deploy/jobs/build-and-deploy/badge)](http://concourse.provendb.com/teams/main/pipelines/provenx-cli-deploy)
+
 ## Usage
 
 ### Download dev binaries

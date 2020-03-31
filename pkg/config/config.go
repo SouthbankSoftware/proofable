@@ -1,5 +1,5 @@
 /*
- * provenx-cli
+ * provenx
  * Copyright (C) 2020  Southbank Software Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-12T11:16:46+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:16:33+11:00
+ * @Last modified time: 2020-03-31T17:03:53+11:00
  */
 
 package config
