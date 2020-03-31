@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-11-07T16:24:57+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:17:58+11:00
+ * @Last modified time: 2020-03-31T16:38:30+11:00
  */
 
 package proof
@@ -28,7 +28,7 @@ import (
 	"errors"
 	"fmt"
 
-	ap "github.com/SouthbankSoftware/provenx-cli/pkg/protos/anchor"
+	ap "github.com/SouthbankSoftware/provenx/pkg/protos/anchor"
 )
 
 const (

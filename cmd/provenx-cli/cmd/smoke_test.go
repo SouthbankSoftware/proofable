@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-20T22:33:23+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:11:21+11:00
+ * @Last modified time: 2020-03-31T16:38:31+11:00
  */
 
 package cmd
@@ -29,7 +29,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
+	"github.com/SouthbankSoftware/provenx/pkg/api"
 )
 
 func Test_Smoke(t *testing.T) {

@@ -1,4 +1,4 @@
-module github.com/SouthbankSoftware/provenx-cli
+module github.com/SouthbankSoftware/provenx
 
 go 1.13
 

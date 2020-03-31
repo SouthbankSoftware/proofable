@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-05T22:05:31+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:13:36+11:00
+ * @Last modified time: 2020-03-31T16:38:30+11:00
  */
 
 package api
@@ -34,8 +34,8 @@ import (
 	"sort"
 	"strings"
 
-	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
-	"github.com/SouthbankSoftware/provenx-cli/pkg/strutil"
+	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
+	"github.com/SouthbankSoftware/provenx/pkg/strutil"
 	"github.com/djherbis/times"
 	"github.com/karrick/godirwalk"
 )

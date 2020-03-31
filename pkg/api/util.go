@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-18T16:30:55+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:13:46+11:00
+ * @Last modified time: 2020-03-31T16:38:30+11:00
  */
 
 package api
@@ -27,7 +27,7 @@ package api
 import (
 	"context"
 
-	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
+	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
 )
 
 // InterceptKeyValueStream intercepts the key-value stream with the given callback function

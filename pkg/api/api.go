@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T08:42:02+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T14:34:22+11:00
+ * @Last modified time: 2020-03-31T16:38:30+11:00
  */
 
 package api
@@ -32,8 +32,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/SouthbankSoftware/provenx-cli/pkg/proof"
-	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
+	"github.com/SouthbankSoftware/provenx/pkg/proof"
+	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
 	"github.com/golang/protobuf/ptypes/empty"
 	"golang.org/x/sync/errgroup"
 )

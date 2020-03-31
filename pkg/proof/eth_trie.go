@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-11-07T15:43:47+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:17:47+11:00
+ * @Last modified time: 2020-03-31T16:38:30+11:00
  */
 
 package proof
@@ -28,8 +28,8 @@ import (
 	"bytes"
 
 	"github.com/SouthbankSoftware/provendb-verify/pkg/proof/binary"
-	"github.com/SouthbankSoftware/provenx-cli/pkg/hasher"
-	ap "github.com/SouthbankSoftware/provenx-cli/pkg/protos/anchor"
+	"github.com/SouthbankSoftware/provenx/pkg/hasher"
+	ap "github.com/SouthbankSoftware/provenx/pkg/protos/anchor"
 )
 
 // EthTrie represents a confirmed proof for pieces of data in Ethereum Trie (ETH_TRIE) format

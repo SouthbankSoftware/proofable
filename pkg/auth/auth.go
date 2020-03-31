@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-10T16:15:43+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:15:02+11:00
+ * @Last modified time: 2020-03-31T16:38:30+11:00
  */
 
 package auth
@@ -36,7 +36,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/SouthbankSoftware/provenx-cli/pkg/config"
+	"github.com/SouthbankSoftware/provenx/pkg/config"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/net/context/ctxhttp"
 )

@@ -19,16 +19,16 @@
  * @Author: guiguan
  * @Date:   2020-03-16T17:43:29+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:11:10+11:00
+ * @Last modified time: 2020-03-31T16:38:31+11:00
  */
 
 package cmd
 
 import (
-	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
-	"github.com/SouthbankSoftware/provenx-cli/pkg/diff"
-	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
-	"github.com/SouthbankSoftware/provenx-cli/pkg/strutil"
+	"github.com/SouthbankSoftware/provenx/pkg/colorcli"
+	"github.com/SouthbankSoftware/provenx/pkg/diff"
+	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
+	"github.com/SouthbankSoftware/provenx/pkg/strutil"
 )
 
 type differ struct {

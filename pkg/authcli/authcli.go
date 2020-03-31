@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-11T12:19:34+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:16:07+11:00
+ * @Last modified time: 2020-03-31T16:38:30+11:00
  */
 
 package authcli
@@ -30,7 +30,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/SouthbankSoftware/provenx-cli/pkg/auth"
+	"github.com/SouthbankSoftware/provenx/pkg/auth"
 	"github.com/manifoldco/promptui"
 )
 

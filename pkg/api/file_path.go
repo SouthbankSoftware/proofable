@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:13:15+11:00
+ * @Last modified time: 2020-03-31T16:38:30+11:00
  */
 
 package api
@@ -34,8 +34,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/SouthbankSoftware/provenx-cli/pkg/hasher"
-	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
+	"github.com/SouthbankSoftware/provenx/pkg/hasher"
+	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
 	"github.com/karrick/godirwalk"
 	"github.com/korovkin/limiter"
 )

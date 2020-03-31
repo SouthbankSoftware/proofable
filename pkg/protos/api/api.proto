@@ -24,7 +24,7 @@
 
 syntax = "proto3";
 
-option go_package = "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api";
+option go_package = "github.com/SouthbankSoftware/provenx/pkg/protos/api";
 
 package api;
 

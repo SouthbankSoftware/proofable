@@ -24,7 +24,7 @@
 
 syntax = "proto3";
 
-option go_package = "github.com/SouthbankSoftware/provenx-cli/pkg/protos/anchor";
+option go_package = "github.com/SouthbankSoftware/provenx/pkg/protos/anchor";
 option java_multiple_files = true;
 option java_package = "com.provendb.anchor.proto";
 option java_outer_classname = "AnchorProto";

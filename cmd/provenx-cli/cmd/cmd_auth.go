@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-10T11:38:58+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:09:02+11:00
+ * @Last modified time: 2020-03-31T16:38:31+11:00
  */
 
 package cmd
@@ -27,9 +27,9 @@ package cmd
 import (
 	"context"
 
-	"github.com/SouthbankSoftware/provenx-cli/pkg/auth"
-	"github.com/SouthbankSoftware/provenx-cli/pkg/authcli"
-	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
+	"github.com/SouthbankSoftware/provenx/pkg/auth"
+	"github.com/SouthbankSoftware/provenx/pkg/authcli"
+	"github.com/SouthbankSoftware/provenx/pkg/colorcli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc/credentials"

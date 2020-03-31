@@ -61,7 +61,7 @@ resources:
     check_every: 5m
     webhook_token: ((common.webhook-token))
     source:
-      uri: https://github.com/SouthbankSoftware/provenx-cli.git
+      uri: https://github.com/SouthbankSoftware/provenx.git
       branch: master
       username: ((common.git-username))
       password: ((common.git-password))

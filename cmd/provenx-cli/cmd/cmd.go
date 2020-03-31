@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:10:40+11:00
+ * @Last modified time: 2020-03-31T16:38:31+11:00
  */
 
 package cmd
@@ -31,9 +31,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
-	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
-	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
+	"github.com/SouthbankSoftware/provenx/pkg/api"
+	"github.com/SouthbankSoftware/provenx/pkg/colorcli"
+	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc/status"

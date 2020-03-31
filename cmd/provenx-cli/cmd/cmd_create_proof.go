@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:09:30+11:00
+ * @Last modified time: 2020-03-31T16:38:31+11:00
  */
 
 package cmd
@@ -30,10 +30,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/SouthbankSoftware/provenx-cli/pkg/api"
-	"github.com/SouthbankSoftware/provenx-cli/pkg/colorcli"
-	apiPB "github.com/SouthbankSoftware/provenx-cli/pkg/protos/api"
-	"github.com/SouthbankSoftware/provenx-cli/pkg/strutil"
+	"github.com/SouthbankSoftware/provenx/pkg/api"
+	"github.com/SouthbankSoftware/provenx/pkg/colorcli"
+	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
+	"github.com/SouthbankSoftware/provenx/pkg/strutil"
 	"github.com/karrick/godirwalk"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-08-26T17:41:36+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T11:17:24+11:00
+ * @Last modified time: 2020-03-31T16:38:30+11:00
  */
 
 package proof
@@ -33,7 +33,7 @@ import (
 
 	"github.com/SouthbankSoftware/provendb-verify/pkg/merkle"
 	"github.com/SouthbankSoftware/provendb-verify/pkg/proof/binary"
-	pb "github.com/SouthbankSoftware/provenx-cli/pkg/protos/anchor"
+	pb "github.com/SouthbankSoftware/provenx/pkg/protos/anchor"
 )
 
 const (
