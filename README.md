@@ -1,20 +1,18 @@
-# [ProvenX](https://provenx.provendb.com/)
+# [ProvenX](https://github.com/SouthbankSoftware/provenx)
 
 ProvenX is a framework for proving any digital asset to Blockchains. Overall, it consists:
 
-- CLI (`provenx-cli`): the command-line interface (CLI) for API Service (`provenx-api`). At the moment, it supports proving a file-system to Ethereum
+- [**CLI** (`provenx-cli`)](https://github.com/SouthbankSoftware/provenx/tree/master/cmd/provenx-cli): the command-line interface (CLI) for API Service (`provenx-api`). At the moment, it supports proving a file-system to Ethereum
 
-  [Documentation](docs/cli.md)
+  [Documentation](cmd/provenx-cli/README.md)
 
-- API Service (`provenx-api`): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A trie is a dictionary of key-values that can be built incrementally, whose root hash at any given time can be also dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is also proven, so as the digital asset stored in that key-value
+- **API Service** (`provenx-api`): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A trie is a dictionary of key-values that can be built incrementally, whose root hash at any given time can be also dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is also proven, so as the digital asset stored in that key-value
 
   [gRPC Protocol Documentation](docs/api.html)
 
-- Anchor Service (`provendb-anchor`): the service continuously anchors hashes to Blockchains, which is similar to what Chainpoint does, but with much better performance and flexibility. It supports multiple anchor types and proof formats. Digital signing can be also done at the Merkle root level. It is consumed by `provenx-api`, and is not directly public-accessible at the moment
+- **Anchor Service** (`provendb-anchor`): the service continuously anchors hashes to Blockchains, which is similar to what Chainpoint does, but with much better performance and flexibility. It supports multiple anchor types and proof formats. Digital signing can be also done at the Merkle root level. It is consumed by `provenx-api`, and is not directly public-accessible at the moment
 
   [gRPC Protocol Documentation](docs/anchor.html)
-
-[GitHub Repo](https://github.com/SouthbankSoftware/provenx)
 
 ## Example
 
