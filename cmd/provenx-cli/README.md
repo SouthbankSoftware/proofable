@@ -69,7 +69,7 @@ make
 
 ### Error: "provenx-cli_darwin_amd64" cannot be opened because the developer cannot be verified
 
-![Mac Cannot Open Issue](images/mac_cannot_open_issue.png)
+![Mac Cannot Open Issue](../../docs/images/mac_cannot_open_issue.png)
 
 Use the following command to fix:
 
