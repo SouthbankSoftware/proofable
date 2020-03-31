@@ -166,7 +166,7 @@ the proof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48
 
 and a Graphviz Dot Graph (`proof.dot`):
 
-![Proof Dot Graph](docs/images/example_proof.dot)
+![Proof Dot Graph](docs/images/example_proof.svg)
 
 ### Step 8: extract a subproof for just one key-value out of the proof
 
@@ -241,4 +241,4 @@ the subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605ace
 
 and a Graphviz Dot Graph (`proof.dot`):
 
-![Subproof Dot Graph](docs/images/example_subproof.dot)
+![Subproof Dot Graph](docs/images/example_subproof.svg)
