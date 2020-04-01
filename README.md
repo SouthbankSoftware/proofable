@@ -184,7 +184,7 @@ api.CreateKeyValuesProof(ctx, cli, id, triePf.GetId(),
 
 ### Step 9: verify the subproof independently
 
-This step independently verifies the subproof we have just created. The only needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof
+This step independently verifies the subproof we have just created. The only thing needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof
 
 ```go
 kvCH, rpCH, errCH := api.VerifyKeyValuesProof(ctx, cli,
