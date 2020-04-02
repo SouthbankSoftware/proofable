@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T08:42:02+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:03:53+11:00
+ * @Last modified time: 2020-04-02T13:07:06+11:00
  */
 
 package api
@@ -33,6 +33,7 @@ import (
 	"os"
 
 	"github.com/SouthbankSoftware/provenx/pkg/proof"
+	anchorPB "github.com/SouthbankSoftware/provenx/pkg/protos/anchor"
 	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
 	"github.com/golang/protobuf/ptypes/empty"
 	"golang.org/x/sync/errgroup"
@@ -242,10 +243,12 @@ func CreateTrieProof(
 	cli apiPB.APIServiceClient,
 	id,
 	root string,
+	anchorType anchorPB.Anchor_Type,
 ) (tp *apiPB.TrieProof, er error) {
 	return cli.CreateTrieProof(ctx, &apiPB.CreateTrieProofRequest{
-		TrieId: id,
-		Root:   root,
+		TrieId:     id,
+		Root:       root,
+		AnchorType: anchorType,
 	})
 }
 

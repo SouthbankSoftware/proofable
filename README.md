@@ -1,18 +1,22 @@
 # [ProvenX](https://github.com/SouthbankSoftware/provenx)
 
+[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/SouthbankSoftware/provenx/pkg/api?tab=doc)
+
 ProvenX is a framework for proving any digital asset to Blockchains. Overall, it consists:
 
 - [**CLI** (`provenx-cli`)](https://github.com/SouthbankSoftware/provenx/tree/master/cmd/provenx-cli): the command-line interface (CLI) for API Service (`provenx-api`). At the moment, it supports proving a file-system to Ethereum
 
-  [Documentation](cmd/provenx-cli/README.md)
+  - [Documentation](cmd/provenx-cli/README.md)
 
 - **API Service** (`provenx-api`): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A trie is a dictionary of key-values that can be built incrementally, whose root hash at any given time can be also dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is also proven, so as the digital asset stored in that key-value
 
-  [gRPC Protocol Documentation](docs/api.html)
+  - [gRPC Protocol Documentation](https://provenx.provendb.com/docs/api.html)
+  - [gRPC Protocol Definition](https://github.com/SouthbankSoftware/provenx/blob/master/pkg/protos/api/api.proto)
 
 - **Anchor Service** (`provendb-anchor`): the service continuously anchors hashes to Blockchains, which is similar to what Chainpoint does, but with much better performance and flexibility. It supports multiple anchor types and proof formats. Digital signing can be also done at the Merkle root level. It is consumed by `provenx-api`, and is not directly public-accessible at the moment
 
-  [gRPC Protocol Documentation](docs/anchor.html)
+  - [gRPC Protocol Documentation](https://provenx.provendb.com/docs/anchor.html)
+  - [gRPC Protocol Definition](https://github.com/SouthbankSoftware/provenx/blob/master/pkg/protos/anchor/anchor.proto)
 
 ## Example
 
@@ -30,7 +34,7 @@ This is a hello world example written in Go that demonstrates how to:
 
 - verify the subproof independently
 
-The packages in [`pkg`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg) altogether resembles a Go SDK for ProvenX, which provides great convenience when consuming `provenx-api`
+The packages in [`pkg`](https://pkg.go.dev/github.com/SouthbankSoftware/provenx/pkg) altogether resembles a Go SDK for ProvenX, which provides great convenience when consuming `provenx-api`
 
 You can find the complete example source code [here](https://github.com/SouthbankSoftware/provenx/tree/master/docs/example.go), which can be run as:
 
@@ -52,7 +56,7 @@ creds, err := authcli.AuthenticateForGRPC(ctx,
 
 ### Step 2: create a gRPC client
 
-This step creates a gRPC client (`cli`) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using [`NewAPIClient`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg/api/client.go), but in that case, you have to manually destroy the client after use
+This step creates a gRPC client (`cli`) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using [`NewAPIClient`](https://pkg.go.dev/github.com/SouthbankSoftware/provenx/pkg/api?tab=doc#NewAPIClient), but in that case, you have to manually destroy the client after use
 
 ```go
 api.WithAPIClient(
@@ -65,7 +69,7 @@ api.WithAPIClient(
 
 ### Step 3: create an empty trie
 
-This step creates an empty trie, which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg/api/api.go), but in that case, you have to manually destroy the trie using [`DeleteTrie`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg/api/api.go) or wait for `provenx-api` to garbage collect it
+This step creates an empty trie, which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/provenx/pkg/api?tab=doc#CreateTrie), but in that case, you have to manually destroy the trie using [`DeleteTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/provenx/pkg/api?tab=doc#DeleteTrie) or wait for `provenx-api` to garbage collect it
 
 ```go
 api.WithTrie(ctx, cli, func(id, root string) error {
@@ -75,7 +79,7 @@ api.WithTrie(ctx, cli, func(id, root string) error {
 
 ### Step 4: set the key-values we want to prove
 
-This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`GetTrieKeyValues`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg/api/api.go), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`SetTrieKeyValues`](https://github.com/SouthbankSoftware/provenx/tree/master/pkg/api/api.go) calls as a way to build up a large trie incrementally
+This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`GetTrieKeyValues`](https://pkg.go.dev/github.com/SouthbankSoftware/provenx/pkg/api?tab=doc#GetTrieKeyValues), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`SetTrieKeyValues`](https://pkg.go.dev/github.com/SouthbankSoftware/provenx/pkg/api?tab=doc#SetTrieKeyValues) calls as a way to build up a large trie incrementally
 
 ```go
 root, err := api.SetTrieKeyValues(ctx, cli, id, root,
@@ -89,10 +93,10 @@ root, err := api.SetTrieKeyValues(ctx, cli, id, root,
 
 ### Step 5: create a proof for the key-values
 
-This step creates a proof, a.k.a. trie proof, to prove the trie at the given root. The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values
+This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum ([`ETH`](https://provenx.provendb.com/docs/anchor.html#anchor.Anchor.Type)). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in
 
 ```go
-triePf, err := api.CreateTrieProof(ctx, cli, id, root)
+triePf, err := api.CreateTrieProof(ctx, cli, id, root, anchorPB.Anchor_ETH)
 ```
 
 ### Step 6: wait for the proof to be anchored to Ethereum
@@ -120,7 +124,8 @@ kvCH, rpCH, errCH := api.VerifyTrieProof(ctx, cli, id, triePf.GetId(),
     true, "proof.dot")
 
 // strip the anchor trie part from each key
-// ... logic omitted here ...
+kvCH = api.InterceptKeyValueStream(ctx, kvCH,
+    api.StripCompoundKeyAnchorTriePart)
 
 log.Println("key-values contained in the proof:")
 for kv := range kvCH {
@@ -192,7 +197,8 @@ kvCH, rpCH, errCH := api.VerifyKeyValuesProof(ctx, cli,
     true, "living_room_Co2_subproof.dot")
 
 // strip the anchor trie part from each key
-// ... logic omitted here ...
+kvCH = api.InterceptKeyValueStream(ctx, kvCH,
+    api.StripCompoundKeyAnchorTriePart)
 
 log.Println("key-values contained in the subproof:")
 for kv := range kvCH {

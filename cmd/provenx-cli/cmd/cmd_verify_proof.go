@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:03:53+11:00
+ * @Last modified time: 2020-04-02T13:01:13+11:00
  */
 
 package cmd
@@ -40,10 +40,6 @@ import (
 )
 
 const (
-	// anchorKeySepLen is the length of the key separator for the top anchor trie. For normal
-	// Proof_ETH_TRIE format, it should be 1; for signed Proof_ETH_TRIE_SIGNED, it should be 2
-	anchorKeySepLen = 1
-
 	viperKeyVerifyProofInputPath = nameVerify + "." + nameProof + "." + nameInputPath
 )
 
@@ -127,18 +123,8 @@ var cmdVerifyProof = &cobra.Command{
 						rightStream, rpCH, rightErrCH := api.VerifyTrieProof(ctx, cli, id, tp.GetId(),
 							true, dotGraphOutputPath)
 
-						// strip the anchor trie part from each key
 						rightStream = api.InterceptKeyValueStream(ctx, rightStream,
-							func(kv *apiPB.KeyValue) *apiPB.KeyValue {
-								if len(kv.KeySep) < anchorKeySepLen {
-									return kv
-								}
-
-								kv.Key = kv.Key[kv.KeySep[anchorKeySepLen-1]:]
-								kv.KeySep = kv.KeySep[anchorKeySepLen:]
-
-								return kv
-							})
+							api.StripCompoundKeyAnchorTriePart)
 
 						trieMetadata, err := getFileTrieRootMetadata(rightStream)
 						if err != nil {

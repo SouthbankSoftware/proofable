@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:03:53+11:00
+ * @Last modified time: 2020-04-02T17:57:26+11:00
  */
 
 package api
@@ -61,7 +61,7 @@ func ExampleGetFilePathKeyValueStream() {
 	// Output:
 	// ./!metadata/1 -> 76616c756531
 	// ./!metadata/2 -> 76616c756532
-	// playground.go -> d9edaa2d7c262c25ec7950e97d648a085d0fc71f36e9b1e8ef34dc2780083cdb
+	// playground.go -> f9733a63e0afd9c64558444b2a681081ad87ff62850c339462733a89abbb09aa
 	// playground.go/!metadata/1 -> 76616c756531
 	// playground.go/!metadata/2 -> 76616c756532
 }

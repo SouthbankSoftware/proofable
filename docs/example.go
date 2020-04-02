@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-31T12:29:46+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:03:53+11:00
+ * @Last modified time: 2020-04-02T13:08:12+11:00
  */
 
 package main
@@ -33,6 +33,7 @@ import (
 
 	"github.com/SouthbankSoftware/provenx/pkg/api"
 	"github.com/SouthbankSoftware/provenx/pkg/authcli"
+	anchorPB "github.com/SouthbankSoftware/provenx/pkg/protos/anchor"
 	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
 	"github.com/SouthbankSoftware/provenx/pkg/strutil"
 )
@@ -72,7 +73,7 @@ func main() {
 				}
 
 				// create a proof for the key-values
-				triePf, err := api.CreateTrieProof(ctx, cli, id, root)
+				triePf, err := api.CreateTrieProof(ctx, cli, id, root, anchorPB.Anchor_ETH)
 				if err != nil {
 					return err
 				}
@@ -97,16 +98,7 @@ func main() {
 
 				// strip the anchor trie part from each key
 				kvCH = api.InterceptKeyValueStream(ctx, kvCH,
-					func(kv *apiPB.KeyValue) *apiPB.KeyValue {
-						if len(kv.KeySep) < 1 {
-							return kv
-						}
-
-						kv.Key = kv.Key[kv.KeySep[0]:]
-						kv.KeySep = kv.KeySep[1:]
-
-						return kv
-					})
+					api.StripCompoundKeyAnchorTriePart)
 
 				log.Println("key-values contained in the proof:")
 				for kv := range kvCH {
@@ -162,16 +154,7 @@ func main() {
 
 			// strip the anchor trie part from each key
 			kvCH = api.InterceptKeyValueStream(ctx, kvCH,
-				func(kv *apiPB.KeyValue) *apiPB.KeyValue {
-					if len(kv.KeySep) < 1 {
-						return kv
-					}
-
-					kv.Key = kv.Key[kv.KeySep[0]:]
-					kv.KeySep = kv.KeySep[1:]
-
-					return kv
-				})
+				api.StripCompoundKeyAnchorTriePart)
 
 			log.Println("key-values contained in the subproof:")
 			for kv := range kvCH {

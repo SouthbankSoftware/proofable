@@ -71,6 +71,7 @@ CreateTrieProofRequest represents a create trie proof request
 | ----- | ---- | ----- | ----------- |
 | trie_id | [string](#string) |  | TrieId is the trie ID |
 | root | [string](#string) |  | Root is the root hash (optional). When zero, the current root hash of the trie will be used to create the TrieProof, and the request will be blocked until all ongoing updates are finished |
+| anchor_type | [anchor.Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the anchor type the trie proof should be submitted to. Default to ETH |
 
 
 

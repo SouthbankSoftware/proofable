@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-01-03T14:55:49+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:04:13+11:00
+ * @Last modified time: 2020-04-02T12:29:44+11:00
  */
 
 syntax = "proto3";
@@ -296,6 +296,9 @@ message CreateTrieProofRequest {
   // trie will be used to create the TrieProof, and the request will be blocked
   // until all ongoing updates are finished
   string root = 2;
+  // AnchorType is the anchor type the trie proof should be submitted to.
+  // Default to ETH
+  anchor.Anchor.Type anchor_type = 3;
 }
 
 // DeleteTrieProofRequest represents a delete trie proof request
@@ -324,7 +327,8 @@ message VerifyTrieProofRequest {
 message CreateKeyValuesProofRequest {
   // TrieId is the trie ID
   string trie_id = 1;
-  // TrieProof is the trie proof to use
+  // TrieProof is the trie proof to use. When TrieProof is zero, a new trie
+  // proof will be created with current root and ETH
   oneof trie_proof {
     // ProofId is the trie proof id
     string proof_id = 2;

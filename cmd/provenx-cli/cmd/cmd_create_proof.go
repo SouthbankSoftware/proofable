@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:03:53+11:00
+ * @Last modified time: 2020-04-02T14:36:46+11:00
  */
 
 package cmd
@@ -32,6 +32,7 @@ import (
 
 	"github.com/SouthbankSoftware/provenx/pkg/api"
 	"github.com/SouthbankSoftware/provenx/pkg/colorcli"
+	anchorPB "github.com/SouthbankSoftware/provenx/pkg/protos/anchor"
 	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
 	"github.com/SouthbankSoftware/provenx/pkg/strutil"
 	"github.com/karrick/godirwalk"
@@ -40,8 +41,10 @@ import (
 )
 
 const (
+	nameAnchorType      = "anchor-type"
 	nameIncludeMetadata = "include-metadata"
 
+	viperKeyCreateProofAnchorType      = nameCreate + "." + nameProof + "." + nameAnchorType
 	viperKeyCreateProofOutputPath      = nameCreate + "." + nameProof + "." + nameOutputPath
 	viperKeyCreateProofIncludeMetadata = nameCreate + "." + nameProof + "." + nameIncludeMetadata
 )
@@ -57,6 +60,15 @@ By default, if the path is a directory, the proof will be created under the dire
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// from this point, we should silence usage if error happens
 		cmd.SilenceUsage = true
+
+		var anchorType anchorPB.Anchor_Type
+
+		anchorTypeStr := viper.GetString(viperKeyCreateProofAnchorType)
+		if t, ok := anchorPB.Anchor_Type_value[anchorTypeStr]; ok {
+			anchorType = anchorPB.Anchor_Type(t)
+		} else {
+			return fmt.Errorf("unknown anchor type `%s`", anchorTypeStr)
+		}
 
 		filePath := args[0]
 		trieOutputPath, err := getTriePath(filePath,
@@ -145,7 +157,7 @@ By default, if the path is a directory, the proof will be created under the dire
 						return err
 					}
 
-					triePf, err := api.CreateTrieProof(ctx, cli, id, root)
+					triePf, err := api.CreateTrieProof(ctx, cli, id, root, anchorType)
 					if err != nil {
 						return err
 					}
@@ -185,6 +197,9 @@ By default, if the path is a directory, the proof will be created under the dire
 
 func init() {
 	cmdCreate.AddCommand(cmdCreateProof)
+
+	cmdCreateProof.Flags().StringP(nameAnchorType, "t", "ETH", "specify the anchor type")
+	viper.BindPFlag(viperKeyCreateProofAnchorType, cmdCreateProof.Flags().Lookup(nameAnchorType))
 
 	cmdCreateProof.Flags().StringP(nameOutputPath, shorthandProofPath, "", "specify the proof output path")
 	viper.BindPFlag(viperKeyCreateProofOutputPath, cmdCreateProof.Flags().Lookup(nameOutputPath))
