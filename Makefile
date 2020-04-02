@@ -18,11 +18,12 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-03-31T17:03:20+11:00
+# @Last modified time: 2020-04-02T18:52:16+11:00
 
-APP_NAME := provenx-cli
+PROJECT_NAME := provenx
+PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(PROJECT_NAME)
+APP_NAME := $(PROJECT_NAME)-cli
 APP_VERSION ?= 0.0.0
-PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(APP_NAME)
 PLAYGROUND_NAME := playground
 PKGS := $(shell go list ./cmd/... ./pkg/...)
 LD_FLAGS := -ldflags \
