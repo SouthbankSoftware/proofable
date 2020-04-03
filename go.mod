@@ -1,4 +1,4 @@
-module github.com/SouthbankSoftware/provenx
+module github.com/SouthbankSoftware/proofable
 
 go 1.13
 

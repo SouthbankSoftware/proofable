@@ -1,4 +1,4 @@
-# provenx
+# proofable
 # Copyright (C) 2020  Southbank Software Ltd.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ image_resource:
   type: docker-image
   source: { repository: alpine/git }
 inputs:
-  - name: provenx-cli
+  - name: proofable-cli
   - name: provendb-releases
   - name: version
   - name: release-darwin_amd64
@@ -41,7 +41,7 @@ run:
     - |
       echo "{\
       \"version\": \"$(cat version/number)\", \
-      \"commit\": \"$(cat provenx-cli/.git/short_ref)\", \
+      \"commit\": \"$(cat proofable-cli/.git/short_ref)\", \
       \"build_url\": \"$(cat meta/atc-external-url)/builds/$(cat meta/build-id)\", \
       \"darwin_amd64\": {\
       \"generation\": \"$(cat release-darwin_amd64/generation)\", \
@@ -55,10 +55,10 @@ run:
       \"generation\": \"$(cat release-windows_amd64/generation)\", \
       \"uri\": \"$(cat release-windows_amd64/url)\"\
       }\
-      }" >> provendb-releases/provenx-cli-releases.jsonl
+      }" >> provendb-releases/proofable-cli-releases.jsonl
 
       cd provendb-releases
       git add .
       git config --global user.email "developer@southbanksoftware.com"
       git config --global user.name "Concourse"
-      git commit -m "Adds \`provenx-cli\` build info for v$(cat ../version/number)"
+      git commit -m "Adds \`proofable-cli\` build info for v$(cat ../version/number)"

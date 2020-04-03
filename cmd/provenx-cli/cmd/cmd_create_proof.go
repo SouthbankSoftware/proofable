@@ -1,5 +1,5 @@
 /*
- * provenx
+ * proofable
  * Copyright (C) 2020  Southbank Software Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-02T14:36:46+11:00
+ * @Last modified time: 2020-04-03T15:57:55+11:00
  */
 
 package cmd
@@ -30,11 +30,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/SouthbankSoftware/provenx/pkg/api"
-	"github.com/SouthbankSoftware/provenx/pkg/colorcli"
-	anchorPB "github.com/SouthbankSoftware/provenx/pkg/protos/anchor"
-	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
-	"github.com/SouthbankSoftware/provenx/pkg/strutil"
+	"github.com/SouthbankSoftware/proofable/pkg/api"
+	"github.com/SouthbankSoftware/proofable/pkg/colorcli"
+	anchorPB "github.com/SouthbankSoftware/proofable/pkg/protos/anchor"
+	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
+	"github.com/SouthbankSoftware/proofable/pkg/strutil"
 	"github.com/karrick/godirwalk"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

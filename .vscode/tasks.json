@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "provenx-cli",
+            "label": "proofable-cli",
             "type": "shell",
-            "command": "dlv debug ./cmd/provenx-cli --headless --listen=:2345 --log --api-version=2 -- auth",
+            "command": "dlv debug ./cmd/proofable-cli --headless --listen=:2345 --log --api-version=2 -- auth",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

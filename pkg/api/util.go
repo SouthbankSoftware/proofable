@@ -1,5 +1,5 @@
 /*
- * provenx
+ * proofable
  * Copyright (C) 2020  Southbank Software Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-18T16:30:55+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-02T12:59:30+11:00
+ * @Last modified time: 2020-04-03T15:57:55+11:00
  */
 
 package api
@@ -27,7 +27,7 @@ package api
 import (
 	"context"
 
-	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
+	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
 )
 
 const (

@@ -1,5 +1,5 @@
 /*
- * provenx
+ * proofable
  * Copyright (C) 2020  Southbank Software Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T08:42:02+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-02T13:07:06+11:00
+ * @Last modified time: 2020-04-03T15:57:55+11:00
  */
 
 package api
@@ -32,9 +32,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/SouthbankSoftware/provenx/pkg/proof"
-	anchorPB "github.com/SouthbankSoftware/provenx/pkg/protos/anchor"
-	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
+	"github.com/SouthbankSoftware/proofable/pkg/proof"
+	anchorPB "github.com/SouthbankSoftware/proofable/pkg/protos/anchor"
+	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
 	"github.com/golang/protobuf/ptypes/empty"
 	"golang.org/x/sync/errgroup"
 )

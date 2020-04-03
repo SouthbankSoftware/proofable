@@ -1,4 +1,4 @@
-# provenx
+# proofable
 # Copyright (C) 2020  Southbank Software Ltd.
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,9 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-04-02T18:52:16+11:00
+# @Last modified time: 2020-04-03T15:58:33+11:00
 
-PROJECT_NAME := provenx
+PROJECT_NAME := proofable
 PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(PROJECT_NAME)
 APP_NAME := $(PROJECT_NAME)-cli
 APP_VERSION ?= 0.0.0

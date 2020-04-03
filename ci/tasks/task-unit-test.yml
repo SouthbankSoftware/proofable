@@ -1,4 +1,4 @@
-# provenx
+# proofable
 # Copyright (C) 2020  Southbank Software Ltd.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,9 +25,9 @@ image_resource:
   type: docker-image
   source: { repository: amidos/dcind, tag: latest }
 inputs:
-  - name: provenx-cli
+  - name: proofable-cli
   - name: provendb-anchor
-  - name: provenx-api
+  - name: proofable-api
   - name: golang
 params: { GIT_ACCESS_TOKEN: ((common.git-access-token)) }
 run:
@@ -41,8 +41,8 @@ run:
       # get images
       docker load -i provendb-anchor/image
       docker tag "$(cat provendb-anchor/image-id)" "$(cat provendb-anchor/repository):$(cat provendb-anchor/tag)"
-      docker load -i provenx-api/image
-      docker tag "$(cat provenx-api/image-id)" "$(cat provenx-api/repository):$(cat provenx-api/tag)"
+      docker load -i proofable-api/image
+      docker tag "$(cat proofable-api/image-id)" "$(cat proofable-api/repository):$(cat proofable-api/tag)"
       docker load -i golang/image
       docker tag "$(cat golang/image-id)" "$(cat golang/repository):$(cat golang/tag)"
       docker images
@@ -56,4 +56,4 @@ run:
       trap cleanup EXIT
 
       # run logic via docker compose
-      docker-compose -f provenx-cli/ci/tasks/docker-compose-unit-test.yml run --rm tests
+      docker-compose -f proofable-cli/ci/tasks/docker-compose-unit-test.yml run --rm tests

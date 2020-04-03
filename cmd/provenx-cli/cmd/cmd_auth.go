@@ -1,5 +1,5 @@
 /*
- * provenx
+ * proofable
  * Copyright (C) 2020  Southbank Software Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-10T11:38:58+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:03:53+11:00
+ * @Last modified time: 2020-04-03T15:57:55+11:00
  */
 
 package cmd
@@ -27,9 +27,9 @@ package cmd
 import (
 	"context"
 
-	"github.com/SouthbankSoftware/provenx/pkg/auth"
-	"github.com/SouthbankSoftware/provenx/pkg/authcli"
-	"github.com/SouthbankSoftware/provenx/pkg/colorcli"
+	"github.com/SouthbankSoftware/proofable/pkg/auth"
+	"github.com/SouthbankSoftware/proofable/pkg/authcli"
+	"github.com/SouthbankSoftware/proofable/pkg/colorcli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc/credentials"

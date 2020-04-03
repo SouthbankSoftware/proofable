@@ -1,4 +1,4 @@
-# provenx
+# proofable
 # Copyright (C) 2020  Southbank Software Ltd.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 # @Last modified time: 2020-02-21T11:15:07+11:00
 
 # update pipeline:
-# fly -t dev sp -c pipeline-deploy.yml -p provenx-cli-deploy
+# fly -t dev sp -c pipeline-deploy.yml -p proofable-cli-deploy
 
 resource_types:
   - name: meta
@@ -52,16 +52,16 @@ resources:
   - name: github-status
     type: github-status
     source:
-      repository: SouthbankSoftware/provenx
+      repository: SouthbankSoftware/proofable
       access_token: ((common.git-access-token))
       branch: master
       context: deploy
-  - name: provenx-cli
+  - name: proofable-cli
     type: git
     check_every: 5m
     webhook_token: ((common.webhook-token))
     source:
-      uri: https://github.com/SouthbankSoftware/provenx.git
+      uri: https://github.com/SouthbankSoftware/proofable.git
       branch: master
       username: ((common.git-username))
       password: ((common.git-password))
@@ -80,30 +80,30 @@ resources:
       driver: gcs
       bucket: provendb-ci
       json_key: ((common.service-account))
-      key: provenx-cli/version/version.txt
+      key: proofable-cli/version/version.txt
       initial_version: 0.0.0
   - name: release-darwin_amd64
     type: gcs-resource
     source:
       bucket: provendb-dev
       json_key: ((common.service-account))
-      versioned_file: provenx-cli/provenx-cli_darwin_amd64
+      versioned_file: proofable-cli/proofable-cli_darwin_amd64
   - name: release-linux_amd64
     type: gcs-resource
     source:
       bucket: provendb-dev
       json_key: ((common.service-account))
-      versioned_file: provenx-cli/provenx-cli_linux_amd64
+      versioned_file: proofable-cli/proofable-cli_linux_amd64
   - name: release-windows_amd64
     type: gcs-resource
     source:
       bucket: provendb-dev
       json_key: ((common.service-account))
-      versioned_file: provenx-cli/provenx-cli_windows_amd64.exe
+      versioned_file: proofable-cli/proofable-cli_windows_amd64.exe
   - name: docker-registry
     type: docker-image
     source:
-      repository: asia.gcr.io/provendb/provenx-cli
+      repository: asia.gcr.io/provendb/proofable-cli
       username: _json_key
       password: ((common.service-account))
 
@@ -111,37 +111,37 @@ jobs:
   - name: build-and-deploy
     serial: true
     plan:
-      - get: provenx-cli
+      - get: proofable-cli
         trigger: true
       - put: github-status
         params:
-          commit: provenx-cli
+          commit: proofable-cli
           state: pending
       - get: version
       - task: build
-        file: provenx-cli/ci/tasks/task-build.yml
+        file: proofable-cli/ci/tasks/task-build.yml
       - in_parallel:
           fail_fast: true
           limit: 3
           steps:
             - put: release-darwin_amd64
               params:
-                file: provenx-cli/provenx-cli_darwin_amd64
+                file: proofable-cli/proofable-cli_darwin_amd64
                 predefined_acl: publicRead
                 cache_control: no-cache, max-age=0
             - put: release-linux_amd64
               params:
-                file: provenx-cli/provenx-cli_linux_amd64
+                file: proofable-cli/proofable-cli_linux_amd64
                 predefined_acl: publicRead
                 cache_control: no-cache, max-age=0
             - put: release-windows_amd64
               params:
-                file: provenx-cli/provenx-cli_windows_amd64.exe
+                file: proofable-cli/proofable-cli_windows_amd64.exe
                 predefined_acl: publicRead
                 cache_control: no-cache, max-age=0
       - put: docker-registry
         params:
-          build: provenx-cli
+          build: proofable-cli
           tag_file: version/number
           tag_as_latest: true
         get_params: { skip_download: true }
@@ -149,7 +149,7 @@ jobs:
       - get: provendb-releases
         params: { clean_tags: true }
       - task: save-build-info
-        file: provenx-cli/ci/tasks/task-save-build-info.yml
+        file: proofable-cli/ci/tasks/task-save-build-info.yml
       - put: provendb-releases
         params:
           repository: provendb-releases
@@ -165,7 +165,7 @@ jobs:
             text: ((slack.guan))
         - put: github-status
           params:
-            commit: provenx-cli
+            commit: proofable-cli
             state: failure
     on_abort:
       do:
@@ -175,7 +175,7 @@ jobs:
             text: Aborted. ((slack.guan))
         - put: github-status
           params:
-            commit: provenx-cli
+            commit: proofable-cli
             state: failure
     on_success:
       do:
@@ -184,5 +184,5 @@ jobs:
             alert_type: success
         - put: github-status
           params:
-            commit: provenx-cli
+            commit: proofable-cli
             state: success

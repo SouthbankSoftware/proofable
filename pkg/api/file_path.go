@@ -1,5 +1,5 @@
 /*
- * provenx
+ * proofable
  * Copyright (C) 2020  Southbank Software Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:03:53+11:00
+ * @Last modified time: 2020-04-03T15:57:55+11:00
  */
 
 package api
@@ -34,8 +34,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/SouthbankSoftware/provenx/pkg/hasher"
-	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
+	"github.com/SouthbankSoftware/proofable/pkg/hasher"
+	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
 	"github.com/karrick/godirwalk"
 	"github.com/korovkin/limiter"
 )

@@ -1,27 +1,27 @@
-# [provenx-cli](https://github.com/SouthbankSoftware/provenx/tree/master/cmd/provenx-cli)
+# [proofable-cli](https://github.com/SouthbankSoftware/proofable/tree/master/cmd/proofable-cli)
 
-`provenx-cli` is the command-line interface (CLI) for [ProvenX](https://provenx.provendb.com/) API Service (`provenx-api`). At the moment, it supports proving a file-system to Ethereum
+`proofable-cli` is the command-line interface (CLI) for [Proofable](https://www.proofable.io/) API Service (`proofable-api`). At the moment, it supports proving a file-system to Ethereum
 
 Test status
 
-[![provenx-cli-test](https://concourse.provendb.com/api/v1/pipelines/provenx-cli-test/jobs/test/badge)](http://concourse.provendb.com/teams/main/pipelines/provenx-cli-test)
+[![proofable-cli-test](https://concourse.provendb.com/api/v1/pipelines/proofable-cli-test/jobs/test/badge)](http://concourse.provendb.com/teams/main/pipelines/proofable-cli-test)
 
 Deploy status
 
-[![provenx-cli-deploy](https://concourse.provendb.com/api/v1/pipelines/provenx-cli-deploy/jobs/build-and-deploy/badge)](http://concourse.provendb.com/teams/main/pipelines/provenx-cli-deploy)
+[![proofable-cli-deploy](https://concourse.provendb.com/api/v1/pipelines/proofable-cli-deploy/jobs/build-and-deploy/badge)](http://concourse.provendb.com/teams/main/pipelines/proofable-cli-deploy)
 
 ## Usage
 
 ### Download dev binaries
 
-- [mac](https://storage.googleapis.com/provendb-dev/provenx-cli/provenx-cli_darwin_amd64)
-- [linux](https://storage.googleapis.com/provendb-dev/provenx-cli/provenx-cli_linux_amd64)
-- [windows](https://storage.googleapis.com/provendb-dev/provenx-cli/provenx-cli_windows_amd64.exe)
+- [mac](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_darwin_amd64)
+- [linux](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_linux_amd64)
+- [windows](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_windows_amd64.exe)
 
 ### Build your own binary
 
 ```bash
-# generate the `provenx-cli` binary
+# generate the `proofable-cli` binary
 make
 ```
 
@@ -29,50 +29,50 @@ make
 
 ```bash
 # for help
-./provenx-cli -h
+./proofable-cli -h
 
 # authenticate with ProvenDB. You don't have to explicitly run this. When you execute a command that requires authentication, it will be automatically run
-./provenx-cli auth
+./proofable-cli auth
 
 # remove existing authentication
-./provenx-cli auth -d
+./proofable-cli auth -d
 
 # create a proof for a path
-./provenx-cli create proof path/to/the/data
+./proofable-cli create proof path/to/the/data
 
 # create a proof for a path in a custom location
-./provenx-cli create proof path/to/the/data -p path/to/output/the/proof.pxproof
+./proofable-cli create proof path/to/the/data -p path/to/output/the/proof.pxproof
 
 # create a proof for a path including metadata
-./provenx-cli create proof path/to/the/data --include-metadata
+./proofable-cli create proof path/to/the/data --include-metadata
 
 # verify a proof for a path
-./provenx-cli verify proof path/to/the/data
+./proofable-cli verify proof path/to/the/data
 
 # verify a proof for a path and output the proof's Graphviz Dot Graph
-./provenx-cli verify proof path/to/the/data -d path/to/output/the/dot/graph.dot
+./proofable-cli verify proof path/to/the/data -d path/to/output/the/dot/graph.dot
 
 # verify a proof for a path from a custom location
-./provenx-cli verify proof path/to/the/data -p path/to/the/proof.pxproof
+./proofable-cli verify proof path/to/the/data -p path/to/the/proof.pxproof
 
 # create a subproof out of a proof
-./provenx-cli create subproof key1_of_the_proof key2_of_the_proof -p path/to/the/proof.pxproof -s path/to/output/the/subproof.pxsubproof
+./proofable-cli create subproof key1_of_the_proof key2_of_the_proof -p path/to/the/proof.pxproof -s path/to/output/the/subproof.pxsubproof
 
 # verify a subproof for a path
-./provenx-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof
+./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof
 
 # verify a subproof for a path and output the subproof's Graphviz Dot Graph
-./provenx-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof -d path/to/output/the/dot/graph.dot
+./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof -d path/to/output/the/dot/graph.dot
 ```
 
 ## FAQ
 
-### Error: "provenx-cli_darwin_amd64" cannot be opened because the developer cannot be verified
+### Error: "proofable-cli_darwin_amd64" cannot be opened because the developer cannot be verified
 
 ![Mac Cannot Open Issue](../../docs/images/mac_cannot_open_issue.png)
 
 Use the following command to fix:
 
 ```bash
-xattr -d com.apple.quarantine path/to/provenx-cli_darwin_amd64
+xattr -d com.apple.quarantine path/to/proofable-cli_darwin_amd64
 ```

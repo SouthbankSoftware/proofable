@@ -1,5 +1,5 @@
 /*
- * provenx
+ * proofable
  * Copyright (C) 2020  Southbank Software Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-03-31T17:03:53+11:00
+ * @Last modified time: 2020-04-03T16:00:30+11:00
  */
 
 package cmd
@@ -31,9 +31,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/SouthbankSoftware/provenx/pkg/api"
-	"github.com/SouthbankSoftware/provenx/pkg/colorcli"
-	apiPB "github.com/SouthbankSoftware/provenx/pkg/protos/api"
+	"github.com/SouthbankSoftware/proofable/pkg/api"
+	"github.com/SouthbankSoftware/proofable/pkg/colorcli"
+	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc/status"
@@ -42,7 +42,7 @@ import (
 const (
 	// global names
 
-	name           = "provenx-cli"
+	name           = "proofable-cli"
 	nameProof      = "proof"
 	nameSubproof   = "subproof"
 	nameCreate     = "create"
@@ -82,7 +82,7 @@ var (
 	version = "0.0.0"
 	cmdRoot = &cobra.Command{
 		Use:           name,
-		Short:         "ProvenX CLI",
+		Short:         "Proofable CLI",
 		SilenceErrors: true,
 	}
 	cliConfig *CLIConfig
@@ -129,11 +129,11 @@ func init() {
 	}
 
 	cmdRoot.PersistentFlags().String(nameAPIHostPort,
-		cliConfig.APIHostPort, "specify the ProvenX API hostPort")
+		cliConfig.APIHostPort, "specify the Proofable API hostPort")
 	viper.BindPFlag(viperKeyAPIHostPort, cmdRoot.PersistentFlags().Lookup(nameAPIHostPort))
 
 	cmdRoot.PersistentFlags().Bool(nameAPISecure,
-		cliConfig.APISecure, "specify whether the ProvenX API connection is secure with TLS")
+		cliConfig.APISecure, "specify whether the Proofable API connection is secure with TLS")
 	viper.BindPFlag(viperKeyAPISecure, cmdRoot.PersistentFlags().Lookup(nameAPISecure))
 
 	cmdRoot.PersistentFlags().String(nameProvenDBAPIGatewayEndpoint,
