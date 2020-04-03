@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-12T10:44:37+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-04-03T18:45:30+11:00
  */
 
 package cmd
@@ -54,19 +54,20 @@ func loadCLIConfig() error {
 	err := cliConfig.Load()
 	if err != nil {
 		if os.IsNotExist(err) {
-			cliConfig.APISecure = defaultAPISecure
-
 			changed = true
+			cliConfig.APISecure = defaultAPISecure
 		} else {
 			return err
 		}
 	}
 
 	if cliConfig.APIHostPort == "" {
+		changed = true
 		cliConfig.APIHostPort = defaultAPIHostPort
 	}
 
 	if cliConfig.ProvendbAPIGatewayEndpoint == "" {
+		changed = true
 		cliConfig.ProvendbAPIGatewayEndpoint = defaultProvenDBAPIGatewayEndpoint
 	}
 

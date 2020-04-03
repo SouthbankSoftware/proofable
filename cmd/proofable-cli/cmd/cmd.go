@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T16:00:30+11:00
+ * @Last modified time: 2020-04-03T18:15:49+11:00
  */
 
 package cmd
@@ -62,7 +62,7 @@ const (
 	nameDevToken                   = "dev-token"
 	nameQuiet                      = "quiet"
 
-	defaultAPIHostPort                = "api.dev.provendb.com:443"
+	defaultAPIHostPort                = "api.dev.proofable.io:443"
 	defaultAPISecure                  = true
 	defaultProvenDBAPIGatewayEndpoint = "https://apigateway.dev.provendb.com"
 
