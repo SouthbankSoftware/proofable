@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-08-26T17:41:36+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-04-06T10:01:26+10:00
  */
 
 package proof
@@ -31,9 +31,9 @@ import (
 	"strings"
 	"time"
 
+	pb "github.com/SouthbankSoftware/proofable/pkg/protos/anchor"
 	"github.com/SouthbankSoftware/provendb-verify/pkg/merkle"
 	"github.com/SouthbankSoftware/provendb-verify/pkg/proof/binary"
-	pb "github.com/SouthbankSoftware/proofable/pkg/protos/anchor"
 )
 
 const (

@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-04-06T11:17:54+10:00
  */
 
 package api
@@ -46,9 +46,9 @@ var (
 	DefaultGetFilePathKeyValueStreamConcurrency uint32 = 4
 
 	// FileExtensionTrie is the file extension for a trie
-	FileExtensionTrie = ".pxproof"
+	FileExtensionTrie = ".proofable"
 	// FileExtensionKeyValuesProof is the file extension for a key-values proof
-	FileExtensionKeyValuesProof = ".pxsubproof"
+	FileExtensionKeyValuesProof = ".subproofable"
 	// FileExtensionDotGraph is the file extension for a Graphviz Dot Graph
 	FileExtensionDotGraph = ".dot"
 

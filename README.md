@@ -1,6 +1,7 @@
 # [Proofable](https://github.com/SouthbankSoftware/proofable)
 
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/SouthbankSoftware/proofable?style=flat-square)](https://goreportcard.com/report/github.com/SouthbankSoftware/proofable)
 
 Proofable is a framework for proving any digital asset to Blockchains. Overall, it consists:
 

@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T11:29:34+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-04-06T11:08:52+10:00
  */
 
 package api
@@ -33,7 +33,7 @@ import (
 // NewAPIClient creates a new API client
 func NewAPIClient(hostPort string, creds credentials.PerRPCCredentials) (
 	con *grpc.ClientConn, cli apiPB.APIServiceClient, er error) {
-	secureOpt := grpc.DialOption(nil)
+	var secureOpt grpc.DialOption
 
 	if creds.RequireTransportSecurity() {
 		secureOpt = grpc.WithTransportCredentials(credentials.NewTLS(nil))
