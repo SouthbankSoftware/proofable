@@ -19,10 +19,12 @@
  * @Author: guiguan
  * @Date:   2020-03-18T13:40:53+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-05-07T18:02:24+10:00
  */
 
 package anchor
 
 //go:generate protoc --plugin=protoc-gen-doc=../protoc-gen-doc --doc_out=../../../docs --doc_opt=markdown,anchor.md -I ../ --go_out=paths=source_relative,plugins=grpc:../ anchor/anchor.proto
 //go:generate protoc --plugin=protoc-gen-doc=../protoc-gen-doc --doc_out=../../../docs --doc_opt=html,anchor.html -I ../ anchor/anchor.proto
+//go:generate ../../../node_sdk/node_modules/.bin/grpc_tools_node_protoc --plugin=protoc-gen-grpc=../../../node_sdk/node_modules/.bin/grpc_tools_node_protoc_plugin --grpc_out=generate_package_definition:../../../node_sdk/src/protos --proto_path=../ anchor/anchor.proto
+//go:generate protoc --plugin=protoc-gen-ts=../../../node_sdk/node_modules/.bin/protoc-gen-ts --ts_out=../../../node_sdk/src/protos -I ../ anchor/anchor.proto

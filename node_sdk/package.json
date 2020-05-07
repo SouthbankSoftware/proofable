@@ -1,0 +1,40 @@
+{
+  "name": "proofable",
+  "version": "0.0.1",
+  "description": "Proofable Node SDK",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk"
+  },
+  "keywords": [
+    "proofable",
+    "provendb",
+    "anchor",
+    "blockchain",
+    "proof",
+    "bitcoin",
+    "ethereum",
+    "trie"
+  ],
+  "contributors": [
+    {
+      "name": "Guan Gui",
+      "email": "guan@southbanksoftware.com"
+    }
+  ],
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "grpc": "npm:@grpc/grpc-js@^1.0.3",
+    "google-protobuf": "^3.12.0-rc.1"
+  },
+  "devDependencies": {
+    "grpc-tools": "^1.8.1",
+    "grpc_tools_node_protoc_ts": "^3.0.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.8.3"
+  }
+}
