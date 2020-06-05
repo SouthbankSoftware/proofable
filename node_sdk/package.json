@@ -3,7 +3,13 @@
   "version": "0.0.1",
   "description": "Proofable Node SDK",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "start": "node dist/index.js",
+    "dev": "npm run build && npm start",
+    "build": "tsc && cpx 'src/**/*.{js,d.ts}' dist",
+    "clean": "rimraf ./dist rmdir",
+    "doc": "typedoc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,13 +34,20 @@
   ],
   "license": "AGPL-3.0",
   "dependencies": {
-    "grpc": "npm:@grpc/grpc-js@^1.0.3",
-    "google-protobuf": "^3.12.0-rc.1"
+    "@types/google-protobuf": "^3.7.2",
+    "@types/lodash": "^4.14.154",
+    "@types/node": "^14.0.6",
+    "google-protobuf": "^3.12.2",
+    "grpc": "npm:@grpc/grpc-js@^1.0.4",
+    "lodash": "^4.17.15",
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "grpc-tools": "^1.8.1",
-    "grpc_tools_node_protoc_ts": "^3.0.0",
+    "cpx": "^1.5.0",
+    "grpc-tools": "^1.9.0",
+    "ts-protoc-gen": "^0.12.1-pre.3266132",
     "tslint": "^6.1.2",
-    "typescript": "^3.8.3"
+    "typedoc": "^0.17.7",
+    "typescript": "^3.9.3"
   }
 }

@@ -5,7 +5,13 @@
         "target": "es6",
         "moduleResolution": "node",
         "sourceMap": true,
-        "outDir": "dist"
+        "outDir": "dist",
+        "strict": true,
+        "declaration": true
+    },
+    "typedocOptions": {
+        "mode": "modules",
+        "out": "docs"
     },
     "lib": [
         "es2015"

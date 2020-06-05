@@ -35,6 +35,17 @@
                 "auth",
             ],
             "cwd": "${workspaceFolder}",
+        },
+        {
+            "name": "Node SDK",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_sdk/src/index.ts",
+            "preLaunchTask": "build node_sdk",
+            "outFiles": [
+                "${workspaceFolder}/node_sdk/dist/index.js"
+            ],
+            "cwd": "${workspaceFolder}/node_sdk",
         }
     ]
 }
