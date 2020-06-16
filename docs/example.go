@@ -54,7 +54,7 @@ func main() {
 
 	// create a gRPC client
 	err = api.WithAPIClient(
-		"api.dev.provendb.com:443",
+		"api.dev.proofable.io:443",
 		creds,
 		func(cli apiPB.APIServiceClient) error {
 			// create an empty trie
