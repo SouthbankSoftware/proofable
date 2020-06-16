@@ -5,4 +5,5 @@ data
 *.dot
 *.proof
 *.trie
-*.px*
+*.proofable
+*.subproofable
