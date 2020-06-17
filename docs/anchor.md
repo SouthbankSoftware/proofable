@@ -254,6 +254,8 @@ Type represents an anchor type
 | BTC | 1 | BTC is the anchor type for Bitcoin Testnet |
 | BTC_MAINNET | 5 | BTC_MAINNET is the anchor type for Bitcoin Mainnet |
 | CHP | 2 | CHP is the anchor type for Chainpoint (planned) |
+| HEDERA | 6 | HEDERA is the anchor type for Hedera Testnet |
+| HEDERA_MAINNET | 7 | HEDERA_MAINNET is the anchor type for Hedera Mainnet |
 
 
 
