@@ -19,6 +19,7 @@ import {
 } from "../protos/api/api_pb";
 import {
   createTrie,
+  createTriePromise,
   deleteTrie,
   importTrie,
   exportTrie,
@@ -120,6 +121,7 @@ export class APIServiceClient extends Client {
   /**
    * Creates a new trie
    */
+  createTrie(): Promise<Trie>;
   createTrie(callback: grpc.requestCallback<Trie>): SurfaceCall;
   createTrie(
     argument: Empty,
@@ -136,8 +138,10 @@ export class APIServiceClient extends Client {
     options: grpc.CallOptions | null,
     callback: grpc.requestCallback<Trie>
   ): grpc.ClientUnaryCall;
-  createTrie(arg1: any, arg2?: any, arg3?: any, arg4?: any): any {
-    if (typeof arg1 === "function") {
+  createTrie(arg1?: any, arg2?: any, arg3?: any, arg4?: any): any {
+    if (!arg1) {
+      return createTriePromise(this);
+    } else if (typeof arg1 === "function") {
       return createTrie(this, arg1);
     }
 

@@ -30,6 +30,7 @@ export declare class APIServiceClient extends Client {
     /**
      * Creates a new trie
      */
+    createTrie(): Promise<Trie>;
     createTrie(callback: grpc.requestCallback<Trie>): SurfaceCall;
     createTrie(argument: Empty, callback: grpc.requestCallback<Trie>): grpc.ClientUnaryCall;
     createTrie(argument: Empty, metadataOrOptions: grpc.Metadata | grpc.CallOptions | null, callback: grpc.requestCallback<Trie>): grpc.ClientUnaryCall;

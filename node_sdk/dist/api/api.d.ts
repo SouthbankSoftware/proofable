@@ -3,6 +3,7 @@ import { SurfaceCall } from "grpc/build/src/call";
 import { APIServiceClient } from "./client";
 import { Trie, KeyValuesFilter, KeyValue, VerifyProofReply } from "../protos/api";
 export declare function createTrie(cli: APIServiceClient, callback: grpc.requestCallback<Trie>): SurfaceCall;
+export declare function createTriePromise(cli: APIServiceClient): Promise<Trie>;
 export declare function deleteTrie(cli: APIServiceClient, id: string, callback: grpc.requestCallback<Trie>): SurfaceCall;
 export declare function importTrie(cli: APIServiceClient, id: string, path: string, callback: grpc.requestCallback<Trie>): SurfaceCall;
 export declare function exportTrie(cli: APIServiceClient, id: string, outputPath: string, callback: grpc.requestCallback<undefined>): SurfaceCall;

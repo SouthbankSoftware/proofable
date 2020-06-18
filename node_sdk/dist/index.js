@@ -18,6 +18,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const grpc = __importStar(require("grpc"));
 const api_1 = require("./api");
@@ -35,8 +44,8 @@ const metadata = new grpc.Metadata();
 //   }`
 // );
 metadata.add("authorization", "Bearer magic");
-// const client = newApiServiceClient("api.dev.proofable.io:443", metadata);
-const client = api_1.newApiServiceClient("localhost:10014", metadata, false);
+const client = api_1.newApiServiceClient("api.dev.proofable.io:443", metadata);
+// const client = newApiServiceClient("localhost:10014", metadata, false);
 // client
 //   .getTries(new google_protobuf_empty_pb.Empty())
 //   .on("data", (trie: Trie) => {
@@ -145,23 +154,44 @@ client.createTrie((err, value) => {
     let trie = value;
     console.log("created trie");
     console.log(trie.toObject());
-    client.setTrieKeyValues(trie.getId(), "", [api_1.KeyValue.from("key1", "val1"), api_1.KeyValue.from("key2", "val2")], (err, value) => {
-        if (err) {
-            console.error(err);
-            cleanup(trie.getId());
-            return;
-        }
-        trie = value;
-        console.log("updated trie");
-        console.log(trie.toObject());
-        client
-            .getTrieKeyValues(api_1.TrieKeyValuesRequest.from(trie.getId(), trie.getRoot()))
-            .on("data", (kv) => {
-            console.log(kv.to());
-        })
-            .on("error", () => {
-            cleanup(trie.getId());
-        });
-    });
+    cleanup(trie.getId());
+    // client.setTrieKeyValues(
+    //   trie.getId(),
+    //   "",
+    //   [KeyValue.from("key1", "val1"), KeyValue.from("key2", "val2")],
+    //   (err, value) => {
+    //     if (err) {
+    //       console.error(err);
+    //       cleanup(trie.getId());
+    //       return;
+    //     }
+    //     trie = value!;
+    //     console.log("updated trie");
+    //     console.log(trie.toObject());
+    //     client
+    //       .getTrieKeyValues(
+    //         TrieKeyValuesRequest.from(trie.getId(), trie.getRoot())
+    //       )
+    //       .on("data", (kv: KeyValue) => {
+    //         console.log(kv.to());
+    //       })
+    //       .on("error", () => {
+    //         cleanup(trie.getId());
+    //       });
+    //   }
+    // );
 });
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    let trie;
+    try {
+        trie = yield client.createTrie();
+    }
+    catch (err) {
+        console.error(err);
+        return;
+    }
+    console.log("created trie");
+    console.log(trie.toObject());
+    cleanup(trie.getId());
+}))();
 //# sourceMappingURL=index.js.map

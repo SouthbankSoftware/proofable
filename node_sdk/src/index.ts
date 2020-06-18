@@ -28,8 +28,8 @@ const metadata = new grpc.Metadata();
 // );
 metadata.add("authorization", "Bearer magic");
 
-// const client = newApiServiceClient("api.dev.proofable.io:443", metadata);
-const client = newApiServiceClient("localhost:10014", metadata, false);
+const client = newApiServiceClient("api.dev.proofable.io:443", metadata);
+// const client = newApiServiceClient("localhost:10014", metadata, false);
 
 // client
 //   .getTries(new google_protobuf_empty_pb.Empty())
@@ -163,32 +163,50 @@ client.createTrie((err, value) => {
   console.log("created trie");
   console.log(trie.toObject());
 
-  client.setTrieKeyValues(
-    trie.getId(),
-    "",
-    [KeyValue.from("key1", "val1"), KeyValue.from("key2", "val2")],
-    (err, value) => {
-      if (err) {
-        console.error(err);
-        cleanup(trie.getId());
-        return;
-      }
+  cleanup(trie.getId());
 
-      trie = value!;
+  // client.setTrieKeyValues(
+  //   trie.getId(),
+  //   "",
+  //   [KeyValue.from("key1", "val1"), KeyValue.from("key2", "val2")],
+  //   (err, value) => {
+  //     if (err) {
+  //       console.error(err);
+  //       cleanup(trie.getId());
+  //       return;
+  //     }
 
-      console.log("updated trie");
-      console.log(trie.toObject());
+  //     trie = value!;
 
-      client
-        .getTrieKeyValues(
-          TrieKeyValuesRequest.from(trie.getId(), trie.getRoot())
-        )
-        .on("data", (kv: KeyValue) => {
-          console.log(kv.to());
-        })
-        .on("error", () => {
-          cleanup(trie.getId());
-        });
-    }
-  );
+  //     console.log("updated trie");
+  //     console.log(trie.toObject());
+
+  //     client
+  //       .getTrieKeyValues(
+  //         TrieKeyValuesRequest.from(trie.getId(), trie.getRoot())
+  //       )
+  //       .on("data", (kv: KeyValue) => {
+  //         console.log(kv.to());
+  //       })
+  //       .on("error", () => {
+  //         cleanup(trie.getId());
+  //       });
+  //   }
+  // );
 });
+
+(async () => {
+  let trie;
+
+  try {
+    trie = await client.createTrie();
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+  console.log("created trie");
+  console.log(trie.toObject());
+
+  cleanup(trie.getId());
+})();

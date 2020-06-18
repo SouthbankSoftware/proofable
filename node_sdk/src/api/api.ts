@@ -28,6 +28,18 @@ export function createTrie(
   return cli.createTrie(new Empty(), callback);
 }
 
+export async function createTriePromise(cli: APIServiceClient): Promise<Trie> {
+  return new Promise((resolve, reject) => {
+    createTrie(cli, (err, value) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve(value);
+    });
+  });
+}
+
 export function deleteTrie(
   cli: APIServiceClient,
   id: string,

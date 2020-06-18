@@ -61,7 +61,10 @@ api_pb_1.KeyValue.prototype.to = function (keyEncoding, valEncoding) {
 };
 class APIServiceClient extends api_grpc_pb_1.APIServiceClient {
     createTrie(arg1, arg2, arg3, arg4) {
-        if (typeof arg1 === "function") {
+        if (!arg1) {
+            return api_1.createTriePromise(this);
+        }
+        else if (typeof arg1 === "function") {
             return api_1.createTrie(this, arg1);
         }
         return super.createTrie(arg1, arg2, arg3, arg4);
