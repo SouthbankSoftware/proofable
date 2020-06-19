@@ -3,6 +3,7 @@ import fs from "fs";
 import * as grpc from "grpc";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { SurfaceCall } from "grpc/build/src/call";
+import { EventIterator, stream } from "event-iterator";
 import { APIServiceClient } from "./client";
 import {
   pipeFromReadableStream,
@@ -245,4 +246,31 @@ export function verifyKeyValuesProof(
   }
 
   return stream;
+}
+
+export function verifyKeyValuesProofPromise(
+  cli: APIServiceClient,
+  path: string,
+  outputKeyValues = false,
+  dotGraphOutputPath?: string
+): AsyncIterable<KeyValue | VerifyProofReply> {
+  return new EventIterator((queue) => {
+    const sc = verifyKeyValuesProof(
+      cli,
+      path,
+      (err, reply) => {
+        if (err) {
+          queue.fail(err);
+          return;
+        }
+
+        queue.push(reply!);
+        queue.stop();
+      },
+      outputKeyValues ? queue.push : undefined,
+      dotGraphOutputPath
+    );
+
+    return sc.cancel;
+  });
 }

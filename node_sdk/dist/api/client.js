@@ -107,7 +107,12 @@ class APIServiceClient extends api_grpc_pb_1.APIServiceClient {
     }
     verifyKeyValuesProof(arg1, arg2, arg3, arg4) {
         if (typeof arg1 === "string") {
-            return api_1.verifyKeyValuesProof(this, arg1, arg2, arg3, arg4);
+            if (typeof arg2 === "function") {
+                return api_1.verifyKeyValuesProof(this, arg1, arg2, arg3, arg4);
+            }
+            else {
+                return api_1.verifyKeyValuesProofPromise(this, arg1, arg2, arg3);
+            }
         }
         return super.verifyKeyValuesProof(arg1, arg2);
     }

@@ -27,6 +27,7 @@ import {
   createKeyValuesProof,
   verifyTrieProof,
   verifyKeyValuesProof,
+  verifyKeyValuesProofPromise,
 } from "./api";
 
 declare module "../protos/api/api_pb" {
@@ -317,6 +318,11 @@ export class APIServiceClient extends Client {
 
   verifyKeyValuesProof(
     path: string,
+    outputKeyValues?: boolean,
+    dotGraphOutputPath?: string
+  ): AsyncIterable<KeyValue | VerifyProofReply>;
+  verifyKeyValuesProof(
+    path: string,
     callback: grpc.requestCallback<VerifyProofReply>,
     onKeyValue?: (kv: KeyValue) => void,
     dotGraphOutputPath?: string
@@ -330,7 +336,11 @@ export class APIServiceClient extends Client {
   ): grpc.ClientDuplexStream<DataChunk, VerifyProofReplyChunk>;
   verifyKeyValuesProof(arg1: any, arg2?: any, arg3?: any, arg4?: any): any {
     if (typeof arg1 === "string") {
-      return verifyKeyValuesProof(this, arg1, arg2, arg3, arg4);
+      if (typeof arg2 === "function") {
+        return verifyKeyValuesProof(this, arg1, arg2, arg3, arg4);
+      } else {
+        return verifyKeyValuesProofPromise(this, arg1, arg2, arg3);
+      }
     }
 
     return super.verifyKeyValuesProof(arg1, arg2);

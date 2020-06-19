@@ -37,6 +37,7 @@
     "@types/google-protobuf": "^3.7.2",
     "@types/lodash": "^4.14.154",
     "@types/node": "^14.0.6",
+    "event-iterator": "^2.0.0",
     "google-protobuf": "^3.12.2",
     "grpc": "npm:@grpc/grpc-js@^1.0.4",
     "lodash": "^4.17.15",

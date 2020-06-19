@@ -11,3 +11,4 @@ export declare function setTrieKeyValues(cli: APIServiceClient, id: string, root
 export declare function createKeyValuesProof(cli: APIServiceClient, trieId: string, proofId: string, filter: KeyValuesFilter | null, outputPath: string, callback: grpc.requestCallback<undefined>): SurfaceCall;
 export declare function verifyTrieProof(cli: APIServiceClient, trieId: string, proofId: string, callback: grpc.requestCallback<VerifyProofReply>, onKeyValue?: (kv: KeyValue) => void, dotGraphOutputPath?: string): SurfaceCall;
 export declare function verifyKeyValuesProof(cli: APIServiceClient, path: string, callback: grpc.requestCallback<VerifyProofReply>, onKeyValue?: (kv: KeyValue) => void, dotGraphOutputPath?: string): SurfaceCall;
+export declare function verifyKeyValuesProofPromise(cli: APIServiceClient, path: string, outputKeyValues?: boolean, dotGraphOutputPath?: string): AsyncIterable<KeyValue | VerifyProofReply>;

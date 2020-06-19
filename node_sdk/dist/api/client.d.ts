@@ -66,6 +66,7 @@ export declare class APIServiceClient extends Client {
     verifyTrieProof(trieId: string, proofId: string, callback: grpc.requestCallback<VerifyProofReply>, onKeyValue?: (kv: KeyValue) => void, dotGraphOutputPath?: string): SurfaceCall;
     verifyTrieProof(argument: VerifyTrieProofRequest, metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null): grpc.ClientReadableStream<VerifyProofReplyChunk>;
     verifyTrieProof(argument: VerifyTrieProofRequest, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): grpc.ClientReadableStream<VerifyProofReplyChunk>;
+    verifyKeyValuesProof(path: string, outputKeyValues?: boolean, dotGraphOutputPath?: string): AsyncIterable<KeyValue | VerifyProofReply>;
     verifyKeyValuesProof(path: string, callback: grpc.requestCallback<VerifyProofReply>, onKeyValue?: (kv: KeyValue) => void, dotGraphOutputPath?: string): SurfaceCall;
     verifyKeyValuesProof(metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null): grpc.ClientDuplexStream<DataChunk, VerifyProofReplyChunk>;
     verifyKeyValuesProof(metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): grpc.ClientDuplexStream<DataChunk, VerifyProofReplyChunk>;

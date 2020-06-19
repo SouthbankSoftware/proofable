@@ -152,61 +152,12 @@ const cleanup = (id: string) => {
 //   "subtest.dot"
 // );
 
-client.createTrie((err, value) => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-
-  let trie = value!;
-
-  console.log("created trie");
-  console.log(trie.toObject());
-
-  cleanup(trie.getId());
-
-  // client.setTrieKeyValues(
-  //   trie.getId(),
-  //   "",
-  //   [KeyValue.from("key1", "val1"), KeyValue.from("key2", "val2")],
-  //   (err, value) => {
-  //     if (err) {
-  //       console.error(err);
-  //       cleanup(trie.getId());
-  //       return;
-  //     }
-
-  //     trie = value!;
-
-  //     console.log("updated trie");
-  //     console.log(trie.toObject());
-
-  //     client
-  //       .getTrieKeyValues(
-  //         TrieKeyValuesRequest.from(trie.getId(), trie.getRoot())
-  //       )
-  //       .on("data", (kv: KeyValue) => {
-  //         console.log(kv.to());
-  //       })
-  //       .on("error", () => {
-  //         cleanup(trie.getId());
-  //       });
-  //   }
-  // );
-});
-
 (async () => {
-  let trie;
-
-  try {
-    trie = await client.createTrie();
-  } catch (err) {
-    console.error(err);
-    return;
+  for await (const val of client.verifyKeyValuesProof(
+    "test.subproofable",
+    true,
+    "subtest.dot"
+  )) {
+    console.log(val.toObject());
   }
-
-  console.log("created trie");
-  console.log(trie.toObject());
-
-  cleanup(trie.getId());
 })();

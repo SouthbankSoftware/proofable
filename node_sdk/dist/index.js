@@ -27,6 +27,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const grpc = __importStar(require("grpc"));
 const api_1 = require("./api");
@@ -146,52 +153,20 @@ const cleanup = (id) => {
 //   },
 //   "subtest.dot"
 // );
-client.createTrie((err, value) => {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    let trie = value;
-    console.log("created trie");
-    console.log(trie.toObject());
-    cleanup(trie.getId());
-    // client.setTrieKeyValues(
-    //   trie.getId(),
-    //   "",
-    //   [KeyValue.from("key1", "val1"), KeyValue.from("key2", "val2")],
-    //   (err, value) => {
-    //     if (err) {
-    //       console.error(err);
-    //       cleanup(trie.getId());
-    //       return;
-    //     }
-    //     trie = value!;
-    //     console.log("updated trie");
-    //     console.log(trie.toObject());
-    //     client
-    //       .getTrieKeyValues(
-    //         TrieKeyValuesRequest.from(trie.getId(), trie.getRoot())
-    //       )
-    //       .on("data", (kv: KeyValue) => {
-    //         console.log(kv.to());
-    //       })
-    //       .on("error", () => {
-    //         cleanup(trie.getId());
-    //       });
-    //   }
-    // );
-});
 (() => __awaiter(void 0, void 0, void 0, function* () {
-    let trie;
+    var e_1, _a;
     try {
-        trie = yield client.createTrie();
+        for (var _b = __asyncValues(client.verifyKeyValuesProof("test.subproofable", true, "subtest.dot")), _c; _c = yield _b.next(), !_c.done;) {
+            const val = _c.value;
+            console.log(val.toObject());
+        }
     }
-    catch (err) {
-        console.error(err);
-        return;
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try {
+            if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+        }
+        finally { if (e_1) throw e_1.error; }
     }
-    console.log("created trie");
-    console.log(trie.toObject());
-    cleanup(trie.getId());
 }))();
 //# sourceMappingURL=index.js.map

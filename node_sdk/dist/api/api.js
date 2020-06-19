@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyKeyValuesProof = exports.verifyTrieProof = exports.createKeyValuesProof = exports.setTrieKeyValues = exports.exportTrie = exports.importTrie = exports.deleteTrie = exports.createTriePromise = exports.createTrie = void 0;
+exports.verifyKeyValuesProofPromise = exports.verifyKeyValuesProof = exports.verifyTrieProof = exports.createKeyValuesProof = exports.setTrieKeyValues = exports.exportTrie = exports.importTrie = exports.deleteTrie = exports.createTriePromise = exports.createTrie = void 0;
 const lodash_1 = __importDefault(require("lodash"));
 const fs_1 = __importDefault(require("fs"));
 const empty_pb_1 = require("google-protobuf/google/protobuf/empty_pb");
+const event_iterator_1 = require("event-iterator");
 const api_1 = require("../protos/api");
 function createTrie(cli, callback) {
     return cli.createTrie(new empty_pb_1.Empty(), callback);
@@ -152,4 +153,18 @@ function verifyKeyValuesProof(cli, path, callback, onKeyValue, dotGraphOutputPat
     return stream;
 }
 exports.verifyKeyValuesProof = verifyKeyValuesProof;
+function verifyKeyValuesProofPromise(cli, path, outputKeyValues = false, dotGraphOutputPath) {
+    return new event_iterator_1.EventIterator((queue) => {
+        const sc = verifyKeyValuesProof(cli, path, (err, reply) => {
+            if (err) {
+                queue.fail(err);
+                return;
+            }
+            queue.push(reply);
+            queue.stop();
+        }, outputKeyValues ? queue.push : undefined, dotGraphOutputPath);
+        return sc.cancel;
+    });
+}
+exports.verifyKeyValuesProofPromise = verifyKeyValuesProofPromise;
 //# sourceMappingURL=api.js.map
