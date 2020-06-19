@@ -3,7 +3,7 @@ import fs from "fs";
 import * as grpc from "grpc";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { SurfaceCall } from "grpc/build/src/call";
-import { EventIterator, stream } from "event-iterator";
+import { EventIterator } from "event-iterator";
 import { APIServiceClient } from "./client";
 import {
   pipeFromReadableStream,
@@ -20,33 +20,17 @@ import {
   VerifyTrieProofRequest,
   VerifyKeyValuesProofRequest,
   TrieKeyValuesRequest,
+  RootFilter,
+  TrieProof,
+  TrieProofRequest,
+  TrieProofsRequest,
+  TrieRoot,
+  TrieRootsRequest,
 } from "../protos/api";
+import { grpcClientReadableStreamToAsyncIterator } from "./util";
 
-export function createTrie(
-  cli: APIServiceClient,
-  callback: grpc.requestCallback<Trie>
-): SurfaceCall {
-  return cli.createTrie(new Empty(), callback);
-}
-
-export async function createTriePromise(cli: APIServiceClient): Promise<Trie> {
-  return new Promise((resolve, reject) => {
-    createTrie(cli, (err, value) => {
-      if (err) {
-        reject(err);
-      }
-
-      resolve(value);
-    });
-  });
-}
-
-export function deleteTrie(
-  cli: APIServiceClient,
-  id: string,
-  callback: grpc.requestCallback<Trie>
-): SurfaceCall {
-  return cli.deleteTrie(TrieRequest.from(id), callback);
+export function getTriesPromise(cli: APIServiceClient): AsyncIterable<Trie> {
+  return grpcClientReadableStreamToAsyncIterator(cli.getTries(new Empty()));
 }
 
 export function importTrie(
@@ -90,6 +74,22 @@ export function importTrie(
   return stream;
 }
 
+export function importTriePromise(
+  cli: APIServiceClient,
+  id: string,
+  path: string
+): Promise<Trie> {
+  return new Promise((resolve, reject) => {
+    importTrie(cli, id, path, (err, value) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve(value);
+    });
+  });
+}
+
 export function exportTrie(
   cli: APIServiceClient,
   id: string,
@@ -105,6 +105,59 @@ export function exportTrie(
   });
 
   return stream;
+}
+
+export function exportTriePromise(
+  cli: APIServiceClient,
+  id: string,
+  outputPath: string
+): Promise<undefined> {
+  return new Promise((resolve, reject) => {
+    exportTrie(cli, id, outputPath, (err) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve();
+    });
+  });
+}
+
+export function createTrie(
+  cli: APIServiceClient,
+  callback: grpc.requestCallback<Trie>
+): SurfaceCall {
+  return cli.createTrie(new Empty(), callback);
+}
+
+export function createTriePromise(cli: APIServiceClient): Promise<Trie> {
+  return new Promise((resolve, reject) => {
+    createTrie(cli, (err, value) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve(value);
+    });
+  });
+}
+
+export function deleteTrie(
+  cli: APIServiceClient,
+  id: string,
+  callback: grpc.requestCallback<Trie>
+): SurfaceCall {
+  return cli.deleteTrie(TrieRequest.from(id), callback);
+}
+
+export function getTrieKeyValuesPromise(
+  cli: APIServiceClient,
+  id: string,
+  root: string
+): AsyncIterable<KeyValue> {
+  return grpcClientReadableStreamToAsyncIterator(
+    cli.getTrieKeyValues(TrieKeyValuesRequest.from(id, root))
+  );
 }
 
 export function setTrieKeyValues(
@@ -131,6 +184,115 @@ export function setTrieKeyValues(
   stream.end();
 
   return stream;
+}
+
+export function setTrieKeyValuesPromise(
+  cli: APIServiceClient,
+  id: string,
+  root: string,
+  iter: Iterable<KeyValue>
+): Promise<Trie> {
+  return new Promise((resolve, reject) => {
+    cli.setTrieKeyValues(id, root, iter, (err, value) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve(value);
+    });
+  });
+}
+
+export function getTrieRootsPromise(
+  cli: APIServiceClient,
+  id: string,
+  filter: RootFilter | null
+): AsyncIterable<TrieRoot> {
+  return grpcClientReadableStreamToAsyncIterator(
+    cli.getTrieRoots(TrieRootsRequest.from(id, filter ?? undefined))
+  );
+}
+
+export function getTrieProofsPromise(
+  cli: APIServiceClient,
+  id: string,
+  filter: RootFilter | null
+): AsyncIterable<TrieProof> {
+  return grpcClientReadableStreamToAsyncIterator(
+    cli.getTrieProofs(TrieProofsRequest.from(id, filter ?? undefined))
+  );
+}
+
+export function subscribeTrieProofPromise(
+  cli: APIServiceClient,
+  id: string,
+  proofId: string,
+  filter: RootFilter | null
+): AsyncIterable<TrieProof> {
+  return grpcClientReadableStreamToAsyncIterator(
+    cli.subscribeTrieProof(
+      TrieProofRequest.from(id, proofId, filter ?? undefined)
+    )
+  );
+}
+
+export function verifyTrieProof(
+  cli: APIServiceClient,
+  trieId: string,
+  proofId: string,
+  callback: grpc.requestCallback<VerifyProofReply>,
+  onKeyValue?: (kv: KeyValue) => void,
+  dotGraphOutputPath?: string
+): SurfaceCall {
+  const request = new VerifyTrieProofRequest();
+
+  request.setTrieId(trieId);
+  request.setProofId(proofId);
+  onKeyValue && request.setOutputKeyValues(true);
+  dotGraphOutputPath && request.setOutputDotGraph(true);
+
+  const stream = cli.verifyTrieProof(request);
+
+  const rs = new VerifyProofReplyStream(stream, callback, onKeyValue);
+
+  if (dotGraphOutputPath) {
+    const outFile = fs.createWriteStream(dotGraphOutputPath);
+
+    pipeToWritableStream(rs.dataStream, outFile, undefined, () => {
+      outFile.end();
+    });
+  }
+
+  return stream;
+}
+
+export function verifyTrieProofPromise(
+  cli: APIServiceClient,
+  trieId: string,
+  proofId: string,
+  outputKeyValues = false,
+  dotGraphOutputPath?: string
+): AsyncIterable<KeyValue | VerifyProofReply> {
+  return new EventIterator((queue) => {
+    const sc = verifyTrieProof(
+      cli,
+      trieId,
+      proofId,
+      (err, reply) => {
+        if (err) {
+          queue.fail(err);
+          return;
+        }
+
+        queue.push(reply!);
+        queue.stop();
+      },
+      outputKeyValues ? queue.push : undefined,
+      dotGraphOutputPath
+    );
+
+    return sc.cancel;
+  });
 }
 
 export function createKeyValuesProof(
@@ -167,36 +329,6 @@ export function createKeyValuesProof(
     outFile.end();
     callback(err as grpc.ServiceError | null);
   });
-
-  return stream;
-}
-
-export function verifyTrieProof(
-  cli: APIServiceClient,
-  trieId: string,
-  proofId: string,
-  callback: grpc.requestCallback<VerifyProofReply>,
-  onKeyValue?: (kv: KeyValue) => void,
-  dotGraphOutputPath?: string
-): SurfaceCall {
-  const request = new VerifyTrieProofRequest();
-
-  request.setTrieId(trieId);
-  request.setProofId(proofId);
-  onKeyValue && request.setOutputKeyValues(true);
-  dotGraphOutputPath && request.setOutputDotGraph(true);
-
-  const stream = cli.verifyTrieProof(request);
-
-  const rs = new VerifyProofReplyStream(stream, callback, onKeyValue);
-
-  if (dotGraphOutputPath) {
-    const outFile = fs.createWriteStream(dotGraphOutputPath);
-
-    pipeToWritableStream(rs.dataStream, outFile, undefined, () => {
-      outFile.end();
-    });
-  }
 
   return stream;
 }

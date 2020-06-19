@@ -1,3 +1,5 @@
+import * as grpc from "grpc";
+import { EventIterator } from "event-iterator";
 import { KeyValue } from "../protos/api/api_pb";
 
 /**
@@ -21,4 +23,21 @@ export function stripCompoundKeyAnchorTriePart(kv: KeyValue): KeyValue {
   kv.setKeySepList(ks.slice(ANCHOR_KEY_SEP_LEN));
 
   return kv;
+}
+
+export function grpcClientReadableStreamToAsyncIterator<T>(
+  stream: grpc.ClientReadableStream<T>
+): AsyncIterable<T> {
+  return new EventIterator((queue) => {
+    stream.addListener("data", queue.push);
+    stream.addListener("close", queue.stop);
+    stream.addListener("error", queue.fail);
+
+    return () => {
+      stream.removeListener("data", queue.push);
+      stream.removeListener("close", queue.stop);
+      stream.removeListener("error", queue.fail);
+      stream.destroy();
+    };
+  });
 }

@@ -153,11 +153,36 @@ const cleanup = (id: string) => {
 // );
 
 (async () => {
-  for await (const val of client.verifyKeyValuesProof(
-    "test.subproofable",
-    true,
-    "subtest.dot"
-  )) {
-    console.log(val.toObject());
+  try {
+    // for await (const val of client.verifyKeyValuesProof(
+    //   "test.subproofable",
+    //   true,
+    //   "subtest.dot"
+    // )) {
+    //   console.log(val.toObject());
+    // }
+    // const trie = await client.createTrie();
+    // for await (const val of client.getTries()) {
+    //   console.log(val.toObject());
+    // }
+    // cleanup(trie.getId());
+
+    let trie = await client.createTrie();
+
+    trie = await client.setTrieKeyValues(trie.getId(), trie.getRoot(), [
+      KeyValue.from("key1", "value1"),
+      KeyValue.from("key2", "value2"),
+    ]);
+
+    for await (const val of client.getTrieKeyValues(
+      trie.getId(),
+      trie.getRoot()
+    )) {
+      console.log(val.to());
+    }
+
+    cleanup(trie.getId());
+  } catch (e) {
+    console.error(e);
   }
 })();

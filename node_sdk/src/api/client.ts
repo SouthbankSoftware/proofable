@@ -16,16 +16,31 @@ import {
   VerifyProofReplyChunk,
   TrieKeyValueRequest,
   TrieKeyValuesRequest,
+  TrieProofRequest,
+  TrieProofsRequest,
+  TrieProof,
+  RootFilter,
+  TrieRootsRequest,
+  TrieRoot,
 } from "../protos/api/api_pb";
 import {
+  getTriesPromise,
+  importTrie,
+  importTriePromise,
+  exportTrie,
+  exportTriePromise,
   createTrie,
   createTriePromise,
   deleteTrie,
-  importTrie,
-  exportTrie,
+  getTrieKeyValuesPromise,
   setTrieKeyValues,
-  createKeyValuesProof,
+  setTrieKeyValuesPromise,
+  getTrieRootsPromise,
+  getTrieProofsPromise,
+  subscribeTrieProofPromise,
   verifyTrieProof,
+  verifyTrieProofPromise,
+  createKeyValuesProof,
   verifyKeyValuesProof,
   verifyKeyValuesProofPromise,
 } from "./api";
@@ -41,6 +56,22 @@ declare module "../protos/api/api_pb" {
 
   namespace TrieKeyValuesRequest {
     function from(id: string, root: string): TrieKeyValuesRequest;
+  }
+
+  namespace TrieProofRequest {
+    function from(
+      id: string,
+      proofId: string,
+      filter?: RootFilter
+    ): TrieProofRequest;
+  }
+
+  namespace TrieProofsRequest {
+    function from(id: string, filter?: RootFilter): TrieProofsRequest;
+  }
+
+  namespace TrieRootsRequest {
+    function from(id: string, filter?: RootFilter): TrieRootsRequest;
   }
 
   namespace Key {
@@ -94,6 +125,34 @@ TrieKeyValuesRequest.from = (id, root) => {
   return r;
 };
 
+TrieProofRequest.from = (id, proofId, filter) => {
+  const r = new TrieProofRequest();
+
+  r.setTrieId(id);
+  r.setProofId(proofId);
+  r.setRootFilter(filter);
+
+  return r;
+};
+
+TrieProofsRequest.from = (id, filter) => {
+  const r = new TrieProofsRequest();
+
+  r.setTrieId(id);
+  r.setRootFilter(filter);
+
+  return r;
+};
+
+TrieRootsRequest.from = (id, filter) => {
+  const r = new TrieRootsRequest();
+
+  r.setTrieId(id);
+  r.setRootFilter(filter);
+
+  return r;
+};
+
 Key.from = (key: string, keyEncoding) => {
   const k = new Key();
 
@@ -119,6 +178,88 @@ KeyValue.prototype.to = function (keyEncoding, valEncoding) {
 };
 
 export class APIServiceClient extends Client {
+  getTries(): AsyncIterable<Trie>;
+  getTries(
+    argument: Empty,
+    metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
+  ): grpc.ClientReadableStream<Trie>;
+  getTries(
+    argument: Empty,
+    metadata?: grpc.Metadata | null,
+    options?: grpc.CallOptions | null
+  ): grpc.ClientReadableStream<Trie>;
+  getTries(arg1?: any, arg2?: any, arg3?: any): any {
+    if (!arg1) {
+      return getTriesPromise(this);
+    }
+
+    return super.getTries(arg1, arg2, arg3);
+  }
+
+  /**
+   * Imports the trie data and creates a new trie. If `id` is zero, a new trie ID will be generated,
+   * which is recommended when importing
+   */
+  importTrie(id: string, path: string): Promise<Trie>;
+  importTrie(
+    id: string,
+    path: string,
+    callback: grpc.requestCallback<Trie>
+  ): SurfaceCall;
+  importTrie(
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientWritableStream<DataChunk>;
+  importTrie(
+    metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientWritableStream<DataChunk>;
+  importTrie(
+    metadata: grpc.Metadata | null,
+    options: grpc.CallOptions | null,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientWritableStream<DataChunk>;
+  importTrie(arg1: any, arg2?: any, arg3?: any): any {
+    if (typeof arg1 === "string") {
+      if (typeof arg3 === "function") {
+        return importTrie(this, arg1, arg2, arg3);
+      }
+
+      return importTriePromise(this, arg1, arg2);
+    }
+
+    return super.importTrie(arg1, arg2, arg3);
+  }
+
+  /**
+   * Exports the given trie
+   */
+  exportTrie(id: string, outputPath: string): Promise<undefined>;
+  exportTrie(
+    id: string,
+    outputPath: string,
+    callback: grpc.requestCallback<undefined>
+  ): SurfaceCall;
+  exportTrie(
+    argument: TrieRequest,
+    metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
+  ): grpc.ClientReadableStream<DataChunk>;
+  exportTrie(
+    argument: TrieRequest,
+    metadata?: grpc.Metadata | null,
+    options?: grpc.CallOptions | null
+  ): grpc.ClientReadableStream<DataChunk>;
+  exportTrie(arg1: any, arg2?: any, arg3?: any): any {
+    if (typeof arg1 === "string") {
+      if (typeof arg3 === "function") {
+        return exportTrie(this, arg1, arg2, arg3);
+      }
+
+      return exportTriePromise(this, arg1, arg2);
+    }
+
+    return super.exportTrie(arg1, arg2, arg3);
+  }
+
   /**
    * Creates a new trie
    */
@@ -176,60 +317,29 @@ export class APIServiceClient extends Client {
     return super.deleteTrie(arg1, arg2, arg3, arg4);
   }
 
-  /**
-   * Imports the trie data and creates a new trie. If `id` is zero, a new trie ID will be generated,
-   * which is recommended when importing
-   */
-  importTrie(
-    id: string,
-    path: string,
-    callback: grpc.requestCallback<Trie>
-  ): SurfaceCall;
-  importTrie(
-    callback: grpc.requestCallback<Trie>
-  ): grpc.ClientWritableStream<DataChunk>;
-  importTrie(
-    metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
-    callback: grpc.requestCallback<Trie>
-  ): grpc.ClientWritableStream<DataChunk>;
-  importTrie(
-    metadata: grpc.Metadata | null,
-    options: grpc.CallOptions | null,
-    callback: grpc.requestCallback<Trie>
-  ): grpc.ClientWritableStream<DataChunk>;
-  importTrie(arg1: any, arg2?: any, arg3?: any): any {
-    if (typeof arg1 === "string") {
-      return importTrie(this, arg1, arg2, arg3);
-    }
-
-    return super.importTrie(arg1, arg2, arg3);
-  }
-
-  /**
-   * Exports the given trie
-   */
-  exportTrie(
-    id: string,
-    outputPath: string,
-    callback: grpc.requestCallback<undefined>
-  ): SurfaceCall;
-  exportTrie(
-    argument: TrieRequest,
+  getTrieKeyValues(id: string, root: string): AsyncIterable<KeyValue>;
+  getTrieKeyValues(
+    argument: TrieKeyValuesRequest,
     metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
-  ): grpc.ClientReadableStream<DataChunk>;
-  exportTrie(
-    argument: TrieRequest,
+  ): grpc.ClientReadableStream<KeyValue>;
+  getTrieKeyValues(
+    argument: TrieKeyValuesRequest,
     metadata?: grpc.Metadata | null,
     options?: grpc.CallOptions | null
-  ): grpc.ClientReadableStream<DataChunk>;
-  exportTrie(arg1: any, arg2?: any, arg3?: any): any {
+  ): grpc.ClientReadableStream<KeyValue>;
+  getTrieKeyValues(arg1: any, arg2: any, arg3?: any): any {
     if (typeof arg1 === "string") {
-      return exportTrie(this, arg1, arg2, arg3);
+      return getTrieKeyValuesPromise(this, arg1, arg2);
     }
 
-    return super.exportTrie(arg1, arg2, arg3);
+    return super.getTrieKeyValues(arg1, arg2, arg3);
   }
 
+  setTrieKeyValues(
+    id: string,
+    root: string,
+    iter: Iterable<KeyValue>
+  ): Promise<Trie>;
   setTrieKeyValues(
     id: string,
     root: string,
@@ -250,10 +360,115 @@ export class APIServiceClient extends Client {
   ): grpc.ClientWritableStream<KeyValue>;
   setTrieKeyValues(arg1: any, arg2?: any, arg3?: any, arg4?: any): any {
     if (typeof arg1 === "string") {
-      return setTrieKeyValues(this, arg1, arg2, arg3, arg4);
+      if (typeof arg4 === "function") {
+        return setTrieKeyValues(this, arg1, arg2, arg3, arg4);
+      }
+
+      return setTrieKeyValuesPromise(this, arg1, arg2, arg3);
     }
 
     return super.setTrieKeyValues(arg1, arg2, arg3);
+  }
+
+  getTrieRoots(id: string, filter: RootFilter | null): AsyncIterable<TrieRoot>;
+  getTrieRoots(
+    argument: TrieRootsRequest,
+    metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
+  ): grpc.ClientReadableStream<TrieRoot>;
+  getTrieRoots(
+    argument: TrieRootsRequest,
+    metadata?: grpc.Metadata | null,
+    options?: grpc.CallOptions | null
+  ): grpc.ClientReadableStream<TrieRoot>;
+  getTrieRoots(arg1: any, arg2: any, arg3?: any): any {
+    if (typeof arg1 === "string") {
+      return getTrieRootsPromise(this, arg1, arg2);
+    }
+
+    return super.getTrieRoots(arg1, arg2, arg3);
+  }
+
+  getTrieProofs(
+    id: string,
+    filter: RootFilter | null
+  ): AsyncIterable<TrieProof>;
+  getTrieProofs(
+    argument: TrieProofsRequest,
+    metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
+  ): grpc.ClientReadableStream<TrieProof>;
+  getTrieProofs(
+    argument: TrieProofsRequest,
+    metadata?: grpc.Metadata | null,
+    options?: grpc.CallOptions | null
+  ): grpc.ClientReadableStream<TrieProof>;
+  getTrieProofs(arg1: any, arg2: any, arg3?: any): any {
+    if (typeof arg1 === "string") {
+      return getTrieProofsPromise(this, arg1, arg2);
+    }
+
+    return super.getTrieProofs(arg1, arg2, arg3);
+  }
+
+  subscribeTrieProof(
+    id: string,
+    proofId: string,
+    filter: RootFilter | null
+  ): AsyncIterable<TrieProof>;
+  subscribeTrieProof(
+    argument: TrieProofRequest,
+    metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
+  ): grpc.ClientReadableStream<TrieProof>;
+  subscribeTrieProof(
+    argument: TrieProofRequest,
+    metadata?: grpc.Metadata | null,
+    options?: grpc.CallOptions | null
+  ): grpc.ClientReadableStream<TrieProof>;
+  subscribeTrieProof(arg1: any, arg2: any, arg3?: any): any {
+    if (typeof arg1 === "string") {
+      return subscribeTrieProofPromise(this, arg1, arg2, arg3);
+    }
+
+    return super.subscribeTrieProof(arg1, arg2, arg3);
+  }
+
+  verifyTrieProof(
+    trieId: string,
+    proofId: string,
+    outputKeyValues?: boolean,
+    dotGraphOutputPath?: string
+  ): AsyncIterable<KeyValue | VerifyProofReply>;
+  verifyTrieProof(
+    trieId: string,
+    proofId: string,
+    callback: grpc.requestCallback<VerifyProofReply>,
+    onKeyValue?: (kv: KeyValue) => void,
+    dotGraphOutputPath?: string
+  ): SurfaceCall;
+  verifyTrieProof(
+    argument: VerifyTrieProofRequest,
+    metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
+  ): grpc.ClientReadableStream<VerifyProofReplyChunk>;
+  verifyTrieProof(
+    argument: VerifyTrieProofRequest,
+    metadata?: grpc.Metadata | null,
+    options?: grpc.CallOptions | null
+  ): grpc.ClientReadableStream<VerifyProofReplyChunk>;
+  verifyTrieProof(
+    arg1: any,
+    arg2: any,
+    arg3?: any,
+    arg4?: any,
+    arg5?: any
+  ): any {
+    if (typeof arg1 === "string") {
+      if (typeof arg3 === "function") {
+        return verifyTrieProof(this, arg1, arg2, arg3, arg4, arg5);
+      }
+
+      return verifyTrieProofPromise(this, arg1, arg2, arg3, arg4);
+    }
+
+    return super.verifyTrieProof(arg1, arg2, arg3);
   }
 
   createKeyValuesProof(
@@ -284,36 +499,6 @@ export class APIServiceClient extends Client {
     }
 
     return super.createKeyValuesProof(arg1, arg2, arg3);
-  }
-
-  verifyTrieProof(
-    trieId: string,
-    proofId: string,
-    callback: grpc.requestCallback<VerifyProofReply>,
-    onKeyValue?: (kv: KeyValue) => void,
-    dotGraphOutputPath?: string
-  ): SurfaceCall;
-  verifyTrieProof(
-    argument: VerifyTrieProofRequest,
-    metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
-  ): grpc.ClientReadableStream<VerifyProofReplyChunk>;
-  verifyTrieProof(
-    argument: VerifyTrieProofRequest,
-    metadata?: grpc.Metadata | null,
-    options?: grpc.CallOptions | null
-  ): grpc.ClientReadableStream<VerifyProofReplyChunk>;
-  verifyTrieProof(
-    arg1: any,
-    arg2: any,
-    arg3?: any,
-    arg4?: any,
-    arg5?: any
-  ): any {
-    if (typeof arg1 === "string") {
-      return verifyTrieProof(this, arg1, arg2, arg3, arg4, arg5);
-    }
-
-    return super.verifyTrieProof(arg1, arg2, arg3);
   }
 
   verifyKeyValuesProof(
