@@ -45,6 +45,8 @@ export namespace Anchor {
     BTC: 1;
     BTC_MAINNET: 5;
     CHP: 2;
+    HEDERA: 6;
+    HEDERA_MAINNET: 7;
   }
 
   export const Type: TypeMap;

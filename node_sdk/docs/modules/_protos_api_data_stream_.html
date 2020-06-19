@@ -38,8 +38,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
 							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
@@ -107,7 +105,7 @@
 					<div class="tsd-signature tsd-kind-icon">Cleanup<wbr>Fn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ServiceError</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/3f08c92/node_sdk/src/protos/api/data_stream.ts#L8">src/protos/api/data_stream.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/b338882/node_sdk/src/protos/api/data_stream.ts#L8">src/protos/api/data_stream.ts:8</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -138,7 +136,7 @@
 					<div class="tsd-signature tsd-kind-icon">Writable<wbr>Data<wbr>Stream&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">grpc.ClientWritableStream</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/3f08c92/node_sdk/src/protos/api/data_stream.ts#L19">src/protos/api/data_stream.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/b338882/node_sdk/src/protos/api/data_stream.ts#L19">src/protos/api/data_stream.ts:19</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -157,7 +155,7 @@
 					<div class="tsd-signature tsd-kind-icon">MAX_<wbr>DATA_<wbr>CHUNK_<wbr>SIZE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">1024</span><span class="tsd-signature-symbol"> = 1024</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/3f08c92/node_sdk/src/protos/api/data_stream.ts#L24">src/protos/api/data_stream.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/b338882/node_sdk/src/protos/api/data_stream.ts#L24">src/protos/api/data_stream.ts:24</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -173,13 +171,13 @@
 					<a name="pipefromreadablestream" class="tsd-anchor"></a>
 					<h3>pipe<wbr>From<wbr>Readable<wbr>Stream</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">pipe<wbr>From<wbr>Readable<wbr>Stream<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readable</span>, to<span class="tsd-signature-symbol">: </span><a href="_protos_api_data_stream_.html#writabledatastream" class="tsd-signature-type">WritableDataStream</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DataChunk</span><span class="tsd-signature-symbol">&gt;</span>, onFirstDataChunk<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>dc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataChunk</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span>, onEnd<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ServiceError</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_protos_api_data_stream_.html#cleanupfn" class="tsd-signature-type">CleanupFn</a></li>
+						<li class="tsd-signature tsd-kind-icon">pipe<wbr>From<wbr>Readable<wbr>Stream<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readable</span>, to<span class="tsd-signature-symbol">: </span><a href="_protos_api_data_stream_.html#writabledatastream" class="tsd-signature-type">WritableDataStream</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_protos_api_api_pb_d_.datachunk.html" class="tsd-signature-type">DataChunk</a><span class="tsd-signature-symbol">&gt;</span>, onFirstDataChunk<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>dc<span class="tsd-signature-symbol">: </span><a href="../classes/_protos_api_api_pb_d_.datachunk.html" class="tsd-signature-type">DataChunk</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span>, onEnd<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ServiceError</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_protos_api_data_stream_.html#cleanupfn" class="tsd-signature-type">CleanupFn</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/3f08c92/node_sdk/src/protos/api/data_stream.ts#L35">src/protos/api/data_stream.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/b338882/node_sdk/src/protos/api/data_stream.ts#L35">src/protos/api/data_stream.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -193,10 +191,10 @@
 									<h5>from: <span class="tsd-signature-type">Readable</span></h5>
 								</li>
 								<li>
-									<h5>to: <a href="_protos_api_data_stream_.html#writabledatastream" class="tsd-signature-type">WritableDataStream</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DataChunk</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>to: <a href="_protos_api_data_stream_.html#writabledatastream" class="tsd-signature-type">WritableDataStream</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_protos_api_api_pb_d_.datachunk.html" class="tsd-signature-type">DataChunk</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onFirstDataChunk: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>dc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataChunk</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onFirstDataChunk: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>dc<span class="tsd-signature-symbol">: </span><a href="../classes/_protos_api_api_pb_d_.datachunk.html" class="tsd-signature-type">DataChunk</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>callback function when the first DataChunk is about to be generated. Use
 										this for setting any necessary metadata for this gRPC call</p>
@@ -219,13 +217,13 @@
 					<a name="pipetowritablestream" class="tsd-anchor"></a>
 					<h3>pipe<wbr>ToWritable<wbr>Stream</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">pipe<wbr>ToWritable<wbr>Stream<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><a href="../interfaces/_protos_api_data_stream_.readabledatastream.html" class="tsd-signature-type">ReadableDataStream</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DataChunk</span><span class="tsd-signature-symbol">&gt;</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writable</span>, onFirstDataChunk<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>dc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataChunk</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span>, onEnd<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ServiceError</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_protos_api_data_stream_.html#cleanupfn" class="tsd-signature-type">CleanupFn</a></li>
+						<li class="tsd-signature tsd-kind-icon">pipe<wbr>ToWritable<wbr>Stream<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><a href="../interfaces/_protos_api_data_stream_.readabledatastream.html" class="tsd-signature-type">ReadableDataStream</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_protos_api_api_pb_d_.datachunk.html" class="tsd-signature-type">DataChunk</a><span class="tsd-signature-symbol">&gt;</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Writable</span>, onFirstDataChunk<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>dc<span class="tsd-signature-symbol">: </span><a href="../classes/_protos_api_api_pb_d_.datachunk.html" class="tsd-signature-type">DataChunk</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span>, onEnd<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ServiceError</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_protos_api_data_stream_.html#cleanupfn" class="tsd-signature-type">CleanupFn</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/3f08c92/node_sdk/src/protos/api/data_stream.ts#L98">src/protos/api/data_stream.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/b338882/node_sdk/src/protos/api/data_stream.ts#L98">src/protos/api/data_stream.ts:98</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -236,13 +234,13 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>from: <a href="../interfaces/_protos_api_data_stream_.readabledatastream.html" class="tsd-signature-type">ReadableDataStream</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">DataChunk</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>from: <a href="../interfaces/_protos_api_data_stream_.readabledatastream.html" class="tsd-signature-type">ReadableDataStream</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_protos_api_api_pb_d_.datachunk.html" class="tsd-signature-type">DataChunk</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>to: <span class="tsd-signature-type">Writable</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onFirstDataChunk: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>dc<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataChunk</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onFirstDataChunk: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>dc<span class="tsd-signature-symbol">: </span><a href="../classes/_protos_api_api_pb_d_.datachunk.html" class="tsd-signature-type">DataChunk</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>callback function when the first DataChunk is received. Use
 										this to access any metadata in this gRPC call reply</p>
@@ -283,6 +281,21 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_protos_anchor_anchor_grpc_pb_d_.html">&quot;protos/anchor/anchor_<wbr>grpc_<wbr>pb.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_protos_anchor_anchor_pb_d_.html">&quot;protos/anchor/anchor_<wbr>pb.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_protos_anchor_index_.html">&quot;protos/anchor/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_protos_api_api_grpc_pb_d_.html">&quot;protos/api/api_<wbr>grpc_<wbr>pb.d&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_protos_api_api_pb_d_.html">&quot;protos/api/api_<wbr>pb.d&quot;</a>
 					</li>
 					<li class="current tsd-kind-module">
 						<a href="_protos_api_data_stream_.html">&quot;protos/api/data_<wbr>stream&quot;</a>
@@ -330,10 +343,12 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">

@@ -9,7 +9,7 @@
     "dev": "npm run build && npm start",
     "build": "tsc && cpx 'src/**/*.{js,d.ts}' dist",
     "clean": "rimraf ./dist rmdir",
-    "doc": "typedoc",
+    "doc": "rimraf ./docs && typedoc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

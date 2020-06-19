@@ -10,8 +10,10 @@
         "declaration": true
     },
     "typedocOptions": {
-        "mode": "modules",
-        "out": "docs"
+        "mode": "library",
+        "out": "docs",
+        "includeDeclarations": true,
+        "excludeExternals": true,
     },
     "lib": [
         "es2015"

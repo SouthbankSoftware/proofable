@@ -404,7 +404,9 @@ proto.anchor.Anchor.Type = {
   ETH_ELASTOS: 4,
   BTC: 1,
   BTC_MAINNET: 5,
-  CHP: 2
+  CHP: 2,
+  HEDERA: 6,
+  HEDERA_MAINNET: 7
 };
 
 /**

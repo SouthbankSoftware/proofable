@@ -2,47 +2,57 @@ import _ from "lodash";
 import * as grpc from "grpc";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { SurfaceCall } from "grpc/build/src/call";
-import { APIServiceClient as Client } from "../protos/api/api_grpc_pb";
 import {
-  Trie,
-  DataChunk,
-  TrieRequest,
+  APIServiceClient as Client,
   CreateKeyValuesProofRequest,
-  KeyValuesFilter,
-  VerifyProofReply,
+  CreateTrieProofRequest,
+  DataChunk,
   Key,
   KeyValue,
-  VerifyTrieProofRequest,
-  VerifyProofReplyChunk,
+  KeyValuesFilter,
+  RootFilter,
+  SetTrieRootRequest,
+  Trie,
   TrieKeyValueRequest,
   TrieKeyValuesRequest,
+  TrieProof,
   TrieProofRequest,
   TrieProofsRequest,
-  TrieProof,
-  RootFilter,
-  TrieRootsRequest,
+  TrieRequest,
   TrieRoot,
-} from "../protos/api/api_pb";
+  TrieRootsRequest,
+  VerifyProofReply,
+  VerifyProofReplyChunk,
+  VerifyTrieProofRequest,
+} from "../protos/api";
 import {
+  AnchorType,
+  createKeyValuesProof,
+  createKeyValuesProofPromise,
+  createTrie,
+  createTriePromise,
+  createTrieProofPromise,
+  deleteTrie,
+  deleteTriePromise,
+  exportTrie,
+  exportTriePromise,
+  getTrieKeyValuePromise,
+  getTrieKeyValuesPromise,
+  getTriePromise,
+  getTrieProofPromise,
+  getTrieProofsPromise,
+  getTrieRootsPromise,
   getTriesPromise,
   importTrie,
   importTriePromise,
-  exportTrie,
-  exportTriePromise,
-  createTrie,
-  createTriePromise,
-  deleteTrie,
-  getTrieKeyValuesPromise,
   setTrieKeyValues,
   setTrieKeyValuesPromise,
-  getTrieRootsPromise,
-  getTrieProofsPromise,
+  setTrieRootPromise,
   subscribeTrieProofPromise,
-  verifyTrieProof,
-  verifyTrieProofPromise,
-  createKeyValuesProof,
   verifyKeyValuesProof,
   verifyKeyValuesProofPromise,
+  verifyTrieProof,
+  verifyTrieProofPromise,
 } from "./api";
 
 declare module "../protos/api/api_pb" {
@@ -72,6 +82,18 @@ declare module "../protos/api/api_pb" {
 
   namespace TrieRootsRequest {
     function from(id: string, filter?: RootFilter): TrieRootsRequest;
+  }
+
+  namespace SetTrieRootRequest {
+    function from(id: string, root: string): SetTrieRootRequest;
+  }
+
+  namespace CreateTrieProofRequest {
+    function from(
+      id: string,
+      root: string,
+      anchorType?: AnchorType
+    ): CreateTrieProofRequest;
   }
 
   namespace Key {
@@ -153,6 +175,25 @@ TrieRootsRequest.from = (id, filter) => {
   return r;
 };
 
+SetTrieRootRequest.from = (id, root) => {
+  const r = new SetTrieRootRequest();
+
+  r.setTrieId(id);
+  r.setRoot(root);
+
+  return r;
+};
+
+CreateTrieProofRequest.from = (id, root, anchorType = 0) => {
+  const r = new CreateTrieProofRequest();
+
+  r.setTrieId(id);
+  r.setRoot(root);
+  r.setAnchorType(anchorType);
+
+  return r;
+};
+
 Key.from = (key: string, keyEncoding) => {
   const k = new Key();
 
@@ -196,6 +237,30 @@ export class APIServiceClient extends Client {
     return super.getTries(arg1, arg2, arg3);
   }
 
+  getTrie(id: string): Promise<Trie>;
+  getTrie(
+    argument: TrieRequest,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientUnaryCall;
+  getTrie(
+    argument: TrieRequest,
+    metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientUnaryCall;
+  getTrie(
+    argument: TrieRequest,
+    metadata: grpc.Metadata | null,
+    options: grpc.CallOptions | null,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientUnaryCall;
+  getTrie(arg1: any, arg2?: any, arg3?: any, arg4?: any): any {
+    if (typeof arg1 === "string") {
+      return getTriePromise(this, arg1);
+    }
+
+    return super.getTrie(arg1, arg2, arg3);
+  }
+
   /**
    * Imports the trie data and creates a new trie. If `id` is zero, a new trie ID will be generated,
    * which is recommended when importing
@@ -233,11 +298,11 @@ export class APIServiceClient extends Client {
   /**
    * Exports the given trie
    */
-  exportTrie(id: string, outputPath: string): Promise<undefined>;
+  exportTrie(id: string, outputPath: string): Promise<void>;
   exportTrie(
     id: string,
     outputPath: string,
-    callback: grpc.requestCallback<undefined>
+    callback: grpc.requestCallback<void>
   ): SurfaceCall;
   exportTrie(
     argument: TrieRequest,
@@ -293,6 +358,7 @@ export class APIServiceClient extends Client {
   /**
    * Deletes the given trie
    */
+  deleteTrie(id: string): Promise<Trie>;
   deleteTrie(id: string, callback: grpc.requestCallback<Trie>): SurfaceCall;
   deleteTrie(
     argument: TrieRequest,
@@ -309,9 +375,13 @@ export class APIServiceClient extends Client {
     options: grpc.CallOptions | null,
     callback: grpc.requestCallback<Trie>
   ): grpc.ClientUnaryCall;
-  deleteTrie(arg1: any, arg2: any, arg3?: any, arg4?: any): any {
+  deleteTrie(arg1: any, arg2?: any, arg3?: any, arg4?: any): any {
     if (typeof arg1 === "string") {
-      return deleteTrie(this, arg1, arg2);
+      if (typeof arg2 === "function") {
+        return deleteTrie(this, arg1, arg2);
+      }
+
+      return deleteTriePromise(this, arg1);
     }
 
     return super.deleteTrie(arg1, arg2, arg3, arg4);
@@ -370,6 +440,30 @@ export class APIServiceClient extends Client {
     return super.setTrieKeyValues(arg1, arg2, arg3);
   }
 
+  getTrieKeyValue(id: string, root: string, key: Key): Promise<KeyValue>;
+  getTrieKeyValue(
+    argument: TrieKeyValueRequest,
+    callback: grpc.requestCallback<KeyValue>
+  ): grpc.ClientUnaryCall;
+  getTrieKeyValue(
+    argument: TrieKeyValueRequest,
+    metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
+    callback: grpc.requestCallback<KeyValue>
+  ): grpc.ClientUnaryCall;
+  getTrieKeyValue(
+    argument: TrieKeyValueRequest,
+    metadata: grpc.Metadata | null,
+    options: grpc.CallOptions | null,
+    callback: grpc.requestCallback<KeyValue>
+  ): grpc.ClientUnaryCall;
+  getTrieKeyValue(arg1: any, arg2: any, arg3?: any, arg4?: any): any {
+    if (typeof arg1 === "string") {
+      return getTrieKeyValuePromise(this, arg1, arg2, arg3);
+    }
+
+    return super.getTrieKeyValue(arg1, arg2, arg3, arg4);
+  }
+
   getTrieRoots(id: string, filter: RootFilter | null): AsyncIterable<TrieRoot>;
   getTrieRoots(
     argument: TrieRootsRequest,
@@ -386,6 +480,30 @@ export class APIServiceClient extends Client {
     }
 
     return super.getTrieRoots(arg1, arg2, arg3);
+  }
+
+  setTrieRoot(id: string, root: string): Promise<Trie>;
+  setTrieRoot(
+    argument: SetTrieRootRequest,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientUnaryCall;
+  setTrieRoot(
+    argument: SetTrieRootRequest,
+    metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientUnaryCall;
+  setTrieRoot(
+    argument: SetTrieRootRequest,
+    metadata: grpc.Metadata | null,
+    options: grpc.CallOptions | null,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientUnaryCall;
+  setTrieRoot(arg1: any, arg2: any, arg3?: any, arg4?: any): any {
+    if (typeof arg1 === "string") {
+      return setTrieRootPromise(this, arg1, arg2);
+    }
+
+    return super.setTrieRoot(arg1, arg2, arg3, arg4);
   }
 
   getTrieProofs(
@@ -409,6 +527,34 @@ export class APIServiceClient extends Client {
     return super.getTrieProofs(arg1, arg2, arg3);
   }
 
+  getTrieProof(
+    id: string,
+    proofId: string,
+    filter: RootFilter | null
+  ): Promise<TrieProof>;
+  getTrieProof(
+    argument: TrieProofRequest,
+    callback: grpc.requestCallback<TrieProof>
+  ): grpc.ClientUnaryCall;
+  getTrieProof(
+    argument: TrieProofRequest,
+    metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
+    callback: grpc.requestCallback<TrieProof>
+  ): grpc.ClientUnaryCall;
+  getTrieProof(
+    argument: TrieProofRequest,
+    metadata: grpc.Metadata | null,
+    options: grpc.CallOptions | null,
+    callback: grpc.requestCallback<TrieProof>
+  ): grpc.ClientUnaryCall;
+  getTrieProof(arg1: any, arg2: any, arg3?: any, arg4?: any): any {
+    if (typeof arg1 === "string") {
+      return getTrieProofPromise(this, arg1, arg2, arg3);
+    }
+
+    return super.getTrieProof(arg1, arg2, arg3, arg4);
+  }
+
   subscribeTrieProof(
     id: string,
     proofId: string,
@@ -429,6 +575,34 @@ export class APIServiceClient extends Client {
     }
 
     return super.subscribeTrieProof(arg1, arg2, arg3);
+  }
+
+  createTrieProof(
+    id: string,
+    root: string,
+    anchorType?: AnchorType
+  ): Promise<TrieProof>;
+  createTrieProof(
+    argument: CreateTrieProofRequest,
+    callback: grpc.requestCallback<TrieProof>
+  ): grpc.ClientUnaryCall;
+  createTrieProof(
+    argument: CreateTrieProofRequest,
+    metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
+    callback: grpc.requestCallback<TrieProof>
+  ): grpc.ClientUnaryCall;
+  createTrieProof(
+    argument: CreateTrieProofRequest,
+    metadata: grpc.Metadata | null,
+    options: grpc.CallOptions | null,
+    callback: grpc.requestCallback<TrieProof>
+  ): grpc.ClientUnaryCall;
+  createTrieProof(arg1: any, arg2: any, arg3?: any, arg4?: any): any {
+    if (typeof arg1 === "string") {
+      return createTrieProofPromise(this, arg1, arg2, arg3);
+    }
+
+    return super.createTrieProof(arg1, arg2, arg3, arg4);
   }
 
   verifyTrieProof(
@@ -475,8 +649,14 @@ export class APIServiceClient extends Client {
     trieId: string,
     proofId: string,
     filter: KeyValuesFilter | null,
+    outputPath: string
+  ): Promise<void>;
+  createKeyValuesProof(
+    trieId: string,
+    proofId: string,
+    filter: KeyValuesFilter | null,
     outputPath: string,
-    callback: grpc.requestCallback<undefined>
+    callback: grpc.requestCallback<void>
   ): SurfaceCall;
   createKeyValuesProof(
     argument: CreateKeyValuesProofRequest,
@@ -495,7 +675,11 @@ export class APIServiceClient extends Client {
     arg5?: any
   ): any {
     if (typeof arg1 === "string") {
-      return createKeyValuesProof(this, arg1, arg2, arg3, arg4, arg5);
+      if (typeof arg5 === "function") {
+        return createKeyValuesProof(this, arg1, arg2, arg3, arg4, arg5);
+      }
+
+      return createKeyValuesProofPromise(this, arg1, arg2, arg3, arg4);
     }
 
     return super.createKeyValuesProof(arg1, arg2, arg3);
@@ -560,3 +744,27 @@ export function newApiServiceClient(
 
   return new APIServiceClient(hostPort, creds);
 }
+
+export {
+  AnchorType,
+  CreateKeyValuesProofRequest,
+  CreateTrieProofRequest,
+  DataChunk,
+  Key,
+  KeyValue,
+  KeyValuesFilter,
+  RootFilter,
+  SetTrieRootRequest,
+  Trie,
+  TrieKeyValueRequest,
+  TrieKeyValuesRequest,
+  TrieProof,
+  TrieProofRequest,
+  TrieProofsRequest,
+  TrieRequest,
+  TrieRoot,
+  TrieRootsRequest,
+  VerifyProofReply,
+  VerifyProofReplyChunk,
+  VerifyTrieProofRequest,
+};
