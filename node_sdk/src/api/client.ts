@@ -68,6 +68,10 @@ declare module "../protos/api/api_pb" {
     function from(id: string, root: string): TrieKeyValuesRequest;
   }
 
+  namespace KeyValuesFilter {
+    function from(iter: Iterable<Key>): KeyValuesFilter;
+  }
+
   namespace TrieProofRequest {
     function from(
       id: string,
@@ -143,6 +147,16 @@ TrieKeyValuesRequest.from = (id, root) => {
 
   r.setTrieId(id);
   r.setRoot(root);
+
+  return r;
+};
+
+KeyValuesFilter.from = (iter) => {
+  const r = new KeyValuesFilter();
+
+  for (const k of iter) {
+    r.addKeys(k);
+  }
 
   return r;
 };

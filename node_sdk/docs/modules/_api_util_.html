@@ -77,6 +77,7 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_api_util_.html#getethtriefromkeyvaluesproof" class="tsd-kind-icon">get<wbr>Eth<wbr>Trie<wbr>From<wbr>Key<wbr>Values<wbr>Proof</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_api_util_.html#grpcclientreadablestreamtoasynciterator" class="tsd-kind-icon">grpc<wbr>Client<wbr>Readable<wbr>Stream<wbr>ToAsync<wbr>Iterator</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_api_util_.html#stripcompoundkeyanchortriepart" class="tsd-kind-icon">strip<wbr>Compound<wbr>Key<wbr>Anchor<wbr>Trie<wbr>Part</a></li>
 							</ul>
@@ -92,7 +93,7 @@
 					<div class="tsd-signature tsd-kind-icon">ANCHOR_<wbr>KEY_<wbr>SEP_<wbr>LEN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/b338882/node_sdk/src/api/util.ts#L9">src/api/util.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/7527ae9/node_sdk/src/api/util.ts#L13">src/api/util.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -105,6 +106,29 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="getethtriefromkeyvaluesproof" class="tsd-anchor"></a>
+					<h3>get<wbr>Eth<wbr>Trie<wbr>From<wbr>Key<wbr>Values<wbr>Proof</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Eth<wbr>Trie<wbr>From<wbr>Key<wbr>Values<wbr>Proof<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_proof_eth_trie_.ethtrie.html" class="tsd-signature-type">EthTrie</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/7527ae9/node_sdk/src/api/util.ts#L49">src/api/util.ts:49</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_proof_eth_trie_.ethtrie.html" class="tsd-signature-type">EthTrie</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="grpcclientreadablestreamtoasynciterator" class="tsd-anchor"></a>
 					<h3>grpc<wbr>Client<wbr>Readable<wbr>Stream<wbr>ToAsync<wbr>Iterator</h3>
@@ -115,7 +139,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/b338882/node_sdk/src/api/util.ts#L28">src/api/util.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/7527ae9/node_sdk/src/api/util.ts#L32">src/api/util.ts:32</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -144,7 +168,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/b338882/node_sdk/src/api/util.ts#L15">src/api/util.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/7527ae9/node_sdk/src/api/util.ts#L19">src/api/util.ts:19</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -184,7 +208,13 @@
 						<a href="_api_util_.html">&quot;api/util&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="_examples_example_.html">&quot;examples/example&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_proof_eth_trie_.html">&quot;proof/eth_<wbr>trie&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="_protos_anchor_anchor_grpc_pb_d_.html">&quot;protos/anchor/anchor_<wbr>grpc_<wbr>pb.d&quot;</a>
@@ -220,6 +250,9 @@
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="_api_util_.html#anchor_key_sep_len" class="tsd-kind-icon">ANCHOR_<wbr>KEY_<wbr>SEP_<wbr>LEN</a>
 					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_api_util_.html#getethtriefromkeyvaluesproof" class="tsd-kind-icon">get<wbr>Eth<wbr>Trie<wbr>From<wbr>Key<wbr>Values<wbr>Proof</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="_api_util_.html#grpcclientreadablestreamtoasynciterator" class="tsd-kind-icon">grpc<wbr>Client<wbr>Readable<wbr>Stream<wbr>ToAsync<wbr>Iterator</a>
 					</li>
@@ -236,6 +269,7 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>

@@ -1,5 +1,9 @@
+import _ from "lodash";
+import fs from "fs";
+import readline from "readline";
 import * as grpc from "grpc";
 import { EventIterator } from "event-iterator";
+import { EthTrie, defaultEthTrie } from "../proof/eth_trie";
 import { KeyValue } from "../protos/api/api_pb";
 
 /**
@@ -40,4 +44,24 @@ export function grpcClientReadableStreamToAsyncIterator<T>(
       stream.destroy();
     };
   });
+}
+
+export async function getEthTrieFromKeyValuesProof(
+  path: string
+): Promise<EthTrie> {
+  const file = fs.createReadStream(path);
+  const reader = readline.createInterface({
+    input: file,
+  });
+
+  const line = await new Promise<string>((resolve) => {
+    reader.on("line", (val) => {
+      reader.close();
+      resolve(val);
+    });
+  });
+
+  file.close();
+
+  return _.defaults(JSON.parse(line), defaultEthTrie);
 }

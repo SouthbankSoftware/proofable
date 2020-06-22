@@ -8,7 +8,7 @@
     "example": "npm run build && node dist/examples/example.js",
     "build": "tsc && cpx 'src/**/*.{js,d.ts}' dist",
     "clean": "rimraf ./dist rmdir",
-    "doc": "rimraf ./docs && typedoc",
+    "doc": "typedoc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
