@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-06-22T15:28:38+10:00
  */
 
 package cmd
@@ -234,9 +234,15 @@ The <path> is the root for those keys in the subproof, which is also the path th
 			colorcli.Green(kvpInputPath),
 			colorcli.Green(merkleRoot),
 			colorcli.Green(et.AnchorType),
-			colorcli.Green(et.BlockNumber),
+			colorcli.Green(getBlockNumberString(
+				et.AnchorType,
+				et.BlockTime,
+				et.BlockTimeNano,
+				et.BlockNumber)),
 			colorcli.Green(et.TxnID),
-			colorcli.Green(time.Unix(int64(et.BlockTime), 0).Format(time.UnixDate)),
+			colorcli.Green(time.Unix(
+				int64(et.BlockTime),
+				int64(et.BlockTimeNano)).Format(time.UnixDate)),
 			colorcli.Green(et.TxnURI))
 
 		if df.passedKV != df.totalKV {

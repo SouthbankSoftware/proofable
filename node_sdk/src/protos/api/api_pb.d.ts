@@ -246,6 +246,9 @@ export class TrieProof extends jspb.Message {
   getBlockTime(): number;
   setBlockTime(value: number): void;
 
+  getBlockTimeNano(): number;
+  setBlockTimeNano(value: number): void;
+
   getBlockNumber(): number;
   setBlockNumber(value: number): void;
 
@@ -274,6 +277,7 @@ export namespace TrieProof {
     txnId: string,
     txnUri: string,
     blockTime: number,
+    blockTimeNano: number,
     blockNumber: number,
     proofRoot: string,
   }

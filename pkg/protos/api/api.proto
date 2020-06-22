@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-01-03T14:55:49+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:58:37+11:00
+ * @Last modified time: 2020-06-22T14:59:21+10:00
  */
 
 syntax = "proto3";
@@ -189,9 +189,15 @@ message TrieProof {
   string txn_id = 8;
   // TxnUri is the explorer URI for the Blockchain transaction
   string txn_uri = 12;
-  // BlockTime is the Blockchain's block time
+  // BlockTime is the Blockchain's block consensus timestamp in seconds
   uint64 block_time = 9;
-  // BlockNumber is the Blockchain's block number
+  // BlockTimeNano is the Blockcahin's block consensus timestamp's nano part.
+  // For most traditional blockchains, this will be zero. For Hedera, this will
+  // be the nano part of the transaction's consensus timestamp
+  uint64 block_time_nano = 13;
+  // BlockNumber is the Blockchain's block number. For Hedera, this will be zero
+  // as there is no block concept and each transaction has its own consensus
+  // timestamp which defines the transaction order
   uint64 block_number = 10;
   // ProofRoot is the root hash of the trie proof, which is the anchor batch's
   // root hash the proof belongs to

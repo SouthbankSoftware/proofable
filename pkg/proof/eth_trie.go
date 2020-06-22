@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-11-07T15:43:47+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-06T10:01:47+10:00
+ * @Last modified time: 2020-06-22T13:02:24+10:00
  */
 
 package proof
@@ -34,12 +34,13 @@ import (
 
 // EthTrie represents a confirmed proof for pieces of data in Ethereum Trie (ETH_TRIE) format
 type EthTrie struct {
-	AnchorType  string   `json:"anchorType"`
-	TxnID       string   `json:"txnId"`
-	TxnURI      string   `json:"txnUri"`
-	BlockTime   uint64   `json:"blockTime,omitempty"`
-	BlockNumber uint64   `json:"blockNumber,omitempty"`
-	TrieNodes   [][]byte `json:"trieNodes,omitempty"`
+	AnchorType    string   `json:"anchorType"`
+	TxnID         string   `json:"txnId"`
+	TxnURI        string   `json:"txnUri"`
+	BlockTime     uint64   `json:"blockTime,omitempty"`
+	BlockTimeNano uint64   `json:"blockTimeNano,omitempty"`
+	BlockNumber   uint64   `json:"blockNumber,omitempty"`
+	TrieNodes     [][]byte `json:"trieNodes,omitempty"`
 }
 
 // NewEthTrie creates a new EthTrie

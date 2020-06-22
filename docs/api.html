@@ -794,7 +794,16 @@ created </p></td>
                   <td>block_time</td>
                   <td><a href="#uint64">uint64</a></td>
                   <td></td>
-                  <td><p>BlockTime is the Blockchain&#39;s block time </p></td>
+                  <td><p>BlockTime is the Blockchain&#39;s block consensus timestamp in seconds </p></td>
+                </tr>
+              
+                <tr>
+                  <td>block_time_nano</td>
+                  <td><a href="#uint64">uint64</a></td>
+                  <td></td>
+                  <td><p>BlockTimeNano is the Blockcahin&#39;s block consensus timestamp&#39;s nano part.
+For most traditional blockchains, this will be zero. For Hedera, this will
+be the nano part of the transaction&#39;s consensus timestamp </p></td>
                 </tr>
               
                 <tr>

@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-06-22T15:29:27+10:00
  */
 
 package cmd
@@ -119,9 +119,15 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 							colorcli.Green(len(filter.Keys), " or more"),
 							colorcli.Green(tp.GetProofRoot()),
 							colorcli.Green(tp.GetAnchorType()),
-							colorcli.Green(tp.GetBlockNumber()),
+							colorcli.Green(getBlockNumberString(
+								tp.GetAnchorType().String(),
+								tp.GetBlockTime(),
+								tp.GetBlockTimeNano(),
+								tp.GetBlockNumber())),
 							colorcli.Green(tp.GetTxnId()),
-							colorcli.Green(time.Unix(int64(tp.GetBlockTime()), 0).Format(time.UnixDate)),
+							colorcli.Green(time.Unix(
+								int64(tp.GetBlockTime()),
+								int64(tp.GetBlockTimeNano())).Format(time.UnixDate)),
 							colorcli.Green(tp.GetTxnUri()))
 
 						return nil

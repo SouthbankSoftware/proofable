@@ -2002,6 +2002,7 @@ proto.api.TrieProof.toObject = function(includeInstance, msg) {
     txnId: jspb.Message.getFieldWithDefault(msg, 8, ""),
     txnUri: jspb.Message.getFieldWithDefault(msg, 12, ""),
     blockTime: jspb.Message.getFieldWithDefault(msg, 9, 0),
+    blockTimeNano: jspb.Message.getFieldWithDefault(msg, 13, 0),
     blockNumber: jspb.Message.getFieldWithDefault(msg, 10, 0),
     proofRoot: jspb.Message.getFieldWithDefault(msg, 11, "")
   };
@@ -2080,6 +2081,10 @@ proto.api.TrieProof.deserializeBinaryFromReader = function(msg, reader) {
     case 9:
       var value = /** @type {number} */ (reader.readUint64());
       msg.setBlockTime(value);
+      break;
+    case 13:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setBlockTimeNano(value);
       break;
     case 10:
       var value = /** @type {number} */ (reader.readUint64());
@@ -2186,6 +2191,13 @@ proto.api.TrieProof.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeUint64(
       9,
+      f
+    );
+  }
+  f = message.getBlockTimeNano();
+  if (f !== 0) {
+    writer.writeUint64(
+      13,
       f
     );
   }
@@ -2402,6 +2414,24 @@ proto.api.TrieProof.prototype.getBlockTime = function() {
  */
 proto.api.TrieProof.prototype.setBlockTime = function(value) {
   return jspb.Message.setProto3IntField(this, 9, value);
+};
+
+
+/**
+ * optional uint64 block_time_nano = 13;
+ * @return {number}
+ */
+proto.api.TrieProof.prototype.getBlockTimeNano = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 13, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.api.TrieProof} returns this
+ */
+proto.api.TrieProof.prototype.setBlockTimeNano = function(value) {
+  return jspb.Message.setProto3IntField(this, 13, value);
 };
 
 

@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-06-22T15:26:49+10:00
  */
 
 package cmd
@@ -184,9 +184,15 @@ By default, if the path is a directory, the proof will be created under the dire
 						colorcli.Green(count),
 						colorcli.Green(triePf.GetProofRoot()),
 						colorcli.Green(triePf.GetAnchorType()),
-						colorcli.Green(triePf.GetBlockNumber()),
+						colorcli.Green(getBlockNumberString(
+							triePf.GetAnchorType().String(),
+							triePf.GetBlockTime(),
+							triePf.GetBlockTimeNano(),
+							triePf.GetBlockNumber())),
 						colorcli.Green(triePf.GetTxnId()),
-						colorcli.Green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
+						colorcli.Green(time.Unix(
+							int64(triePf.GetBlockTime()),
+							int64(triePf.GetBlockTimeNano())).Format(time.UnixDate)),
 						colorcli.Green(triePf.GetTxnUri()))
 
 					return nil
