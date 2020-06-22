@@ -19,14 +19,17 @@
  * @Author: guiguan
  * @Date:   2020-02-18T16:30:55+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-06-22T17:48:55+10:00
  */
 
 package api
 
 import (
 	"context"
+	"encoding/json"
+	"os"
 
+	"github.com/SouthbankSoftware/proofable/pkg/proof"
 	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
 )
 
@@ -75,4 +78,25 @@ func StripCompoundKeyAnchorTriePart(
 	kv.KeySep = kv.KeySep[anchorKeySepLen:]
 
 	return kv
+}
+
+// GetEthTrieFromKeyValuesProof returns the EthTrie from the given key-values proof
+func GetEthTrieFromKeyValuesProof(path string) (et *proof.EthTrie, er error) {
+	f, err := os.Open(path)
+	if err != nil {
+		er = err
+		return
+	}
+	defer f.Close()
+
+	etr := &proof.EthTrie{}
+
+	err = json.NewDecoder(f).Decode(etr)
+	if err != nil {
+		er = err
+		return
+	}
+
+	et = etr
+	return
 }
