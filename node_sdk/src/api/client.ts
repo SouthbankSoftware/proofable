@@ -57,25 +57,22 @@ import { Anchor, Batch } from "../protos/anchor";
 
 declare module "../protos/anchor/anchor_pb.d" {
   namespace Anchor {
-    type TypeOfType = Anchor.TypeMap[keyof Anchor.TypeMap];
-    let TypeName: Record<TypeOfType, string>;
+    type ValueOfType = Anchor.TypeMap[keyof Anchor.TypeMap];
+    let TypeName: Record<ValueOfType, keyof Anchor.TypeMap>;
 
-    type TypeOfStatus = Anchor.StatusMap[keyof Anchor.StatusMap];
-    let StatusName: Record<TypeOfStatus, string>;
+    type ValueOfStatus = Anchor.StatusMap[keyof Anchor.StatusMap];
+    let StatusName: Record<ValueOfStatus, string>;
   }
 
   namespace Batch {
-    type TypeOfStatus = Batch.StatusMap[keyof Batch.StatusMap];
-    let StatusName: Record<TypeOfStatus, string>;
+    type ValueOfStatus = Batch.StatusMap[keyof Batch.StatusMap];
+    let StatusName: Record<ValueOfStatus, string>;
   }
 }
 
-// @ts-ignore
-Anchor.TypeName = _.invert(Anchor.Type);
-// @ts-ignore
-Anchor.StatusName = _.invert(Anchor.Status);
-// @ts-ignore
-Batch.StatusName = _.invert(Batch.Status);
+Anchor.TypeName = _.invert(Anchor.Type) as any;
+Anchor.StatusName = _.invert(Anchor.Status) as any;
+Batch.StatusName = _.invert(Batch.Status) as any;
 
 declare module "../protos/api/api_pb.d" {
   namespace TrieRequest {
@@ -118,7 +115,7 @@ declare module "../protos/api/api_pb.d" {
     function from(
       id: string,
       root: string,
-      anchorType?: Anchor.TypeOfType
+      anchorType?: Anchor.ValueOfType
     ): CreateTrieProofRequest;
   }
 
@@ -616,7 +613,7 @@ export class APIServiceClient extends Client {
   createTrieProof(
     id: string,
     root: string,
-    anchorType?: Anchor.TypeOfType
+    anchorType?: Anchor.ValueOfType
   ): Promise<TrieProof>;
   createTrieProof(
     argument: CreateTrieProofRequest,

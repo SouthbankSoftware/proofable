@@ -338,7 +338,7 @@ export function createTrieProofPromise(
   cli: APIServiceClient,
   id: string,
   root: string,
-  anchorType: Anchor.TypeOfType = 0
+  anchorType: Anchor.ValueOfType = 0
 ): Promise<TrieProof> {
   return new Promise((resolve, reject) => {
     cli.createTrieProof(
