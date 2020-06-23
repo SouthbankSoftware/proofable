@@ -116,7 +116,7 @@ the proof with a root hash of 9aa9f728c533ea7d7671e227e987b45bf49ae31986ad9c7923
 
 and a Graphviz Dot Graph (`proof.dot`):
 
-![Proof Dot Graph](docs/images/example_proof.svg)
+![Proof Dot Graph](https://github.com/SouthbankSoftware/proofable/tree/master/docs/images/example_proof.svg)
 
 ### Step 7: Extract a subproof for just one key-value out of the proof
 
@@ -157,4 +157,4 @@ The subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605ace
 
 and a Graphviz Dot Graph (`living_room_Co2_subproof.dot`):
 
-![Subproof Dot Graph](docs/images/example_subproof.svg)
+![Subproof Dot Graph](https://github.com/SouthbankSoftware/proofable/tree/master/docs/images/example_subproof.svg)
