@@ -58,20 +58,23 @@ import { Anchor, Batch } from "../protos/anchor";
 declare module "../protos/anchor/anchor_pb.d" {
   namespace Anchor {
     type TypeOfType = Anchor.TypeMap[keyof Anchor.TypeMap];
-    let TypeName: Record<number, string>;
+    let TypeName: Record<TypeOfType, string>;
 
     type TypeOfStatus = Anchor.StatusMap[keyof Anchor.StatusMap];
-    let StatusName: Record<number, string>;
+    let StatusName: Record<TypeOfStatus, string>;
   }
 
   namespace Batch {
     type TypeOfStatus = Batch.StatusMap[keyof Batch.StatusMap];
-    let StatusName: Record<number, string>;
+    let StatusName: Record<TypeOfStatus, string>;
   }
 }
 
+// @ts-ignore
 Anchor.TypeName = _.invert(Anchor.Type);
+// @ts-ignore
 Anchor.StatusName = _.invert(Anchor.Status);
+// @ts-ignore
 Batch.StatusName = _.invert(Batch.Status);
 
 declare module "../protos/api/api_pb.d" {

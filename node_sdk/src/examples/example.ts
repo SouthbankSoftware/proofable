@@ -18,32 +18,29 @@
  *
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
- * @Last modified by:   Koustubh Gaikwad
- * @Last modified time: 2020-06-23T15:47:10+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2020-06-23T17:27:08+10:00
  */
 
 import * as grpc from "grpc";
 import {
-    newApiServiceClient,
-    Trie,
-    KeyValue,
-    TrieProof,
-    stripCompoundKeyAnchorTriePart,
-    Key,
-    KeyValuesFilter,
-    getEthTrieFromKeyValuesProof,
-    VerifyProofReply,
-  } from "../api";
+  Anchor,
+  Batch,
+  getEthTrieFromKeyValuesProof,
+  Key,
+  KeyValue,
+  KeyValuesFilter,
+  newApiServiceClient,
+  stripCompoundKeyAnchorTriePart,
+  Trie,
+  VerifyProofReply,
+} from "../api";
 
-import { Anchor, Batch } from "../protos/anchor/anchor_pb";
-import _ from "lodash";
-import { EthTrie } from "../proof/eth_trie";
+const API_PROOFABLE_ENDPOINT = "api.dev.proofable.io:443";
+const VERIFY_PROOF_DOTGRAPH_FILE = "proof.dot";
+const VERIFY_SUBPROOF_DOTGRAPH_FILE = "subproof_verify.dot";
 
-const API_PROOFABLE_ENDPOINT="api.dev.proofable.io:443";
-const VERIFY_PROOF_DOTGRAPH_FILE="proof.dot";
-const VERIFY_SUBPROOF_DOTGRAPH_FILE="subproof_verify.dot";
-
-// Values that need to be proved
+// key-values to be proved
 const TRIE_KEY_VALUES = [
   KeyValue.from("balcony/wind/speed", "11km/h"),
   KeyValue.from("balcony/wind/direction", "N"),
@@ -51,110 +48,139 @@ const TRIE_KEY_VALUES = [
   KeyValue.from("living_room/Co2", "564ppm"),
 ];
 
-// The key for which the subproof needs to be extracted
+// the key for which the subproof needs to be extracted
 const SUBPROOF_KEY = "living_room/Co2";
 
+// setup the Proofable API service client
 const metadata = new grpc.Metadata();
 metadata.add("authorization", "Bearer magic");
 const client = newApiServiceClient(API_PROOFABLE_ENDPOINT, metadata);
 
-const cleanup = async (id: string) => {
-  try{
-    await client.deleteTrie(id);
-  }
-  catch(err){
-    console.error(err);
-    return
-  }
-};
-
-
-// you can use `npm run example` this run this
+// use `npm run example` to run this example
 (async () => {
+  let trie: Trie | null = null;
 
-  // Create an empty trie
-  let trie:Trie;
-
-  trie = await client.createTrie();
-  console.log("New trie -> ")
-  console.log(trie.toObject());
-
-  // Push values into trie
-  try{
-    trie = await client.setTrieKeyValues(
-        trie.getId(),
-        trie.getRoot(),
-        TRIE_KEY_VALUES,
-        );
-    console.log("updated trie -> ")
+  try {
+    // create an empty trie
+    trie = await client.createTrie();
+    console.log("createTrie -> ");
     console.log(trie.toObject());
 
-    // Create a proof for the existing values
-    const trieProof: TrieProof = await client.createTrieProof(trie.getId(), trie.getRoot(), Anchor.Type.ETH);
+    // set the key-values we want to prove. Note: the root is changed after we modify
+    // the trie
+    trie = await client.setTrieKeyValues(
+      trie.getId(),
+      trie.getRoot(),
+      TRIE_KEY_VALUES
+    );
+    console.log("setTrieKeyValues -> ");
+    console.log(trie.toObject());
 
-    console.log("trieProof -> ")
-    console.log(trieProof.toObject())
+    // create a proof for the key-values
+    let trieProof = await client.createTrieProof(
+      trie.getId(),
+      trie.getRoot(),
+      Anchor.Type.ETH
+    );
+    console.log("createTrieProof -> ");
+    console.log(trieProof.toObject());
 
-    // Subscribe to TrieProof
-    const trieProofIterable: AsyncIterable<TrieProof> = client.subscribeTrieProof(trie.getId(), trieProof.getId(), null);
-    let trieProofAnchored:TrieProof = new TrieProof();
-    for await (const tp of trieProofIterable){
-      console.log("Anchoring Proof: " + _.invert(Batch.Status)[tp.getStatus()]);
-      trieProofAnchored = tp;
+    // wait for the proof to be anchored to Ethereum
+    for await (const tp of client.subscribeTrieProof(
+      trie.getId(),
+      trieProof.getId(),
+      null
+    )) {
+      console.log("Anchoring proof: %s", Batch.StatusName[tp.getStatus()]);
+      trieProof = tp;
     }
 
-    // Verify Proof
-    for await(const val of client.verifyTrieProof(trie.getId(), trieProof.getId(), true, VERIFY_PROOF_DOTGRAPH_FILE)){
-      if(val instanceof VerifyProofReply){
-        if(!val.getVerified()){
-          console.error(`falsified proof: ${val.getError()}`);
-          return cleanup(trie.getId());
+    // verify the proof
+    console.log("key-values contained in the proof:");
+    for await (const val of client.verifyTrieProof(
+      trie.getId(),
+      trieProof.getId(),
+      true,
+      VERIFY_PROOF_DOTGRAPH_FILE
+    )) {
+      if (val instanceof VerifyProofReply) {
+        if (!val.getVerified()) {
+          console.error("falsified proof: %s", val.getError());
+          return;
         }
-        console.log("Proof Verified!");
+      } else {
+        const kv = stripCompoundKeyAnchorTriePart(val).to();
+
+        console.log("\t%s -> %s", kv.key, kv.val);
       }
     }
 
-    console.log("\nThe proof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
-          trieProofAnchored.getRoot(),
-          _.invert(Anchor.Type)[trieProofAnchored.getAnchorType()],
-          trieProofAnchored.getBlockNumber(),
-          trieProofAnchored.getTxnId(),
-          (new Date(trieProofAnchored.getBlockTime() * 1000)).toUTCString(),
-          trieProofAnchored.getTxnUri(),
-        )
-    console.log(`The proof's dot graph is saved to ${VERIFY_PROOF_DOTGRAPH_FILE}`);
+    console.log(
+      "\nthe proof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
+      trieProof.getRoot(),
+      Anchor.TypeName[trieProof.getAnchorType()],
+      trieProof.getBlockNumber(),
+      trieProof.getTxnId(),
+      new Date(trieProof.getBlockTime() * 1000).toUTCString(),
+      trieProof.getTxnUri()
+    );
+    console.log(
+      "the proof's dot graph is saved to `%s`",
+      VERIFY_PROOF_DOTGRAPH_FILE
+    );
 
     // extract a subproof for just one key value out of the proof
-    await client.createKeyValuesProof(trie.getId(),trieProof.getId(), KeyValuesFilter.from([Key.from(SUBPROOF_KEY)]), SUBPROOF_KEY.replace("/", "-") + ".pxsubproof");
-    console.log(`\nThe subproof for the key ${SUBPROOF_KEY} is saved to ${SUBPROOF_KEY.replace("/", "-")}.pxsubproof`)
+    await client.createKeyValuesProof(
+      trie.getId(),
+      trieProof.getId(),
+      KeyValuesFilter.from([Key.from(SUBPROOF_KEY)]),
+      SUBPROOF_KEY.replace("/", "-") + ".subproofable"
+    );
+    console.log(
+      "the subproof for the key `%s` is saved to `%s.subproofable`",
+      SUBPROOF_KEY,
+      SUBPROOF_KEY.replace("/", "-")
+    );
 
     // verify the subproof independently
-    for await ( const val of client.verifyKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".pxsubproof", true, VERIFY_SUBPROOF_DOTGRAPH_FILE)){
-      if (val instanceof KeyValue) {
-        // within this branch, val is now narrowed down to KeyValue
-        console.log(stripCompoundKeyAnchorTriePart(val).to("utf8", "utf8"));
+    console.log("key-values contained in the subproof:");
+    for await (const val of client.verifyKeyValuesProof(
+      SUBPROOF_KEY.replace("/", "-") + ".subproofable",
+      true,
+      VERIFY_SUBPROOF_DOTGRAPH_FILE
+    )) {
+      if (val instanceof VerifyProofReply) {
+        if (!val.getVerified()) {
+          console.error("falsified subproof: %s", val.getError());
+          return;
+        }
       } else {
-        // within this branch, val is now narrowed down to VerifyProofReply
-        console.log("The subproof is", val.getVerified() ? "valid" : "invalid");
+        const kv = stripCompoundKeyAnchorTriePart(val).to();
+
+        console.log("\t%s -> %s", kv.key, kv.val);
       }
     }
-    const et:EthTrie = await getEthTrieFromKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".pxsubproof")
 
-    console.log("The subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
-          et.root,
-          et.anchorType,
-          et.blockNumber,
-          et.txnId,
-          (new Date(et.blockTime * 1000)).toUTCString(),
-          et.txnUri,
-        )
-    console.log(`The subproof's dot graph is saved to ${VERIFY_SUBPROOF_DOTGRAPH_FILE}`);
+    const ethTrie = await getEthTrieFromKeyValuesProof(
+      SUBPROOF_KEY.replace("/", "-") + ".subproofable"
+    );
 
-  }
-  catch(err){
-    console.log(err);
-  }
-  finally{
-    cleanup(trie.getId());
+    console.log(
+      "\nthe subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
+      ethTrie.root,
+      ethTrie.anchorType,
+      ethTrie.blockNumber,
+      ethTrie.txnId,
+      new Date(ethTrie.blockTime * 1000).toUTCString(),
+      ethTrie.txnUri
+    );
+    console.log(
+      "the subproof's dot graph is saved to `%s`",
+      VERIFY_SUBPROOF_DOTGRAPH_FILE
+    );
+  } catch (err) {
+    console.error(err);
+  } finally {
+    trie && (await client.deleteTrie(trie.getId()));
   }
 })();
