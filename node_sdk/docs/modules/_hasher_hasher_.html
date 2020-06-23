@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;protos/anchor/anchor_pb.d&quot; | proofable</title>
+	<title>&quot;hasher/hasher&quot; | proofable</title>
 	<meta name="description" content="Documentation for proofable">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_protos_anchor_anchor_pb_d_.html">&quot;protos/anchor/anchor_pb.d&quot;</a>
+					<a href="_hasher_hasher_.html">&quot;hasher/hasher&quot;</a>
 				</li>
 			</ul>
-			<h1>Module &quot;protos/anchor/anchor_pb.d&quot;</h1>
+			<h1>Module &quot;hasher/hasher&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -69,21 +69,67 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.anchor.html" class="tsd-kind-icon">Anchor</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.anchorrequest.html" class="tsd-kind-icon">Anchor<wbr>Request</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.batch.html" class="tsd-kind-icon">Batch</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.batchrequest.html" class="tsd-kind-icon">Batch<wbr>Request</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.proof.html" class="tsd-kind-icon">Proof</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.proofrequest.html" class="tsd-kind-icon">Proof<wbr>Request</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.submitproofrequest.html" class="tsd-kind-icon">Submit<wbr>Proof<wbr>Request</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.subscribebatchesrequest.html" class="tsd-kind-icon">Subscribe<wbr>Batches<wbr>Request</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.verifyproofreply.html" class="tsd-kind-icon">Verify<wbr>Proof<wbr>Reply</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_protos_anchor_anchor_pb_d_.verifyproofrequest.html" class="tsd-kind-icon">Verify<wbr>Proof<wbr>Request</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_hasher_hasher_.html#hashsize" class="tsd-kind-icon">hash<wbr>Size</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_hasher_hasher_.html#sha3" class="tsd-kind-icon">sha3</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="hashsize" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> hash<wbr>Size</h3>
+					<div class="tsd-signature tsd-kind-icon">hash<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">32</span><span class="tsd-signature-symbol"> = 32</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/f1f598c/node_sdk/src/hasher/hasher.ts#L7">src/hasher/hasher.ts:7</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The size of a hash</p>
+						</div>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="sha3" class="tsd-anchor"></a>
+					<h3>sha3</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">sha3<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/f1f598c/node_sdk/src/hasher/hasher.ts#L12">src/hasher/hasher.ts:12</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Hashes the given data using SHA3 256 Keccak</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>data: <span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -108,7 +154,7 @@
 					<li class=" tsd-kind-module">
 						<a href="_examples_example_.html">&quot;examples/example&quot;</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="_hasher_hasher_.html">&quot;hasher/hasher&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -126,7 +172,7 @@
 					<li class=" tsd-kind-module">
 						<a href="_protos_anchor_anchor_grpc_pb_d_.html">&quot;protos/anchor/anchor_<wbr>grpc_<wbr>pb.d&quot;</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="_protos_anchor_anchor_pb_d_.html">&quot;protos/anchor/anchor_<wbr>pb.d&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -154,35 +200,11 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.anchor.html" class="tsd-kind-icon">Anchor</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="_hasher_hasher_.html#hashsize" class="tsd-kind-icon">hash<wbr>Size</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.anchorrequest.html" class="tsd-kind-icon">Anchor<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.batch.html" class="tsd-kind-icon">Batch</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.batchrequest.html" class="tsd-kind-icon">Batch<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.proof.html" class="tsd-kind-icon">Proof</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.proofrequest.html" class="tsd-kind-icon">Proof<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.submitproofrequest.html" class="tsd-kind-icon">Submit<wbr>Proof<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.subscribebatchesrequest.html" class="tsd-kind-icon">Subscribe<wbr>Batches<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.verifyproofreply.html" class="tsd-kind-icon">Verify<wbr>Proof<wbr>Reply</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_protos_anchor_anchor_pb_d_.verifyproofrequest.html" class="tsd-kind-icon">Verify<wbr>Proof<wbr>Request</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_hasher_hasher_.html#sha3" class="tsd-kind-icon">sha3</a>
 					</li>
 				</ul>
 			</nav>

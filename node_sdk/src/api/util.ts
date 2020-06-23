@@ -3,7 +3,7 @@ import fs from "fs";
 import readline from "readline";
 import * as grpc from "grpc";
 import { EventIterator } from "event-iterator";
-import { EthTrie, defaultEthTrie } from "../proof/eth_trie";
+import { EthTrie } from "../proof";
 import { KeyValue } from "../protos/api/api_pb";
 
 /**
@@ -63,5 +63,5 @@ export async function getEthTrieFromKeyValuesProof(
 
   file.close();
 
-  return _.defaults(JSON.parse(line), defaultEthTrie);
+  return _.assign(new (class extends EthTrie {})(), JSON.parse(line));
 }
