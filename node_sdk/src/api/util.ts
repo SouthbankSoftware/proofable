@@ -34,12 +34,12 @@ export function grpcClientReadableStreamToAsyncIterator<T>(
 ): AsyncIterable<T> {
   return new EventIterator((queue) => {
     stream.addListener("data", queue.push);
-    stream.addListener("close", queue.stop);
+    stream.addListener("end", queue.stop);
     stream.addListener("error", queue.fail);
 
     return () => {
       stream.removeListener("data", queue.push);
-      stream.removeListener("close", queue.stop);
+      stream.removeListener("end", queue.stop);
       stream.removeListener("error", queue.fail);
       stream.destroy();
     };
