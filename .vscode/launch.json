@@ -37,13 +37,13 @@
             "cwd": "${workspaceFolder}",
         },
         {
-            "name": "Node SDK",
+            "name": "Node SDK Example",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceFolder}/node_sdk/src/index.ts",
+            "program": "${workspaceFolder}/node_sdk/src/examples/example.ts",
             "preLaunchTask": "build node_sdk",
             "outFiles": [
-                "${workspaceFolder}/node_sdk/dist/index.js"
+                "${workspaceFolder}/node_sdk/dist/examples/example.js"
             ],
             "cwd": "${workspaceFolder}/node_sdk",
         }
