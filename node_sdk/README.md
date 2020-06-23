@@ -6,9 +6,7 @@ Go to `proofable` project root and `make generate`
 
 ## Example
 
-This is a hello world example written in Go that demonstrates how to:
-
-- authenticate with ProvenDB
+This is a hello world example written in TypeScript that demonstrates how to:
 
 - prove a bunch of key-values to Ethereum Testnet within a minute
 
@@ -24,7 +22,7 @@ The Node SDK is located [here](https://github.com/SouthbankSoftware/proofable/tr
 
 You can find the complete example source code [here](https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/example.ts), which can be run as:
 
-```shell
+```zsh
 npm run example
 ```
 
@@ -52,6 +50,12 @@ trie = await client.createTrie();
 This step sets a bunch of key-values that we want to prove in the trie we have just created. In this example, the values are set here in this variable at the beginning `TRIE_KEY_VALUES`. Both key and value can be arbitrary binaries. They key order doesn't matter.
 
 ```typescript
+const TRIE_KEY_VALUES = [
+  KeyValue.from("balcony/wind/speed", "11km/h"),
+  KeyValue.from("balcony/wind/direction", "N"),
+  KeyValue.from("living_room/temp", "24.8℃"),
+  KeyValue.from("living_room/Co2", "564ppm"),
+];
 trie = await client.setTrieKeyValues(
         trie.getId(),
         trie.getRoot(),
@@ -71,7 +75,7 @@ const trieProof: TrieProof = await client.createTrieProof(trie.getId(), trie.get
 
 ### Step 5: wait for the proof to be anchored to Ethereum
 
-This step waits the proof we have just created until it is anchored to Ethereum testnet, during which we output the anchoring progress
+This step waits for the proof we have just created until it is anchored to Ethereum testnet, during which we print the anchoring progress.
 
 ```typescript
 const trieProofIterable: AsyncIterable<TrieProof> = client.subscribeTrieProof(trie.getId(), trieProof.getId(), null);
@@ -84,7 +88,7 @@ const trieProofIterable: AsyncIterable<TrieProof> = client.subscribeTrieProof(tr
 
 ### Step 6: Verify the proof
 
-This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof
+This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof.
 
 ```typescript
 for await(const val of client.verifyTrieProof(trie.getId(), trieProof.getId(), true, VERIFY_PROOF_DOTGRAPH_FILE)){
@@ -141,6 +145,16 @@ for await ( const val of client.verifyKeyValuesProof("living_room_Co2.pxsubproof
         console.log("the subproof is", val.getVerified() ? "valid" : "invalid");
       }
     }
+    const et:EthTrie = await getEthTrieFromKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".pxsubproof")
+
+    console.log("The subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
+          et.root,
+          et.anchorType,
+          et.blockNumber,
+          et.txnId,
+          (new Date(et.blockTime * 1000)).toUTCString(),
+          et.txnUri,
+        )
     console.log(`The subproof's dot graph is saved to ${VERIFY_SUBPROOF_DOTGRAPH_FILE}`);
 ```
 
@@ -155,6 +169,6 @@ with summary
 The subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to undefined in block 6715676 with transaction 13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f at Tue, 23 Jun 2020 05:36:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f
 ```
 
-and a Graphviz Dot Graph (`living_room_Co2_subproof.dot`):
+and a Graphviz Dot Graph (`subproof_verify.dot`):
 
 ![Subproof Dot Graph](https://github.com/SouthbankSoftware/proofable/tree/master/docs/images/example_subproof.svg)
