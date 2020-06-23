@@ -19,7 +19,7 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   Koustubh Gaikwad
- * @Last modified time: 2020-06-23T14:57:28+10:00
+ * @Last modified time: 2020-06-23T15:42:49+10:00
  */
 
 import * as grpc from "grpc";
@@ -114,7 +114,7 @@ const cleanup = async (id: string) => {
       }
     }
 
-    console.log("\nThe proof with a root hash of %s is anchored to %s in block %s with transaction %s at %s, which can be viewed at %s",
+    console.log("\nThe proof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
           trieProofAnchored.getRoot(),
           _.invert(Anchor.Type)[trieProofAnchored.getAnchorType()],
           trieProofAnchored.getBlockNumber(),
@@ -129,7 +129,7 @@ const cleanup = async (id: string) => {
     console.log(`The subproof for the key ${SUBPROOF_KEY} is saved to ${SUBPROOF_KEY.replace("/", "-")}.pxsubproof`)
 
     // verify the subproof independently
-    for await ( const val of client.verifyKeyValuesProof("living_room_Co2.pxsubproof", true, VERIFY_SUBPROOF_DOTGRAPH_FILE)){
+    for await ( const val of client.verifyKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".pxsubproof", true, VERIFY_SUBPROOF_DOTGRAPH_FILE)){
       if (val instanceof KeyValue) {
         // within this branch, val is now narrowed down to KeyValue
         console.log(stripCompoundKeyAnchorTriePart(val).to("utf8", "utf8"));
@@ -138,10 +138,17 @@ const cleanup = async (id: string) => {
         console.log("The subproof is", val.getVerified() ? "valid" : "invalid");
       }
     }
-    console.log(`The subproof's dot graph is saved to ${VERIFY_SUBPROOF_DOTGRAPH_FILE}`);
+    const et:EthTrie = await getEthTrieFromKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".pxsubproof")
 
-    // let et:EthTrie = await getEthTrieFromKeyValuesProof("living_room_Co2.pxsubproof");
-    // console.log(et.trieNodes[0]);
+    console.log("\nThe subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
+          et.root,
+          et.anchorType,
+          et.blockNumber,
+          et.txnId,
+          (new Date(et.blockTime * 1000)).toUTCString(),
+          et.txnUri,
+        )
+    console.log(`The subproof's dot graph is saved to ${VERIFY_SUBPROOF_DOTGRAPH_FILE}`);
 
   }
   catch(err){

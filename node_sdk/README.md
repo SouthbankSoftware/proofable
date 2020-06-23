@@ -150,6 +150,11 @@ This step will output the key-values contained in the subproof:
 { key: 'living_room/Co2', val: '564ppm' }
 ```
 
+with summary
+```typescript
+The subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to undefined in block 6715676 with transaction 13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f at Tue, 23 Jun 2020 05:36:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f
+```
+
 and a Graphviz Dot Graph (`living_room_Co2_subproof.dot`):
 
 ![Subproof Dot Graph](docs/images/example_subproof.svg)
