@@ -19,7 +19,7 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   Koustubh Gaikwad
- * @Last modified time: 2020-06-23T15:42:49+10:00
+ * @Last modified time: 2020-06-23T15:47:10+10:00
  */
 
 import * as grpc from "grpc";
@@ -126,7 +126,7 @@ const cleanup = async (id: string) => {
 
     // extract a subproof for just one key value out of the proof
     await client.createKeyValuesProof(trie.getId(),trieProof.getId(), KeyValuesFilter.from([Key.from(SUBPROOF_KEY)]), SUBPROOF_KEY.replace("/", "-") + ".pxsubproof");
-    console.log(`The subproof for the key ${SUBPROOF_KEY} is saved to ${SUBPROOF_KEY.replace("/", "-")}.pxsubproof`)
+    console.log(`\nThe subproof for the key ${SUBPROOF_KEY} is saved to ${SUBPROOF_KEY.replace("/", "-")}.pxsubproof`)
 
     // verify the subproof independently
     for await ( const val of client.verifyKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".pxsubproof", true, VERIFY_SUBPROOF_DOTGRAPH_FILE)){
@@ -140,7 +140,7 @@ const cleanup = async (id: string) => {
     }
     const et:EthTrie = await getEthTrieFromKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".pxsubproof")
 
-    console.log("\nThe subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
+    console.log("The subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
           et.root,
           et.anchorType,
           et.blockNumber,
