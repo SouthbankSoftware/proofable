@@ -19,7 +19,7 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   Koustubh Gaikwad
- * @Last modified time: 2020-06-23T10:17:23+10:00
+ * @Last modified time: 2020-06-23T10:29:27+10:00
  */
 
 import * as grpc from "grpc";
@@ -117,82 +117,83 @@ const cleanup = (id: string) => {
   }
 
   // let trieProofAnchored:TrieProof | undefined;
-  // for await (const tp of trieProofIterable){
-  //   console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
+  for await (const tp of trieProofIterable){
+    console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
   //   let trieProofAnchored = tp;
+  }
+  console.log("end");
+
+  // const iterator = trieProofIterable[Symbol.asyncIterator]()
+  // let tp:TrieProof = (await iterator.next()).value as any as TrieProof;
+  // console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
+  // tp = (await iterator.next()).value as any as TrieProof;
+  // console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
+  // tp = (await iterator.next()).value as any as TrieProof;
+  // console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
+  // tp = (await iterator.next()).value as any as TrieProof;
+  // console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
+  // tp = (await iterator.next()).value as any as TrieProof;
+  // console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
+
+  // // verify the proof
+  // let verifyProofReply;
+  // try{
+  //     verifyProofReply = client.verifyTrieProof(
+  //         trie.getId(),
+  //         trieProof.getId(),
+  //         true,
+  //         "verify.dot");
+  //     }
+  // catch(error){
+  //     console.error(error);
+  //     cleanup(trie.getId());
   // }
 
-  const iterator = trieProofIterable[Symbol.asyncIterator]()
-  let tp:TrieProof = (await iterator.next()).value as any as TrieProof;
-  console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
-  tp = (await iterator.next()).value as any as TrieProof;
-  console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
-  tp = (await iterator.next()).value as any as TrieProof;
-  console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
-  tp = (await iterator.next()).value as any as TrieProof;
-  console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
-  tp = (await iterator.next()).value as any as TrieProof;
-  console.log("Anchoring: " + _.invert(Batch.Status)[tp.getStatus()]);
+  // if(typeof verifyProofReply === "undefined"){
+  //   console.error("Got 'undefined` response from verifyTrieProof");
+  //   return cleanup(trie.getId());
+  // }
 
-  // verify the proof
-  let verifyProofReply;
-  try{
-      verifyProofReply = client.verifyTrieProof(
-          trie.getId(),
-          trieProof.getId(),
-          true,
-          "verify.dot");
-      }
-  catch(error){
-      console.error(error);
-      cleanup(trie.getId());
-  }
+  // let verifyProof: any
+  // for await (verifyProof of verifyProofReply);
 
-  if(typeof verifyProofReply === "undefined"){
-    console.error("Got 'undefined` response from verifyTrieProof");
-    return cleanup(trie.getId());
-  }
+  // if(!verifyProof.getVerified()){
+  //   console.error(`falsified proof: ${verifyProof.getError()}`);
+  //   return cleanup(trie.getId());
+  // }
 
-  let verifyProof: any
-  for await (verifyProof of verifyProofReply);
+  // console.log("Proof verified!")
+  // console.log("the proof with a root hash of %s is anchored to %s in block %s with transaction %s at %s, which can be viewed at %s",
+  //       tp.getProofRoot(),
+  //       _.invert(Anchor.Type)[tp.getAnchorType()],
+  //       tp.getBlockNumber(),
+  //       tp.getTxnId(),
+  //       (new Date(tp.getBlockTime() * 1000)).toUTCString(),
+  //       tp.getTxnUri(),
+  //     )
+  // console.log("The proof's dot graph is saved to verify.dot");
 
-  if(!verifyProof.getVerified()){
-    console.error(`falsified proof: ${verifyProof.getError()}`);
-    return cleanup(trie.getId());
-  }
+  // // extract a subproof for just one key value out of the proof
+  // try{
+  //   await client.createKeyValuesProof(trie.getId(),trieProof.getId(), KeyValuesFilter.from([Key.from("living_room/Co2")]), "living_room_Co2.pxsubproof");
+  // }
+  // catch(error){
+  //   console.error(error);
+  //   return cleanup(trie.getId());
+  // }
 
-  console.log("Proof verified!")
-  console.log("the proof with a root hash of %s is anchored to %s in block %s with transaction %s at %s, which can be viewed at %s",
-        tp.getProofRoot(),
-        _.invert(Anchor.Type)[tp.getAnchorType()],
-        tp.getBlockNumber(),
-        tp.getTxnId(),
-        (new Date(tp.getBlockTime() * 1000)).toUTCString(),
-        tp.getTxnUri(),
-      )
-  console.log("The proof's dot graph is saved to verify.dot");
+  // console.log("the subproof for the key `living_room/Co2` is saved to `living_room_Co2.pxsubproof`")
 
-  // extract a subproof for just one key value out of the proof
-  try{
-    await client.createKeyValuesProof(trie.getId(),trieProof.getId(), KeyValuesFilter.from([Key.from("living_room/Co2")]), "living_room_Co2.pxsubproof");
-  }
-  catch(error){
-    console.error(error);
-    return cleanup(trie.getId());
-  }
-
-  console.log("the subproof for the key `living_room/Co2` is saved to `living_room_Co2.pxsubproof`")
-
-  // verify the subproof independently
-  for await ( const val of client.verifyKeyValuesProof("living_room_Co2.pxsubproof", true, "living_room_Co2_subproof.dot")){
-    if (val instanceof KeyValue) {
-      // within this branch, val is now narrowed down to KeyValue
-      console.log(stripCompoundKeyAnchorTriePart(val).to("utf8", "utf8"));
-    } else {
-      // within this branch, val is now narrowed down to VerifyProofReply
-      console.log("the subproof is", val.getVerified() ? "valid" : "invalid");
-    }
-  }
+  // // verify the subproof independently
+  // for await ( const val of client.verifyKeyValuesProof("living_room_Co2.pxsubproof", true, "living_room_Co2_subproof.dot")){
+  //   if (val instanceof KeyValue) {
+  //     // within this branch, val is now narrowed down to KeyValue
+  //     console.log(stripCompoundKeyAnchorTriePart(val).to("utf8", "utf8"));
+  //   } else {
+  //     // within this branch, val is now narrowed down to VerifyProofReply
+  //     console.log("the subproof is", val.getVerified() ? "valid" : "invalid");
+  //   }
+  // }
 
   // let et:EthTrie = await getEthTrieFromKeyValuesProof("living_room_Co2.pxsubproof");
   // console.log(et.trieNodes[0]);
