@@ -26,7 +26,6 @@ import {
   VerifyTrieProofRequest,
 } from "../protos/api";
 import {
-  AnchorType,
   createKeyValuesProof,
   createKeyValuesProofPromise,
   createTrie,
@@ -54,8 +53,28 @@ import {
   verifyTrieProof,
   verifyTrieProofPromise,
 } from "./api";
+import { Anchor, Batch } from "../protos/anchor";
 
-declare module "../protos/api/api_pb" {
+declare module "../protos/anchor/anchor_pb.d" {
+  namespace Anchor {
+    type TypeOfType = Anchor.TypeMap[keyof Anchor.TypeMap];
+    let TypeName: Record<number, string>;
+
+    type TypeOfStatus = Anchor.StatusMap[keyof Anchor.StatusMap];
+    let StatusName: Record<number, string>;
+  }
+
+  namespace Batch {
+    type TypeOfStatus = Batch.StatusMap[keyof Batch.StatusMap];
+    let StatusName: Record<number, string>;
+  }
+}
+
+Anchor.TypeName = _.invert(Anchor.Type);
+Anchor.StatusName = _.invert(Anchor.Status);
+Batch.StatusName = _.invert(Batch.Status);
+
+declare module "../protos/api/api_pb.d" {
   namespace TrieRequest {
     function from(id: string): TrieRequest;
   }
@@ -96,7 +115,7 @@ declare module "../protos/api/api_pb" {
     function from(
       id: string,
       root: string,
-      anchorType?: AnchorType
+      anchorType?: Anchor.TypeOfType
     ): CreateTrieProofRequest;
   }
 
@@ -198,7 +217,7 @@ SetTrieRootRequest.from = (id, root) => {
   return r;
 };
 
-CreateTrieProofRequest.from = (id, root, anchorType = 0) => {
+CreateTrieProofRequest.from = (id, root, anchorType = Anchor.Type.ETH) => {
   const r = new CreateTrieProofRequest();
 
   r.setTrieId(id);
@@ -594,7 +613,7 @@ export class APIServiceClient extends Client {
   createTrieProof(
     id: string,
     root: string,
-    anchorType?: AnchorType
+    anchorType?: Anchor.TypeOfType
   ): Promise<TrieProof>;
   createTrieProof(
     argument: CreateTrieProofRequest,
@@ -760,7 +779,8 @@ export function newApiServiceClient(
 }
 
 export {
-  AnchorType,
+  Anchor,
+  Batch,
   CreateKeyValuesProofRequest,
   CreateTrieProofRequest,
   DataChunk,

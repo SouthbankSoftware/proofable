@@ -4,37 +4,33 @@ import * as grpc from "grpc";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { SurfaceCall } from "grpc/build/src/call";
 import { EventIterator } from "event-iterator";
-import { APIServiceClient } from "./client";
-import { Anchor } from "../protos/anchor";
+import { APIServiceClient, Anchor } from "./client";
 import {
-  pipeFromReadableStream,
-  pipeToWritableStream,
-  VerifyProofReplyStream,
   CleanupFn,
-  Trie,
-  TrieRequest,
-  KeyValuesFilter,
   CreateKeyValuesProofRequest,
   CreateTrieProofRequest,
+  Key,
   KeyValue,
-  VerifyProofReply,
-  VerifyTrieProofRequest,
-  VerifyKeyValuesProofRequest,
-  TrieKeyValuesRequest,
+  KeyValuesFilter,
+  pipeFromReadableStream,
+  pipeToWritableStream,
   RootFilter,
+  SetTrieRootRequest,
+  Trie,
+  TrieKeyValueRequest,
+  TrieKeyValuesRequest,
   TrieProof,
   TrieProofRequest,
   TrieProofsRequest,
+  TrieRequest,
   TrieRoot,
   TrieRootsRequest,
-  TrieKeyValueRequest,
-  Key,
-  SetTrieRootRequest,
+  VerifyKeyValuesProofRequest,
+  VerifyProofReply,
+  VerifyProofReplyStream,
+  VerifyTrieProofRequest,
 } from "../protos/api";
 import { grpcClientReadableStreamToAsyncIterator } from "./util";
-import { join } from "path";
-
-export type AnchorType = Anchor.TypeMap[keyof Anchor.TypeMap];
 
 export function getTriesPromise(cli: APIServiceClient): AsyncIterable<Trie> {
   return grpcClientReadableStreamToAsyncIterator(cli.getTries(new Empty()));
@@ -342,7 +338,7 @@ export function createTrieProofPromise(
   cli: APIServiceClient,
   id: string,
   root: string,
-  anchorType: AnchorType = 0
+  anchorType: Anchor.TypeOfType = 0
 ): Promise<TrieProof> {
   return new Promise((resolve, reject) => {
     cli.createTrieProof(
