@@ -114,13 +114,11 @@ for await(const val of client.verifyTrieProof(trie.getId(), trieProof.getId(), t
 
 This step will output the summary of the proof
 
-```zsh
-the proof with a root hash of 9aa9f728c533ea7d7671e227e987b45bf49ae31986ad9c7923e987b518a3c1cf is anchored to ETH in block 6715256 with transaction 8acda892995cffd521a7f16eedadffc6756d198dff83f1c54ea1114d8156fca5 at Tue, 23 Jun 2020 03:51:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x8acda892995cffd521a7f16eedadffc6756d198dff83f1c54ea1114d8156fca5
-```
+> The proof with a root hash of 9aa9f728c533ea7d7671e227e987b45bf49ae31986ad9c7923e987b518a3c1cf is anchored to ETH in block 6715256 with transaction 8acda892995cffd521a7f16eedadffc6756d198dff83f1c54ea1114d8156fca5 at Tue, 23 Jun 2020 03:51:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x8acda892995cffd521a7f16eedadffc6756d198dff83f1c54ea1114d8156fca5
 
 and a Graphviz Dot Graph (`proof.dot`):
 
-![Proof Dot Graph](https://github.com/SouthbankSoftware/proofable/tree/master/docs/images/example_proof.svg)
+![Proof Dot Graph](../docs/images/example_proof.svg)
 
 ### Step 7: Extract a subproof for just one key-value out of the proof
 
@@ -165,10 +163,9 @@ This step will output the key-values contained in the subproof:
 ```
 
 with summary
-```typescript
-The subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to undefined in block 6715676 with transaction 13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f at Tue, 23 Jun 2020 05:36:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f
-```
+> The subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to undefined in block 6715676 with transaction 13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f at Tue, 23 Jun 2020 05:36:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f
+
 
 and a Graphviz Dot Graph (`subproof_verify.dot`):
 
-![Subproof Dot Graph](https://github.com/SouthbankSoftware/proofable/tree/master/docs/images/example_subproof.svg)
+![Subproof Dot Graph](../docs/images/example_subproof.svg)
