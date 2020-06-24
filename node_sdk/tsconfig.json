@@ -7,7 +7,13 @@
         "sourceMap": true,
         "outDir": "dist",
         "strict": true,
-        "declaration": true
+        "declaration": true,
+        "baseUrl": ".",
+        "paths": {
+            "@SDK/*": [
+                "src/*"
+            ],
+        }
     },
     "typedocOptions": {
         "mode": "library",

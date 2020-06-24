@@ -1,3 +1,27 @@
+/*
+ * proofable
+ * Copyright (C) 2020  Southbank Software Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @Author: guiguan
+ * @Date:   2020-06-24T12:14:57+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2020-06-24T13:15:41+10:00
+ */
+
 import _ from "lodash";
 import fs from "fs";
 import * as grpc from "grpc";
@@ -189,7 +213,7 @@ export function deleteTriePromise(
 }
 
 /**
- * 
+ *
  * @param cli
  * @param id
  * @param root
@@ -227,12 +251,12 @@ export function getTrieKeyValuePromise(
 }
 
 /**
- * 
- * @param cli 
- * @param id 
- * @param root 
- * @param iter 
- * @param callback 
+ *
+ * @param cli
+ * @param id
+ * @param root
+ * @param iter
+ * @param callback
  * SetTrieKeyValues sets the key-values to the trie. When root is zero (""), the current root hash of the trie will be used, and the request will be blocked until all ongoing updates are finished
  */
 export function setTrieKeyValues(
@@ -262,10 +286,10 @@ export function setTrieKeyValues(
 }
 
 /**
- * 
- * @param cli 
- * @param id 
- * @param root 
+ *
+ * @param cli
+ * @param id
+ * @param root
  * @param iter
  *  SetTrieKeyValuesPromise sets the key-values to the trie. When root is zero (""), the current root hash of the trie will be used, and the request will be blocked until all ongoing updates are finished
  */
