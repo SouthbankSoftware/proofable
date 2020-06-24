@@ -21,7 +21,7 @@ Proofable is a framework for proving any digital asset to Blockchains. Overall, 
 
 ## Node SDK
 
-The Node SDK with sample examples is available [here](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
+The Node SDK with sample examples is available [here](https://www.proofable.io/node_sdk/docs)
 
 ## Example using Go SDK
 
