@@ -69,6 +69,141 @@
 					<h2>Compile Protobuf Definitions</h2>
 				</a>
 				<p>Go to <code>proofable</code> project root and <code>make generate</code></p>
+				<a href="#example-typescript" id="example-typescript" style="color: inherit; text-decoration: none;">
+					<h2>Example (TypeScript)</h2>
+				</a>
+				<p>This is a hello world example written in <a href="https://www.typescriptlang.org/">TypeScript</a> that demonstrates how to:</p>
+				<ul>
+					<li><p>prove a bunch of key-values to Ethereum Testnet within a minute</p>
+					</li>
+					<li><p>create a proof for them</p>
+					</li>
+					<li><p>verify the proof</p>
+					</li>
+					<li><p>extract a subproof for just one key-value out of the proof</p>
+					</li>
+					<li><p>verify the subproof independently</p>
+					</li>
+				</ul>
+				<p>The Node SDK is located <a href="https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk">here</a>. It makes accessing <code>proofable-api</code> very convenient.</p>
+				<p>You can find the complete example source code <a href="https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/example.ts">here</a>, which can be run as:</p>
+				<pre><code class="language-zsh">npm run example</code></pre>
+				<a href="#step-1-create-a-grpc-client" id="step-1-create-a-grpc-client" style="color: inherit; text-decoration: none;">
+					<h3>Step 1: Create a gRPC client</h3>
+				</a>
+				<p>The following code creates a gRPC client. You can skip the authentication part while running the example using magic token as specified in the code below.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> metadata = <span class="hljs-keyword">new</span> grpc.Metadata();
+metadata.add(<span class="hljs-string">&quot;authorization&quot;</span>, <span class="hljs-string">&quot;Bearer magic&quot;</span>);
+<span class="hljs-keyword">const</span> client = newApiServiceClient(API_PROOFABLE_ENDPOINT, metadata);</code></pre>
+				<a href="#step-2-create-an-empty-trie" id="step-2-create-an-empty-trie" style="color: inherit; text-decoration: none;">
+					<h3>Step 2: Create an empty trie</h3>
+				</a>
+				<p>This step creates an empty trie which only has a vlid trieID. The root for empty trie will always be <code>0000000000000000000000000000000000000000000000000000000000000000</code></p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">let</span> trie: Trie | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span>;
+trie = <span class="hljs-keyword">await</span> client.createTrie();</code></pre>
+				<a href="#step-3-set-the-key-values-we-want-to-prove" id="step-3-set-the-key-values-we-want-to-prove" style="color: inherit; text-decoration: none;">
+					<h3>Step 3: Set the key-values we want to prove</h3>
+				</a>
+				<p>This step sets a bunch of key-values that we want to prove in the trie we have just created. In this example, the values are set here in this variable at the beginning <code>TRIE_KEY_VALUES</code>. Both key and value can be arbitrary binaries. They key order doesn&#39;t matter.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> TRIE_KEY_VALUES = [
+  KeyValue.from(<span class="hljs-string">&quot;balcony/wind/speed&quot;</span>, <span class="hljs-string">&quot;11km/h&quot;</span>),
+  KeyValue.from(<span class="hljs-string">&quot;balcony/wind/direction&quot;</span>, <span class="hljs-string">&quot;N&quot;</span>),
+  KeyValue.from(<span class="hljs-string">&quot;living_room/temp&quot;</span>, <span class="hljs-string">&quot;24.8℃&quot;</span>),
+  KeyValue.from(<span class="hljs-string">&quot;living_room/Co2&quot;</span>, <span class="hljs-string">&quot;564ppm&quot;</span>),
+];
+trie = <span class="hljs-keyword">await</span> client.setTrieKeyValues(
+        trie.getId(),
+        trie.getRoot(),
+        TRIE_KEY_VALUES,
+        );</code></pre>
+				<p>When getting key-values from the trie, e.g. <a href="docs/"><code>getTrieKeyValues</code></a>, they will always be sorted according to the key&#39;s alphabetical order. When setting key-values, you can also make multiple [<code>client.setTrieKeyValues</code>] calls as a way to build up a large trie incrementally</p>
+				<a href="#step-4-create-a-proof-for-the-key-values" id="step-4-create-a-proof-for-the-key-values" style="color: inherit; text-decoration: none;">
+					<h3>Step 4: Create a proof for the key-values</h3>
+				</a>
+				<p>This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum (<a href="https://www.proofable.io/docs/anchor.html#anchor.Anchor.Type"><code>ETH</code></a>). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> trieProof: TrieProof = <span class="hljs-keyword">await</span> client.createTrieProof(trie.getId(), trie.getRoot(), Anchor.Type.ETH);</code></pre>
+				<a href="#step-5-wait-for-the-proof-to-be-anchored-to-ethereum" id="step-5-wait-for-the-proof-to-be-anchored-to-ethereum" style="color: inherit; text-decoration: none;">
+					<h3>Step 5: wait for the proof to be anchored to Ethereum</h3>
+				</a>
+				<p>This step waits for the proof we have just created until it is anchored to Ethereum testnet, during which we print the anchoring progress.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> trieProofIterable: AsyncIterable&lt;TrieProof&gt; = client.subscribeTrieProof(trie.getId(), trieProof.getId(), <span class="hljs-literal">null</span>);
+    <span class="hljs-keyword">let</span> trieProofAnchored:TrieProof = <span class="hljs-keyword">new</span> TrieProof();
+    <span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">const</span> tp <span class="hljs-keyword">of</span> trieProofIterable){
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Anchoring Proof: &quot;</span> + _.invert(Batch.Status)[tp.getStatus()]);
+      trieProofAnchored = tp;
+    }</code></pre>
+				<a href="#step-6-verify-the-proof" id="step-6-verify-the-proof" style="color: inherit; text-decoration: none;">
+					<h3>Step 6: Verify the proof</h3>
+				</a>
+				<p>This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span>(<span class="hljs-keyword">const</span> val <span class="hljs-keyword">of</span> client.verifyTrieProof(trie.getId(), trieProof.getId(), <span class="hljs-literal">true</span>, VERIFY_PROOF_DOTGRAPH_FILE)){
+      <span class="hljs-keyword">if</span>(val <span class="hljs-keyword">instanceof</span> VerifyProofReply){
+        <span class="hljs-keyword">if</span>(!val.getVerified()){
+          <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`falsified proof: <span class="hljs-subst">${val.getError()}</span>`</span>);
+          <span class="hljs-keyword">return</span> cleanup(trie.getId());
+        }
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Proof Verified!&quot;</span>);
+      }
+    }
+
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;the proof with a root hash of %s is anchored to %s in block %s with transaction %s at %s, which can be viewed at %s&quot;</span>,
+          trieProofAnchored.getRoot(),
+          _.invert(Anchor.Type)[trieProofAnchored.getAnchorType()],
+          trieProofAnchored.getBlockNumber(),
+          trieProofAnchored.getTxnId(),
+          (<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(trieProofAnchored.getBlockTime() * <span class="hljs-number">1000</span>)).toUTCString(),
+          trieProofAnchored.getTxnUri(),
+        )
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`The proof&#x27;s dot graph is saved to <span class="hljs-subst">${VERIFY_PROOF_DOTGRAPH_FILE}</span>`</span>);</code></pre>
+				<p>This step will output the summary of the proof</p>
+				<blockquote>
+					<p>The proof with a root hash of 9aa9f728c533ea7d7671e227e987b45bf49ae31986ad9c7923e987b518a3c1cf is anchored to ETH in block 6715256 with transaction 8acda892995cffd521a7f16eedadffc6756d198dff83f1c54ea1114d8156fca5 at Tue, 23 Jun 2020 03:51:54 GMT, which can be viewed at <a href="https://rinkeby.etherscan.io/tx/0x8acda892995cffd521a7f16eedadffc6756d198dff83f1c54ea1114d8156fca5">https://rinkeby.etherscan.io/tx/0x8acda892995cffd521a7f16eedadffc6756d198dff83f1c54ea1114d8156fca5</a></p>
+				</blockquote>
+				<p>and a Graphviz Dot Graph (<code>proof.dot</code>):</p>
+				<p><img src="../docs/images/example_proof.svg" alt="Proof Dot Graph"></p>
+				<a href="#step-7-extract-a-subproof-for-just-one-key-value-out-of-the-proof" id="step-7-extract-a-subproof-for-just-one-key-value-out-of-the-proof" style="color: inherit; text-decoration: none;">
+					<h3>Step 7: Extract a subproof for just one key-value out of the proof</h3>
+				</a>
+				<p>This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key <code>living_room/Co2</code> only and nothing else. A subproof file named <code>living_room_Co2.pxsubproof</code> will be created in current working directory. You could also create a subproof for multiple key-values</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> SUBPROOF_KEY = <span class="hljs-string">&quot;living_room/Co2&quot;</span>;
+<span class="hljs-keyword">await</span> client.createKeyValuesProof(trie.getId(),trieProof.getId(), KeyValuesFilter.from([Key.from(SUBPROOF_KEY)]), SUBPROOF_KEY.replace(<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-string">&quot;-&quot;</span>) + <span class="hljs-string">&quot;.pxsubproof&quot;</span>);</code></pre>
+				<a href="#step-9-verify-the-subproof-independently" id="step-9-verify-the-subproof-independently" style="color: inherit; text-decoration: none;">
+					<h3>Step 9: verify the subproof independently</h3>
+				</a>
+				<p>This step independently verifies the subproof we have just created. The only thing needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> ( <span class="hljs-keyword">const</span> val <span class="hljs-keyword">of</span> client.verifyKeyValuesProof(<span class="hljs-string">&quot;living_room_Co2.pxsubproof&quot;</span>, <span class="hljs-literal">true</span>, VERIFY_SUBPROOF_DOTGRAPH_FILE)){
+      <span class="hljs-keyword">if</span> (val <span class="hljs-keyword">instanceof</span> KeyValue) {
+        <span class="hljs-comment">// within this branch, val is now narrowed down to KeyValue</span>
+        <span class="hljs-built_in">console</span>.log(stripCompoundKeyAnchorTriePart(val).to(<span class="hljs-string">&quot;utf8&quot;</span>, <span class="hljs-string">&quot;utf8&quot;</span>));
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">// within this branch, val is now narrowed down to VerifyProofReply</span>
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;the subproof is&quot;</span>, val.getVerified() ? <span class="hljs-string">&quot;valid&quot;</span> : <span class="hljs-string">&quot;invalid&quot;</span>);
+      }
+    }
+    <span class="hljs-keyword">const</span> et:EthTrie = <span class="hljs-keyword">await</span> getEthTrieFromKeyValuesProof(SUBPROOF_KEY.replace(<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-string">&quot;-&quot;</span>) + <span class="hljs-string">&quot;.pxsubproof&quot;</span>)
+
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;The subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s&quot;</span>,
+          et.root,
+          et.anchorType,
+          et.blockNumber,
+          et.txnId,
+          (<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(et.blockTime * <span class="hljs-number">1000</span>)).toUTCString(),
+          et.txnUri,
+        )
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`The subproof&#x27;s dot graph is saved to <span class="hljs-subst">${VERIFY_SUBPROOF_DOTGRAPH_FILE}</span>`</span>);</code></pre>
+				<p>This step will output the key-values contained in the subproof:</p>
+				<pre><code class="language-zsh">{ key: <span class="hljs-string">&#x27;living_room/Co2&#x27;</span>, val: <span class="hljs-string">&#x27;564ppm&#x27;</span> }</code></pre>
+				<p>with summary</p>
+				<blockquote>
+					<p>The subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to undefined in block 6715676 with transaction 13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f at Tue, 23 Jun 2020 05:36:54 GMT, which can be viewed at <a href="https://rinkeby.etherscan.io/tx/0x13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f">https://rinkeby.etherscan.io/tx/0x13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f</a></p>
+				</blockquote>
+				<p>and a Graphviz Dot Graph (<code>subproof_verify.dot</code>):</p>
+				<p><img src="../docs/images/example_subproof.svg" alt="Subproof Dot Graph"></p>
+				<a href="#example-javascript" id="example-javascript" style="color: inherit; text-decoration: none;">
+					<h2>Example (JavaScript)</h2>
+				</a>
+				<p>The same example is also written in JavaScript. You can run it like this</p>
+				<pre><code class="language-zsh">npm run examplejs</code></pre>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
