@@ -188,6 +188,13 @@ export function deleteTriePromise(
   });
 }
 
+/**
+ * 
+ * @param cli
+ * @param id
+ * @param root
+ * getTrieKeyValuesPromise gets the key-values of the trie at the given root. When root is zero (""), the current root hash of the trie will be used, and the request will be blocked until all ongoing updates are finished
+ */
 export function getTrieKeyValuesPromise(
   cli: APIServiceClient,
   id: string,
@@ -219,6 +226,15 @@ export function getTrieKeyValuePromise(
   });
 }
 
+/**
+ * 
+ * @param cli 
+ * @param id 
+ * @param root 
+ * @param iter 
+ * @param callback 
+ * SetTrieKeyValues sets the key-values to the trie. When root is zero (""), the current root hash of the trie will be used, and the request will be blocked until all ongoing updates are finished
+ */
 export function setTrieKeyValues(
   cli: APIServiceClient,
   id: string,
@@ -245,6 +261,14 @@ export function setTrieKeyValues(
   return stream;
 }
 
+/**
+ * 
+ * @param cli 
+ * @param id 
+ * @param root 
+ * @param iter
+ *  SetTrieKeyValuesPromise sets the key-values to the trie. When root is zero (""), the current root hash of the trie will be used, and the request will be blocked until all ongoing updates are finished
+ */
 export function setTrieKeyValuesPromise(
   cli: APIServiceClient,
   id: string,

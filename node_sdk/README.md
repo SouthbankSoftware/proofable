@@ -4,9 +4,9 @@
 
 Go to `proofable` project root and `make generate`
 
-## Example
+## Example (TypeScript)
 
-This is a hello world example written in TypeScript that demonstrates how to:
+This is a hello world example written in [TypeScript](https://www.typescriptlang.org/) that demonstrates how to:
 
 - prove a bunch of key-values to Ethereum Testnet within a minute
 
@@ -41,7 +41,7 @@ const client = newApiServiceClient(API_PROOFABLE_ENDPOINT, metadata);
 This step creates an empty trie which only has a vlid trieID. The root for empty trie will always be `0000000000000000000000000000000000000000000000000000000000000000`
 
 ```typescript
-let trie:Trie;
+let trie: Trie | null = null;
 trie = await client.createTrie();
 ```
 
@@ -63,7 +63,7 @@ trie = await client.setTrieKeyValues(
         );
 ```
 
-When getting key-values from the trie, e.g. [`client.getTrieKeyValues`], they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`client.setTrieKeyValues`] calls as a way to build up a large trie incrementally
+When getting key-values from the trie, e.g. [`getTrieKeyValuesPromise`](docs/modules/_api_api_.html#gettriekeyvaluespromise), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`setTrieKeyValuesPromise`](docs/modules/_api_api_.html#settriekeyvaluespromise) calls as a way to build up a large trie incrementally
 
 ### Step 4: Create a proof for the key-values
 
@@ -134,7 +134,8 @@ await client.createKeyValuesProof(trie.getId(),trieProof.getId(), KeyValuesFilte
 This step independently verifies the subproof we have just created. The only thing needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof
 
 ```typescript
-for await ( const val of client.verifyKeyValuesProof("living_room_Co2.pxsubproof", true, VERIFY_SUBPROOF_DOTGRAPH_FILE)){
+const SUBPROOF_KEY = "living_room/Co2";
+for await ( const val of client.verifyKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".subproofable", true, VERIFY_SUBPROOF_DOTGRAPH_FILE)){
       if (val instanceof KeyValue) {
         // within this branch, val is now narrowed down to KeyValue
         console.log(stripCompoundKeyAnchorTriePart(val).to("utf8", "utf8"));
@@ -169,3 +170,11 @@ with summary
 and a Graphviz Dot Graph (`subproof_verify.dot`):
 
 ![Subproof Dot Graph](../docs/images/example_subproof.svg)
+
+## Example (JavaScript)
+
+The same example is also written in JavaScript. You can run it like this
+
+```zsh
+npm run examplejs
+```
