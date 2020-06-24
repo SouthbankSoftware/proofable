@@ -8,12 +8,6 @@
         "outDir": "dist",
         "strict": true,
         "declaration": true,
-        "baseUrl": ".",
-        "paths": {
-            "@SDK/*": [
-                "src/*"
-            ],
-        }
     },
     "typedocOptions": {
         "mode": "library",
@@ -25,10 +19,7 @@
         "es2015"
     ],
     "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/*.spec.ts"
+        "src",
+        "tests",
     ]
 }

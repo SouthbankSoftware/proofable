@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-19T10:49:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T13:15:49+10:00
+ * @Last modified time: 2020-06-24T19:10:03+10:00
  */
 
 import _ from "lodash";
@@ -315,7 +315,7 @@ export class APIServiceClient extends Client {
       return getTriePromise(this, arg1);
     }
 
-    return super.getTrie(arg1, arg2, arg3);
+    return super.getTrie(arg1, arg2, arg3, arg4);
   }
 
   /**

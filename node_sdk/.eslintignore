@@ -1,0 +1,4 @@
+/dist
+/docs
+/src/protos/**/*_pb.js
+/src/protos/**/*_pb.d.ts

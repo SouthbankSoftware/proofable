@@ -18,11 +18,10 @@
  *
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
- * @Last modified by:   Koustubh Gaikwad
- * @Last modified time: 2020-06-24T10:48:15+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2020-06-24T21:07:51+10:00
  */
 
-import 'regenerator-runtime/runtime';
 import * as grpc from "grpc";
 import {
   Anchor,
@@ -33,8 +32,9 @@ import {
   KeyValuesFilter,
   newApiServiceClient,
   stripCompoundKeyAnchorTriePart,
+  Trie,
   VerifyProofReply,
-} from "../../dist/api";
+} from "../api";
 
 const API_PROOFABLE_ENDPOINT = "api.dev.proofable.io:443";
 const VERIFY_PROOF_DOTGRAPH_FILE = "proof.dot";
@@ -58,7 +58,7 @@ const client = newApiServiceClient(API_PROOFABLE_ENDPOINT, metadata);
 
 // use `npm run example` to run this example
 (async () => {
-  let trie = null;
+  let trie: Trie | null = null;
 
   try {
     // create an empty trie

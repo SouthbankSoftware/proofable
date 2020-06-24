@@ -40,12 +40,26 @@
             "name": "Node SDK Example",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceFolder}/node_sdk/src/examples/example.ts",
+            "program": "${workspaceFolder}/node_sdk/src/examples/typescript.ts",
             "preLaunchTask": "build node_sdk",
             "outFiles": [
-                "${workspaceFolder}/node_sdk/dist/examples/example.js"
+                "${workspaceFolder}/node_sdk/dist/examples/typescript.js"
             ],
             "cwd": "${workspaceFolder}/node_sdk",
+        },
+        {
+            "name": "Node SDK Jest",
+            "type": "node",
+            "request": "launch",
+            "runtimeArgs": [
+                "--inspect-brk",
+                "${workspaceFolder}/node_sdk/node_modules/.bin/jest",
+                "--runInBand",
+            ],
+            "cwd": "${workspaceFolder}/node_sdk",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "port": 9229
         }
     ]
 }

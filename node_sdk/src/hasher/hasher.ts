@@ -19,9 +19,10 @@
  * @Author: guiguan
  * @Date:   2020-06-23T13:52:46+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T13:16:35+10:00
+ * @Last modified time: 2020-06-24T19:01:58+10:00
  */
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { keccak256 } from "eth-lib/lib/hash";
 

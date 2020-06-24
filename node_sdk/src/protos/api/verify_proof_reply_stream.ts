@@ -19,11 +19,10 @@
  * @Author: guiguan
  * @Date:   2020-06-19T10:49:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T13:18:03+10:00
+ * @Last modified time: 2020-06-24T19:14:20+10:00
  */
 
 import * as grpc from "grpc";
-import _ from "lodash";
 import { EventEmitter } from "events";
 import {
   DataChunk,

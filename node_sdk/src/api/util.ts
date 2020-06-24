@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-23T12:20:18+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T13:16:01+10:00
+ * @Last modified time: 2020-06-24T19:07:25+10:00
  */
 
 import _ from "lodash";
@@ -34,7 +34,7 @@ import { KeyValue } from "../protos/api/api_pb";
  * The length of the key separator for the top anchor trie. For normal Proof_ETH_TRIE format, it
  * should be 1; for signed Proof_ETH_TRIE_SIGNED, it should be 2
  */
-export let ANCHOR_KEY_SEP_LEN = 1;
+export const ANCHOR_KEY_SEP_LEN = 1;
 
 /**
  * Strips away the anchor trie part from the compound key. The anchor trie part of a key is added by

@@ -19,18 +19,18 @@
  * @Author: guiguan
  * @Date:   2020-06-22T16:45:37+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T13:16:53+10:00
+ * @Last modified time: 2020-06-24T18:52:47+10:00
  */
 
 import { sha3 } from "../hasher";
 
 export abstract class EthTrie {
-  anchorType: string = "ETH";
-  txnId: string = "";
-  txnUri: string = "";
-  blockTime: number = 0;
-  blockTimeNano: number = 0;
-  blockNumber: number = 0;
+  anchorType = "ETH";
+  txnId = "";
+  txnUri = "";
+  blockTime = 0;
+  blockTimeNano = 0;
+  blockNumber = 0;
   trieNodes: string[] = [];
 
   get root(): string {

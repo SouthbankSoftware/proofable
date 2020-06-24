@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /*
  * proofable
  * Copyright (C) 2020  Southbank Software Ltd.
@@ -19,11 +20,11 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-23T17:27:08+10:00
+ * @Last modified time: 2020-06-24T21:16:46+10:00
  */
 
-import * as grpc from "grpc";
-import {
+const grpc = require("grpc");
+const {
   Anchor,
   Batch,
   getEthTrieFromKeyValuesProof,
@@ -32,9 +33,8 @@ import {
   KeyValuesFilter,
   newApiServiceClient,
   stripCompoundKeyAnchorTriePart,
-  Trie,
   VerifyProofReply,
-} from "../api";
+} = require("../../dist/api");
 
 const API_PROOFABLE_ENDPOINT = "api.dev.proofable.io:443";
 const VERIFY_PROOF_DOTGRAPH_FILE = "proof.dot";
@@ -58,7 +58,7 @@ const client = newApiServiceClient(API_PROOFABLE_ENDPOINT, metadata);
 
 // use `npm run example` to run this example
 (async () => {
-  let trie: Trie | null = null;
+  let trie = null;
 
   try {
     // create an empty trie
