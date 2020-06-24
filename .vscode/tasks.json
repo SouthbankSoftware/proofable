@@ -12,6 +12,18 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "build node_sdk",
+            "type": "shell",
+            "command": "npm run-script build",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}/node_sdk"
+            }
         }
     ]
 }

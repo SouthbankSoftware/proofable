@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es6",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
+        "strict": true,
+        "declaration": true,
+    },
+    "typedocOptions": {
+        "mode": "library",
+        "out": "docs",
+        "includeDeclarations": true,
+        "excludeExternals": true,
+    },
+    "lib": [
+        "es2015"
+    ],
+    "include": [
+        "src",
+        "tests",
+    ]
+}

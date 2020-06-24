@@ -19,27 +19,195 @@
  * @Author: guiguan
  * @Date:   2020-02-15T08:42:02+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-06-22T18:04:39+10:00
  */
 
 package api
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"os"
 
-	"github.com/SouthbankSoftware/proofable/pkg/proof"
 	anchorPB "github.com/SouthbankSoftware/proofable/pkg/protos/anchor"
 	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
 	"github.com/golang/protobuf/ptypes/empty"
 	"golang.org/x/sync/errgroup"
 )
 
-// CreateTrie creates a new trie
+// GetTries gets all tries. Admin privilege is required
+func GetTries(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+) (trCH <-chan *apiPB.Trie, errCH <-chan error) {
+	trChan := make(chan *apiPB.Trie, 3)
+	errChan := make(chan error, 1)
+
+	go func() {
+		defer close(trChan)
+		defer close(errChan)
+
+		var er error
+
+		defer func() {
+			if er != nil {
+				errChan <- er
+			}
+		}()
+
+		getCli, err := cli.GetTries(ctx, &empty.Empty{})
+		if err != nil {
+			er = err
+			return
+		}
+
+		for {
+			tr, err := getCli.Recv()
+			if err != nil {
+				if errors.Is(err, io.EOF) {
+					break
+				}
+
+				er = err
+				return
+			}
+
+			select {
+			case <-ctx.Done():
+				er = ctx.Err()
+				return
+			case trChan <- tr:
+			}
+		}
+
+		return
+	}()
+
+	trCH = trChan
+	errCH = errChan
+	return
+}
+
+// GetTrie gets a trie
+func GetTrie(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id string,
+) (root string, er error) {
+	tr, err := cli.GetTrie(ctx, &apiPB.TrieRequest{
+		TrieId: id,
+	})
+	if err != nil {
+		er = err
+		return
+	}
+
+	root = tr.GetRoot()
+	return
+}
+
+// ImportTrie imports the trie data and creates a new trie. If ID is zero, a new trie ID will be
+// generated, which is recommended when importing
+func ImportTrie(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	path string,
+) (newID, root string, er error) {
+	impCli, err := cli.ImportTrie(ctx)
+	if err != nil {
+		er = err
+		return
+	}
+
+	inFile, err := os.Open(path)
+	if err != nil {
+		er = err
+		return
+	}
+	defer inFile.Close()
+
+	wc := apiPB.NewDataStreamWriter(
+		impCli,
+		func() (md apiPB.DataChunkMetadata, er error) {
+			md = &apiPB.DataChunk_TrieRequest{
+				TrieRequest: &apiPB.TrieRequest{
+					TrieId: id,
+				},
+			}
+			return
+		},
+	)
+	defer func() {
+		// close the stream writer
+		wc.Close()
+
+		tri, err := impCli.CloseAndRecv()
+		if err != nil {
+			er = err
+			return
+		}
+
+		newID = tri.GetId()
+		root = tri.GetRoot()
+	}()
+
+	_, er = io.Copy(wc, inFile)
+	return
+}
+
+// WithImportedTrie provides a new imported trie to the closure that is automatically destroyed when
+// done. If ID is zero, a new trie ID will be generated, which is recommended when importing
+func WithImportedTrie(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	path string,
+	fn func(id, root string) error) (er error) {
+	newID, root, err := ImportTrie(ctx, cli, id, path)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		err := DeleteTrie(ctx, cli, newID)
+		if err != nil && er == nil {
+			er = err
+		}
+	}()
+
+	return fn(newID, root)
+}
+
+// ExportTrie exports the given trie
+func ExportTrie(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	outputPath string,
+) error {
+	stream, err := cli.ExportTrie(ctx, &apiPB.TrieRequest{
+		TrieId: id,
+	})
+	if err != nil {
+		return err
+	}
+
+	rc := apiPB.NewDataStreamReader(stream, nil)
+	defer rc.Close()
+
+	outFile, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	defer outFile.Close()
+
+	_, err = io.Copy(outFile, rc)
+	return err
+}
+
+// CreateTrie creates a new empty trie
 func CreateTrie(ctx context.Context, cli apiPB.APIServiceClient) (
 	id, root string, er error) {
 	tr, err := cli.CreateTrie(ctx, &empty.Empty{})
@@ -76,6 +244,83 @@ func WithTrie(ctx context.Context, cli apiPB.APIServiceClient,
 	}()
 
 	return fn(id, root)
+}
+
+// GetTrieKeyValues gets the key-values of the trie at the given root. When root is zero (""), the
+// current root hash of the trie will be used, and the request will be blocked until all ongoing
+// updates are finished
+func GetTrieKeyValues(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	root string,
+) (kvCH <-chan *apiPB.KeyValue, errCH <-chan error) {
+	kvChan := make(chan *apiPB.KeyValue, 10)
+	errChan := make(chan error, 1)
+
+	go func() {
+		defer close(kvChan)
+		defer close(errChan)
+
+		var er error
+
+		defer func() {
+			if er != nil {
+				errChan <- er
+			}
+		}()
+
+		getCli, err := cli.GetTrieKeyValues(ctx, &apiPB.TrieKeyValuesRequest{
+			TrieId: id,
+			Root:   root,
+		})
+		if err != nil {
+			er = err
+			return
+		}
+
+		for {
+			kv, err := getCli.Recv()
+			if err != nil {
+				if errors.Is(err, io.EOF) {
+					break
+				}
+
+				er = err
+				return
+			}
+
+			select {
+			case <-ctx.Done():
+				er = ctx.Err()
+				return
+			case kvChan <- kv:
+			}
+		}
+
+		return
+	}()
+
+	kvCH = kvChan
+	errCH = errChan
+	return
+}
+
+// GetTrieKeyValue get a key-value of the trie at the given root. When root is zero (""), the
+// current root hash of the trie will be used, and the request will be blocked until all ongoing
+// updates are finished
+func GetTrieKeyValue(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	root string,
+	key *apiPB.Key,
+) (kv *apiPB.KeyValue, er error) {
+	return cli.GetTrieKeyValue(ctx, &apiPB.TrieKeyValueRequest{
+		TrieId: id,
+		Root:   root,
+		Key:    key,
+	})
 }
 
 // SetTrieKeyValues sets the key-values to the trie. When root is zero (""), the current root hash
@@ -158,20 +403,19 @@ func SetTrieKeyValues(
 	return
 }
 
-// GetTrieKeyValues gets the key-values of the trie at the given root. When root is zero (""), the
-// current root hash of the trie will be used, and the request will be blocked until all ongoing
-// updates are finished
-func GetTrieKeyValues(
+// GetTrieRoots gets roots of a trie. This is a series of roots showing the modification history of
+// a trie
+func GetTrieRoots(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
-	id,
-	root string,
-) (kvCH <-chan *apiPB.KeyValue, errCH <-chan error) {
-	kvChan := make(chan *apiPB.KeyValue, 10)
+	id string,
+	filter *apiPB.RootFilter,
+) (trCH <-chan *apiPB.TrieRoot, errCH <-chan error) {
+	trChan := make(chan *apiPB.TrieRoot, 3)
 	errChan := make(chan error, 1)
 
 	go func() {
-		defer close(kvChan)
+		defer close(trChan)
 		defer close(errChan)
 
 		var er error
@@ -182,9 +426,9 @@ func GetTrieKeyValues(
 			}
 		}()
 
-		getCli, err := cli.GetTrieKeyValues(ctx, &apiPB.TrieKeyValuesRequest{
-			TrieId: id,
-			Root:   root,
+		getCli, err := cli.GetTrieRoots(ctx, &apiPB.TrieRootsRequest{
+			TrieId:     id,
+			RootFilter: filter,
 		})
 		if err != nil {
 			er = err
@@ -192,7 +436,7 @@ func GetTrieKeyValues(
 		}
 
 		for {
-			kv, err := getCli.Recv()
+			tr, err := getCli.Recv()
 			if err != nil {
 				if errors.Is(err, io.EOF) {
 					break
@@ -206,50 +450,116 @@ func GetTrieKeyValues(
 			case <-ctx.Done():
 				er = ctx.Err()
 				return
-			case kvChan <- kv:
+			case trChan <- tr:
 			}
 		}
 
 		return
 	}()
 
-	kvCH = kvChan
+	trCH = trChan
 	errCH = errChan
 	return
 }
 
-// GetTrieKeyValue get a key-value of the trie at the given root. When root is zero (""), the
-// current root hash of the trie will be used, and the request will be blocked until all ongoing
-// updates are finished
-func GetTrieKeyValue(
+// SetTrieRoot sets the root of a trie to the given one. This will add an entry in the root history
+func SetTrieRoot(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
 	id,
 	root string,
-	key *apiPB.Key,
-) (kv *apiPB.KeyValue, er error) {
-	return cli.GetTrieKeyValue(ctx, &apiPB.TrieKeyValueRequest{
+) (er error) {
+	_, er = cli.SetTrieRoot(ctx, &apiPB.SetTrieRootRequest{
 		TrieId: id,
 		Root:   root,
-		Key:    key,
 	})
+	return
 }
 
-// CreateTrieProof creates a trie proof for the given trie root. When root is zero (""), the current
-// root hash of the trie will be used, and the request will be blocked until all ongoing updates are
-// finished
-func CreateTrieProof(
+// GetTrieProofs gets proofs of a trie
+func GetTrieProofs(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
-	id,
-	root string,
-	anchorType anchorPB.Anchor_Type,
+	id string,
+	filter *apiPB.RootFilter,
+) (tpCH <-chan *apiPB.TrieProof, errCH <-chan error) {
+	tpChan := make(chan *apiPB.TrieProof, 3)
+	errChan := make(chan error, 1)
+
+	go func() {
+		defer close(tpChan)
+		defer close(errChan)
+
+		var er error
+
+		defer func() {
+			if er != nil {
+				errChan <- er
+			}
+		}()
+
+		getCli, err := cli.GetTrieProofs(ctx, &apiPB.TrieProofsRequest{
+			TrieId:     id,
+			RootFilter: filter,
+		})
+		if err != nil {
+			er = err
+			return
+		}
+
+		for {
+			tp, err := getCli.Recv()
+			if err != nil {
+				if errors.Is(err, io.EOF) {
+					break
+				}
+
+				er = err
+				return
+			}
+
+			select {
+			case <-ctx.Done():
+				er = ctx.Err()
+				return
+			case tpChan <- tp:
+			}
+		}
+
+		return
+	}()
+
+	tpCH = tpChan
+	errCH = errChan
+	return
+}
+
+// GetTrieProof gets a trie proof by either proof ID or root. If by root, the latest proof of
+// that root will be returned
+func GetTrieProof(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	trieID,
+	proofID,
+	trieRoot string,
 ) (tp *apiPB.TrieProof, er error) {
-	return cli.CreateTrieProof(ctx, &apiPB.CreateTrieProofRequest{
-		TrieId:     id,
-		Root:       root,
-		AnchorType: anchorType,
-	})
+	request := &apiPB.TrieProofRequest{
+		TrieId: trieID,
+	}
+
+	if proofID != "" {
+		request.Query = &apiPB.TrieProofRequest_ProofId{
+			ProofId: proofID,
+		}
+	} else {
+		request.Query = &apiPB.TrieProofRequest_RootFilter{
+			RootFilter: &apiPB.RootFilter{
+				Root: trieRoot,
+			},
+		}
+	}
+
+	return cli.GetTrieProof(ctx, request)
 }
 
 // SubscribeTrieProof subscribes to the given trie proof
@@ -310,32 +620,34 @@ func SubscribeTrieProof(
 	return
 }
 
-// GetTrieProof gets a trie proof by either proof ID or root. If by root, the latest proof of
-// that root will be returned
-func GetTrieProof(
+// CreateTrieProof creates a trie proof for the given trie root. When root is zero (""), the current
+// root hash of the trie will be used, and the request will be blocked until all ongoing updates are
+// finished
+func CreateTrieProof(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
-	trieID,
-	proofID,
-	trieRoot string,
+	id,
+	root string,
+	anchorType anchorPB.Anchor_Type,
 ) (tp *apiPB.TrieProof, er error) {
-	request := &apiPB.TrieProofRequest{
-		TrieId: trieID,
-	}
+	return cli.CreateTrieProof(ctx, &apiPB.CreateTrieProofRequest{
+		TrieId:     id,
+		Root:       root,
+		AnchorType: anchorType,
+	})
+}
 
-	if proofID != "" {
-		request.Query = &apiPB.TrieProofRequest_ProofId{
-			ProofId: proofID,
-		}
-	} else {
-		request.Query = &apiPB.TrieProofRequest_RootFilter{
-			RootFilter: &apiPB.RootFilter{
-				Root: trieRoot,
-			},
-		}
-	}
-
-	return cli.GetTrieProof(ctx, request)
+// DeleteTrieProof deletes a proof for a trie root
+func DeleteTrieProof(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id,
+	proofID string,
+) (tp *apiPB.TrieProof, er error) {
+	return cli.DeleteTrieProof(ctx, &apiPB.DeleteTrieProofRequest{
+		TrieId:  id,
+		ProofId: proofID,
+	})
 }
 
 // VerifyTrieProof verifies the given trie proof. When dotGraphOutputPath is non-zero, a Graphviz
@@ -343,7 +655,7 @@ func GetTrieProof(
 func VerifyTrieProof(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
-	trieID,
+	id,
 	proofID string,
 	outputKeyValues bool,
 	dotGraphOutputPath string,
@@ -366,7 +678,7 @@ func VerifyTrieProof(
 		}()
 
 		stream, err := cli.VerifyTrieProof(ctx, &apiPB.VerifyTrieProofRequest{
-			TrieId:          trieID,
+			TrieId:          id,
 			ProofId:         proofID,
 			OutputKeyValues: outputKeyValues,
 			OutputDotGraph:  dotGraphOutputPath != "",
@@ -435,105 +747,6 @@ func VerifyTrieProof(
 	rpCH = rpChan
 	errCH = errChan
 	return
-}
-
-// ExportTrie exports the given trie
-func ExportTrie(
-	ctx context.Context,
-	cli apiPB.APIServiceClient,
-	id,
-	outputPath string,
-) error {
-	stream, err := cli.ExportTrie(ctx, &apiPB.TrieRequest{
-		TrieId: id,
-	})
-	if err != nil {
-		return err
-	}
-
-	rc := apiPB.NewDataStreamReader(stream, nil)
-	defer rc.Close()
-
-	outFile, err := os.Create(outputPath)
-	if err != nil {
-		return err
-	}
-	defer outFile.Close()
-
-	_, err = io.Copy(outFile, rc)
-	return err
-}
-
-// ImportTrie imports the trie data and creates a new trie. If ID is zero, a new trie ID will be
-// generated, which is recommended when importing
-func ImportTrie(
-	ctx context.Context,
-	cli apiPB.APIServiceClient,
-	id,
-	path string,
-) (newID, root string, er error) {
-	impCli, err := cli.ImportTrie(ctx)
-	if err != nil {
-		er = err
-		return
-	}
-
-	inFile, err := os.Open(path)
-	if err != nil {
-		er = err
-		return
-	}
-	defer inFile.Close()
-
-	wc := apiPB.NewDataStreamWriter(
-		impCli,
-		func() (md apiPB.DataChunkMetadata, er error) {
-			md = &apiPB.DataChunk_TrieRequest{
-				TrieRequest: &apiPB.TrieRequest{
-					TrieId: id,
-				},
-			}
-			return
-		},
-	)
-	defer func() {
-		// close the stream writer
-		wc.Close()
-
-		tri, err := impCli.CloseAndRecv()
-		if err != nil {
-			er = err
-			return
-		}
-
-		newID = tri.GetId()
-		root = tri.GetRoot()
-	}()
-
-	_, er = io.Copy(wc, inFile)
-	return
-}
-
-// WithImportedTrie provides a new imported trie to the closure that is automatically destroyed when
-// done. If ID is zero, a new trie ID will be generated, which is recommended when importing
-func WithImportedTrie(
-	ctx context.Context,
-	cli apiPB.APIServiceClient,
-	id,
-	path string,
-	fn func(id, root string) error) (er error) {
-	newID, root, err := ImportTrie(ctx, cli, id, path)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		err := DeleteTrie(ctx, cli, newID)
-		if err != nil && er == nil {
-			er = err
-		}
-	}()
-
-	return fn(newID, root)
 }
 
 // CreateKeyValuesProof creates a key-values proof for the provided key-values out of the given trie
@@ -711,26 +924,5 @@ func VerifyKeyValuesProof(
 	kvCH = kvChan
 	rpCH = rpChan
 	errCH = errChan
-	return
-}
-
-// GetEthTrieFromKeyValuesProof returns the EthTrie from the given key-values proof
-func GetEthTrieFromKeyValuesProof(path string) (et *proof.EthTrie, er error) {
-	f, err := os.Open(path)
-	if err != nil {
-		er = err
-		return
-	}
-	defer f.Close()
-
-	etr := &proof.EthTrie{}
-
-	err = json.NewDecoder(f).Decode(etr)
-	if err != nil {
-		er = err
-		return
-	}
-
-	et = etr
 	return
 }

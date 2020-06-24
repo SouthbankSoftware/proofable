@@ -1,0 +1,1 @@
+ignores: ["grpc-tools", "ts-protoc-gen", "@types/jest", "eslint-import-resolver-typescript"]

@@ -5,10 +5,11 @@ data
 *.dot
 *.proof
 *.trie
-*.px*
+*.proofable
+*.subproofable
 
 .git
 /.vscode
 /ci
 /docs
-
+/node_sdk

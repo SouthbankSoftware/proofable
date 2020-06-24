@@ -262,7 +262,8 @@ viewed as a snapshot of all the key-values contained in the trie
 | anchor_type | [anchor.Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the anchor type the trie proof has been submitted to |
 | txn_id | [string](#string) |  | TxnId is the Blockchain transaction ID |
 | txn_uri | [string](#string) |  | TxnUri is the explorer URI for the Blockchain transaction |
-| block_time | [uint64](#uint64) |  | BlockTime is the Blockchain&#39;s block time |
+| block_time | [uint64](#uint64) |  | BlockTime is the Blockchain&#39;s block consensus timestamp in seconds |
+| block_time_nano | [uint64](#uint64) |  | BlockTimeNano is the Blockcahin&#39;s block consensus timestamp&#39;s nano part. For most traditional blockchains, this will be zero. For Hedera, this will be the nano part of the transaction&#39;s consensus timestamp |
 | block_number | [uint64](#uint64) |  | BlockNumber is the Blockchain&#39;s block number |
 | proof_root | [string](#string) |  | ProofRoot is the root hash of the trie proof, which is the anchor batch&#39;s root hash the proof belongs to |
 

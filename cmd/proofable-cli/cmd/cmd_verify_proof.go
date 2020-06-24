@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-06-22T16:04:20+10:00
  */
 
 package cmd
@@ -127,33 +127,31 @@ var cmdVerifyProof = &cobra.Command{
 							api.StripCompoundKeyAnchorTriePart)
 
 						trieMetadata, err := getFileTrieRootMetadata(rightStream)
-						if err != nil {
-							return err
-						}
+						if err == nil {
+							if trieMetadata.Version != fileTrieVersion {
+								return fmt.Errorf("file proof version mismatched, expected `%v` but got `%v`",
+									fileTrieVersion, trieMetadata.Version)
+							}
 
-						if trieMetadata.Version != fileTrieVersion {
-							return fmt.Errorf("file proof version mismatched, expected `%v` but got `%v`",
-								fileTrieVersion, trieMetadata.Version)
-						}
+							// make sure it is ordered
+							leftStream, leftErrCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, true,
+								func(key, fp string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
+									if trieMetadata.IncludeMetadata {
+										return api.GetFilePathKeyMetadataKeyValues(key, fp, de)
+									}
 
-						// make sure it is ordered
-						leftStream, leftErrCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, true,
-							func(key, fp string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
-								if trieMetadata.IncludeMetadata {
-									return api.GetFilePathKeyMetadataKeyValues(key, fp, de)
-								}
+									return
+								})
 
-								return
-							})
+							err = diff.OrderedKeyValueStreams(leftStream, rightStream, df.push)
+							if err != nil {
+								return err
+							}
 
-						err = diff.OrderedKeyValueStreams(leftStream, rightStream, df.push)
-						if err != nil {
-							return err
-						}
-
-						err = <-leftErrCH
-						if err != nil {
-							return err
+							err = <-leftErrCH
+							if err != nil {
+								return err
+							}
 						}
 
 						err = <-rightErrCH
@@ -191,9 +189,15 @@ var cmdVerifyProof = &cobra.Command{
 			colorcli.Green(trieInputPath),
 			colorcli.Green(triePf.GetProofRoot()),
 			colorcli.Green(triePf.GetAnchorType()),
-			colorcli.Green(triePf.GetBlockNumber()),
+			colorcli.Green(getBlockNumberString(
+				triePf.GetAnchorType().String(),
+				triePf.GetBlockTime(),
+				triePf.GetBlockTimeNano(),
+				triePf.GetBlockNumber())),
 			colorcli.Green(triePf.GetTxnId()),
-			colorcli.Green(time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate)),
+			colorcli.Green(time.Unix(
+				int64(triePf.GetBlockTime()),
+				int64(triePf.GetBlockTimeNano())).Format(time.UnixDate)),
 			colorcli.Green(triePf.GetTxnUri()))
 
 		if df.passedKV != df.totalKV {
