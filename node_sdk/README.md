@@ -57,10 +57,10 @@ const TRIE_KEY_VALUES = [
   KeyValue.from("living_room/Co2", "564ppm"),
 ];
 trie = await client.setTrieKeyValues(
-        trie.getId(),
-        trie.getRoot(),
-        TRIE_KEY_VALUES,
-        );
+  trie.getId(),
+  trie.getRoot(),
+  TRIE_KEY_VALUES
+);
 ```
 
 When getting key-values from the trie, e.g. [`getTrieKeyValuesPromise`](docs/modules/_api_api_.html#gettriekeyvaluespromise), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`setTrieKeyValuesPromise`](docs/modules/_api_api_.html#settriekeyvaluespromise) calls as a way to build up a large trie incrementally
@@ -70,7 +70,11 @@ When getting key-values from the trie, e.g. [`getTrieKeyValuesPromise`](docs/mod
 This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum ([`ETH`](https://www.proofable.io/docs/anchor.html#anchor.Anchor.Type)). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in
 
 ```typescript
-const trieProof: TrieProof = await client.createTrieProof(trie.getId(), trie.getRoot(), Anchor.Type.ETH);
+const trieProof: TrieProof = await client.createTrieProof(
+  trie.getId(),
+  trie.getRoot(),
+  Anchor.Type.ETH
+);
 ```
 
 ### Step 5: wait for the proof to be anchored to Ethereum
@@ -78,12 +82,16 @@ const trieProof: TrieProof = await client.createTrieProof(trie.getId(), trie.get
 This step waits for the proof we have just created until it is anchored to Ethereum testnet, during which we print the anchoring progress.
 
 ```typescript
-const trieProofIterable: AsyncIterable<TrieProof> = client.subscribeTrieProof(trie.getId(), trieProof.getId(), null);
-    let trieProofAnchored:TrieProof = new TrieProof();
-    for await (const tp of trieProofIterable){
-      console.log("Anchoring Proof: " + _.invert(Batch.Status)[tp.getStatus()]);
-      trieProofAnchored = tp;
-    }
+const trieProofIterable: AsyncIterable<TrieProof> = client.subscribeTrieProof(
+  trie.getId(),
+  trieProof.getId(),
+  null
+);
+let trieProofAnchored: TrieProof = new TrieProof();
+for await (const tp of trieProofIterable) {
+  console.log("Anchoring Proof: " + _.invert(Batch.Status)[tp.getStatus()]);
+  trieProofAnchored = tp;
+}
 ```
 
 ### Step 6: Verify the proof
@@ -91,25 +99,31 @@ const trieProofIterable: AsyncIterable<TrieProof> = client.subscribeTrieProof(tr
 This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof.
 
 ```typescript
-for await(const val of client.verifyTrieProof(trie.getId(), trieProof.getId(), true, VERIFY_PROOF_DOTGRAPH_FILE)){
-      if(val instanceof VerifyProofReply){
-        if(!val.getVerified()){
-          console.error(`falsified proof: ${val.getError()}`);
-          return cleanup(trie.getId());
-        }
-        console.log("Proof Verified!");
-      }
+for await (const val of client.verifyTrieProof(
+  trie.getId(),
+  trieProof.getId(),
+  true,
+  VERIFY_PROOF_DOTGRAPH_FILE
+)) {
+  if (val instanceof VerifyProofReply) {
+    if (!val.getVerified()) {
+      console.error(`falsified proof: ${val.getError()}`);
+      return cleanup(trie.getId());
     }
+    console.log("Proof Verified!");
+  }
+}
 
-    console.log("the proof with a root hash of %s is anchored to %s in block %s with transaction %s at %s, which can be viewed at %s",
-          trieProofAnchored.getRoot(),
-          _.invert(Anchor.Type)[trieProofAnchored.getAnchorType()],
-          trieProofAnchored.getBlockNumber(),
-          trieProofAnchored.getTxnId(),
-          (new Date(trieProofAnchored.getBlockTime() * 1000)).toUTCString(),
-          trieProofAnchored.getTxnUri(),
-        )
-    console.log(`The proof's dot graph is saved to ${VERIFY_PROOF_DOTGRAPH_FILE}`);
+console.log(
+  "the proof with a root hash of %s is anchored to %s in block %s with transaction %s at %s, which can be viewed at %s",
+  trieProofAnchored.getRoot(),
+  _.invert(Anchor.Type)[trieProofAnchored.getAnchorType()],
+  trieProofAnchored.getBlockNumber(),
+  trieProofAnchored.getTxnId(),
+  new Date(trieProofAnchored.getBlockTime() * 1000).toUTCString(),
+  trieProofAnchored.getTxnUri()
+);
+console.log(`The proof's dot graph is saved to ${VERIFY_PROOF_DOTGRAPH_FILE}`);
 ```
 
 This step will output the summary of the proof
@@ -118,7 +132,7 @@ This step will output the summary of the proof
 
 and a Graphviz Dot Graph (`proof.dot`):
 
-![Proof Dot Graph](../docs/images/example_proof.svg)
+![Proof Dot Graph](https://github.com/SouthbankSoftware/proofable/raw/master/docs/images/example_proof.svg)
 
 ### Step 7: Extract a subproof for just one key-value out of the proof
 
@@ -126,7 +140,12 @@ This step extracts a subproof, a.k.a. key-values proof, out of the proof we have
 
 ```typescript
 const SUBPROOF_KEY = "living_room/Co2";
-await client.createKeyValuesProof(trie.getId(),trieProof.getId(), KeyValuesFilter.from([Key.from(SUBPROOF_KEY)]), SUBPROOF_KEY.replace("/", "-") + ".pxsubproof");
+await client.createKeyValuesProof(
+  trie.getId(),
+  trieProof.getId(),
+  KeyValuesFilter.from([Key.from(SUBPROOF_KEY)]),
+  SUBPROOF_KEY.replace("/", "-") + ".pxsubproof"
+);
 ```
 
 ### Step 9: verify the subproof independently
@@ -135,26 +154,35 @@ This step independently verifies the subproof we have just created. The only thi
 
 ```typescript
 const SUBPROOF_KEY = "living_room/Co2";
-for await ( const val of client.verifyKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".subproofable", true, VERIFY_SUBPROOF_DOTGRAPH_FILE)){
-      if (val instanceof KeyValue) {
-        // within this branch, val is now narrowed down to KeyValue
-        console.log(stripCompoundKeyAnchorTriePart(val).to("utf8", "utf8"));
-      } else {
-        // within this branch, val is now narrowed down to VerifyProofReply
-        console.log("the subproof is", val.getVerified() ? "valid" : "invalid");
-      }
-    }
-    const et:EthTrie = await getEthTrieFromKeyValuesProof(SUBPROOF_KEY.replace("/", "-") + ".pxsubproof")
+for await (const val of client.verifyKeyValuesProof(
+  SUBPROOF_KEY.replace("/", "-") + ".subproofable",
+  true,
+  VERIFY_SUBPROOF_DOTGRAPH_FILE
+)) {
+  if (val instanceof KeyValue) {
+    // within this branch, val is now narrowed down to KeyValue
+    console.log(stripCompoundKeyAnchorTriePart(val).to("utf8", "utf8"));
+  } else {
+    // within this branch, val is now narrowed down to VerifyProofReply
+    console.log("the subproof is", val.getVerified() ? "valid" : "invalid");
+  }
+}
+const et: EthTrie = await getEthTrieFromKeyValuesProof(
+  SUBPROOF_KEY.replace("/", "-") + ".pxsubproof"
+);
 
-    console.log("The subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
-          et.root,
-          et.anchorType,
-          et.blockNumber,
-          et.txnId,
-          (new Date(et.blockTime * 1000)).toUTCString(),
-          et.txnUri,
-        )
-    console.log(`The subproof's dot graph is saved to ${VERIFY_SUBPROOF_DOTGRAPH_FILE}`);
+console.log(
+  "The subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
+  et.root,
+  et.anchorType,
+  et.blockNumber,
+  et.txnId,
+  new Date(et.blockTime * 1000).toUTCString(),
+  et.txnUri
+);
+console.log(
+  `The subproof's dot graph is saved to ${VERIFY_SUBPROOF_DOTGRAPH_FILE}`
+);
 ```
 
 This step will output the key-values contained in the subproof:
@@ -164,12 +192,12 @@ This step will output the key-values contained in the subproof:
 ```
 
 with summary
-> The subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to undefined in block 6715676 with transaction 13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f at Tue, 23 Jun 2020 05:36:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f
 
+> The subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to undefined in block 6715676 with transaction 13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f at Tue, 23 Jun 2020 05:36:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f
 
 and a Graphviz Dot Graph (`subproof_verify.dot`):
 
-![Subproof Dot Graph](../docs/images/example_subproof.svg)
+![Subproof Dot Graph](https://github.com/SouthbankSoftware/proofable/raw/master/docs/images/example_subproof.svg)
 
 ## Example (JavaScript)
 
