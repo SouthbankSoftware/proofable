@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;protos/api/util&quot; | proofable</title>
+	<title>&quot;config/config&quot; | proofable</title>
 	<meta name="description" content="Documentation for proofable">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_protos_api_util_.html">&quot;protos/api/util&quot;</a>
+					<a href="_config_config_.html">&quot;config/config&quot;</a>
 				</li>
 			</ul>
-			<h1>Module &quot;protos/api/util&quot;</h1>
+			<h1>Module &quot;config/config&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -69,47 +69,111 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_config_config_.html#name_config_root" class="tsd-kind-icon">NAME_<wbr>CONFIG_<wbr>ROOT</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_protos_api_util_.html#makeserviceerror" class="tsd-kind-icon">make<wbr>Service<wbr>Error</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_config_config_.html#filepath" class="tsd-kind-icon">file<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_config_config_.html#rootpath" class="tsd-kind-icon">root<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_config_config_.html#userconfigdir" class="tsd-kind-icon">user<wbr>Config<wbr>Dir</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="name_config_root" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> NAME_<wbr>CONFIG_<wbr>ROOT</h3>
+					<div class="tsd-signature tsd-kind-icon">NAME_<wbr>CONFIG_<wbr>ROOT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"ProvenDB"</span><span class="tsd-signature-symbol"> = &quot;ProvenDB&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/config/config.ts:31</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The name of the ProvenDB root config directory</p>
+						</div>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="makeserviceerror" class="tsd-anchor"></a>
-					<h3>make<wbr>Service<wbr>Error</h3>
+					<a name="filepath" class="tsd-anchor"></a>
+					<h3>file<wbr>Path</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">make<wbr>Service<wbr>Error<span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span>, code<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Status</span>, metadata<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Metadata</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ServiceError</span></li>
+						<li class="tsd-signature tsd-kind-icon">file<wbr>Path<span class="tsd-signature-symbol">(</span>configFileName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/protos/api/util.ts#L32">src/protos/api/util.ts:32</a></li>
+									<li>Defined in src/config/config.ts:83</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Create a ServiceError out of an Error</p>
+									<p>The config file path for the given ProvenDB config file name</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>err: <span class="tsd-signature-type">Error</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> code: <span class="tsd-signature-type">Status</span><span class="tsd-signature-symbol"> = Status.INTERNAL</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> metadata: <span class="tsd-signature-type">Metadata</span><span class="tsd-signature-symbol"> = new Metadata()</span></h5>
+									<h5>configFileName: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ServiceError</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="rootpath" class="tsd-anchor"></a>
+					<h3>root<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">root<wbr>Path<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/config/config.ts:76</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The ProvenDB config root path</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="userconfigdir" class="tsd-anchor"></a>
+					<h3>user<wbr>Config<wbr>Dir</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">user<wbr>Config<wbr>Dir<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/config/config.ts:36</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The OS user config path</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -136,7 +200,7 @@
 					<li class=" tsd-kind-module">
 						<a href="_api_util_.html">&quot;api/util&quot;</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="_config_config_.html">&quot;config/config&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -178,7 +242,7 @@
 					<li class=" tsd-kind-module">
 						<a href="_protos_api_index_.html">&quot;protos/api/index&quot;</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="_protos_api_util_.html">&quot;protos/api/util&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -188,8 +252,17 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="_config_config_.html#name_config_root" class="tsd-kind-icon">NAME_<wbr>CONFIG_<wbr>ROOT</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="_protos_api_util_.html#makeserviceerror" class="tsd-kind-icon">make<wbr>Service<wbr>Error</a>
+						<a href="_config_config_.html#filepath" class="tsd-kind-icon">file<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_config_config_.html#rootpath" class="tsd-kind-icon">root<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_config_config_.html#userconfigdir" class="tsd-kind-icon">user<wbr>Config<wbr>Dir</a>
 					</li>
 				</ul>
 			</nav>

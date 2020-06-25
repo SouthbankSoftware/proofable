@@ -19,14 +19,13 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-25T17:37:36+10:00
+ * @Last modified time: 2020-06-25T20:14:48+10:00
  */
 
 import {
   Anchor,
   Batch,
   getEthTrieFromKeyValuesProof,
-  grpc,
   Key,
   KeyValue,
   KeyValuesFilter,
@@ -52,9 +51,7 @@ const TRIE_KEY_VALUES = [
 const SUBPROOF_KEY = "living_room/Co2";
 
 // setup the Proofable API service client
-const metadata = new grpc.Metadata();
-metadata.add("authorization", "Bearer magic");
-const client = newApiServiceClient(API_PROOFABLE_ENDPOINT, metadata);
+const client = newApiServiceClient(API_PROOFABLE_ENDPOINT);
 
 // use `npm run example` to run this example
 (async () => {

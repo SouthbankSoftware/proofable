@@ -27,7 +27,7 @@ The Node SDK with sample examples is available [here](https://www.proofable.io/n
 
 This is a hello world example written in Go that demonstrates how to:
 
-- authenticate with ProvenDB
+- create a Proofable API client
 
 - prove a bunch of key-values to Ethereum Testnet within a minute
 
@@ -49,7 +49,7 @@ go run docs/example.go
 
 ### Step 1: authenticate with ProvenDB
 
-This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is at `~/Library/Application\ Support/ProvenDB/auth.json`. The next time, when you invoke `AuthenticateForGRPC`, it will automatically use the saved token without prompting you to go through the authentication steps again
+This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. The next time, when you invoke `AuthenticateForGRPC`, it will automatically use the saved token without prompting you to go through the authentication steps again. You can find more details from [here](https://github.com/SouthbankSoftware/proofable/blob/master/pkg/auth/auth.go). Please note that this authenticaton method is temperary, which will be replaced by an API key soon
 
 ```go
 creds, err := authcli.AuthenticateForGRPC(ctx,
@@ -59,9 +59,9 @@ creds, err := authcli.AuthenticateForGRPC(ctx,
 )
 ```
 
-### Step 2: create a gRPC client
+### Step 2: create a Proofable client
 
-This step creates a gRPC client (`cli`) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using [`NewAPIClient`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#NewAPIClient), but in that case, you have to manually destroy the client after use
+This step creates a Proofable API gRPC client (`cli`) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using [`NewAPIClient`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#NewAPIClient), but in that case, you have to manually destroy the client after use
 
 ```go
 api.WithAPIClient(

@@ -71,7 +71,7 @@
 				</a>
 				<p>This is a hello world example written in TypeScript that demonstrates how to:</p>
 				<ul>
-					<li><p>create a gRPC client</p>
+					<li><p>create a Proofable API client</p>
 					</li>
 					<li><p>prove a bunch of key-values to Ethereum Testnet within a minute</p>
 					</li>
@@ -88,24 +88,27 @@
 				<pre><code class="language-zsh">npm run example</code></pre>
 				<p>You can also find the Javascript version <a href="https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/javascript.js">here</a>, which can be run as:</p>
 				<pre><code class="language-zsh">npm run example-js</code></pre>
-				<a href="#step-1-create-a-grpc-client" id="step-1-create-a-grpc-client" style="color: inherit; text-decoration: none;">
-					<h3>Step 1: create a gRPC client</h3>
+				<a href="#step-1-authenticate-with-provendb" id="step-1-authenticate-with-provendb" style="color: inherit; text-decoration: none;">
+					<h3>Step 1: authenticate with ProvenDB</h3>
 				</a>
-				<p>This step creates a gRPC <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html"><code>client</code></a>. Note: here we use a magic token to authenticate with <code>proofable-api</code> for testing purpose, which will be changed soon</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> metadata = <span class="hljs-keyword">new</span> grpc.Metadata();
-metadata.add(<span class="hljs-string">&quot;authorization&quot;</span>, <span class="hljs-string">&quot;Bearer magic&quot;</span>);
-
-<span class="hljs-keyword">const</span> client = newApiServiceClient(
-  <span class="hljs-string">&quot;https://apigateway.dev.provendb.com&quot;</span>,
-  metadata
-);</code></pre>
-				<a href="#step-2-create-an-empty-trie" id="step-2-create-an-empty-trie" style="color: inherit; text-decoration: none;">
-					<h3>Step 2: create an empty trie</h3>
+				<p>This step will authenticate with ProvenDB so you can access <code>proofable-api</code>. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at <code>~/Library/Application\ Support/ProvenDB/auth.json</code>. You can find more etails from <a href="http://localhost:8080/modules/_api_auth_.html#getauthmetadata">here</a>. Please note that this authenticaton method is temperary, which will be replaced by an API key soon</p>
+				<ol>
+					<li>download <a href="https://www.proofable.io/cmd/proofable-cli/"><code>provendb-cli</code></a></li>
+					<li>sign in/up to ProvenDB: <code>./provendb-cli auth</code></li>
+					<li>you are all set. You only need to do this once</li>
+				</ol>
+				<a href="#step-2-create-a-proofable-api-client" id="step-2-create-a-proofable-api-client" style="color: inherit; text-decoration: none;">
+					<h3>Step 2: create a Proofable API client</h3>
 				</a>
-				<p>This step creates an empty trie with root <code>0000000000000000000000000000000000000000000000000000000000000000</code>, which is a dictionary that can hold key-values. After using the trie, you should destroy the trie using <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#deletetrie"><code>deleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it</p>
+				<p>This step creates a Proofable API gRPC <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html"><code>client</code></a>. After using the client, you can destroy the client using <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#close"><code>client.close()</code></a></p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> client = newApiServiceClient(<span class="hljs-string">&quot;https://apigateway.dev.provendb.com&quot;</span>);</code></pre>
+				<a href="#step-3-create-an-empty-trie" id="step-3-create-an-empty-trie" style="color: inherit; text-decoration: none;">
+					<h3>Step 3: create an empty trie</h3>
+				</a>
+				<p>This step creates an empty trie with root <code>0000000000000000000000000000000000000000000000000000000000000000</code>, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#deletetrie"><code>deleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">let</span> trie = <span class="hljs-keyword">await</span> client.createTrie();</code></pre>
-				<a href="#step-3-set-the-key-values-we-want-to-prove" id="step-3-set-the-key-values-we-want-to-prove" style="color: inherit; text-decoration: none;">
-					<h3>Step 3: set the key-values we want to prove</h3>
+				<a href="#step-4-set-the-key-values-we-want-to-prove" id="step-4-set-the-key-values-we-want-to-prove" style="color: inherit; text-decoration: none;">
+					<h3>Step 4: set the key-values we want to prove</h3>
 				</a>
 				<p>This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn&#39;t matter. When getting key-values from the trie, e.g. <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#gettriekeyvalues"><code>getTrieKeyValues</code></a>, they will always be sorted according to the key&#39;s alphabetical order. When setting key-values, you can also make multiple <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#settriekeyvalues"><code>setTrieKeyValues</code></a> calls as a way to build up a large trie incrementally</p>
 				<pre><code class="language-typescript">trie = <span class="hljs-keyword">await</span> client.setTrieKeyValues(trie.getId(), trie.getRoot(), [
@@ -114,8 +117,8 @@ metadata.add(<span class="hljs-string">&quot;authorization&quot;</span>, <span c
   KeyValue.from(<span class="hljs-string">&quot;living_room/temp&quot;</span>, <span class="hljs-string">&quot;24.8℃&quot;</span>),
   KeyValue.from(<span class="hljs-string">&quot;living_room/Co2&quot;</span>, <span class="hljs-string">&quot;564ppm&quot;</span>),
 ]);</code></pre>
-				<a href="#step-4-create-a-proof-for-the-key-values" id="step-4-create-a-proof-for-the-key-values" style="color: inherit; text-decoration: none;">
-					<h3>Step 4: create a proof for the key-values</h3>
+				<a href="#step-5-create-a-proof-for-the-key-values" id="step-5-create-a-proof-for-the-key-values" style="color: inherit; text-decoration: none;">
+					<h3>Step 5: create a proof for the key-values</h3>
 				</a>
 				<p>This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum (<a href="https://www.proofable.io/docs/anchor.html#anchor.Anchor.Type"><code>ETH</code></a>). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">let</span> trieProof = <span class="hljs-keyword">await</span> client.createTrieProof(
@@ -123,8 +126,8 @@ metadata.add(<span class="hljs-string">&quot;authorization&quot;</span>, <span c
   trie.getRoot(),
   Anchor.Type.ETH
 );</code></pre>
-				<a href="#step-5-wait-for-the-proof-to-be-anchored-to-ethereum" id="step-5-wait-for-the-proof-to-be-anchored-to-ethereum" style="color: inherit; text-decoration: none;">
-					<h3>Step 5: wait for the proof to be anchored to Ethereum</h3>
+				<a href="#step-6-wait-for-the-proof-to-be-anchored-to-ethereum" id="step-6-wait-for-the-proof-to-be-anchored-to-ethereum" style="color: inherit; text-decoration: none;">
+					<h3>Step 6: wait for the proof to be anchored to Ethereum</h3>
 				</a>
 				<p>This step waits for the proof we have just created until it is anchored to Ethereum, during which we output the anchoring progress</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">const</span> tp <span class="hljs-keyword">of</span> client.subscribeTrieProof(
@@ -135,8 +138,8 @@ metadata.add(<span class="hljs-string">&quot;authorization&quot;</span>, <span c
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Anchoring proof: %s&quot;</span>, Batch.StatusName[tp.getStatus()]);
   trieProof = tp;
 }</code></pre>
-				<a href="#step-6-verify-the-proof" id="step-6-verify-the-proof" style="color: inherit; text-decoration: none;">
-					<h3>Step 6: verify the proof</h3>
+				<a href="#step-7-verify-the-proof" id="step-7-verify-the-proof" style="color: inherit; text-decoration: none;">
+					<h3>Step 7: verify the proof</h3>
 				</a>
 				<p>This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">const</span> val <span class="hljs-keyword">of</span> client.verifyTrieProof(
@@ -176,8 +179,8 @@ living_room/temp -&gt; 24.8℃</code></pre>
 				<pre><code class="language-zsh">the proof with a root <span class="hljs-built_in">hash</span> of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH <span class="hljs-keyword">in</span> block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue, 31 Mar 2020 15:33:10 AEDT, <span class="hljs-built_in">which</span> can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232</code></pre>
 				<p>and a Graphviz Dot Graph (<code>proof.dot</code>):</p>
 				<p><img src="https://github.com/SouthbankSoftware/proofable/raw/master/docs/images/example_proof.svg" alt="Proof Dot Graph"></p>
-				<a href="#step-7-extract-a-subproof-for-just-one-key-value-out-of-the-proof" id="step-7-extract-a-subproof-for-just-one-key-value-out-of-the-proof" style="color: inherit; text-decoration: none;">
-					<h3>Step 7: extract a subproof for just one key-value out of the proof</h3>
+				<a href="#step-8-extract-a-subproof-for-just-one-key-value-out-of-the-proof" id="step-8-extract-a-subproof-for-just-one-key-value-out-of-the-proof" style="color: inherit; text-decoration: none;">
+					<h3>Step 8: extract a subproof for just one key-value out of the proof</h3>
 				</a>
 				<p>This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key <code>living_room/Co2</code> only and nothing else. A subproof file named <code>living_room_Co2.subproofable</code> will be created in current working directory. You could also create a subproof for multiple key-values</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">await</span> client.createKeyValuesProof(
@@ -186,8 +189,8 @@ living_room/temp -&gt; 24.8℃</code></pre>
   KeyValuesFilter.from([Key.from(<span class="hljs-string">&quot;living_room/Co2&quot;</span>)]),
   <span class="hljs-string">&quot;living_room_Co2.subproofable&quot;</span>
 );</code></pre>
-				<a href="#step-8-verify-the-subproof-independently" id="step-8-verify-the-subproof-independently" style="color: inherit; text-decoration: none;">
-					<h3>Step 8: verify the subproof independently</h3>
+				<a href="#step-9-verify-the-subproof-independently" id="step-9-verify-the-subproof-independently" style="color: inherit; text-decoration: none;">
+					<h3>Step 9: verify the subproof independently</h3>
 				</a>
 				<p>This step independently verifies the subproof we have just created. The only thing needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">const</span> val <span class="hljs-keyword">of</span> client.verifyKeyValuesProof(
@@ -239,6 +242,9 @@ living_room/temp -&gt; 24.8℃</code></pre>
 						<a href="modules/_api_api_.html">&quot;api/api&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="modules/_api_auth_.html">&quot;api/auth&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="modules/_api_client_.html">&quot;api/client&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -246,6 +252,12 @@ living_room/temp -&gt; 24.8℃</code></pre>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/_api_util_.html">&quot;api/util&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_config_config_.html">&quot;config/config&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_config_index_.html">&quot;config/index&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/_hasher_hasher_.html">&quot;hasher/hasher&quot;</a>

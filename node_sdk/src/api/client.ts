@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-19T10:49:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-25T17:37:18+10:00
+ * @Last modified time: 2020-06-25T19:31:41+10:00
  */
 
 import _ from "lodash";
@@ -50,6 +50,7 @@ import {
   VerifyProofReplyChunk,
   VerifyTrieProofRequest,
 } from "../protos/api";
+import { Anchor, Batch } from "../protos/anchor";
 import {
   createKeyValuesProof,
   createKeyValuesProofPromise,
@@ -79,7 +80,7 @@ import {
   verifyTrieProof,
   verifyTrieProofPromise,
 } from "./api";
-import { Anchor, Batch } from "../protos/anchor";
+import { getAuthMetadata } from "./auth";
 
 declare module "../protos/anchor/anchor_pb.d" {
   namespace Anchor {
@@ -817,12 +818,16 @@ export class APIServiceClient extends Client {
  */
 export function newApiServiceClient(
   hostPort: string,
-  metadata: grpc.Metadata,
+  authMetadata?: grpc.Metadata,
   secure = true
 ): APIServiceClient {
+  if (!authMetadata) {
+    authMetadata = getAuthMetadata();
+  }
+
   const callCreds = grpc.credentials.createFromMetadataGenerator(
     (args: any, callback: any) => {
-      callback(null, metadata);
+      callback(null, authMetadata);
     }
   );
   let creds: grpc.ChannelCredentials;

@@ -6,7 +6,7 @@
 
 This is a hello world example written in TypeScript that demonstrates how to:
 
-- create a gRPC client
+- create a Proofable API client
 
 - prove a bunch of key-values to Ethereum Testnet within a minute
 
@@ -30,29 +30,31 @@ You can also find the Javascript version [here](https://github.com/SouthbankSoft
 npm run example-js
 ```
 
-### Step 1: create a gRPC client
+### Step 1: authenticate with ProvenDB
 
-This step creates a gRPC [`client`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html). Note: here we use a magic token to authenticate with `proofable-api` for testing purpose, which will be changed soon
+This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. You can find more etails from [here](http://localhost:8080/modules/_api_auth_.html#getauthmetadata). Please note that this authenticaton method is temperary, which will be replaced by an API key soon
+
+1. download [`provendb-cli`](https://www.proofable.io/cmd/proofable-cli/)
+2. sign in/up to ProvenDB: `./provendb-cli auth`
+3. you are all set. You only need to do this once
+
+### Step 2: create a Proofable API client
+
+This step creates a Proofable API gRPC [`client`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html). After using the client, you can destroy the client using [`client.close()`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#close)
 
 ```typescript
-const metadata = new grpc.Metadata();
-metadata.add("authorization", "Bearer magic");
-
-const client = newApiServiceClient(
-  "https://apigateway.dev.provendb.com",
-  metadata
-);
+const client = newApiServiceClient("https://apigateway.dev.provendb.com");
 ```
 
-### Step 2: create an empty trie
+### Step 3: create an empty trie
 
-This step creates an empty trie with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you should destroy the trie using [`deleteTrie`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
+This step creates an empty trie with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using [`deleteTrie`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
 
 ```typescript
 let trie = await client.createTrie();
 ```
 
-### Step 3: set the key-values we want to prove
+### Step 4: set the key-values we want to prove
 
 This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`getTrieKeyValues`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#gettriekeyvalues), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`setTrieKeyValues`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#settriekeyvalues) calls as a way to build up a large trie incrementally
 
@@ -65,7 +67,7 @@ trie = await client.setTrieKeyValues(trie.getId(), trie.getRoot(), [
 ]);
 ```
 
-### Step 4: create a proof for the key-values
+### Step 5: create a proof for the key-values
 
 This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum ([`ETH`](https://www.proofable.io/docs/anchor.html#anchor.Anchor.Type)). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in
 
@@ -77,7 +79,7 @@ let trieProof = await client.createTrieProof(
 );
 ```
 
-### Step 5: wait for the proof to be anchored to Ethereum
+### Step 6: wait for the proof to be anchored to Ethereum
 
 This step waits for the proof we have just created until it is anchored to Ethereum, during which we output the anchoring progress
 
@@ -92,7 +94,7 @@ for await (const tp of client.subscribeTrieProof(
 }
 ```
 
-### Step 6: verify the proof
+### Step 7: verify the proof
 
 This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof
 
@@ -146,7 +148,7 @@ and a Graphviz Dot Graph (`proof.dot`):
 
 ![Proof Dot Graph](https://github.com/SouthbankSoftware/proofable/raw/master/docs/images/example_proof.svg)
 
-### Step 7: extract a subproof for just one key-value out of the proof
+### Step 8: extract a subproof for just one key-value out of the proof
 
 This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key `living_room/Co2` only and nothing else. A subproof file named `living_room_Co2.subproofable` will be created in current working directory. You could also create a subproof for multiple key-values
 
@@ -159,7 +161,7 @@ await client.createKeyValuesProof(
 );
 ```
 
-### Step 8: verify the subproof independently
+### Step 9: verify the subproof independently
 
 This step independently verifies the subproof we have just created. The only thing needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof
 

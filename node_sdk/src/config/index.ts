@@ -17,11 +17,9 @@
  *
  *
  * @Author: guiguan
- * @Date:   2020-06-19T10:49:04+10:00
+ * @Date:   2020-06-25T18:41:37+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-25T19:32:04+10:00
+ * @Last modified time: 2020-06-25T18:41:59+10:00
  */
 
-export * from "./client";
-export * from "./util";
-export * from "./auth";
+export * from "./config";
