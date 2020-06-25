@@ -32,7 +32,7 @@ npm run example-js
 
 ### Step 1: create a gRPC client
 
-This step creates a gRPC [`client`](https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html). Note: here we use a magic token to authenticate with `proofable-api` for testing purpose, which will be changed soon
+This step creates a gRPC [`client`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html). Note: here we use a magic token to authenticate with `proofable-api` for testing purpose, which will be changed soon
 
 ```typescript
 const metadata = new grpc.Metadata();
@@ -46,7 +46,7 @@ const client = newApiServiceClient(
 
 ### Step 2: create an empty trie
 
-This step creates an empty trie with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you should destroy the trie using [`deleteTrie`](https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
+This step creates an empty trie with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you should destroy the trie using [`deleteTrie`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
 
 ```typescript
 let trie = await client.createTrie();
@@ -54,7 +54,7 @@ let trie = await client.createTrie();
 
 ### Step 3: set the key-values we want to prove
 
-This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`getTrieKeyValues`](https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html#gettriekeyvalues), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`setTrieKeyValues`](https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html#settriekeyvalues) calls as a way to build up a large trie incrementally
+This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`getTrieKeyValues`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#gettriekeyvalues), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`setTrieKeyValues`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#settriekeyvalues) calls as a way to build up a large trie incrementally
 
 ```typescript
 trie = await client.setTrieKeyValues(trie.getId(), trie.getRoot(), [

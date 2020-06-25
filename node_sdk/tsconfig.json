@@ -14,7 +14,11 @@
         "out": "docs",
         "includeDeclarations": true,
         "excludeExternals": true,
-        "gitRevision": "master"
+        "gitRevision": "master",
+        "exclude": [
+            "**/*.test.ts",
+            "tests",
+        ]
     },
     "lib": [
         "es2015"
