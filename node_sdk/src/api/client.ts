@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-19T10:49:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-25T16:22:17+10:00
+ * @Last modified time: 2020-06-25T17:37:18+10:00
  */
 
 import _ from "lodash";
@@ -847,6 +847,7 @@ export {
   CreateKeyValuesProofRequest,
   CreateTrieProofRequest,
   DataChunk,
+  grpc,
   Key,
   KeyValue,
   KeyValuesFilter,

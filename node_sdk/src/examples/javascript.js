@@ -20,14 +20,14 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T21:16:46+10:00
+ * @Last modified time: 2020-06-25T17:38:42+10:00
  */
 
-const grpc = require("grpc");
 const {
   Anchor,
   Batch,
   getEthTrieFromKeyValuesProof,
+  grpc,
   Key,
   KeyValue,
   KeyValuesFilter,

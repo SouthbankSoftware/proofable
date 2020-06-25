@@ -19,14 +19,14 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-25T12:17:32+10:00
+ * @Last modified time: 2020-06-25T17:37:36+10:00
  */
 
-import * as grpc from "grpc";
 import {
   Anchor,
   Batch,
   getEthTrieFromKeyValuesProof,
+  grpc,
   Key,
   KeyValue,
   KeyValuesFilter,
