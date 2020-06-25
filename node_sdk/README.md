@@ -1,10 +1,12 @@
 # [Proofable Node SDK](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
 
-Proofable Node SDK provides a set of basic promise-based APIs as well as more advanced callback and stream based APIs. The promise-based APIs are convenient to be consumed in most use cases when dealing with the API Service in [Proofable Framework](https://www.proofable.io/), while the callback and stream based APIs support more advanced features such as canceling and per-call gRPC options.
+[Proofable Node SDK](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk) provides a set of basic promise-based APIs as well as more advanced callback and stream based APIs. The promise-based APIs are convenient to be consumed in most use cases when dealing with the API Service in [Proofable Framework](https://www.proofable.io/), while the callback and stream based APIs support more advanced features such as canceling and per-call gRPC options.
 
 ## Example
 
-This is a hello world example written in [TypeScript](https://www.typescriptlang.org/) that demonstrates how to:
+This is a hello world example written in TypeScript that demonstrates how to:
+
+- create a gRPC client
 
 - prove a bunch of key-values to Ethereum Testnet within a minute
 
@@ -16,59 +18,59 @@ This is a hello world example written in [TypeScript](https://www.typescriptlang
 
 - verify the subproof independently
 
-The Node SDK is located [here](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk). It makes accessing `proofable-api` very convenient.
-
-You can find the complete example source code [here](https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/example.ts), which can be run as:
+You can find the complete example source code [here](https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/typescript.ts), which can be run as:
 
 ```zsh
 npm run example
 ```
 
-### Step 1: Create a gRPC client
+You can also find the Javascript version [here](https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/javascript.js), which can be run as:
 
-The following code creates a gRPC client. You can skip the authentication part while running the example using magic token as specified in the code below.
+```zsh
+npm run example-js
+```
+
+### Step 1: create a gRPC client
+
+This step creates a gRPC [`client`](https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html). Note: here we use a magic token to authenticate with `proofable-api` for testing purpose, which will be changed soon
 
 ```typescript
 const metadata = new grpc.Metadata();
 metadata.add("authorization", "Bearer magic");
-const client = newApiServiceClient(API_PROOFABLE_ENDPOINT, metadata);
+
+const client = newApiServiceClient(
+  "https://apigateway.dev.provendb.com",
+  metadata
+);
 ```
 
-### Step 2: Create an empty trie
+### Step 2: create an empty trie
 
-This step creates an empty trie which only has a vlid trieID. The root for empty trie will always be `0000000000000000000000000000000000000000000000000000000000000000`
+This step creates an empty trie with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you should destroy the trie using [`deleteTrie`](https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
 
 ```typescript
-let trie: Trie | null = null;
-trie = await client.createTrie();
+let trie = await client.createTrie();
 ```
 
-### Step 3: Set the key-values we want to prove
+### Step 3: set the key-values we want to prove
 
-This step sets a bunch of key-values that we want to prove in the trie we have just created. In this example, the values are set here in this variable at the beginning `TRIE_KEY_VALUES`. Both key and value can be arbitrary binaries. They key order doesn't matter.
+This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`getTrieKeyValues`](https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html#gettriekeyvalues), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`setTrieKeyValues`](https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html#settriekeyvalues) calls as a way to build up a large trie incrementally
 
 ```typescript
-const TRIE_KEY_VALUES = [
+trie = await client.setTrieKeyValues(trie.getId(), trie.getRoot(), [
   KeyValue.from("balcony/wind/speed", "11km/h"),
   KeyValue.from("balcony/wind/direction", "N"),
   KeyValue.from("living_room/temp", "24.8℃"),
   KeyValue.from("living_room/Co2", "564ppm"),
-];
-trie = await client.setTrieKeyValues(
-  trie.getId(),
-  trie.getRoot(),
-  TRIE_KEY_VALUES
-);
+]);
 ```
 
-When getting key-values from the trie, e.g. [`getTrieKeyValuesPromise`](docs/modules/_api_api_.html#gettriekeyvaluespromise), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`setTrieKeyValuesPromise`](docs/modules/_api_api_.html#settriekeyvaluespromise) calls as a way to build up a large trie incrementally
-
-### Step 4: Create a proof for the key-values
+### Step 4: create a proof for the key-values
 
 This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum ([`ETH`](https://www.proofable.io/docs/anchor.html#anchor.Anchor.Type)). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in
 
 ```typescript
-const trieProof: TrieProof = await client.createTrieProof(
+let trieProof = await client.createTrieProof(
   trie.getId(),
   trie.getRoot(),
   Anchor.Type.ETH
@@ -77,130 +79,136 @@ const trieProof: TrieProof = await client.createTrieProof(
 
 ### Step 5: wait for the proof to be anchored to Ethereum
 
-This step waits for the proof we have just created until it is anchored to Ethereum testnet, during which we print the anchoring progress.
+This step waits for the proof we have just created until it is anchored to Ethereum, during which we output the anchoring progress
 
 ```typescript
-const trieProofIterable: AsyncIterable<TrieProof> = client.subscribeTrieProof(
+for await (const tp of client.subscribeTrieProof(
   trie.getId(),
   trieProof.getId(),
   null
-);
-let trieProofAnchored: TrieProof = new TrieProof();
-for await (const tp of trieProofIterable) {
-  console.log("Anchoring Proof: " + _.invert(Batch.Status)[tp.getStatus()]);
-  trieProofAnchored = tp;
+)) {
+  console.log("Anchoring proof: %s", Batch.StatusName[tp.getStatus()]);
+  trieProof = tp;
 }
 ```
 
-### Step 6: Verify the proof
+### Step 6: verify the proof
 
-This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof.
+This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof
 
 ```typescript
 for await (const val of client.verifyTrieProof(
   trie.getId(),
   trieProof.getId(),
   true,
-  VERIFY_PROOF_DOTGRAPH_FILE
+  "proof.dot"
 )) {
   if (val instanceof VerifyProofReply) {
     if (!val.getVerified()) {
-      console.error(`falsified proof: ${val.getError()}`);
-      return cleanup(trie.getId());
+      console.error("falsified proof: %s", val.getError());
+      return;
     }
-    console.log("Proof Verified!");
+  } else {
+    // strip the anchor trie part from each key
+    const kv = stripCompoundKeyAnchorTriePart(val).to();
+
+    console.log("\t%s -> %s", kv.key, kv.val);
   }
 }
 
 console.log(
-  "the proof with a root hash of %s is anchored to %s in block %s with transaction %s at %s, which can be viewed at %s",
-  trieProofAnchored.getRoot(),
-  _.invert(Anchor.Type)[trieProofAnchored.getAnchorType()],
-  trieProofAnchored.getBlockNumber(),
-  trieProofAnchored.getTxnId(),
-  new Date(trieProofAnchored.getBlockTime() * 1000).toUTCString(),
-  trieProofAnchored.getTxnUri()
+  "\nthe proof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
+  trieProof.getRoot(),
+  Anchor.TypeName[trieProof.getAnchorType()],
+  trieProof.getBlockNumber(),
+  trieProof.getTxnId(),
+  new Date(trieProof.getBlockTime() * 1000).toUTCString(),
+  trieProof.getTxnUri()
 );
-console.log(`The proof's dot graph is saved to ${VERIFY_PROOF_DOTGRAPH_FILE}`);
 ```
 
-This step will output the summary of the proof
+This step will output the key-values contained in the proof:
 
-> The proof with a root hash of 9aa9f728c533ea7d7671e227e987b45bf49ae31986ad9c7923e987b518a3c1cf is anchored to ETH in block 6715256 with transaction 8acda892995cffd521a7f16eedadffc6756d198dff83f1c54ea1114d8156fca5 at Tue, 23 Jun 2020 03:51:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x8acda892995cffd521a7f16eedadffc6756d198dff83f1c54ea1114d8156fca5
+```zsh
+balcony/wind/direction -> N
+balcony/wind/speed -> 11km/h
+living_room/Co2 -> 564ppm
+living_room/temp -> 24.8℃
+```
+
+and a summary:
+
+```zsh
+the proof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH in block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue, 31 Mar 2020 15:33:10 AEDT, which can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232
+```
 
 and a Graphviz Dot Graph (`proof.dot`):
 
 ![Proof Dot Graph](https://github.com/SouthbankSoftware/proofable/raw/master/docs/images/example_proof.svg)
 
-### Step 7: Extract a subproof for just one key-value out of the proof
+### Step 7: extract a subproof for just one key-value out of the proof
 
-This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key `living_room/Co2` only and nothing else. A subproof file named `living_room_Co2.pxsubproof` will be created in current working directory. You could also create a subproof for multiple key-values
+This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key `living_room/Co2` only and nothing else. A subproof file named `living_room_Co2.subproofable` will be created in current working directory. You could also create a subproof for multiple key-values
 
 ```typescript
-const SUBPROOF_KEY = "living_room/Co2";
 await client.createKeyValuesProof(
   trie.getId(),
   trieProof.getId(),
-  KeyValuesFilter.from([Key.from(SUBPROOF_KEY)]),
-  SUBPROOF_KEY.replace("/", "-") + ".pxsubproof"
+  KeyValuesFilter.from([Key.from("living_room/Co2")]),
+  "living_room_Co2.subproofable"
 );
 ```
 
-### Step 9: verify the subproof independently
+### Step 8: verify the subproof independently
 
 This step independently verifies the subproof we have just created. The only thing needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof
 
 ```typescript
-const SUBPROOF_KEY = "living_room/Co2";
 for await (const val of client.verifyKeyValuesProof(
-  SUBPROOF_KEY.replace("/", "-") + ".subproofable",
+  "living_room_Co2.subproofable",
   true,
-  VERIFY_SUBPROOF_DOTGRAPH_FILE
+  "living_room_Co2_subproof.dot"
 )) {
-  if (val instanceof KeyValue) {
-    // within this branch, val is now narrowed down to KeyValue
-    console.log(stripCompoundKeyAnchorTriePart(val).to("utf8", "utf8"));
+  if (val instanceof VerifyProofReply) {
+    if (!val.getVerified()) {
+      console.error("falsified subproof: %s", val.getError());
+      return;
+    }
   } else {
-    // within this branch, val is now narrowed down to VerifyProofReply
-    console.log("the subproof is", val.getVerified() ? "valid" : "invalid");
+    // strip the anchor trie part from each key
+    const kv = stripCompoundKeyAnchorTriePart(val).to();
+
+    console.log("\t%s -> %s", kv.key, kv.val);
   }
 }
-const et: EthTrie = await getEthTrieFromKeyValuesProof(
-  SUBPROOF_KEY.replace("/", "-") + ".pxsubproof"
+
+const ethTrie = await getEthTrieFromKeyValuesProof(
+  "living_room_Co2.subproofable"
 );
 
 console.log(
-  "The subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
-  et.root,
-  et.anchorType,
-  et.blockNumber,
-  et.txnId,
-  new Date(et.blockTime * 1000).toUTCString(),
-  et.txnUri
-);
-console.log(
-  `The subproof's dot graph is saved to ${VERIFY_SUBPROOF_DOTGRAPH_FILE}`
+  "\nthe subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s",
+  ethTrie.root,
+  ethTrie.anchorType,
+  ethTrie.blockNumber,
+  ethTrie.txnId,
+  new Date(ethTrie.blockTime * 1000).toUTCString(),
+  ethTrie.txnUri
 );
 ```
 
 This step will output the key-values contained in the subproof:
 
 ```zsh
-{ key: 'living_room/Co2', val: '564ppm' }
+living_room/Co2 -> 564ppm
 ```
 
-with summary
-
-> The subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to undefined in block 6715676 with transaction 13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f at Tue, 23 Jun 2020 05:36:54 GMT, which can be viewed at https://rinkeby.etherscan.io/tx/0x13ebc980694b231efee6cdf23c1880f2a790e464af04483bfc55f019f3b6f36f
-
-and a Graphviz Dot Graph (`subproof_verify.dot`):
-
-![Subproof Dot Graph](https://github.com/SouthbankSoftware/proofable/raw/master/docs/images/example_subproof.svg)
-
-## Example (JavaScript)
-
-The same example is also written in JavaScript. You can run it like this
+and a summary:
 
 ```zsh
-npm run examplejs
+the subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH in block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue, 31 Mar 2020 15:33:10 AEDT, which can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232
 ```
+
+and a Graphviz Dot Graph (`living_room_Co2_subproof.dot`):
+
+![Subproof Dot Graph](https://github.com/SouthbankSoftware/proofable/raw/master/docs/images/example_subproof.svg)

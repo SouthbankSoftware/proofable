@@ -19,7 +19,7 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T21:07:51+10:00
+ * @Last modified time: 2020-06-25T12:17:32+10:00
  */
 
 import * as grpc from "grpc";
@@ -109,6 +109,7 @@ const client = newApiServiceClient(API_PROOFABLE_ENDPOINT, metadata);
           return;
         }
       } else {
+        // strip the anchor trie part from each key
         const kv = stripCompoundKeyAnchorTriePart(val).to();
 
         console.log("\t%s -> %s", kv.key, kv.val);
@@ -155,6 +156,7 @@ const client = newApiServiceClient(API_PROOFABLE_ENDPOINT, metadata);
           return;
         }
       } else {
+        // strip the anchor trie part from each key
         const kv = stripCompoundKeyAnchorTriePart(val).to();
 
         console.log("\t%s -> %s", kv.key, kv.val);

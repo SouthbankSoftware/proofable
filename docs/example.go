@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-31T12:29:46+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-06-25T12:18:19+10:00
  */
 
 package main
@@ -135,12 +135,12 @@ func main() {
 							{Key: []byte("living_room/Co2")},
 						},
 					},
-					"living_room_Co2.pxsubproof")
+					"living_room_Co2.subproofable")
 				if err != nil {
 					return err
 				}
 
-				log.Println("the subproof for the key `living_room/Co2` is saved to `living_room_Co2.pxsubproof`")
+				log.Println("the subproof for the key `living_room/Co2` is saved to `living_room_Co2.subproofable`")
 				return nil
 			})
 			if err != nil {
@@ -149,7 +149,7 @@ func main() {
 
 			// verify the subproof independently
 			kvCH, rpCH, errCH := api.VerifyKeyValuesProof(ctx, cli,
-				"living_room_Co2.pxsubproof",
+				"living_room_Co2.subproofable",
 				true, "living_room_Co2_subproof.dot")
 
 			// strip the anchor trie part from each key
@@ -173,7 +173,7 @@ func main() {
 				return fmt.Errorf("falsified subproof: %s", rp.GetError())
 			}
 
-			et, err := api.GetEthTrieFromKeyValuesProof("living_room_Co2.pxsubproof")
+			et, err := api.GetEthTrieFromKeyValuesProof("living_room_Co2.subproofable")
 			if err != nil {
 				return err
 			}

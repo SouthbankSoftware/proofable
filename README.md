@@ -180,7 +180,7 @@ and a Graphviz Dot Graph (`proof.dot`):
 
 ### Step 8: extract a subproof for just one key-value out of the proof
 
-This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key `living_room/Co2` only and nothing else. A subproof file named `living_room_Co2.pxsubproof` will be created in current working directory. You could also create a subproof for multiple key-values
+This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key `living_room/Co2` only and nothing else. A subproof file named `living_room_Co2.subproofable` will be created in current working directory. You could also create a subproof for multiple key-values
 
 ```go
 api.CreateKeyValuesProof(ctx, cli, id, triePf.GetId(),
@@ -189,7 +189,7 @@ api.CreateKeyValuesProof(ctx, cli, id, triePf.GetId(),
             {Key: []byte("living_room/Co2")},
         },
     },
-    "living_room_Co2.pxsubproof")
+    "living_room_Co2.subproofable")
 ```
 
 ### Step 9: verify the subproof independently
@@ -198,7 +198,7 @@ This step independently verifies the subproof we have just created. The only thi
 
 ```go
 kvCH, rpCH, errCH := api.VerifyKeyValuesProof(ctx, cli,
-    "living_room_Co2.pxsubproof",
+    "living_room_Co2.subproofable",
     true, "living_room_Co2_subproof.dot")
 
 // strip the anchor trie part from each key
@@ -222,7 +222,7 @@ if !rp.GetVerified() {
     return fmt.Errorf("falsified subproof: %s", rp.GetError())
 }
 
-et, err := api.GetEthTrieFromKeyValuesProof("living_room_Co2.pxsubproof")
+et, err := api.GetEthTrieFromKeyValuesProof("living_room_Co2.subproofable")
 if err != nil {
     return err
 }
