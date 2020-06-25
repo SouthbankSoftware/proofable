@@ -91,7 +91,7 @@
 				<a href="#step-1-create-a-grpc-client" id="step-1-create-a-grpc-client" style="color: inherit; text-decoration: none;">
 					<h3>Step 1: create a gRPC client</h3>
 				</a>
-				<p>This step creates a gRPC <a href="https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html"><code>client</code></a>. Note: here we use a magic token to authenticate with <code>proofable-api</code> for testing purpose, which will be changed soon</p>
+				<p>This step creates a gRPC <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html"><code>client</code></a>. Note: here we use a magic token to authenticate with <code>proofable-api</code> for testing purpose, which will be changed soon</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> metadata = <span class="hljs-keyword">new</span> grpc.Metadata();
 metadata.add(<span class="hljs-string">&quot;authorization&quot;</span>, <span class="hljs-string">&quot;Bearer magic&quot;</span>);
 
@@ -102,12 +102,12 @@ metadata.add(<span class="hljs-string">&quot;authorization&quot;</span>, <span c
 				<a href="#step-2-create-an-empty-trie" id="step-2-create-an-empty-trie" style="color: inherit; text-decoration: none;">
 					<h3>Step 2: create an empty trie</h3>
 				</a>
-				<p>This step creates an empty trie with root <code>0000000000000000000000000000000000000000000000000000000000000000</code>, which is a dictionary that can hold key-values. After using the trie, you should destroy the trie using <a href="https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html#deletetrie"><code>deleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it</p>
+				<p>This step creates an empty trie with root <code>0000000000000000000000000000000000000000000000000000000000000000</code>, which is a dictionary that can hold key-values. After using the trie, you should destroy the trie using <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#deletetrie"><code>deleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">let</span> trie = <span class="hljs-keyword">await</span> client.createTrie();</code></pre>
 				<a href="#step-3-set-the-key-values-we-want-to-prove" id="step-3-set-the-key-values-we-want-to-prove" style="color: inherit; text-decoration: none;">
 					<h3>Step 3: set the key-values we want to prove</h3>
 				</a>
-				<p>This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn&#39;t matter. When getting key-values from the trie, e.g. <a href="https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html#gettriekeyvalues"><code>getTrieKeyValues</code></a>, they will always be sorted according to the key&#39;s alphabetical order. When setting key-values, you can also make multiple <a href="https://www.proofable.io/node_sdk/docs/classes/_src_api_client_.apiserviceclient.html#settriekeyvalues"><code>setTrieKeyValues</code></a> calls as a way to build up a large trie incrementally</p>
+				<p>This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn&#39;t matter. When getting key-values from the trie, e.g. <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#gettriekeyvalues"><code>getTrieKeyValues</code></a>, they will always be sorted according to the key&#39;s alphabetical order. When setting key-values, you can also make multiple <a href="https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#settriekeyvalues"><code>setTrieKeyValues</code></a> calls as a way to build up a large trie incrementally</p>
 				<pre><code class="language-typescript">trie = <span class="hljs-keyword">await</span> client.setTrieKeyValues(trie.getId(), trie.getRoot(), [
   KeyValue.from(<span class="hljs-string">&quot;balcony/wind/speed&quot;</span>, <span class="hljs-string">&quot;11km/h&quot;</span>),
   KeyValue.from(<span class="hljs-string">&quot;balcony/wind/direction&quot;</span>, <span class="hljs-string">&quot;N&quot;</span>),
