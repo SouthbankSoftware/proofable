@@ -59,7 +59,7 @@ creds, err := authcli.AuthenticateForGRPC(ctx,
 )
 ```
 
-### Step 2: create a Proofable client
+### Step 2: create a Proofable API client
 
 This step creates a Proofable API gRPC client (`cli`) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using [`NewAPIClient`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#NewAPIClient), but in that case, you have to manually destroy the client after use
 
