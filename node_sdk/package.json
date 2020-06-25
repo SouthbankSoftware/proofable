@@ -9,7 +9,7 @@
     "example-js": "npm run build && node dist/examples/javascript.js",
     "build": "tsc -p tsconfig.build.json && cpx 'src/**/*.{js,d.ts}' dist",
     "clean": "rimraf ./dist '*.proofable' '*.subproofable' '*.dot'",
-    "doc": "typedoc",
+    "doc": "typedoc && touch docs/.nojekyll",
     "lint": "eslint . --ext .ts,.js --max-warnings=0",
     "depcheck": "depcheck",
     "jest": "jest --forceExit",
