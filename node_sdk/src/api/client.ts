@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-19T10:49:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T19:10:03+10:00
+ * @Last modified time: 2020-06-25T16:22:17+10:00
  */
 
 import _ from "lodash";
@@ -31,6 +31,7 @@ import {
   CreateKeyValuesProofRequest,
   CreateTrieProofRequest,
   DataChunk,
+  DeleteTrieProofRequest,
   Key,
   KeyValue,
   KeyValuesFilter,
@@ -57,6 +58,7 @@ import {
   createTrieProofPromise,
   deleteTrie,
   deleteTriePromise,
+  deleteTrieProofPromise,
   exportTrie,
   exportTriePromise,
   getTrieKeyValuePromise,
@@ -141,6 +143,10 @@ declare module "../protos/api/api_pb.d" {
       root: string,
       anchorType?: Anchor.ValueOfType
     ): CreateTrieProofRequest;
+  }
+
+  namespace DeleteTrieProofRequest {
+    function from(id: string, proofId: string): DeleteTrieProofRequest;
   }
 
   namespace Key {
@@ -247,6 +253,15 @@ CreateTrieProofRequest.from = (id, root, anchorType = Anchor.Type.ETH) => {
   r.setTrieId(id);
   r.setRoot(root);
   r.setAnchorType(anchorType);
+
+  return r;
+};
+
+DeleteTrieProofRequest.from = (id, proofId) => {
+  const r = new DeleteTrieProofRequest();
+
+  r.setTrieId(id);
+  r.setProofId(proofId);
 
   return r;
 };
@@ -660,6 +675,30 @@ export class APIServiceClient extends Client {
     }
 
     return super.createTrieProof(arg1, arg2, arg3, arg4);
+  }
+
+  deleteTrieProof(id: string, proofId: string): Promise<TrieProof>;
+  deleteTrieProof(
+    argument: DeleteTrieProofRequest,
+    callback: grpc.requestCallback<TrieProof>
+  ): grpc.ClientUnaryCall;
+  deleteTrieProof(
+    argument: DeleteTrieProofRequest,
+    metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
+    callback: grpc.requestCallback<TrieProof>
+  ): grpc.ClientUnaryCall;
+  deleteTrieProof(
+    argument: DeleteTrieProofRequest,
+    metadata: grpc.Metadata | null,
+    options: grpc.CallOptions | null,
+    callback: grpc.requestCallback<TrieProof>
+  ): grpc.ClientUnaryCall;
+  deleteTrieProof(arg1: any, arg2: any, arg3?: any, arg4?: any): any {
+    if (typeof arg1 === "string") {
+      return deleteTrieProofPromise(this, arg1, arg2);
+    }
+
+    return super.deleteTrieProof(arg1, arg2, arg3, arg4);
   }
 
   verifyTrieProof(

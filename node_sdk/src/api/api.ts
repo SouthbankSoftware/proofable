@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-24T12:14:57+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T19:03:08+10:00
+ * @Last modified time: 2020-06-25T16:18:32+10:00
  */
 
 import _ from "lodash";
@@ -33,6 +33,7 @@ import {
   CleanupFn,
   CreateKeyValuesProofRequest,
   CreateTrieProofRequest,
+  DeleteTrieProofRequest,
   Key,
   KeyValue,
   KeyValuesFilter,
@@ -391,6 +392,26 @@ export function createTrieProofPromise(
   return new Promise((resolve, reject) => {
     cli.createTrieProof(
       CreateTrieProofRequest.from(id, root, anchorType),
+      (err, value) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(value);
+      }
+    );
+  });
+}
+
+export function deleteTrieProofPromise(
+  cli: APIServiceClient,
+  id: string,
+  proofId: string
+): Promise<TrieProof> {
+  return new Promise((resolve, reject) => {
+    cli.deleteTrieProof(
+      DeleteTrieProofRequest.from(id, proofId),
       (err, value) => {
         if (err) {
           reject(err);
