@@ -1,5 +1,7 @@
 # [Proofable Node SDK](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
 
+[![NPM Package](https://img.shields.io/npm/v/proofable?style=flat-square)](https://www.npmjs.com/package/proofable)
+
 [Proofable Node SDK](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk) provides a set of basic promise-based APIs as well as more advanced callback and stream based APIs. The promise-based APIs are convenient to be consumed in most use cases when dealing with the API Service in [Proofable Framework](https://www.proofable.io/), while the callback and stream based APIs support more advanced features such as canceling and per-call gRPC options.
 
 ## Example
