@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-23T12:20:18+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-24T19:07:25+10:00
+ * @Last modified time: 2020-06-26T16:23:27+10:00
  */
 
 import _ from "lodash";
@@ -87,5 +87,5 @@ export async function getEthTrieFromKeyValuesProof(
 
   file.close();
 
-  return _.assign(new (class extends EthTrie {})(), JSON.parse(line));
+  return _.merge(new (class extends EthTrie {})(), JSON.parse(line));
 }

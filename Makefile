@@ -18,7 +18,7 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-04-03T15:58:33+11:00
+# @Last modified time: 2020-06-29T15:45:15+10:00
 
 PROJECT_NAME := proofable
 PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(PROJECT_NAME)
@@ -31,7 +31,7 @@ LD_FLAGS := -ldflags \
 
 all: build
 
-.PHONY: run build build-regen generate test test-dev clean playground doc grpcc
+.PHONY: run build build-regen generate test test-dev test-all clean playground doc grpcc
 
 run:
 	go run $(LD_FLAGS) ./cmd/$(APP_NAME)
@@ -49,6 +49,8 @@ test:
 test-dev:
 	# -test.v verbose
 	go test $(LD_FLAGS) -count=1 -test.v $(PKGS)
+test-all: test-dev
+	cd node_sdk && npm i && npm t
 clean:
 	go clean -testcache $(PKGS)
 	rm -f $(APP_NAME)* $(PLAYGROUND_NAME)*

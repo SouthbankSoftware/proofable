@@ -2,14 +2,6 @@
 
 `proofable-cli` is the command-line interface (CLI) for [Proofable](https://www.proofable.io/) API Service (`proofable-api`). At the moment, it supports proving a file-system to Ethereum
 
-Test status
-
-[![proofable-cli-test](https://concourse.provendb.com/api/v1/pipelines/proofable-cli-test/jobs/test/badge)](http://concourse.provendb.com/teams/main/pipelines/proofable-cli-test)
-
-Deploy status
-
-[![proofable-cli-deploy](https://concourse.provendb.com/api/v1/pipelines/proofable-cli-deploy/jobs/build-and-deploy/badge)](http://concourse.provendb.com/teams/main/pipelines/proofable-cli-deploy)
-
 ## Usage
 
 ### Download dev binaries

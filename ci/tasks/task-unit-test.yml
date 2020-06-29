@@ -25,10 +25,10 @@ image_resource:
   type: docker-image
   source: { repository: amidos/dcind, tag: latest }
 inputs:
-  - name: proofable-cli
+  - name: proofable
   - name: provendb-anchor
   - name: proofable-api
-  - name: golang
+  - name: proofable-tests
 params: { GIT_ACCESS_TOKEN: ((common.git-access-token)) }
 run:
   path: bash
@@ -43,8 +43,8 @@ run:
       docker tag "$(cat provendb-anchor/image-id)" "$(cat provendb-anchor/repository):$(cat provendb-anchor/tag)"
       docker load -i proofable-api/image
       docker tag "$(cat proofable-api/image-id)" "$(cat proofable-api/repository):$(cat proofable-api/tag)"
-      docker load -i golang/image
-      docker tag "$(cat golang/image-id)" "$(cat golang/repository):$(cat golang/tag)"
+      docker load -i proofable-tests/image
+      docker tag "$(cat proofable-tests/image-id)" "$(cat proofable-tests/repository):$(cat proofable-tests/tag)"
       docker images
 
       # cleanup
@@ -56,4 +56,4 @@ run:
       trap cleanup EXIT
 
       # run logic via docker compose
-      docker-compose -f proofable-cli/ci/tasks/docker-compose-unit-test.yml run --rm tests
+      docker-compose -f proofable/ci/tasks/docker-compose-unit-test.yml run --rm tests

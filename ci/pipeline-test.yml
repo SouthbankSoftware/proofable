@@ -21,7 +21,7 @@
 # @Last modified time: 2020-03-05T19:32:55+11:00
 
 # update pipeline:
-# fly -t dev sp -c pipeline-test.yml -p proofable-cli-test
+# fly -t dev sp -c pipeline-test.yml -p proofable-test
 
 resource_types:
   - name: slack-alert
@@ -38,7 +38,7 @@ resources:
     type: slack-alert
     source:
       url: ((common.slack-webook-url))
-  - name: proofable-cli
+  - name: proofable
     type: pull-request
     check_every: 5m
     webhook_token: ((common.webhook-token))
@@ -48,32 +48,32 @@ resources:
   - name: provendb-anchor
     type: docker-image
     source:
-      repository: asia.gcr.io/provendb/provendb-anchor
+      repository: provendbdev.azurecr.io/provendb-anchor
       tag: "latest"
-      username: _json_key
-      password: ((common.service-account))
+      username: ((common.azure-registry-username))
+      password: ((common.azure-registry-password))
   - name: proofable-api
     type: docker-image
     source:
-      repository: asia.gcr.io/provendb/proofable-api
+      repository: provendbdev.azurecr.io/proofable-api
       tag: "latest"
-      username: _json_key
-      password: ((common.service-account))
-  - name: golang
+      username: ((common.azure-registry-username))
+      password: ((common.azure-registry-password))
+  - name: proofable-tests
     type: docker-image
     source:
-      repository: golang
-      tag: 1.14.0
+      repository: southbanksoftware/proofable-tests
+      tag: "latest"
 
 jobs:
   - name: test
     plan:
-      - get: proofable-cli
+      - get: proofable
         trigger: true
         version: every
-      - put: proofable-cli
+      - put: proofable
         params:
-          path: proofable-cli
+          path: proofable
           status: pending
       - in_parallel:
           fail_fast: true
@@ -83,20 +83,20 @@ jobs:
               params: { save: true }
             - get: proofable-api
               params: { save: true }
-            - get: golang
+            - get: proofable-tests
               params: { save: true }
       - task: unit-test
         privileged: true
-        file: proofable-cli/ci/tasks/task-unit-test.yml
+        file: proofable/ci/tasks/task-unit-test.yml
     on_failure:
       do:
         - put: slack
           params:
             alert_type: failed
             text: ((slack.guan))
-        - put: proofable-cli
+        - put: proofable
           params:
-            path: proofable-cli
+            path: proofable
             status: failure
     on_abort:
       do:
@@ -104,16 +104,16 @@ jobs:
           params:
             alert_type: failed
             text: Aborted. ((slack.guan))
-        - put: proofable-cli
+        - put: proofable
           params:
-            path: proofable-cli
+            path: proofable
             status: failure
     on_success:
       do:
         - put: slack
           params:
             alert_type: success
-        - put: proofable-cli
+        - put: proofable
           params:
-            path: proofable-cli
+            path: proofable
             status: success
