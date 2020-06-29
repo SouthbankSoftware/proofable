@@ -24,7 +24,7 @@ version: "3.4"
 
 services:
   tests:
-    image: proofable-tests:latest
+    image: southbanksoftware/proofable-tests:latest
     container_name: tests
     depends_on:
       - api

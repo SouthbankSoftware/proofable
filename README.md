@@ -3,6 +3,8 @@
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc)
 [![Go Report Card](https://goreportcard.com/badge/github.com/SouthbankSoftware/proofable?style=flat-square)](https://goreportcard.com/report/github.com/SouthbankSoftware/proofable)
 [![NPM Package](https://img.shields.io/npm/v/proofable?style=flat-square)](https://www.npmjs.com/package/proofable)
+[![Proofable Test Status](https://concourse.provendb.com/api/v1/teams/main/pipelines/proofable-test/jobs/test/badge?title=test)](http://concourse.provendb.com/teams/main/pipelines/proofable-test)
+[![Proofable Deploy Status](https://concourse.provendb.com/api/v1/teams/main/pipelines/proofable-deploy/jobs/build-and-deploy/badge?title=deploy)](http://concourse.provendb.com/teams/main/pipelines/proofable-deploy)
 
 Proofable is a framework for proving any digital asset to Blockchains. Overall, it consists:
 
