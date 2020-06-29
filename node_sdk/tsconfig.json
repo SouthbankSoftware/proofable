@@ -17,7 +17,7 @@
         "gitRevision": "master",
         "exclude": [
             "**/*.test.ts",
-            "tests",
+            "tests/**/*",
             "src/examples/*"
         ]
     },
