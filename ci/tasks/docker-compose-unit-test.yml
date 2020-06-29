@@ -24,7 +24,7 @@ version: "3.4"
 
 services:
   tests:
-    image: golang:1.14.0
+    image: proofable-tests:latest
     container_name: tests
     depends_on:
       - api
@@ -32,19 +32,19 @@ services:
         "/bin/sh",
         "-c",
         "git config --global url.\"https://${GIT_ACCESS_TOKEN}:@github.com/\".insteadOf \"https://github.com/\" \
-        && cd /go/proofable-cli \
-        && make test-dev",
+        && cd /go/proofable \
+        && make test-all",
       ]
     environment:
       PROOFABLE_CLI_API_HOST_PORT: "api:10014"
       PROOFABLE_CLI_API_SECURE: "false"
       PROOFABLE_CLI_DEV_TOKEN: "magic"
     volumes:
-      - $PWD/proofable-cli:/go/proofable-cli
+      - $PWD/proofable:/go/proofable
     networks:
       - backend
   anchor:
-    image: asia.gcr.io/provendb/provendb-anchor:latest
+    image: provendbdev.azurecr.io/provendb-anchor:latest
     container_name: anchor
     healthcheck:
       test: ["CMD-SHELL", "netstat -an | grep 10008 > /dev/null || exit 1"]
@@ -61,7 +61,7 @@ services:
     networks:
       - backend
   api:
-    image: asia.gcr.io/provendb/proofable-api:latest
+    image: provendbdev.azurecr.io/proofable-api:latest
     container_name: api
     depends_on:
       - anchor

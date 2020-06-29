@@ -19,13 +19,11 @@
  * @Author: guiguan
  * @Date:   2020-06-24T12:34:35+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-25T00:29:16+10:00
+ * @Last modified time: 2020-06-26T16:53:08+10:00
  */
 
 import fs from "fs";
-import * as grpc from "grpc";
 import {
-  newApiServiceClient,
   APIServiceClient,
   Trie,
   KeyValue,
@@ -37,6 +35,7 @@ import {
   Key,
   stripCompoundKeyAnchorTriePart,
 } from "../src";
+import { getTestClient } from "./util";
 
 const SMOKE_PROOF_FILE = "smoke.proofable";
 const SMOKE_SUBPROOF_FILE = "smoke.subproofable";
@@ -51,9 +50,7 @@ describe("smoke test", () => {
   let client: APIServiceClient;
 
   beforeAll(() => {
-    const metadata = new grpc.Metadata();
-    metadata.add("authorization", "Bearer magic");
-    client = newApiServiceClient("api.dev.proofable.io:443", metadata);
+    client = getTestClient();
   });
 
   let trie: Trie;
