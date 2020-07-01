@@ -12,7 +12,7 @@ Proofable is a framework for proving any digital asset to Blockchains. Overall, 
 
   - [Documentation](cmd/proofable-cli/README.md)
 
-- **API Service** (`proofable-api`): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A [trie](https://www.proofable.io/docs/trie.md) is a dictionary of ordered key-values that can be built incrementally, whose root hash at any given time can be dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is proven, so as the digital asset stored in that key-value
+- **API Service** (`proofable-api`): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A [trie](https://www.proofable.io/docs/trie.html) is a dictionary of ordered key-values that can be built incrementally, whose root hash at any given time can be dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is proven, so as the digital asset stored in that key-value
 
   - [gRPC Protocol Documentation](https://www.proofable.io/docs/api.html)
   - [gRPC Protocol Definition](https://github.com/SouthbankSoftware/proofable/blob/master/pkg/protos/api/api.proto)
@@ -77,7 +77,7 @@ api.WithAPIClient(
 
 ### Step 3: create an empty trie
 
-This step creates an empty [trie](https://www.proofable.io/docs/trie.md), which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#CreateTrie), but in that case, you have to manually destroy the trie using [`DeleteTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#DeleteTrie) or wait for `proofable-api` to garbage collect it
+This step creates an empty [trie](https://www.proofable.io/docs/trie.html), which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#CreateTrie), but in that case, you have to manually destroy the trie using [`DeleteTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#DeleteTrie) or wait for `proofable-api` to garbage collect it
 
 ```go
 api.WithTrie(ctx, cli, func(id, root string) error {

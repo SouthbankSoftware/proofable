@@ -50,7 +50,7 @@ const client = newApiServiceClient("https://apigateway.dev.provendb.com");
 
 ### Step 3: create an empty trie
 
-This step creates an empty [trie](https://www.proofable.io/docs/trie.md) with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using [`deleteTrie`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
+This step creates an empty [trie](https://www.proofable.io/docs/trie.html) with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using [`deleteTrie`](https://www.proofable.io/node_sdk/docs/classes/_api_client_.apiserviceclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
 
 ```typescript
 let trie = await client.createTrie();
