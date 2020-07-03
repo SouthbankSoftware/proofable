@@ -124,4 +124,10 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
 
     ![Subproof Dot Graph Example](docs/images/example_basic_subproof_dot.svg)
 
-You can find the complete source code of this guide from [here](https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/typescript_basic.ts). Or a more detailed example from [here](https://www.proofable.io/node_sdk/docs/example.html)
+### What's Next
+
+- You can find the complete source code of this guide from [here](https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/typescript_basic.ts). Or a more detailed example with both TypeScript and JavaScript from [here](https://www.proofable.io/node_sdk/docs/example.html)
+
+- Getting yourself familiar with the [trie concept](https://www.proofable.io/docs/trie.html)
+
+- Checking out the [Proofable Node SDK Reference](https://www.proofable.io/node_sdk/docs/reference)
