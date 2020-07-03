@@ -4,6 +4,7 @@
 
 Proofable Node SDK provides a set of promise-based APIs as well as more advanced callback and stream based APIs. When dealing with the Proofable API Service, The promise-based APIs are convenient to be consumed in most use cases, while the callback and stream based APIs support more advanced features such as canceling and per-call gRPC options.
 
+- [SDK](https://www.proofable.io/node_sdk/)
 - [SDK Reference](https://www.proofable.io/node_sdk/docs/reference)
 - [SDK GitHub Repo](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
 - [SDK Examples](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk/src/examples)
@@ -46,7 +47,7 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
    console.dir(trieProof.toObject());
    ```
 
-   ![Anchor Trie Example](docs/images/example_basic_anchor_trie.png)
+   ![Anchor Trie Example](https://www.proofable.io/node_sdk/docs/images/example_basic_anchor_trie.png)
 
 7. export the trie for later use. This trie file is a self-contained certificate that can be used later on to do all sorts of manipulations, including verifiying the data
 
@@ -74,9 +75,9 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
    console.dir(result);
    ```
 
-   ![Import and Verify Trie Example](docs/images/example_basic_import_and_verify_trie.png)
+   ![Import and Verify Trie Example](https://www.proofable.io/node_sdk/docs/images/example_basic_import_and_verify_trie.png)
 
-   ![Proof Dot Graph Example](docs/images/example_basic_proof_dot.svg)
+   ![Proof Dot Graph Example](https://www.proofable.io/node_sdk/docs/images/example_basic_proof_dot.svg)
 
 9. creates a key-values proof for the data subset directly from the already proved trie. This proof file is a self-contained certificate that proves the data subset
 
@@ -120,9 +121,9 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
 
     As you can see, the `trie` and `proof.id` are `undefined` comparing to previous output, which indicates that the key-values proof is independent of any tries
 
-    ![Verify Key-values Proof Example](docs/images/example_basic_verify_key_values_proof.png)
+    ![Verify Key-values Proof Example](https://www.proofable.io/node_sdk/docs/images/example_basic_verify_key_values_proof.png)
 
-    ![Subproof Dot Graph Example](docs/images/example_basic_subproof_dot.svg)
+    ![Subproof Dot Graph Example](https://www.proofable.io/node_sdk/docs/images/example_basic_subproof_dot.svg)
 
 ### What's Next
 

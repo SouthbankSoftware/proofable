@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-19T13:32:18+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-03T12:59:15+10:00
+ * @Last modified time: 2020-07-03T16:29:35+10:00
  */
 
 /**
@@ -32,9 +32,11 @@
  * more advanced features such as canceling and per-call gRPC options.
  *
  * - [SDK](https://www.proofable.io/node_sdk/)
+ * - [SDK Reference](https://www.proofable.io/node_sdk/docs/reference)
  * - [SDK GitHub Repo](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
  * - [SDK Examples](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk/src/examples)
  * - [Proofable Framework](https://www.proofable.io/)
+ * - [Getting Started](https://www.proofable.io/node_sdk/#getting-started)
  * @packageDocumentation
  */
 
