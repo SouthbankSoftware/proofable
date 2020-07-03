@@ -28,7 +28,7 @@ npm run example-js
 
 ## Step 1: authenticate with ProvenDB
 
-This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. You can find more etails from [here](https://www.proofable.io/node_sdk/docs/reference/index.html#getauthmetadata). Please note that this authenticaton method is temperary, which will be replaced by an API key soon
+This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. You can find more etails from [here](https://www.proofable.io/node_sdk/docs/reference/index.html#getauthmetadata). Please note that this authenticaton method is temporary, which will be replaced by an API key soon
 
 1. download [`proofable-cli`](https://www.proofable.io/cmd/proofable-cli/)
 2. sign in/up to ProvenDB: `./proofable-cli auth`

@@ -52,7 +52,7 @@ go run docs/example.go
 
 ### Step 1: authenticate with ProvenDB
 
-This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. The next time, when you invoke `AuthenticateForGRPC`, it will automatically use the saved token without prompting you to go through the authentication steps again. You can find more details from [here](https://github.com/SouthbankSoftware/proofable/blob/master/pkg/auth/auth.go). Please note that this authenticaton method is temperary, which will be replaced by an API key soon
+This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. The next time, when you invoke `AuthenticateForGRPC`, it will automatically use the saved token without prompting you to go through the authentication steps again. You can find more details from [here](https://github.com/SouthbankSoftware/proofable/blob/master/pkg/auth/auth.go). Please note that this authenticaton method is temporary, which will be replaced by an API key soon
 
 ```go
 creds, err := authcli.AuthenticateForGRPC(ctx,
