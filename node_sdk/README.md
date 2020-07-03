@@ -16,7 +16,9 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
 
 2. create an authentication token using: `./proofable-cli auth`. You can find details from [here](https://www.proofable.io/node_sdk/docs/example.html#step-1-authenticate-with-provendb)
 
-3. ```typescript
+3. import [Proofable package](https://www.npmjs.com/package/proofable)
+
+   ```typescript
    import { newAPIClient, Anchor, Key /* and more */ } from "proofable";
    ```
 
@@ -79,7 +81,7 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
 
    ![Proof Dot Graph Example](https://www.proofable.io/node_sdk/docs/images/example_basic_proof_dot.svg)
 
-9. creates a key-values proof for the data subset directly from the already proved trie. This proof file is a self-contained certificate that proves the data subset
+9. create a key-values proof for the data subset directly from the already proved trie. This proof file is a self-contained certificate that proves the data subset
 
    ```typescript
    await client.createKeyValuesProof(
