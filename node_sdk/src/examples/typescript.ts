@@ -19,7 +19,7 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-25T20:14:48+10:00
+ * @Last modified time: 2020-07-03T10:44:05+10:00
  */
 
 import {
@@ -29,7 +29,7 @@ import {
   Key,
   KeyValue,
   KeyValuesFilter,
-  newApiServiceClient,
+  newAPIClient,
   stripCompoundKeyAnchorTriePart,
   Trie,
   VerifyProofReply,
@@ -51,7 +51,7 @@ const TRIE_KEY_VALUES = [
 const SUBPROOF_KEY = "living_room/Co2";
 
 // setup the Proofable API service client
-const client = newApiServiceClient(API_PROOFABLE_ENDPOINT);
+const client = newAPIClient(API_PROOFABLE_ENDPOINT);
 
 // use `npm run example` to run this example
 (async () => {
@@ -85,8 +85,7 @@ const client = newApiServiceClient(API_PROOFABLE_ENDPOINT);
     // wait for the proof to be anchored to Ethereum
     for await (const tp of client.subscribeTrieProof(
       trie.getId(),
-      trieProof.getId(),
-      null
+      trieProof.getId()
     )) {
       console.log("Anchoring proof: %s", Batch.StatusName[tp.getStatus()]);
       trieProof = tp;

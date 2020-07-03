@@ -10,8 +10,9 @@
         "declaration": true,
     },
     "typedocOptions": {
+        "name": "Proofable Node SDK",
         "mode": "library",
-        "out": "docs",
+        "out": "docs/reference",
         "includeDeclarations": true,
         "excludeExternals": true,
         "gitRevision": "master",
@@ -19,7 +20,10 @@
             "**/*.test.ts",
             "tests/**/*",
             "src/examples/*"
-        ]
+        ],
+        "listInvalidSymbolLinks": true,
+        "readme": "none",
+        "entryPoint": "\"index\""
     },
     "lib": [
         "es2015"

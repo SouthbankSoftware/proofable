@@ -19,12 +19,12 @@
  * @Author: guiguan
  * @Date:   2020-06-24T12:34:35+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-26T16:53:08+10:00
+ * @Last modified time: 2020-07-02T22:50:53+10:00
  */
 
 import fs from "fs";
 import {
-  APIServiceClient,
+  APIClient,
   Trie,
   KeyValue,
   TrieProof,
@@ -47,7 +47,7 @@ function deleteFile(path: string) {
 }
 
 describe("smoke test", () => {
-  let client: APIServiceClient;
+  let client: APIClient;
 
   beforeAll(() => {
     client = getTestClient();
@@ -92,8 +92,7 @@ describe("smoke test", () => {
   test("wait trie proof to be confirmed", async () => {
     for await (const tp of client.subscribeTrieProof(
       trie.getId(),
-      trieProof.getId(),
-      null
+      trieProof.getId()
     )) {
       trieProof = tp;
     }

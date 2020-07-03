@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-24T12:14:57+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-25T16:18:32+10:00
+ * @Last modified time: 2020-07-02T22:47:40+10:00
  */
 
 import _ from "lodash";
@@ -28,7 +28,7 @@ import * as grpc from "grpc";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { SurfaceCall } from "grpc/build/src/call";
 import { EventIterator } from "event-iterator";
-import { APIServiceClient, Anchor } from "./client";
+import { APIClient, Anchor } from "./client";
 import {
   CleanupFn,
   CreateKeyValuesProofRequest,
@@ -57,14 +57,11 @@ import {
 } from "../protos/api";
 import { grpcClientReadableStreamToAsyncIterator } from "./util";
 
-export function getTriesPromise(cli: APIServiceClient): AsyncIterable<Trie> {
+export function getTriesPromise(cli: APIClient): AsyncIterable<Trie> {
   return grpcClientReadableStreamToAsyncIterator(cli.getTries(new Empty()));
 }
 
-export function getTriePromise(
-  cli: APIServiceClient,
-  id: string
-): Promise<Trie> {
+export function getTriePromise(cli: APIClient, id: string): Promise<Trie> {
   return new Promise((resolve, reject) => {
     cli.getTrie(TrieRequest.from(id), (err, value) => {
       if (err) {
@@ -78,7 +75,7 @@ export function getTriePromise(
 }
 
 export function importTrie(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   path: string,
   callback: grpc.requestCallback<Trie>
@@ -119,7 +116,7 @@ export function importTrie(
 }
 
 export function importTriePromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   path: string
 ): Promise<Trie> {
@@ -136,7 +133,7 @@ export function importTriePromise(
 }
 
 export function exportTrie(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   outputPath: string,
   callback: grpc.requestCallback<void>
@@ -153,7 +150,7 @@ export function exportTrie(
 }
 
 export function exportTriePromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   outputPath: string
 ): Promise<void> {
@@ -170,13 +167,13 @@ export function exportTriePromise(
 }
 
 export function createTrie(
-  cli: APIServiceClient,
+  cli: APIClient,
   callback: grpc.requestCallback<Trie>
 ): SurfaceCall {
   return cli.createTrie(new Empty(), callback);
 }
 
-export function createTriePromise(cli: APIServiceClient): Promise<Trie> {
+export function createTriePromise(cli: APIClient): Promise<Trie> {
   return new Promise((resolve, reject) => {
     createTrie(cli, (err, value) => {
       if (err) {
@@ -190,17 +187,14 @@ export function createTriePromise(cli: APIServiceClient): Promise<Trie> {
 }
 
 export function deleteTrie(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   callback: grpc.requestCallback<Trie>
 ): SurfaceCall {
   return cli.deleteTrie(TrieRequest.from(id), callback);
 }
 
-export function deleteTriePromise(
-  cli: APIServiceClient,
-  id: string
-): Promise<Trie> {
+export function deleteTriePromise(cli: APIClient, id: string): Promise<Trie> {
   return new Promise((resolve, reject) => {
     deleteTrie(cli, id, (err, value) => {
       if (err) {
@@ -213,15 +207,8 @@ export function deleteTriePromise(
   });
 }
 
-/**
- *
- * @param cli
- * @param id
- * @param root
- * getTrieKeyValuesPromise gets the key-values of the trie at the given root. When root is zero (""), the current root hash of the trie will be used, and the request will be blocked until all ongoing updates are finished
- */
 export function getTrieKeyValuesPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   root: string
 ): AsyncIterable<KeyValue> {
@@ -231,7 +218,7 @@ export function getTrieKeyValuesPromise(
 }
 
 export function getTrieKeyValuePromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   root: string,
   key: Key
@@ -251,27 +238,18 @@ export function getTrieKeyValuePromise(
   });
 }
 
-/**
- *
- * @param cli
- * @param id
- * @param root
- * @param iter
- * @param callback
- * SetTrieKeyValues sets the key-values to the trie. When root is zero (""), the current root hash of the trie will be used, and the request will be blocked until all ongoing updates are finished
- */
 export function setTrieKeyValues(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   root: string,
-  iter: Iterable<KeyValue>,
+  keyValues: Iterable<KeyValue>,
   callback: grpc.requestCallback<Trie>
 ): SurfaceCall {
   const stream = cli.setTrieKeyValues(callback);
 
   let first = true;
 
-  for (const kv of iter) {
+  for (const kv of keyValues) {
     if (first) {
       first = false;
 
@@ -286,22 +264,14 @@ export function setTrieKeyValues(
   return stream;
 }
 
-/**
- *
- * @param cli
- * @param id
- * @param root
- * @param iter
- *  SetTrieKeyValuesPromise sets the key-values to the trie. When root is zero (""), the current root hash of the trie will be used, and the request will be blocked until all ongoing updates are finished
- */
-export function setTrieKeyValuesPromise(
-  cli: APIServiceClient,
+export async function setTrieKeyValuesPromise(
+  cli: APIClient,
   id: string,
   root: string,
-  iter: Iterable<KeyValue>
+  keyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>
 ): Promise<Trie> {
-  return new Promise((resolve, reject) => {
-    cli.setTrieKeyValues(id, root, iter, (err, value) => {
+  return new Promise(async (resolve, reject) => {
+    const stream = cli.setTrieKeyValues((err, value) => {
       if (err) {
         reject(err);
         return;
@@ -309,21 +279,37 @@ export function setTrieKeyValuesPromise(
 
       resolve(value);
     });
+
+    let first = true;
+
+    for await (const kv of keyValues) {
+      if (first) {
+        first = false;
+
+        kv.setTrieKeyValuesRequest(TrieKeyValuesRequest.from(id, root));
+      }
+
+      stream.write(kv);
+    }
+
+    stream.end();
+
+    return stream;
   });
 }
 
 export function getTrieRootsPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
-  filter: RootFilter | null
+  filter?: RootFilter
 ): AsyncIterable<TrieRoot> {
   return grpcClientReadableStreamToAsyncIterator(
-    cli.getTrieRoots(TrieRootsRequest.from(id, filter ?? undefined))
+    cli.getTrieRoots(TrieRootsRequest.from(id, filter))
   );
 }
 
 export function setTrieRootPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   root: string
 ): Promise<Trie> {
@@ -340,54 +326,47 @@ export function setTrieRootPromise(
 }
 
 export function getTrieProofsPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
-  filter: RootFilter | null
+  filter?: RootFilter
 ): AsyncIterable<TrieProof> {
   return grpcClientReadableStreamToAsyncIterator(
-    cli.getTrieProofs(TrieProofsRequest.from(id, filter ?? undefined))
+    cli.getTrieProofs(TrieProofsRequest.from(id, filter))
   );
 }
 
 export function getTrieProofPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
-  proofId: string,
-  filter: RootFilter | null
+  query?: string | RootFilter
 ): Promise<TrieProof> {
   return new Promise((resolve, reject) => {
-    cli.getTrieProof(
-      TrieProofRequest.from(id, proofId, filter ?? undefined),
-      (err, value) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(value);
+    cli.getTrieProof(TrieProofRequest.from(id, query), (err, value) => {
+      if (err) {
+        reject(err);
+        return;
       }
-    );
+
+      resolve(value);
+    });
   });
 }
 
 export function subscribeTrieProofPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
-  proofId: string,
-  filter: RootFilter | null
+  query?: string | RootFilter
 ): AsyncIterable<TrieProof> {
   return grpcClientReadableStreamToAsyncIterator(
-    cli.subscribeTrieProof(
-      TrieProofRequest.from(id, proofId, filter ?? undefined)
-    )
+    cli.subscribeTrieProof(TrieProofRequest.from(id, query))
   );
 }
 
 export function createTrieProofPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   root: string,
-  anchorType: Anchor.ValueOfType = 0
+  anchorType: Anchor.ValueOfType = Anchor.Type.ETH
 ): Promise<TrieProof> {
   return new Promise((resolve, reject) => {
     cli.createTrieProof(
@@ -405,7 +384,7 @@ export function createTrieProofPromise(
 }
 
 export function deleteTrieProofPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   id: string,
   proofId: string
 ): Promise<TrieProof> {
@@ -425,7 +404,7 @@ export function deleteTrieProofPromise(
 }
 
 export function verifyTrieProof(
-  cli: APIServiceClient,
+  cli: APIClient,
   trieId: string,
   proofId: string,
   callback: grpc.requestCallback<VerifyProofReply>,
@@ -455,7 +434,7 @@ export function verifyTrieProof(
 }
 
 export function verifyTrieProofPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   trieId: string,
   proofId: string,
   outputKeyValues = false,
@@ -484,7 +463,7 @@ export function verifyTrieProofPromise(
 }
 
 export function createKeyValuesProof(
-  cli: APIServiceClient,
+  cli: APIClient,
   trieId: string,
   proofId: string,
   filter: KeyValuesFilter | null,
@@ -522,7 +501,7 @@ export function createKeyValuesProof(
 }
 
 export function createKeyValuesProofPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   trieId: string,
   proofId: string,
   filter: KeyValuesFilter | null,
@@ -541,7 +520,7 @@ export function createKeyValuesProofPromise(
 }
 
 export function verifyKeyValuesProof(
-  cli: APIServiceClient,
+  cli: APIClient,
   path: string,
   callback: grpc.requestCallback<VerifyProofReply>,
   onKeyValue?: (kv: KeyValue) => void,
@@ -588,7 +567,7 @@ export function verifyKeyValuesProof(
 }
 
 export function verifyKeyValuesProofPromise(
-  cli: APIServiceClient,
+  cli: APIClient,
   path: string,
   outputKeyValues = false,
   dotGraphOutputPath?: string

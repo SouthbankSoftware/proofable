@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-19T10:49:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-29T17:58:34+10:00
+ * @Last modified time: 2020-07-03T00:18:04+10:00
  */
 
 import _ from "lodash";
@@ -27,7 +27,7 @@ import * as grpc from "grpc";
 import { Empty } from "google-protobuf/google/protobuf/empty_pb";
 import { SurfaceCall } from "grpc/build/src/call";
 import {
-  APIServiceClient as Client,
+  APIServiceClient,
   CreateKeyValuesProofRequest,
   CreateTrieProofRequest,
   DataChunk,
@@ -80,6 +80,14 @@ import {
   verifyTrieProof,
   verifyTrieProofPromise,
 } from "./api";
+import {
+  anchorTrie,
+  createTrieFromKeyValues,
+  importAndVerifyTrieWithSortedKeyValues,
+  ProofVerificationResult,
+  verifyKeyValuesProofWithSortedKeyValues,
+  verifyTrieWithSortedKeyValues,
+} from "./helpers";
 import { getAuthMetadata } from "./auth";
 import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
 
@@ -121,23 +129,21 @@ declare module "../protos/api/api_pb.d" {
 
   namespace RootFilter {
     /**
-     * Constructs a root filter
+     * Constructs a root filter. When zero, the oldest TrieProof of current root hash will be
+     * returned
      *
-     * @param root the root hash. When zero (""), the current root hash of the trie will be used to
-     * retrieve the TrieProof, and the request will be blocked until all ongoing updates are
+     * @param root the root hash. When zero (`""`), the current root hash of the trie will be used
+     * to retrieve the TrieProof, and the request will be blocked until all ongoing updates are
      * finished
-     * @param notBefore the not before timestamp. When undefined, this constraint is not used; when
-     * zero (epoch, i.e. `new Date(0)`), the latest TrieProof for the root hash will be returned
+     * @param notBefore the not before timestamp. When not provided (`undefined`), this constraint
+     * is not used, the oldest TrieProof for the root hash will be returned; when zero (epoch, i.e.
+     * `new Date(0)`), the latest TrieProof for the root hash will be returned
      */
     function from(root: string, notBefore?: Date): RootFilter;
   }
 
   namespace TrieProofRequest {
-    function from(
-      id: string,
-      proofId: string,
-      filter?: RootFilter
-    ): TrieProofRequest;
+    function from(id: string, query?: string | RootFilter): TrieProofRequest;
   }
 
   namespace TrieProofsRequest {
@@ -185,6 +191,8 @@ declare module "../protos/api/api_pb.d" {
       key: string;
       val: string;
     };
+    keyTo(encoding?: "utf8" | "hex"): string;
+    valTo(encoding?: "utf8" | "hex"): string;
   }
 }
 
@@ -241,12 +249,16 @@ RootFilter.from = (root, notBefore) => {
   return r;
 };
 
-TrieProofRequest.from = (id, proofId, filter) => {
+TrieProofRequest.from = (id, query) => {
   const r = new TrieProofRequest();
 
   r.setTrieId(id);
-  r.setProofId(proofId);
-  r.setRootFilter(filter);
+
+  if (typeof query === "string") {
+    r.setProofId(query);
+  } else {
+    r.setRootFilter(query);
+  }
 
   return r;
 };
@@ -316,12 +328,20 @@ KeyValue.from = (key, val, keyEncoding, valEncoding) => {
 
 KeyValue.prototype.to = function (keyEncoding, valEncoding) {
   return {
-    key: Buffer.from(this.getKey_asU8()).toString(keyEncoding ?? "utf8"),
-    val: Buffer.from(this.getValue_asU8()).toString(valEncoding ?? "utf8"),
+    key: this.keyTo(keyEncoding),
+    val: this.valTo(valEncoding),
   };
 };
 
-export class APIServiceClient extends Client {
+KeyValue.prototype.keyTo = function (encoding) {
+  return Buffer.from(this.getKey_asU8()).toString(encoding ?? "utf8");
+};
+
+KeyValue.prototype.valTo = function (encoding) {
+  return Buffer.from(this.getValue_asU8()).toString(encoding ?? "utf8");
+};
+
+export class APIClient extends APIServiceClient {
   /**
    * Gets all tries. Admin privilege is required
    */
@@ -472,6 +492,17 @@ export class APIServiceClient extends Client {
   }
 
   /**
+   * Creates a new trie with the given key-values
+   *
+   * @param keyValues the key-values
+   */
+  createTrieFromKeyValues(
+    keyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>
+  ): Promise<Trie> {
+    return createTrieFromKeyValues(this, keyValues);
+  }
+
+  /**
    * Deletes the given trie
    *
    * @param id trie ID
@@ -506,7 +537,7 @@ export class APIServiceClient extends Client {
   }
 
   /**
-   * Gets the key-values of the trie at the given root. When root is zero (""), the current root
+   * Gets the key-values of the trie at the given root. When root is zero (`""`), the current root
    * hash of the trie will be used, and the request will be blocked until all ongoing updates are
    * finished
    *
@@ -532,7 +563,7 @@ export class APIServiceClient extends Client {
   }
 
   /**
-   * Get a key-value of the trie at the given root. When root is zero (""), the current root hash of
+   * Get a key-value of the trie at the given root. When root is zero (`""`), the current root hash of
    * the trie will be used, and the request will be blocked until all ongoing updates are finished
    *
    * @param id trie ID
@@ -564,22 +595,22 @@ export class APIServiceClient extends Client {
   }
 
   /**
-   * Sets the key-values to the trie. When root is zero (""), the current root hash of the trie will
+   * Sets the key-values to the trie. When root is zero (`""`), the current root hash of the trie will
    * be used, and the request will be blocked until all ongoing updates are finished
    *
    * @param id trie ID
    * @param root trie root
-   * @param iter the key-values
+   * @param keyValues the key-values
    */
   setTrieKeyValues(
     id: string,
     root: string,
-    iter: Iterable<KeyValue>
+    keyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>
   ): Promise<Trie>;
   setTrieKeyValues(
     id: string,
     root: string,
-    iter: Iterable<KeyValue>,
+    keyValues: Iterable<KeyValue>,
     callback: grpc.requestCallback<Trie>
   ): SurfaceCall;
   setTrieKeyValues(
@@ -610,9 +641,9 @@ export class APIServiceClient extends Client {
    * Gets roots of a trie. This is a series of roots showing the modification history of a trie
    *
    * @param id trie ID
-   * @param filter the root filter (optional). When null, all TrieRoots will be returned
+   * @param filter the root filter. When not provided, all [[`TrieRoot`]]s will be returned
    */
-  getTrieRoots(id: string, filter: RootFilter | null): AsyncIterable<TrieRoot>;
+  getTrieRoots(id: string, filter?: RootFilter): AsyncIterable<TrieRoot>;
   getTrieRoots(
     argument: TrieRootsRequest,
     metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
@@ -661,15 +692,12 @@ export class APIServiceClient extends Client {
   }
 
   /**
-   * Gets proofs of a trie
+   * Gets proofs of a trie. The returned [[`TrieProof`]]s will be in chronological order
    *
    * @param id trie ID
-   * @param filter the root filter (optional). When null, all TrieProofs will be returned
+   * @param filter the root filter. When not provided, all [[`TrieProof`]]s will be returned
    */
-  getTrieProofs(
-    id: string,
-    filter: RootFilter | null
-  ): AsyncIterable<TrieProof>;
+  getTrieProofs(id: string, filter?: RootFilter): AsyncIterable<TrieProof>;
   getTrieProofs(
     argument: TrieProofsRequest,
     metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null
@@ -692,14 +720,10 @@ export class APIServiceClient extends Client {
    * returned
    *
    * @param id trie ID
-   * @param proofId trie proof ID
-   * @param filter the root filter. A null filter equals a zero filter
+   * @param query trie proof ID or root filter. When not provided, the oldest [[`TrieProof`]] for
+   * current trie root will be returned
    */
-  getTrieProof(
-    id: string,
-    proofId: string,
-    filter: RootFilter | null
-  ): Promise<TrieProof>;
+  getTrieProof(id: string, query?: string | RootFilter): Promise<TrieProof>;
   getTrieProof(
     argument: TrieProofRequest,
     callback: grpc.requestCallback<TrieProof>
@@ -717,7 +741,7 @@ export class APIServiceClient extends Client {
   ): grpc.ClientUnaryCall;
   getTrieProof(arg1: any, arg2: any, arg3?: any, arg4?: any): any {
     if (typeof arg1 === "string") {
-      return getTrieProofPromise(this, arg1, arg2, arg3);
+      return getTrieProofPromise(this, arg1, arg2);
     }
 
     return super.getTrieProof(arg1, arg2, arg3, arg4);
@@ -727,13 +751,12 @@ export class APIServiceClient extends Client {
    * Subscribes to the given trie proof
    *
    * @param id trie ID
-   * @param proofId trie proof ID
-   * @param filter the root filter. A null filter equals a zero filter
+   * @param query trie proof ID or root filter. When not provided, the oldest [[`TrieProof`]] for
+   * current trie root will be used
    */
   subscribeTrieProof(
     id: string,
-    proofId: string,
-    filter: RootFilter | null
+    query?: string | RootFilter
   ): AsyncIterable<TrieProof>;
   subscribeTrieProof(
     argument: TrieProofRequest,
@@ -746,19 +769,19 @@ export class APIServiceClient extends Client {
   ): grpc.ClientReadableStream<TrieProof>;
   subscribeTrieProof(arg1: any, arg2: any, arg3?: any): any {
     if (typeof arg1 === "string") {
-      return subscribeTrieProofPromise(this, arg1, arg2, arg3);
+      return subscribeTrieProofPromise(this, arg1, arg2);
     }
 
     return super.subscribeTrieProof(arg1, arg2, arg3);
   }
 
   /**
-   * Creates a trie proof for the given trie root. When root is zero (""), the current root hash of
+   * Creates a trie proof for the given trie root. When root is zero (`""`), the current root hash of
    * the trie will be used, and the request will be blocked until all ongoing updates are finished
    *
    * @param id trie Id
    * @param root trie root
-   * @param anchorType the anchor type the trie proof should be submitted to. Default to ETH
+   * @param anchorType the anchor type the trie proof should be submitted to. Default: `Anchor.Type.ETH`
    */
   createTrieProof(
     id: string,
@@ -786,6 +809,22 @@ export class APIServiceClient extends Client {
     }
 
     return super.createTrieProof(arg1, arg2, arg3, arg4);
+  }
+
+  /**
+   * Anchors the trie at the given root by creating a trie proof and waiting for it to be confirmed
+   *
+   * @param trie the trie at a root
+   * @param anchorType the anchor type the trie proof should be submitted to. Default:
+   * `Anchor.Type.ETH`
+   * @param outputProgress whether to output the anchoring progress to stdout. Default: `true`
+   */
+  anchorTrie(
+    trie: Trie,
+    anchorType?: Anchor.ValueOfType,
+    outputProgress?: boolean
+  ): Promise<TrieProof> {
+    return anchorTrie(this, trie, anchorType, outputProgress);
   }
 
   /**
@@ -823,8 +862,8 @@ export class APIServiceClient extends Client {
    *
    * @param trieId trie ID
    * @param proofId trie proof ID
-   * @param outputKeyValues whether to output key-values contained in the trie. Default: false
-   * @param dotGraphOutputPath Graphviz Dot Graph output file path. Default: "" (don't output)
+   * @param outputKeyValues whether to output key-values contained in the trie. Default: `false`
+   * @param dotGraphOutputPath Graphviz Dot Graph output file path. Default: `undefined` (don't output)
    */
   verifyTrieProof(
     trieId: string,
@@ -867,10 +906,64 @@ export class APIServiceClient extends Client {
   }
 
   /**
+   * Verifies the trie at the given root with the original data in sorted stream of key-values. The
+   * returned results contain both proof and key-values status
+   *
+   * @param trie the trie at a root
+   * @param sortedKeyValues the original data in sorted stream. You can use [[`sortKeyValues`]] to
+   * sort a key-values array
+   * @param trieProofQuery trie proof ID or root filter. When not provided, the oldest
+   * [[`TrieProof`]] for current trie root will be used
+   * @param dotGraphOutputPath Graphviz Dot Graph output file path. Default: `undefined` (don't
+   * output)
+   */
+  verifyTrieWithSortedKeyValues(
+    trie: Trie,
+    sortedKeyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>,
+    trieProofQuery?: string | RootFilter,
+    dotGraphOutputPath?: string
+  ): Promise<ProofVerificationResult> {
+    return verifyTrieWithSortedKeyValues(
+      this,
+      trie,
+      sortedKeyValues,
+      trieProofQuery,
+      dotGraphOutputPath
+    );
+  }
+
+  /**
+   * Imports a trie and verifies its given root with the original data in sorted stream of
+   * key-values. The returned results contain both proof and key-values status
+   *
+   * @param path the trie input file path
+   * @param sortedKeyValues the original data in sorted stream. You can use [[`sortKeyValues`]] to
+   * sort a key-values array
+   * @param trieProofQuery trie proof ID or root filter. When not provided, the oldest
+   * [[`TrieProof`]] for current trie root will be used
+   * @param dotGraphOutputPath Graphviz Dot Graph output file path. Default: `undefined` (don't
+   * output)
+   */
+  importAndVerifyTrieWithSortedKeyValues(
+    path: string,
+    sortedKeyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>,
+    trieProofQuery?: string | RootFilter,
+    dotGraphOutputPath?: string
+  ): Promise<ProofVerificationResult> {
+    return importAndVerifyTrieWithSortedKeyValues(
+      this,
+      path,
+      sortedKeyValues,
+      trieProofQuery,
+      dotGraphOutputPath
+    );
+  }
+
+  /**
    * Creates a key-values proof for the provided key-values out of the given trie proof
    *
    * @param trieId trie ID
-   * @param proofId trie proof ID to base on. When zero (""), a new trie proof will be created
+   * @param proofId trie proof ID to base on. When zero (`""`), a new trie proof will be created
    * on-the-fly
    * @param filter the key-values filter (optional). When null or zero, all key-values will be
    * included in the proof
@@ -920,8 +1013,8 @@ export class APIServiceClient extends Client {
    * Verifies the given key-values proof
    *
    * @param path the key-values proof input file path
-   * @param outputKeyValues whether to output key-values contained in the trie. Default: false
-   * @param dotGraphOutputPath Graphviz Dot Graph output file path. Default: "" (don't output)
+   * @param outputKeyValues whether to output key-values contained in the trie. Default: `false`
+   * @param dotGraphOutputPath Graphviz Dot Graph output file path. Default: `undefined` (don't output)
    */
   verifyKeyValuesProof(
     path: string,
@@ -952,16 +1045,39 @@ export class APIServiceClient extends Client {
 
     return super.verifyKeyValuesProof(arg1, arg2);
   }
+
+  /**
+   * Verifies the key-values proof with the original data in sorted stream of key-values. The
+   * returned results contain both proof and key-values status
+   *
+   * @param path the key-values proof input file path
+   * @param sortedKeyValues the original data in sorted stream. You can use [[`sortKeyValues`]] to
+   * sort a key-values array
+   * @param dotGraphOutputPath Graphviz Dot Graph output file path. Default: `undefined` (don't
+   * output)
+   */
+  verifyKeyValuesProofWithSortedKeyValues(
+    path: string,
+    sortedKeyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>,
+    dotGraphOutputPath?: string
+  ): Promise<ProofVerificationResult> {
+    return verifyKeyValuesProofWithSortedKeyValues(
+      this,
+      path,
+      sortedKeyValues,
+      dotGraphOutputPath
+    );
+  }
 }
 
 /**
  * Creates a new API Service client
  */
-export function newApiServiceClient(
+export function newAPIClient(
   hostPort: string,
   authMetadata?: grpc.Metadata,
   secure = true
-): APIServiceClient {
+): APIClient {
   if (!authMetadata) {
     authMetadata = getAuthMetadata();
   }
@@ -984,7 +1100,7 @@ export function newApiServiceClient(
     (creds as any).callCredentials = callCreds;
   }
 
-  return new APIServiceClient(hostPort, creds);
+  return new APIClient(hostPort, creds);
 }
 
 export {
@@ -993,6 +1109,7 @@ export {
   CreateKeyValuesProofRequest,
   CreateTrieProofRequest,
   DataChunk,
+  DeleteTrieProofRequest,
   grpc,
   Key,
   KeyValue,

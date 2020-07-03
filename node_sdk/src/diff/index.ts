@@ -17,19 +17,9 @@
  *
  *
  * @Author: guiguan
- * @Date:   2020-06-19T10:49:04+10:00
+ * @Date:   2020-07-02T14:08:45+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-02T22:44:33+10:00
+ * @Last modified time: 2020-07-02T14:09:10+10:00
  */
 
-export * from "./auth";
-export * from "./client";
-export {
-  dataToKeyValues,
-  sortKeyValues,
-  ProofVerificationResult,
-} from "./helpers";
-export {
-  stripCompoundKeyAnchorTriePart,
-  getEthTrieFromKeyValuesProof,
-} from "./util";
+export * from "./diff";

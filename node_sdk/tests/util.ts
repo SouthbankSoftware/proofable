@@ -19,20 +19,15 @@
  * @Author: guiguan
  * @Date:   2020-06-26T16:34:25+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-26T18:53:02+10:00
+ * @Last modified time: 2020-07-02T22:50:17+10:00
  */
 
 import fs from "fs";
 import _ from "lodash";
-import {
-  newApiServiceClient,
-  APIServiceClient,
-  grpc,
-  getAuthMetadata,
-} from "../src";
+import { newAPIClient, APIClient, grpc, getAuthMetadata } from "../src";
 import { filePath } from "../src/config";
 
-export function getTestClient(): APIServiceClient {
+export function getTestClient(): APIClient {
   // defaults to https://github.com/SouthbankSoftware/proofable/blob/master/cmd/proofable-cli/cmd/cmd.go#L65-L67
   const config = {
     apiHostPort: "api.dev.proofable.io:443",
@@ -65,5 +60,5 @@ export function getTestClient(): APIServiceClient {
     metadata = getAuthMetadata();
   }
 
-  return newApiServiceClient(config.apiHostPort, metadata, config.apiSecure);
+  return newAPIClient(config.apiHostPort, metadata, config.apiSecure);
 }

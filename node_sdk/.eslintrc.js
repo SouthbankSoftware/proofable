@@ -19,7 +19,9 @@ module.exports = {
       2,
       { devDependencies: ["**/test.ts"] },
     ],
-    "@typescript-eslint/indent": [2, 2],
+    // cannot indent union properly:
+    // https://github.com/typescript-eslint/typescript-eslint/issues/1824
+    "@typescript-eslint/indent": "off",
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",

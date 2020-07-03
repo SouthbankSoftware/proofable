@@ -1,1 +1,2 @@
 ignores: ["grpc-tools", "ts-protoc-gen", "@types/jest", "eslint-import-resolver-typescript"]
+ignore-dirs: ["dist", "docs", "node_modules"]
