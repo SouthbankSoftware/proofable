@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-07-02T11:42:17+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-03T02:00:38+10:00
+ * @Last modified time: 2020-07-07T11:09:21+10:00
  */
 
 import util from "util";
@@ -30,6 +30,7 @@ import {
   TrieProof,
   VerifyProofReply,
 } from "../protos/api";
+import { getBlockNumberString } from "../protos/anchor";
 import { APIClient, Anchor, Batch } from "./client";
 import {
   stripCompoundKeyAnchorTriePart,
@@ -210,19 +211,6 @@ async function verifyProofWithSortedKeyValues(
   }
 
   return result;
-}
-
-function getBlockNumberString(
-  anchorType: string,
-  blockTime: number,
-  blockTimeNano: number,
-  blockNumber: number
-): string {
-  if (anchorType.startsWith(Anchor.TypeName[Anchor.Type.HEDERA])) {
-    return util.format("%d.%d", blockTime, blockTimeNano);
-  }
-
-  return blockNumber.toString();
 }
 
 function getBlockTimeString(blockTime: number, blockTimeNano: number): string {

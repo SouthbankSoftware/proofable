@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-26T16:34:25+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-02T22:50:17+10:00
+ * @Last modified time: 2020-07-07T12:28:03+10:00
  */
 
 import fs from "fs";
@@ -45,7 +45,10 @@ export function getTestClient(): APIClient {
 
   _.merge(config, {
     apiHostPort: process.env["PROOFABLE_CLI_API_HOST_PORT"],
-    apiSecure: process.env["PROOFABLE_CLI_API_SECURE"] !== "false",
+    apiSecure:
+      process.env["PROOFABLE_CLI_API_SECURE"] === undefined
+        ? undefined
+        : process.env["PROOFABLE_CLI_API_SECURE"] !== "false",
     provendbApiGatewayEndpoint:
       process.env["PROOFABLE_CLI_API_GATEWAY_ENDPOINT"],
     devToken: process.env["PROOFABLE_CLI_DEV_TOKEN"],

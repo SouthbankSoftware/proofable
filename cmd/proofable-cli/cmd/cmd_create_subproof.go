@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-22T15:29:27+10:00
+ * @Last modified time: 2020-07-07T10:40:57+10:00
  */
 
 package cmd
@@ -31,6 +31,7 @@ import (
 
 	"github.com/SouthbankSoftware/proofable/pkg/api"
 	"github.com/SouthbankSoftware/proofable/pkg/colorcli"
+	anchorPB "github.com/SouthbankSoftware/proofable/pkg/protos/anchor"
 	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
 	"github.com/SouthbankSoftware/proofable/pkg/strutil"
 	"github.com/spf13/cobra"
@@ -119,7 +120,7 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 							colorcli.Green(len(filter.Keys), " or more"),
 							colorcli.Green(tp.GetProofRoot()),
 							colorcli.Green(tp.GetAnchorType()),
-							colorcli.Green(getBlockNumberString(
+							colorcli.Green(anchorPB.GetBlockNumberString(
 								tp.GetAnchorType().String(),
 								tp.GetBlockTime(),
 								tp.GetBlockTimeNano(),

@@ -17,11 +17,28 @@
  *
  *
  * @Author: guiguan
- * @Date:   2020-06-19T17:04:31+10:00
+ * @Date:   2020-07-07T10:36:03+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-07T11:07:56+10:00
+ * @Last modified time: 2020-07-07T10:39:18+10:00
  */
 
-export * from "./anchor_grpc_pb";
-export * from "./anchor_pb";
-export * from "./block";
+package anchor
+
+import (
+	fmt "fmt"
+	"strings"
+)
+
+// GetBlockNumberString gets the string representation of the block number concept. For Hedera, it
+// is `blockTime.blockTimeNano`; for the rest, it is `blockNumber`
+func GetBlockNumberString(
+	anchorType string,
+	blockTime,
+	blockTimeNano,
+	blockNumber uint64) string {
+	if strings.HasPrefix(anchorType, Anchor_HEDERA.String()) {
+		return fmt.Sprintf("%v.%v", blockTime, blockTimeNano)
+	}
+
+	return fmt.Sprintf("%v", blockNumber)
+}
