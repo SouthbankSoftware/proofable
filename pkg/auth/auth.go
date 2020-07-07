@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-10T16:15:43+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-07-07T12:09:09+10:00
  */
 
 package auth
@@ -33,7 +33,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"time"
 	"unsafe"
 
 	"github.com/SouthbankSoftware/proofable/pkg/config"
@@ -95,11 +94,12 @@ func VerifyAuth(endpoint string) (au *Auth, er error) {
 		return
 	}
 
-	if claims.ExpiresAt-time.Now().Unix() < int64(tokenExpirationThreshold.Seconds()) {
-		au = aut
-		er = ErrTokenExpired
-		return
-	}
+	// TODO: temp just ignore token expiration. Remove this logic after API Key Service
+	// if claims.ExpiresAt-time.Now().Unix() < int64(tokenExpirationThreshold.Seconds()) {
+	// 	au = aut
+	// 	er = ErrTokenExpired
+	// 	return
+	// }
 
 	au = aut
 	return

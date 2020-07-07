@@ -17,11 +17,27 @@
  *
  *
  * @Author: guiguan
- * @Date:   2020-06-19T17:04:31+10:00
+ * @Date:   2020-07-07T11:05:07+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-07T11:07:56+10:00
+ * @Last modified time: 2020-07-07T11:07:18+10:00
  */
 
-export * from "./anchor_grpc_pb";
-export * from "./anchor_pb";
-export * from "./block";
+import util from "util";
+import { Anchor } from "./anchor_pb";
+
+/**
+ * Gets the string representation of the block number concept. For Hedera, it is
+ * `blockTime.blockTimeNano`; for the rest, it is `blockNumber`
+ */
+export function getBlockNumberString(
+  anchorType: string,
+  blockTime: number,
+  blockTimeNano: number,
+  blockNumber: number
+): string {
+  if (anchorType.startsWith(Anchor.TypeName[Anchor.Type.HEDERA])) {
+    return util.format("%d.%d", blockTime, blockTimeNano);
+  }
+
+  return blockNumber.toString();
+}

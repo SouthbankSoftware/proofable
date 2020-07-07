@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-22T16:04:20+10:00
+ * @Last modified time: 2020-07-07T10:40:57+10:00
  */
 
 package cmd
@@ -33,6 +33,7 @@ import (
 	"github.com/SouthbankSoftware/proofable/pkg/api"
 	"github.com/SouthbankSoftware/proofable/pkg/colorcli"
 	"github.com/SouthbankSoftware/proofable/pkg/diff"
+	anchorPB "github.com/SouthbankSoftware/proofable/pkg/protos/anchor"
 	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
 	"github.com/karrick/godirwalk"
 	"github.com/spf13/cobra"
@@ -189,7 +190,7 @@ var cmdVerifyProof = &cobra.Command{
 			colorcli.Green(trieInputPath),
 			colorcli.Green(triePf.GetProofRoot()),
 			colorcli.Green(triePf.GetAnchorType()),
-			colorcli.Green(getBlockNumberString(
+			colorcli.Green(anchorPB.GetBlockNumberString(
 				triePf.GetAnchorType().String(),
 				triePf.GetBlockTime(),
 				triePf.GetBlockTimeNano(),

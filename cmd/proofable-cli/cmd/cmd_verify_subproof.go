@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-22T15:28:38+10:00
+ * @Last modified time: 2020-07-07T10:40:57+10:00
  */
 
 package cmd
@@ -38,6 +38,7 @@ import (
 	"github.com/SouthbankSoftware/proofable/pkg/colorcli"
 	"github.com/SouthbankSoftware/proofable/pkg/diff"
 	"github.com/SouthbankSoftware/proofable/pkg/hasher"
+	anchorPB "github.com/SouthbankSoftware/proofable/pkg/protos/anchor"
 	apiPB "github.com/SouthbankSoftware/proofable/pkg/protos/api"
 	"github.com/SouthbankSoftware/proofable/pkg/strutil"
 	"github.com/spf13/cobra"
@@ -234,7 +235,7 @@ The <path> is the root for those keys in the subproof, which is also the path th
 			colorcli.Green(kvpInputPath),
 			colorcli.Green(merkleRoot),
 			colorcli.Green(et.AnchorType),
-			colorcli.Green(getBlockNumberString(
+			colorcli.Green(anchorPB.GetBlockNumberString(
 				et.AnchorType,
 				et.BlockTime,
 				et.BlockTimeNano,
