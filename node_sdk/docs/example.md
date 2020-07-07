@@ -28,15 +28,15 @@ npm run example-js
 
 ## Step 1: authenticate with ProvenDB
 
-This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. You can find more etails from [here](https://www.proofable.io/node_sdk/docs/reference/index.html#getauthmetadata). Please note that this authenticaton method is temporary, which will be replaced by an API key soon
+This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. You can find more etails from [here](https://docs.proofable.io/node_sdk/docs/reference/index.html#getauthmetadata). Please note that this authenticaton method is temporary, which will be replaced by an API key soon
 
-1. download [`proofable-cli`](https://www.proofable.io/cmd/proofable-cli/)
+1. download [`proofable-cli`](https://docs.proofable.io/cmd/proofable-cli/)
 2. sign in/up to ProvenDB: `./proofable-cli auth`
 3. you are all set. You only need to do this once
 
 ## Step 2: create a Proofable API client
 
-This step creates a Proofable API gRPC [`client`](https://www.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html). After using the client, you can destroy the client using [`client.close()`](https://www.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html#close)
+This step creates a Proofable API gRPC [`client`](https://docs.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html). After using the client, you can destroy the client using [`client.close()`](https://docs.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html#close)
 
 ```typescript
 const client = newAPIClient("https://apigateway.dev.provendb.com");
@@ -44,7 +44,7 @@ const client = newAPIClient("https://apigateway.dev.provendb.com");
 
 ## Step 3: create an empty trie
 
-This step creates an empty [trie](https://www.proofable.io/docs/trie.html) with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using [`deleteTrie`](https://www.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
+This step creates an empty [trie](https://docs.proofable.io/docs/trie.html) with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using [`deleteTrie`](https://docs.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
 
 ```typescript
 let trie = await client.createTrie();
@@ -52,7 +52,7 @@ let trie = await client.createTrie();
 
 ## Step 4: set the key-values we want to prove
 
-This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`getTrieKeyValues`](https://www.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html#gettriekeyvalues), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`setTrieKeyValues`](https://www.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html#settriekeyvalues) calls as a way to build up a large trie incrementally
+This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. [`getTrieKeyValues`](https://docs.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html#gettriekeyvalues), they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple [`setTrieKeyValues`](https://docs.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html#settriekeyvalues) calls as a way to build up a large trie incrementally
 
 ```typescript
 trie = await client.setTrieKeyValues(trie.getId(), trie.getRoot(), [
@@ -65,7 +65,7 @@ trie = await client.setTrieKeyValues(trie.getId(), trie.getRoot(), [
 
 ## Step 5: create a proof for the key-values
 
-This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum ([`ETH`](https://www.proofable.io/docs/anchor.html#anchor.Anchor.Type)). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in
+This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum ([`ETH`](https://docs.proofable.io/docs/anchor.html#anchor.Anchor.Type)). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in
 
 ```typescript
 let trieProof = await client.createTrieProof(

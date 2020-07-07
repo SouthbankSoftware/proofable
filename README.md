@@ -12,19 +12,19 @@ Proofable is a framework for proving any digital asset to Blockchains. Overall, 
 
   - [Documentation](cmd/proofable-cli/README.md)
 
-- **API Service** (`proofable-api`): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A [trie](https://www.proofable.io/docs/trie.html) is a dictionary of ordered key-values that can be built incrementally, whose root hash at any given time can be dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is proven, so as the digital asset stored in that key-value
+- **API Service** (`proofable-api`): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A [trie](https://docs.proofable.io/docs/trie.html) is a dictionary of ordered key-values that can be built incrementally, whose root hash at any given time can be dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is proven, so as the digital asset stored in that key-value
 
-  - [gRPC Protocol Documentation](https://www.proofable.io/docs/api.html)
+  - [gRPC Protocol Documentation](https://docs.proofable.io/docs/api.html)
   - [gRPC Protocol Definition](https://github.com/SouthbankSoftware/proofable/blob/master/pkg/protos/api/api.proto)
 
 - **Anchor Service** (`provendb-anchor`): the service continuously anchors hashes to Blockchains, which is similar to what Chainpoint does, but with much better performance and flexibility. It supports multiple anchor types and proof formats. Digital signing can be also done at the Merkle root level. It is consumed by `proofable-api`, and is not directly public-accessible at the moment
 
-  - [gRPC Protocol Documentation](https://www.proofable.io/docs/anchor.html)
+  - [gRPC Protocol Documentation](https://docs.proofable.io/docs/anchor.html)
   - [gRPC Protocol Definition](https://github.com/SouthbankSoftware/proofable/blob/master/pkg/protos/anchor/anchor.proto)
 
 ## Node SDK
 
-The Node SDK with sample examples is available [here](https://www.proofable.io/node_sdk/)
+The Node SDK with sample examples is available [here](https://docs.proofable.io/node_sdk/)
 
 ## Example using Go SDK
 
@@ -77,7 +77,7 @@ api.WithAPIClient(
 
 ### Step 3: create an empty trie
 
-This step creates an empty [trie](https://www.proofable.io/docs/trie.html), which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#CreateTrie), but in that case, you have to manually destroy the trie using [`DeleteTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#DeleteTrie) or wait for `proofable-api` to garbage collect it
+This step creates an empty [trie](https://docs.proofable.io/docs/trie.html), which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#CreateTrie), but in that case, you have to manually destroy the trie using [`DeleteTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#DeleteTrie) or wait for `proofable-api` to garbage collect it
 
 ```go
 api.WithTrie(ctx, cli, func(id, root string) error {
@@ -101,7 +101,7 @@ root, err := api.SetTrieKeyValues(ctx, cli, id, root,
 
 ### Step 5: create a proof for the key-values
 
-This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum ([`ETH`](https://www.proofable.io/docs/anchor.html#anchor.Anchor.Type)). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in
+This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum ([`ETH`](https://docs.proofable.io/docs/anchor.html#anchor.Anchor.Type)). The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in
 
 ```go
 triePf, err := api.CreateTrieProof(ctx, cli, id, root, anchorPB.Anchor_ETH)

@@ -2,19 +2,19 @@
 
 [![NPM Package](https://img.shields.io/npm/v/proofable?style=flat-square)](https://www.npmjs.com/package/proofable)
 
-Proofable Node SDK provides a set of promise-based APIs as well as more advanced callback and stream based APIs. When dealing with the Proofable API Service, The promise-based APIs are convenient to be consumed in most use cases, while the callback and stream based APIs support more advanced features such as canceling and per-call gRPC options.
+Proofable Node SDK provides a set of promise-based APIs as well as more advanced callback and stream based APIs for dealing with the Proofable API Service. The promise-based APIs are convenient to be consumed in most use cases, while the callback and stream based APIs support more advanced features such as canceling and per-call gRPC options.
 
-- [SDK](https://www.proofable.io/node_sdk/)
-- [SDK Reference](https://www.proofable.io/node_sdk/docs/reference)
+- [SDK](https://docs.proofable.io/node_sdk/)
+- [SDK Reference](https://docs.proofable.io/node_sdk/docs/reference)
 - [SDK GitHub Repo](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
 - [SDK Examples](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk/src/examples)
-- [Proofable Framework](https://www.proofable.io/)
+- [Proofable Framework](https://docs.proofable.io/)
 
 ## Getting Started
 
 1. `npm i proofable`. We recommend the Node LTS versions: v12.16.3+
 
-2. create an authentication token using: `./proofable-cli auth`. You can find details from [here](https://www.proofable.io/node_sdk/docs/example.html#step-1-authenticate-with-provendb)
+2. create an authentication token using: `./proofable-cli auth`. You can find details from [here](https://docs.proofable.io/node_sdk/docs/example.html#step-1-authenticate-with-provendb)
 
 3. import [Proofable package](https://www.npmjs.com/package/proofable)
 
@@ -28,7 +28,7 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
    const client = newAPIClient("api.dev.proofable.io:443");
    ```
 
-5. create a [trie](https://www.proofable.io/docs/trie.html) from data
+5. create a [trie](https://docs.proofable.io/docs/trie.html) from data
 
    ```typescript
    const trie = await client.createTrieFromKeyValues(
@@ -41,7 +41,7 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
    );
    ```
 
-6. anchor the trie to a blockchain that is [supported by Proofable](https://www.proofable.io/docs/anchor.html#anchor.Anchor.Type). Here we use [Hedera](https://www.hedera.com/) testnet, as it is cool and fast
+6. anchor the trie to a blockchain that is [supported by Proofable](https://docs.proofable.io/docs/anchor.html#anchor.Anchor.Type). Here we use [Hedera](https://www.hedera.com/) testnet, as it is cool and fast
 
    ```typescript
    const trieProof = await client.anchorTrie(trie, Anchor.Type.HEDERA);
@@ -49,7 +49,7 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
    console.dir(trieProof.toObject());
    ```
 
-   ![Anchor Trie Example](https://www.proofable.io/node_sdk/docs/images/example_basic_anchor_trie.png)
+   ![Anchor Trie Example](https://docs.proofable.io/node_sdk/docs/images/example_basic_anchor_trie.png)
 
 7. export the trie for later use. This trie file is a self-contained certificate that can be used later on to do all sorts of manipulations, including verifiying the data
 
@@ -77,9 +77,9 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
    console.dir(result);
    ```
 
-   ![Import and Verify Trie Example](https://www.proofable.io/node_sdk/docs/images/example_basic_import_and_verify_trie.png)
+   ![Import and Verify Trie Example](https://docs.proofable.io/node_sdk/docs/images/example_basic_import_and_verify_trie.png)
 
-   ![Proof Dot Graph Example](https://www.proofable.io/node_sdk/docs/images/example_basic_proof_dot.svg)
+   ![Proof Dot Graph Example](https://docs.proofable.io/node_sdk/docs/images/example_basic_proof_dot.svg)
 
 9. create a key-values proof for the data subset directly from the already proved trie. This proof file is a self-contained certificate that proves the data subset
 
@@ -123,14 +123,14 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
 
     As you can see, the `trie` and `proof.id` are `undefined` comparing to previous output, which indicates that the key-values proof is independent of any tries
 
-    ![Verify Key-values Proof Example](https://www.proofable.io/node_sdk/docs/images/example_basic_verify_key_values_proof.png)
+    ![Verify Key-values Proof Example](https://docs.proofable.io/node_sdk/docs/images/example_basic_verify_key_values_proof.png)
 
-    ![Subproof Dot Graph Example](https://www.proofable.io/node_sdk/docs/images/example_basic_subproof_dot.svg)
+    ![Subproof Dot Graph Example](https://docs.proofable.io/node_sdk/docs/images/example_basic_subproof_dot.svg)
 
 ### What's Next
 
-- You can find the complete source code of this guide from [here](https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/typescript_basic.ts). Or a more detailed example with both TypeScript and JavaScript from [here](https://www.proofable.io/node_sdk/docs/example.html)
+- You can find the complete source code of this guide from [here](https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/typescript_basic.ts). Or a more detailed example with both TypeScript and JavaScript from [here](https://docs.proofable.io/node_sdk/docs/example.html)
 
-- Getting yourself familiar with the [trie concept](https://www.proofable.io/docs/trie.html)
+- Getting yourself familiar with the [trie concept](https://docs.proofable.io/docs/trie.html)
 
-- Checking out the [Proofable Node SDK Reference](https://www.proofable.io/node_sdk/docs/reference)
+- Checking out the [Proofable Node SDK Reference](https://docs.proofable.io/node_sdk/docs/reference)

@@ -1,6 +1,6 @@
 # [proofable-cli](https://github.com/SouthbankSoftware/proofable/tree/master/cmd/proofable-cli)
 
-`proofable-cli` is the command-line interface (CLI) for [Proofable](https://www.proofable.io/) API Service (`proofable-api`). At the moment, it supports proving a file-system to Ethereum
+`proofable-cli` is the command-line interface (CLI) for [Proofable](https://docs.proofable.io/) API Service (`proofable-api`). At the moment, it supports proving a file-system to Ethereum
 
 ## Usage
 
