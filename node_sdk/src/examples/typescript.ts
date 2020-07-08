@@ -19,7 +19,7 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-03T10:44:05+10:00
+ * @Last modified time: 2020-07-08T10:51:08+10:00
  */
 
 import {
@@ -35,7 +35,7 @@ import {
   VerifyProofReply,
 } from "../api";
 
-const API_PROOFABLE_ENDPOINT = "api.dev.proofable.io:443";
+const API_PROOFABLE_ENDPOINT = "api.proofable.io:443";
 const VERIFY_PROOF_DOTGRAPH_FILE = "proof.dot";
 const VERIFY_SUBPROOF_DOTGRAPH_FILE = "subproof_verify.dot";
 

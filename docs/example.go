@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-31T12:29:46+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-25T12:18:19+10:00
+ * @Last modified time: 2020-07-08T10:51:06+10:00
  */
 
 package main
@@ -54,7 +54,7 @@ func main() {
 
 	// create a gRPC client
 	err = api.WithAPIClient(
-		"api.dev.proofable.io:443",
+		"api.proofable.io:443",
 		creds,
 		func(cli apiPB.APIServiceClient) error {
 			// create an empty trie

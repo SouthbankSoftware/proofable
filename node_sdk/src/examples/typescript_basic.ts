@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-07-02T23:16:27+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-03T16:09:07+10:00
+ * @Last modified time: 2020-07-08T10:51:09+10:00
  */
 
 import _ from "lodash";
@@ -47,7 +47,7 @@ const KEY_VALUES_PROOF_PATH = "example_key_values_proof.subproofable";
 (async () => {
   // create a Proofable API client. Make sure to use `proofable-cli auth` to sign in/up for the
   // first time
-  const client = newAPIClient("api.dev.proofable.io:443");
+  const client = newAPIClient("api.proofable.io:443");
 
   let trieId: string | null = null;
 

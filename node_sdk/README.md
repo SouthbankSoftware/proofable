@@ -25,7 +25,7 @@ Proofable Node SDK provides a set of promise-based APIs as well as more advanced
 4. create a Proofable API client
 
    ```typescript
-   const client = newAPIClient("api.dev.proofable.io:443");
+   const client = newAPIClient("api.proofable.io:443");
    ```
 
 5. create a [trie](https://docs.proofable.io/docs/trie.html) from data
