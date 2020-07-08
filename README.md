@@ -16,6 +16,7 @@ Proofable is a framework for proving any digital asset to Blockchains. Overall, 
 
   - [gRPC Protocol Documentation](https://docs.proofable.io/docs/api.html)
   - [gRPC Protocol Definition](https://github.com/SouthbankSoftware/proofable/blob/master/pkg/protos/api/api.proto)
+  - [gRPC Demo](https://docs.proofable.io/docs/grpc_demo.html)
 
 - **Anchor Service** (`provendb-anchor`): the service continuously anchors hashes to Blockchains, which is similar to what Chainpoint does, but with much better performance and flexibility. It supports multiple anchor types and proof formats. Digital signing can be also done at the Merkle root level. It is consumed by `proofable-api`, and is not directly public-accessible at the moment
 

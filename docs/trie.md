@@ -1,5 +1,7 @@
 # Trie
 
+- [Proofable Framework](https://docs.proofable.io/)
+
 A trie is a [data structure](https://eth.wiki/en/fundamentals/patricia-tree) that behaves like a dictionary of key-values. Any data can be encoded as binaries in a key-value pair. The trie takes care of hashing the data and deriving the [Merkle root](https://en.wikipedia.org/wiki/Merkle_tree). Internally, the key-values of a trie are ordered alphabetically by their keys, which form a prefix tree, as follows:
 
 ![Trie Dot Graph](images/example_proof.svg)
