@@ -2,13 +2,21 @@
 
 `proofable-cli` is the command-line interface (CLI) for [Proofable](https://docs.proofable.io/) API Service (`proofable-api`). At the moment, it supports proving a file-system to Ethereum
 
+<script id="asciicast-346277" src="https://asciinema.org/a/346277.js" data-autoplay="true" async></script>
+
 ## Usage
 
-### Download dev binaries
+### Download dev (cutting-edge) binaries
 
 - [mac](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_darwin_amd64)
 - [linux](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_linux_amd64)
 - [windows](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_windows_amd64.exe)
+
+### Download prd (released) binaries
+
+- [mac](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_darwin_amd64)
+- [linux](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_linux_amd64)
+- [windows](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_windows_amd64.exe)
 
 ### Build your own binary
 
