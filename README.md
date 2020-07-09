@@ -57,7 +57,7 @@ This step will authenticate with ProvenDB so you can access `proofable-api`. Whe
 
 ```go
 creds, err := authcli.AuthenticateForGRPC(ctx,
-    "https://apigateway.dev.provendb.com",
+    "https://apigateway.provendb.com",
     true,
     "",
 )

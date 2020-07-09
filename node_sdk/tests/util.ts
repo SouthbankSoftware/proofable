@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-26T16:34:25+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-07T12:28:03+10:00
+ * @Last modified time: 2020-07-09T13:48:44+10:00
  */
 
 import fs from "fs";
@@ -32,7 +32,7 @@ export function getTestClient(): APIClient {
   const config = {
     apiHostPort: "api.dev.proofable.io:443",
     apiSecure: true,
-    provendbApiGatewayEndpoint: "https://apigateway.dev.provendb.com",
+    provendbApiGatewayEndpoint: "https://apigateway.provendb.com",
     devToken: undefined,
   };
 

@@ -39,7 +39,7 @@ This step will authenticate with ProvenDB so you can access `proofable-api`. Whe
 This step creates a Proofable API gRPC [`client`](https://docs.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html). After using the client, you can destroy the client using [`client.close()`](https://docs.proofable.io/node_sdk/docs/reference/classes/_index_.apiclient.html#close)
 
 ```typescript
-const client = newAPIClient("https://apigateway.dev.provendb.com");
+const client = newAPIClient("api.proofable.io:443");
 ```
 
 ## Step 3: create an empty trie

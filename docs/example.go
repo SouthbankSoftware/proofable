@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-31T12:29:46+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-08T10:51:06+10:00
+ * @Last modified time: 2020-07-09T13:48:44+10:00
  */
 
 package main
@@ -44,7 +44,7 @@ func main() {
 
 	// authenticate with ProvenDB
 	creds, err := authcli.AuthenticateForGRPC(ctx,
-		"https://apigateway.dev.provendb.com",
+		"https://apigateway.provendb.com",
 		true,
 		"",
 	)

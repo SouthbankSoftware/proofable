@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-08T10:51:06+10:00
+ * @Last modified time: 2020-07-09T13:48:44+10:00
  */
 
 package cmd
@@ -64,7 +64,7 @@ const (
 
 	defaultAPIHostPort                = "api.proofable.io:443"
 	defaultAPISecure                  = true
-	defaultProvenDBAPIGatewayEndpoint = "https://apigateway.dev.provendb.com"
+	defaultProvenDBAPIGatewayEndpoint = "https://apigateway.provendb.com"
 
 	viperKeyAPIHostPort                = nameAPIHostPort
 	viperKeyAPISecure                  = nameAPISecure
