@@ -149,7 +149,7 @@ jobs:
       - get: provendb-releases
         params: { clean_tags: true }
       - task: save-build-info
-        file: proofable-cli/ci/tasks/task-save-build-info.yml
+        file: proofable-cli/ci/task-save-build-info/task-save-build-info.yml
       - put: provendb-releases
         params:
           repository: provendb-releases

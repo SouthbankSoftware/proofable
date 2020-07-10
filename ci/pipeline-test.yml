@@ -87,7 +87,7 @@ jobs:
               params: { save: true }
       - task: unit-test
         privileged: true
-        file: proofable/ci/tasks/task-unit-test.yml
+        file: proofable/ci/task-unit-test/task-unit-test.yml
     on_failure:
       do:
         - put: slack
