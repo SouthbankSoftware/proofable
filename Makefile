@@ -18,7 +18,7 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-06-29T15:45:15+10:00
+# @Last modified time: 2020-07-10T17:11:38+10:00
 
 PROJECT_NAME := proofable
 PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(PROJECT_NAME)
@@ -41,7 +41,7 @@ build:
 	go build $(LD_FLAGS) ./cmd/$(APP_NAME)
 build-regen: generate build
 build-all:
-	go run github.com/mitchellh/gox -osarch="linux/amd64 windows/amd64 darwin/amd64" $(LD_FLAGS) ./cmd/$(APP_NAME)
+	go run src.techknowlogick.com/xgo --deps=https://gmplib.org/download/gmp/gmp-6.0.0a.tar.bz2 --targets=linux/amd64,windows/amd64,darwin/amd64 --pkg cmd/$(APP_NAME) $(LD_FLAGS) $(PROJECT_IMPORT_PATH)
 generate:
 	go generate $(PKGS)
 test:

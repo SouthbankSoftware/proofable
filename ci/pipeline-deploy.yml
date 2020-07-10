@@ -119,7 +119,7 @@ jobs:
           state: pending
       - get: version
       - task: build
-        file: proofable-cli/ci/tasks/task-build.yml
+        file: proofable-cli/ci/task-build/task-build.yml
       - in_parallel:
           fail_fast: true
           limit: 3

@@ -1,5 +1,5 @@
-# proofable
-# Copyright (C) 2020  Southbank Software Ltd.
+# provendb-verify
+# Copyright (C) 2019  Southbank Software Ltd.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -18,25 +18,35 @@
 # @Author: guiguan
 # @Date:   2019-01-29T16:04:55+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-03-05T19:32:55+11:00
+# @Last modified time: 2019-02-15T14:13:01+11:00
 
 platform: linux
 image_resource:
   type: docker-image
-  source: { repository: southbanksoftware/proofable-tests, tag: latest }
+  source: { repository: southbanksoftware/golang-dcind, tag: latest }
 inputs:
   - name: version
   - name: proofable-cli
 outputs:
   - name: proofable-cli
-params:
-  GIT_ACCESS_TOKEN: ((common.git-access-token))
 run:
-  path: sh
+  path: bash
   args:
     - -exc
     - |
       export APP_VERSION=$(cat version/number)
-      git config --global url."https://${GIT_ACCESS_TOKEN}:@github.com/".insteadOf "https://github.com/"
       cd proofable-cli
+      source ci/task-build/dcind.bash
+      start_docker
+      cleanup() {
+        docker stop -t 0 $(docker container ls -a -q) || true
+        docker system prune -a -f || true
+        stop_docker || true
+      }
+      trap cleanup EXIT
+      await_docker
+
       make build-all
+      mv proofable-cli-darwin-*-amd64 proofable-cli_darwin_amd64
+      mv proofable-cli-linux-amd64 proofable-cli_linux_amd64
+      mv proofable-cli-windows-*-amd64.exe proofable-cli_windows_amd64.exe

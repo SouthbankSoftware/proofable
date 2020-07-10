@@ -25,11 +25,11 @@
  * @Author: guiguan
  * @Date:   2019-03-25T16:23:56+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-07-10T17:12:02+10:00
  */
 
 package tools
 
 import (
-	_ "github.com/mitchellh/gox"
+	_ "src.techknowlogick.com/xgo"
 )
