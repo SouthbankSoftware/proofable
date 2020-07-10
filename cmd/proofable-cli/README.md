@@ -2,7 +2,7 @@
 
 `proofable-cli` is the command-line interface (CLI) for [Proofable](https://docs.proofable.io/) API Service (`proofable-api`). At the moment, it supports proving a file-system to Ethereum
 
-<script id="asciicast-346277" src="https://asciinema.org/a/346277.js" data-autoplay="true" async></script>
+<script id="asciicast-346585" src="https://asciinema.org/a/346585.js" data-autoplay="true" async></script>
 
 ## Usage
 
@@ -24,7 +24,7 @@
 
 2. make it executable: `chmod +x proofable-cli_darwin_amd64`
 
-3. make sure it is not in quarantine: `xattr -d com.apple.quarantine ./proofable-cli_darwin_amd64`
+3. make sure it is not in quarantine: `xattr -d com.apple.quarantine proofable-cli_darwin_amd64`
 
    see [this FAQ](#error-proofable-cli_darwin_amd64-cannot-be-opened-because-the-developer-cannot-be-verified)
 
