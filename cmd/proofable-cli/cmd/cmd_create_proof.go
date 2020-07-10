@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-07T10:40:57+10:00
+ * @Last modified time: 2020-07-10T15:08:44+10:00
  */
 
 package cmd
@@ -27,6 +27,7 @@ package cmd
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -167,6 +168,10 @@ By default, if the path is a directory, the proof will be created under the dire
 					for tp := range tpCH {
 						colorcli.Printf("Anchoring proof: %s\n", tp.GetStatus())
 						triePf = tp
+
+						if tp.GetStatus() == anchorPB.Batch_ERROR {
+							return errors.New(tp.GetError())
+						}
 					}
 
 					err = <-errCH

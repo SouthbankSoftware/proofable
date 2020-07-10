@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-31T12:29:46+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-09T13:48:44+10:00
+ * @Last modified time: 2020-07-10T15:31:33+10:00
  */
 
 package main
@@ -27,6 +27,7 @@ package main
 import (
 	"context"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -84,6 +85,10 @@ func main() {
 				for tp := range tpCH {
 					log.Printf("Anchoring proof: %s\n", tp.GetStatus())
 					triePf = tp
+
+					if tp.GetStatus() == anchorPB.Batch_ERROR {
+						return errors.New(tp.GetError())
+					}
 				}
 
 				// always check error from the error channel

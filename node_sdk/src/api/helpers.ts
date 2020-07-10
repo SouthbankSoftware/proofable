@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-07-02T11:42:17+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-07T11:09:21+10:00
+ * @Last modified time: 2020-07-10T15:22:06+10:00
  */
 
 import util from "util";
@@ -100,6 +100,10 @@ export async function anchorTrie(
     outputProgress &&
       console.log("Anchoring proof: %s", Batch.StatusName[tp.getStatus()]);
     trieProof = tp;
+
+    if (tp.getStatus() === Batch.Status.ERROR) {
+      throw new Error(tp.getError());
+    }
   }
 
   return trieProof;

@@ -20,7 +20,7 @@
  * @Author: Koustubh Gaikwad
  * @Date:   2020-06-19T09:26:20+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-08T10:51:08+10:00
+ * @Last modified time: 2020-07-10T15:28:33+10:00
  */
 
 const {
@@ -89,6 +89,10 @@ const client = newAPIClient(API_PROOFABLE_ENDPOINT);
     )) {
       console.log("Anchoring proof: %s", Batch.StatusName[tp.getStatus()]);
       trieProof = tp;
+
+      if (tp.getStatus() === Batch.Status.ERROR) {
+        throw new Error(tp.getError());
+      }
     }
 
     // verify the proof

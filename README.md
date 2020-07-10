@@ -118,6 +118,10 @@ tpCH, errCH := api.SubscribeTrieProof(ctx, cli, id, triePf.GetId())
 for tp := range tpCH {
     log.Printf("Anchoring proof: %s\n", tp.GetStatus())
     triePf = tp
+
+    if tp.GetStatus() == anchorPB.Batch_ERROR {
+        return errors.New(tp.GetError())
+    }
 }
 
 // always check error from the error channel

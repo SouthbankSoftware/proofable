@@ -86,6 +86,10 @@ for await (const tp of client.subscribeTrieProof(
 )) {
   console.log("Anchoring proof: %s", Batch.StatusName[tp.getStatus()]);
   trieProof = tp;
+
+  if (tp.getStatus() === Batch.Status.ERROR) {
+    throw new Error(tp.getError());
+  }
 }
 ```
 
