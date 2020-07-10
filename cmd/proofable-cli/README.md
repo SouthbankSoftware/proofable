@@ -18,6 +18,16 @@
 - [linux](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_linux_amd64)
 - [windows](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_windows_amd64.exe)
 
+### For macOS users
+
+1. download the binary `proofable-cli_darwin_amd64`
+
+2. make it executable: `chmod +x proofable-cli_darwin_amd64`
+
+3. make sure it is not in quarantine: `xattr -d com.apple.quarantine ./proofable-cli_darwin_amd64`
+
+   see [this FAQ](#error-proofable-cli_darwin_amd64-cannot-be-opened-because-the-developer-cannot-be-verified)
+
 ### Build your own binary
 
 ```bash
