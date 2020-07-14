@@ -20,7 +20,9 @@
 
 ### For macOS users
 
-1. download the binary `proofable-cli_darwin_amd64`
+#### Download directly
+
+1. download the binary [`proofable-cli_darwin_amd64`](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_darwin_amd64)
 
 2. make it executable: `chmod +x proofable-cli_darwin_amd64`
 
@@ -28,12 +30,16 @@
 
    see [this FAQ](#error-proofable-cli_darwin_amd64-cannot-be-opened-because-the-developer-cannot-be-verified)
 
+#### Use [Homebrew](https://brew.sh/)
+
+1. `brew tap southbanksoftware/proofable`
+2. `brew install proofable-cli`
+
 ### Build your own binary
 
-```bash
-# generate the `proofable-cli` binary
-make
-```
+1. make sure the latest golang is installed
+2. clone this repo
+3. `cd cmd/proofable-cli && make`
 
 ### Examples
 
