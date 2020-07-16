@@ -1,6 +1,6 @@
 {
   "name": "proofable",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Proofable Node SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

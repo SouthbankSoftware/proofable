@@ -4,11 +4,14 @@
 
 Proofable Node SDK provides a set of promise-based APIs as well as more advanced callback and stream based APIs for dealing with the Proofable API Service. The promise-based APIs are convenient to be consumed in most use cases, while the callback and stream based APIs support more advanced features such as canceling and per-call gRPC options.
 
-- [SDK](https://docs.proofable.io/node_sdk/)
-- [SDK Reference](https://docs.proofable.io/node_sdk/docs/reference)
-- [SDK GitHub Repo](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
-- [SDK Examples](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk/src/examples)
 - [Proofable Framework](https://docs.proofable.io/)
+
+Node SDK:
+
+- [Home](https://docs.proofable.io/node_sdk/)
+- [Reference](https://docs.proofable.io/node_sdk/docs/reference)
+- [GitHub](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
+- [Examples](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk/src/examples)
 
 ## Getting Started
 

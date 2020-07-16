@@ -6,7 +6,7 @@
 [![Proofable Test Status](https://concourse.provendb.com/api/v1/teams/main/pipelines/proofable-test/jobs/test/badge?title=test)](http://concourse.provendb.com/teams/main/pipelines/proofable-test)
 [![Proofable Deploy Status](https://concourse.provendb.com/api/v1/teams/main/pipelines/proofable-deploy/jobs/build-and-deploy/badge?title=deploy)](http://concourse.provendb.com/teams/main/pipelines/proofable-deploy)
 
-Proofable is a framework for proving any digital asset to Blockchains. Overall, it consists:
+Proofable is a general purpose proving framework for certifying digital assets to public blockchains. Overall, it consists:
 
 - [**CLI** (`proofable-cli`)](https://github.com/SouthbankSoftware/proofable/tree/master/cmd/proofable-cli): the command-line interface (CLI) for API Service (`proofable-api`). At the moment, it supports proving a file-system to Ethereum
 

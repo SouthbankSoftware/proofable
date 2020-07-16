@@ -43,7 +43,7 @@ func (m *Trie) Reset()         { *m = Trie{} }
 func (m *Trie) String() string { return proto.CompactTextString(m) }
 func (*Trie) ProtoMessage()    {}
 func (*Trie) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{0}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{0}
 }
 func (m *Trie) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Trie.Unmarshal(m, b)
@@ -97,7 +97,7 @@ func (m *DataChunk) Reset()         { *m = DataChunk{} }
 func (m *DataChunk) String() string { return proto.CompactTextString(m) }
 func (*DataChunk) ProtoMessage()    {}
 func (*DataChunk) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{1}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{1}
 }
 func (m *DataChunk) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DataChunk.Unmarshal(m, b)
@@ -258,7 +258,7 @@ func (m *KeyValue) Reset()         { *m = KeyValue{} }
 func (m *KeyValue) String() string { return proto.CompactTextString(m) }
 func (*KeyValue) ProtoMessage()    {}
 func (*KeyValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{2}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{2}
 }
 func (m *KeyValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KeyValue.Unmarshal(m, b)
@@ -397,7 +397,7 @@ func (m *VerifyProofReplyChunk) Reset()         { *m = VerifyProofReplyChunk{} }
 func (m *VerifyProofReplyChunk) String() string { return proto.CompactTextString(m) }
 func (*VerifyProofReplyChunk) ProtoMessage()    {}
 func (*VerifyProofReplyChunk) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{3}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{3}
 }
 func (m *VerifyProofReplyChunk) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyProofReplyChunk.Unmarshal(m, b)
@@ -575,7 +575,7 @@ func (m *Key) Reset()         { *m = Key{} }
 func (m *Key) String() string { return proto.CompactTextString(m) }
 func (*Key) ProtoMessage()    {}
 func (*Key) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{4}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{4}
 }
 func (m *Key) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Key.Unmarshal(m, b)
@@ -626,7 +626,7 @@ func (m *TrieRoot) Reset()         { *m = TrieRoot{} }
 func (m *TrieRoot) String() string { return proto.CompactTextString(m) }
 func (*TrieRoot) ProtoMessage()    {}
 func (*TrieRoot) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{5}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{5}
 }
 func (m *TrieRoot) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieRoot.Unmarshal(m, b)
@@ -688,7 +688,9 @@ type TrieProof struct {
 	// For most traditional blockchains, this will be zero. For Hedera, this will
 	// be the nano part of the transaction's consensus timestamp
 	BlockTimeNano uint64 `protobuf:"varint,13,opt,name=block_time_nano,json=blockTimeNano,proto3" json:"block_time_nano,omitempty"`
-	// BlockNumber is the Blockchain's block number
+	// BlockNumber is the Blockchain's block number. For Hedera, this will be zero
+	// as there is no block concept and each transaction has its own consensus
+	// timestamp which defines the transaction order
 	BlockNumber uint64 `protobuf:"varint,10,opt,name=block_number,json=blockNumber,proto3" json:"block_number,omitempty"`
 	// ProofRoot is the root hash of the trie proof, which is the anchor batch's
 	// root hash the proof belongs to
@@ -702,7 +704,7 @@ func (m *TrieProof) Reset()         { *m = TrieProof{} }
 func (m *TrieProof) String() string { return proto.CompactTextString(m) }
 func (*TrieProof) ProtoMessage()    {}
 func (*TrieProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{6}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{6}
 }
 func (m *TrieProof) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieProof.Unmarshal(m, b)
@@ -831,7 +833,7 @@ func (m *RootFilter) Reset()         { *m = RootFilter{} }
 func (m *RootFilter) String() string { return proto.CompactTextString(m) }
 func (*RootFilter) ProtoMessage()    {}
 func (*RootFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{7}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{7}
 }
 func (m *RootFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RootFilter.Unmarshal(m, b)
@@ -880,7 +882,7 @@ func (m *KeyValuesFilter) Reset()         { *m = KeyValuesFilter{} }
 func (m *KeyValuesFilter) String() string { return proto.CompactTextString(m) }
 func (*KeyValuesFilter) ProtoMessage()    {}
 func (*KeyValuesFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{8}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{8}
 }
 func (m *KeyValuesFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KeyValuesFilter.Unmarshal(m, b)
@@ -920,7 +922,7 @@ func (m *TrieRequest) Reset()         { *m = TrieRequest{} }
 func (m *TrieRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieRequest) ProtoMessage()    {}
 func (*TrieRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{9}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{9}
 }
 func (m *TrieRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieRequest.Unmarshal(m, b)
@@ -948,7 +950,7 @@ func (m *TrieRequest) GetTrieId() string {
 }
 
 // TrieKeyValuesRequest represents a trie key-values request. The returned
-// KeyValues are ordered by the keys alphabetically
+// KeyValues are ordered by the keys lexicographically
 type TrieKeyValuesRequest struct {
 	// TrieId is the trie ID
 	TrieId string `protobuf:"bytes,1,opt,name=trie_id,json=trieId,proto3" json:"trie_id,omitempty"`
@@ -965,7 +967,7 @@ func (m *TrieKeyValuesRequest) Reset()         { *m = TrieKeyValuesRequest{} }
 func (m *TrieKeyValuesRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieKeyValuesRequest) ProtoMessage()    {}
 func (*TrieKeyValuesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{10}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{10}
 }
 func (m *TrieKeyValuesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieKeyValuesRequest.Unmarshal(m, b)
@@ -1018,7 +1020,7 @@ func (m *TrieKeyValueRequest) Reset()         { *m = TrieKeyValueRequest{} }
 func (m *TrieKeyValueRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieKeyValueRequest) ProtoMessage()    {}
 func (*TrieKeyValueRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{11}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{11}
 }
 func (m *TrieKeyValueRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieKeyValueRequest.Unmarshal(m, b)
@@ -1076,7 +1078,7 @@ func (m *TrieRootsRequest) Reset()         { *m = TrieRootsRequest{} }
 func (m *TrieRootsRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieRootsRequest) ProtoMessage()    {}
 func (*TrieRootsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{12}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{12}
 }
 func (m *TrieRootsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieRootsRequest.Unmarshal(m, b)
@@ -1125,7 +1127,7 @@ func (m *SetTrieRootRequest) Reset()         { *m = SetTrieRootRequest{} }
 func (m *SetTrieRootRequest) String() string { return proto.CompactTextString(m) }
 func (*SetTrieRootRequest) ProtoMessage()    {}
 func (*SetTrieRootRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{13}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{13}
 }
 func (m *SetTrieRootRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetTrieRootRequest.Unmarshal(m, b)
@@ -1160,7 +1162,7 @@ func (m *SetTrieRootRequest) GetRoot() string {
 }
 
 // TrieProofsRequest represents a trie proofs request. The returned TrieProofs
-// are ordered by root alphabetically then by created at timestamp
+// are ordered by root lexicographically then by created at timestamp
 // chronologically
 type TrieProofsRequest struct {
 	// TrieId is the trie ID
@@ -1177,7 +1179,7 @@ func (m *TrieProofsRequest) Reset()         { *m = TrieProofsRequest{} }
 func (m *TrieProofsRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieProofsRequest) ProtoMessage()    {}
 func (*TrieProofsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{14}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{14}
 }
 func (m *TrieProofsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieProofsRequest.Unmarshal(m, b)
@@ -1230,7 +1232,7 @@ func (m *TrieProofRequest) Reset()         { *m = TrieProofRequest{} }
 func (m *TrieProofRequest) String() string { return proto.CompactTextString(m) }
 func (*TrieProofRequest) ProtoMessage()    {}
 func (*TrieProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{15}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{15}
 }
 func (m *TrieProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrieProofRequest.Unmarshal(m, b)
@@ -1384,7 +1386,7 @@ func (m *CreateTrieProofRequest) Reset()         { *m = CreateTrieProofRequest{}
 func (m *CreateTrieProofRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateTrieProofRequest) ProtoMessage()    {}
 func (*CreateTrieProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{16}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{16}
 }
 func (m *CreateTrieProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateTrieProofRequest.Unmarshal(m, b)
@@ -1440,7 +1442,7 @@ func (m *DeleteTrieProofRequest) Reset()         { *m = DeleteTrieProofRequest{}
 func (m *DeleteTrieProofRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteTrieProofRequest) ProtoMessage()    {}
 func (*DeleteTrieProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{17}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{17}
 }
 func (m *DeleteTrieProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteTrieProofRequest.Unmarshal(m, b)
@@ -1495,7 +1497,7 @@ func (m *VerifyTrieProofRequest) Reset()         { *m = VerifyTrieProofRequest{}
 func (m *VerifyTrieProofRequest) String() string { return proto.CompactTextString(m) }
 func (*VerifyTrieProofRequest) ProtoMessage()    {}
 func (*VerifyTrieProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{18}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{18}
 }
 func (m *VerifyTrieProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyTrieProofRequest.Unmarshal(m, b)
@@ -1566,7 +1568,7 @@ func (m *CreateKeyValuesProofRequest) Reset()         { *m = CreateKeyValuesProo
 func (m *CreateKeyValuesProofRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateKeyValuesProofRequest) ProtoMessage()    {}
 func (*CreateKeyValuesProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{19}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{19}
 }
 func (m *CreateKeyValuesProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateKeyValuesProofRequest.Unmarshal(m, b)
@@ -1724,7 +1726,7 @@ func (m *VerifyKeyValuesProofRequest) Reset()         { *m = VerifyKeyValuesProo
 func (m *VerifyKeyValuesProofRequest) String() string { return proto.CompactTextString(m) }
 func (*VerifyKeyValuesProofRequest) ProtoMessage()    {}
 func (*VerifyKeyValuesProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{20}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{20}
 }
 func (m *VerifyKeyValuesProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyKeyValuesProofRequest.Unmarshal(m, b)
@@ -1773,7 +1775,7 @@ func (m *VerifyProofReply) Reset()         { *m = VerifyProofReply{} }
 func (m *VerifyProofReply) String() string { return proto.CompactTextString(m) }
 func (*VerifyProofReply) ProtoMessage()    {}
 func (*VerifyProofReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_519a13911e92cd67, []int{21}
+	return fileDescriptor_api_0b2c260ae0aadf63, []int{21}
 }
 func (m *VerifyProofReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyProofReply.Unmarshal(m, b)
@@ -1858,7 +1860,7 @@ type APIServiceClient interface {
 	// DeleteTrie deletes a trie. This destroys everything of a trie
 	DeleteTrie(ctx context.Context, in *TrieRequest, opts ...grpc.CallOption) (*Trie, error)
 	// GetTrieKeyValues gets key-values of a trie. The returned KeyValues are
-	// ordered by the keys alphabetically
+	// ordered by the keys lexicographically
 	GetTrieKeyValues(ctx context.Context, in *TrieKeyValuesRequest, opts ...grpc.CallOption) (APIService_GetTrieKeyValuesClient, error)
 	// GetTrieKeyValue gets a key-value of a trie
 	GetTrieKeyValue(ctx context.Context, in *TrieKeyValueRequest, opts ...grpc.CallOption) (*KeyValue, error)
@@ -2344,7 +2346,7 @@ type APIServiceServer interface {
 	// DeleteTrie deletes a trie. This destroys everything of a trie
 	DeleteTrie(context.Context, *TrieRequest) (*Trie, error)
 	// GetTrieKeyValues gets key-values of a trie. The returned KeyValues are
-	// ordered by the keys alphabetically
+	// ordered by the keys lexicographically
 	GetTrieKeyValues(*TrieKeyValuesRequest, APIService_GetTrieKeyValuesServer) error
 	// GetTrieKeyValue gets a key-value of a trie
 	GetTrieKeyValue(context.Context, *TrieKeyValueRequest) (*KeyValue, error)
@@ -2871,9 +2873,9 @@ var _APIService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "api/api.proto",
 }
 
-func init() { proto.RegisterFile("api/api.proto", fileDescriptor_api_519a13911e92cd67) }
+func init() { proto.RegisterFile("api/api.proto", fileDescriptor_api_0b2c260ae0aadf63) }
 
-var fileDescriptor_api_519a13911e92cd67 = []byte{
+var fileDescriptor_api_0b2c260ae0aadf63 = []byte{
 	// 1321 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x57, 0xcd, 0x6e, 0xdb, 0x46,
 	0x10, 0x16, 0x2d, 0x5b, 0x3f, 0x23, 0xc9, 0x52, 0x36, 0xb2, 0xad, 0xc8, 0x2d, 0xa2, 0xf2, 0x10,

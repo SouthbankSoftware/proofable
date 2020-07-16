@@ -231,7 +231,7 @@ TrieKeyValueRequest represents a trie key-value request
 
 ### TrieKeyValuesRequest
 TrieKeyValuesRequest represents a trie key-values request. The returned
-KeyValues are ordered by the keys alphabetically
+KeyValues are ordered by the keys lexicographically
 
 
 | Field | Type | Label | Description |
@@ -264,7 +264,7 @@ viewed as a snapshot of all the key-values contained in the trie
 | txn_uri | [string](#string) |  | TxnUri is the explorer URI for the Blockchain transaction |
 | block_time | [uint64](#uint64) |  | BlockTime is the Blockchain&#39;s block consensus timestamp in seconds |
 | block_time_nano | [uint64](#uint64) |  | BlockTimeNano is the Blockcahin&#39;s block consensus timestamp&#39;s nano part. For most traditional blockchains, this will be zero. For Hedera, this will be the nano part of the transaction&#39;s consensus timestamp |
-| block_number | [uint64](#uint64) |  | BlockNumber is the Blockchain&#39;s block number |
+| block_number | [uint64](#uint64) |  | BlockNumber is the Blockchain&#39;s block number. For Hedera, this will be zero as there is no block concept and each transaction has its own consensus timestamp which defines the transaction order |
 | proof_root | [string](#string) |  | ProofRoot is the root hash of the trie proof, which is the anchor batch&#39;s root hash the proof belongs to |
 
 
@@ -293,7 +293,7 @@ TrieProofRequest represents a trie proof request
 
 ### TrieProofsRequest
 TrieProofsRequest represents a trie proofs request. The returned TrieProofs
-are ordered by root alphabetically then by created at timestamp
+are ordered by root lexicographically then by created at timestamp
 chronologically
 
 
@@ -449,7 +449,7 @@ that key-value
 | ExportTrie | [TrieRequest](#api.TrieRequest) | [DataChunk](#api.DataChunk) stream | ExportTrie exports a trie&#39;s data |
 | CreateTrie | [.google.protobuf.Empty](#google.protobuf.Empty) | [Trie](#api.Trie) | CreateTrie creates an empty trie |
 | DeleteTrie | [TrieRequest](#api.TrieRequest) | [Trie](#api.Trie) | DeleteTrie deletes a trie. This destroys everything of a trie |
-| GetTrieKeyValues | [TrieKeyValuesRequest](#api.TrieKeyValuesRequest) | [KeyValue](#api.KeyValue) stream | GetTrieKeyValues gets key-values of a trie. The returned KeyValues are ordered by the keys alphabetically |
+| GetTrieKeyValues | [TrieKeyValuesRequest](#api.TrieKeyValuesRequest) | [KeyValue](#api.KeyValue) stream | GetTrieKeyValues gets key-values of a trie. The returned KeyValues are ordered by the keys lexicographically |
 | GetTrieKeyValue | [TrieKeyValueRequest](#api.TrieKeyValueRequest) | [KeyValue](#api.KeyValue) | GetTrieKeyValue gets a key-value of a trie |
 | SetTrieKeyValues | [KeyValue](#api.KeyValue) stream | [Trie](#api.Trie) | SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to remove that key. Modifications to a trie will change its root hash |
 | GetTrieRoots | [TrieRootsRequest](#api.TrieRootsRequest) | [TrieRoot](#api.TrieRoot) stream | GetTrieRoots gets roots of a trie. This is a series of roots showing the modification history of a trie |

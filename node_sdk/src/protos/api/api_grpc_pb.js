@@ -22,7 +22,7 @@
 // @Author: guiguan
 // @Date:   2020-01-03T14:55:49+11:00
 // @Last modified by:   guiguan
-// @Last modified time: 2020-06-22T14:30:18+10:00
+// @Last modified time: 2020-07-15T12:54:53+10:00
 //
 'use strict';
 var grpc = require('grpc');
@@ -312,7 +312,7 @@ deleteTrie: {
     responseDeserialize: deserialize_api_Trie,
   },
   // GetTrieKeyValues gets key-values of a trie. The returned KeyValues are
-// ordered by the keys alphabetically
+// ordered by the keys lexicographically
 getTrieKeyValues: {
     path: '/api.APIService/GetTrieKeyValues',
     requestStream: false,
