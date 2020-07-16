@@ -121,6 +121,8 @@ jobs:
       - task: build
         privileged: true
         file: proofable-cli/ci/task-build/task-build.yml
+      - task: sign
+        file: proofable-cli/ci/task-sign/task-sign.yml  
       - in_parallel:
           fail_fast: true
           limit: 3
