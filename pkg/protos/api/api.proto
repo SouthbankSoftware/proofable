@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-01-03T14:55:49+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-22T14:59:21+10:00
+ * @Last modified time: 2020-07-15T12:54:53+10:00
  */
 
 syntax = "proto3";
@@ -54,7 +54,7 @@ service APIService {
   // DeleteTrie deletes a trie. This destroys everything of a trie
   rpc DeleteTrie(TrieRequest) returns (Trie) {}
   // GetTrieKeyValues gets key-values of a trie. The returned KeyValues are
-  // ordered by the keys alphabetically
+  // ordered by the keys lexicographically
   rpc GetTrieKeyValues(TrieKeyValuesRequest) returns (stream KeyValue) {}
   // GetTrieKeyValue gets a key-value of a trie
   rpc GetTrieKeyValue(TrieKeyValueRequest) returns (KeyValue) {}
@@ -230,7 +230,7 @@ message TrieRequest {
 }
 
 // TrieKeyValuesRequest represents a trie key-values request. The returned
-// KeyValues are ordered by the keys alphabetically
+// KeyValues are ordered by the keys lexicographically
 message TrieKeyValuesRequest {
   // TrieId is the trie ID
   string trie_id = 1;
@@ -271,7 +271,7 @@ message SetTrieRootRequest {
 }
 
 // TrieProofsRequest represents a trie proofs request. The returned TrieProofs
-// are ordered by root alphabetically then by created at timestamp
+// are ordered by root lexicographically then by created at timestamp
 // chronologically
 message TrieProofsRequest {
   // TrieId is the trie ID

@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-19T13:32:18+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-03T16:29:35+10:00
+ * @Last modified time: 2020-07-15T13:02:45+10:00
  */
 
 /**
@@ -31,12 +31,14 @@
  * convenient to be consumed in most use cases, while the callback and stream based APIs support
  * more advanced features such as canceling and per-call gRPC options.
  *
- * - [SDK](https://docs.proofable.io/node_sdk/)
- * - [SDK Reference](https://docs.proofable.io/node_sdk/docs/reference)
- * - [SDK GitHub Repo](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
- * - [SDK
- *   Examples](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk/src/examples)
  * - [Proofable Framework](https://docs.proofable.io/)
+ *
+ * Node SDK:
+ *
+ * - [Home](https://docs.proofable.io/node_sdk/)
+ * - [Reference](https://docs.proofable.io/node_sdk/docs/reference)
+ * - [GitHub](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
+ * - [Examples](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk/src/examples)
  * - [Getting Started](https://docs.proofable.io/node_sdk/#getting-started)
  * @packageDocumentation
  */

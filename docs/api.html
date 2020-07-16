@@ -684,7 +684,7 @@ blocked until all ongoing updates are finished </p></td>
         
       
         <h3 id="api.TrieKeyValuesRequest">TrieKeyValuesRequest</h3>
-        <p>TrieKeyValuesRequest represents a trie key-values request. The returned</p><p>KeyValues are ordered by the keys alphabetically</p>
+        <p>TrieKeyValuesRequest represents a trie key-values request. The returned</p><p>KeyValues are ordered by the keys lexicographically</p>
 
         
           <table class="field-table">
@@ -810,7 +810,9 @@ be the nano part of the transaction&#39;s consensus timestamp </p></td>
                   <td>block_number</td>
                   <td><a href="#uint64">uint64</a></td>
                   <td></td>
-                  <td><p>BlockNumber is the Blockchain&#39;s block number </p></td>
+                  <td><p>BlockNumber is the Blockchain&#39;s block number. For Hedera, this will be zero
+as there is no block concept and each transaction has its own consensus
+timestamp which defines the transaction order </p></td>
                 </tr>
               
                 <tr>
@@ -867,7 +869,7 @@ root hash the proof belongs to </p></td>
         
       
         <h3 id="api.TrieProofsRequest">TrieProofsRequest</h3>
-        <p>TrieProofsRequest represents a trie proofs request. The returned TrieProofs</p><p>are ordered by root alphabetically then by created at timestamp</p><p>chronologically</p>
+        <p>TrieProofsRequest represents a trie proofs request. The returned TrieProofs</p><p>are ordered by root lexicographically then by created at timestamp</p><p>chronologically</p>
 
         
           <table class="field-table">
@@ -1200,7 +1202,7 @@ not provided in the metadata, a new one will be generated</p></td>
                 <td><a href="#api.TrieKeyValuesRequest">TrieKeyValuesRequest</a></td>
                 <td><a href="#api.KeyValue">KeyValue</a> stream</td>
                 <td><p>GetTrieKeyValues gets key-values of a trie. The returned KeyValues are
-ordered by the keys alphabetically</p></td>
+ordered by the keys lexicographically</p></td>
               </tr>
             
               <tr>
