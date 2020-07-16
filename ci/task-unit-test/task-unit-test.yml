@@ -56,4 +56,4 @@ run:
       trap cleanup EXIT
 
       # run logic via docker compose
-      docker-compose -f proofable/ci/tasks/docker-compose-unit-test.yml run --rm tests
+      docker-compose -f proofable/ci/task-unit-test/docker-compose-unit-test.yml run --rm tests
