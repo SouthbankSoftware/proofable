@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-11T11:29:59+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-22T10:21:12+10:00
+ * @Last modified time: 2020-07-22T12:07:12+10:00
  */
 
 package auth
@@ -136,7 +136,7 @@ func (a *Auth) SignInWithOauth(ctx context.Context, provider string) error {
 	eg.Go(func() error {
 		// visit oauth uri
 		uri := fmt.Sprintf(
-			"%v/auth/signup?redirectURL=http://localhost:%v/login&app=provendb-cli&provider=%v",
+			"%v/auth/signup?redirectURL=http://localhost:%v/login&app=proofable&provider=%v",
 			a.Endpoint, port, provider)
 
 		return open.Run(uri)
