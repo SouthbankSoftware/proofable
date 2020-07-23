@@ -20,8 +20,8 @@
  *
  * @Author: Michael Harrison (Mike@Southbanksoftware.com)
  * @Date:   2020-02-21T11:28:11+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2020-07-23T16:15:02+10:00
  */
 
 package auth
@@ -243,7 +243,7 @@ var (
 					<p>Congratulations! Authentication with the CLI has successfully passed. You may now close this browser window and continue through the CLI.</p>
           <p>Other Links:</p>
           <div class="buttons">
-            <button class="blue"><a href="https://provendb.com/app/dashboard" >ProvenDB UI</a></button>
+            <button class="blue"><a href="https://app.provendb.com/app/dashboard" >ProvenDB UI</a></button>
             <button><a href="https://provendb.com/homepage">Home</a></button>
           </div>
         </div>
@@ -456,7 +456,7 @@ var (
           <h1>Authentication Failed.</h1>
 					<p>Oh no! We're sorry, authentication for the CLI has failed. Please try again in your terminal, ensuring you are logging in with a valid ProvenDB account. If problems persist, you can contact support below:  </p>
           <div class="buttons">
-            <button class="blue"><a href="https://provendb.com/app/signup" >Create Account</a></button>
+            <button class="blue"><a href="https://app.provendb.com/app/signup" >Create Account</a></button>
             <button><a href="https://provendb.readme.io/discuss">Support</a></button>
           </div>
         </div>
