@@ -17,7 +17,7 @@ else
     exit 1
 fi
 
-echo -e "installing from \`$DOWNLOAD_LINK\` to \`$INSTALL_PATH\`...\n"
+echo -e "Installing from \`$DOWNLOAD_LINK\` to \`$INSTALL_PATH\`...\n"
 
 if [[ $(command -v curl) ]]; then
     DOWNLOAD_CMD="curl \"$DOWNLOAD_LINK\""
