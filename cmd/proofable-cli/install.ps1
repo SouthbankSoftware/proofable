@@ -1,4 +1,5 @@
 param($Env = "prd", $InstallPath = (Get-Location))
+$ErrorActionPreference = "Stop"
 
 $zipFileName = "proofable-cli_windows_amd64.zip"
 $downloadLink = "https://storage.googleapis.com/provendb-$Env/proofable-cli/$zipFileName"
