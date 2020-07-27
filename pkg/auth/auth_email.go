@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-11T11:29:36+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-03T15:57:55+11:00
+ * @Last modified time: 2020-07-22T11:13:08+10:00
  */
 
 package auth
@@ -29,8 +29,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"unsafe"
 
 	"golang.org/x/net/context/ctxhttp"
@@ -67,7 +69,12 @@ func (a *Auth) SignInWithEmail(ctx context.Context, email, pwd string) error {
 
 	if res.StatusCode != http.StatusOK {
 		// handle error
-		return errors.New(string(body))
+		msg := string(body)
+		if strings.Contains(msg, "user not found") {
+			return fmt.Errorf("Welcome to Proofable. Please sign up at https://app.provendb.com/app/signup/email first then sign in from here using email again")
+		}
+
+		return errors.New(msg)
 	}
 
 	type token struct {
