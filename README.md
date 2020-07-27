@@ -10,7 +10,7 @@ Proofable is a general purpose proving framework for certifying digital assets t
 
 - [**CLI** (`proofable-cli`)](https://github.com/SouthbankSoftware/proofable/tree/master/cmd/proofable-cli): the command-line interface (CLI) for API Service (`proofable-api`). At the moment, it supports proving a file-system to Ethereum
 
-  - [Documentation](cmd/proofable-cli/README.md)
+  - [Documentation](https://docs.proofable.io/cmd/proofable-cli/)
 
 - **API Service** (`proofable-api`): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A [trie](https://docs.proofable.io/docs/trie.html) is a dictionary of ordered key-values that can be built incrementally, whose root hash at any given time can be dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is proven, so as the digital asset stored in that key-value
 

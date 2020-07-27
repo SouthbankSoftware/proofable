@@ -1,39 +1,93 @@
 # [proofable-cli](https://github.com/SouthbankSoftware/proofable/tree/master/cmd/proofable-cli)
 
-`proofable-cli` is the command-line interface (CLI) for [Proofable](https://docs.proofable.io/) API Service (`proofable-api`). At the moment, it supports proving a file-system to Ethereum
+`proofable-cli` is the command-line interface (CLI) for [Proofable](https://docs.proofable.io/) API Service (`proofable-api`). At the moment, it supports certifying a file-system to blockchains
 
 <script id="asciicast-346585" src="https://asciinema.org/a/346585.js" data-autoplay="true" async></script>
 
 ## Usage
 
-### Download dev (cutting-edge) binaries
-
-- [mac](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_darwin_amd64)
-- [linux](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_linux_amd64)
-- [windows](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_windows_amd64.exe)
-
-### Download prd (released) binaries
-
-- [mac](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_darwin_amd64)
-- [linux](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_linux_amd64)
-- [windows](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_windows_amd64.exe)
-
 ### For macOS users
 
-#### Download directly
-
-1. download the binary [`proofable-cli_darwin_amd64`](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_darwin_amd64)
-
-2. make it executable: `chmod +x proofable-cli_darwin_amd64`
-
-3. make sure it is not in quarantine: `xattr -d com.apple.quarantine proofable-cli_darwin_amd64`
-
-   see [this FAQ](#error-proofable-cli_darwin_amd64-cannot-be-opened-because-the-developer-cannot-be-verified)
-
-#### Use [Homebrew](https://brew.sh/)
+#### Install via [Homebrew](https://brew.sh/)
 
 1. `brew tap southbanksoftware/proofable`
 2. `brew install proofable-cli`
+
+Later on, you can upgrade to the latest version using: `brew upgrade proofable-cli`
+
+#### Install directly
+
+Copy and paste the following bash command in a [macOS Terminal](https://support.apple.com/en-au/guide/terminal/welcome/mac):
+
+```bash
+bash -c "$(eval "$(if [[ $(command -v curl) ]]; then echo "curl -fsSL"; else echo "wget -qO-"; fi) https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.sh")"
+```
+
+Then hit return to run, which will install the latest `proofable-cli` binary into `/usr/local/bin`. Then you can use the CLI as:
+
+```bash
+proofable-cli -h
+```
+
+If you want to install the latest dev (cutting edge) binary, using:
+
+```bash
+ENV=dev bash -c "$(eval "$(if [[ $(command -v curl) ]]; then echo "curl -fsSL"; else echo "wget -qO-"; fi) https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.sh")"
+```
+
+To upgrade, simply repeat the installation steps
+
+### For Linux users
+
+#### Install directly
+
+Copy and paste the following bash command in a [Linux shell prompt](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview):
+
+```bash
+sudo bash -c "$(eval "$(if [[ $(command -v curl) ]]; then echo "curl -fsSL"; else echo "wget -qO-"; fi) https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.sh")"
+```
+
+Then hit return to run, which will install the latest `proofable-cli` binary into `/usr/local/bin`. Then you can use the CLI as:
+
+```bash
+proofable-cli -h
+```
+
+If you want to install the latest dev (cutting edge) binary, using:
+
+```bash
+sudo ENV=dev bash -c "$(eval "$(if [[ $(command -v curl) ]]; then echo "curl -fsSL"; else echo "wget -qO-"; fi) https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.sh")"
+```
+
+To upgrade, simply repeat the installation steps
+
+### For Windows users
+
+#### Install directly
+
+Copy and paste the following PowerShell command in a [PowerShell prompt](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7):
+
+```powershell
+& ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.ps1')))
+```
+
+Then hit return to run, which will install the latest `proofable-cli.exe` binary into your current directory. Then you can use the CLI as:
+
+```powershell
+.\proofable-cli.exe -h
+```
+
+If you want to install the latest dev (cutting edge) binary, using:
+
+```bash
+& ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.ps1'))) "dev"
+```
+
+To upgrade, simply repeat the installation steps
+
+#### Install directly in Windows Subsystem for Linux (WSL)
+
+Follow the [same steps](###for-linux-users) for Linux users
 
 ### Build your own binary
 
@@ -80,6 +134,20 @@
 # verify a subproof for a path and output the subproof's Graphviz Dot Graph
 ./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof -d path/to/output/the/dot/graph.dot
 ```
+
+## Binaries
+
+### Dev (cutting-edge) binaries
+
+- [mac](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_darwin_amd64.tar.gz)
+- [linux](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_linux_amd64.tar.gz)
+- [windows](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_windows_amd64.zip)
+
+### Prd (released) binaries
+
+- [mac](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_darwin_amd64.tar.gz)
+- [linux](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_linux_amd64.tar.gz)
+- [windows](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_windows_amd64.zip)
 
 ## FAQ
 

@@ -121,25 +121,25 @@ jobs:
       - task: build
         privileged: true
         file: proofable-cli/ci/task-build/task-build.yml
-      - task: sign
-        file: proofable-cli/ci/task-sign/task-sign.yml  
+      - task: sign-and-archive
+        file: proofable-cli/ci/sign-and-archive/sign-and-archive.yml
       - in_parallel:
           fail_fast: true
           limit: 3
           steps:
             - put: release-darwin_amd64
               params:
-                file: proofable-cli/proofable-cli_darwin_amd64
+                file: proofable-cli/proofable-cli_darwin_amd64.tar.gz
                 predefined_acl: publicRead
                 cache_control: no-cache, max-age=0
             - put: release-linux_amd64
               params:
-                file: proofable-cli/proofable-cli_linux_amd64
+                file: proofable-cli/proofable-cli_linux_amd64.tar.gz
                 predefined_acl: publicRead
                 cache_control: no-cache, max-age=0
             - put: release-windows_amd64
               params:
-                file: proofable-cli/proofable-cli_windows_amd64.exe
+                file: proofable-cli/proofable-cli_windows_amd64.zip
                 predefined_acl: publicRead
                 cache_control: no-cache, max-age=0
       - put: docker-registry

@@ -1,29 +1,29 @@
 # proofable
 # Copyright (C) 2020  Southbank Software Ltd.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-# 
-# 
-# @Author: Koustubh Gaikwad
+#
+#
+# @Author: Koustubh Gaikwad, guiguan
 # @Date:   2020-07-16T11:04:12+10:00
-# @Last modified by:   Koustubh Gaikwad
-# @Last modified time: 2020-07-16T11:05:53+10:00
+# @Last modified by:   guiguan
+# @Last modified time: 2020-07-27T17:07:47+10:00
 
 platform: linux
 image_resource:
   type: docker-image
-  source: { repository: mono, tag: 6.8.0.96-slim }
+  source: { repository: SouthbankSoftware/mono, tag: latest }
 inputs:
   - name: proofable-cli
 outputs:
@@ -33,4 +33,16 @@ run:
   args:
     - -exc
     - |
-      echo "Do nothing at this point, add signing steps here"
+      cd proofable-cli
+
+      # TODO: sign windows binary
+      mv proofable-cli_windows_amd64.exe proofable-cli.exe
+
+      # archive binaries
+      tar -czvf proofable-cli_darwin_amd64.tar.gz \
+        --transform "flags=r;s|proofable-cli_darwin_amd64|proofable-cli|" \
+        --owner=root proofable-cli_darwin_amd64
+      tar -czvf proofable-cli_linux_amd64.tar.gz \
+        --transform "flags=r;s|proofable-cli_linux_amd64|proofable-cli|" \
+        --owner=root proofable-cli_linux_amd64
+      zip -r proofable-cli_windows_amd64.zip proofable-cli.exe
