@@ -87,19 +87,19 @@ resources:
     source:
       bucket: provendb-dev
       json_key: ((common.service-account))
-      versioned_file: proofable-cli/proofable-cli_darwin_amd64
+      versioned_file: proofable-cli/proofable-cli_darwin_amd64.tar.gz
   - name: release-linux_amd64
     type: gcs-resource
     source:
       bucket: provendb-dev
       json_key: ((common.service-account))
-      versioned_file: proofable-cli/proofable-cli_linux_amd64
+      versioned_file: proofable-cli/proofable-cli_linux_amd64.tar.gz
   - name: release-windows_amd64
     type: gcs-resource
     source:
       bucket: provendb-dev
       json_key: ((common.service-account))
-      versioned_file: proofable-cli/proofable-cli_windows_amd64.exe
+      versioned_file: proofable-cli/proofable-cli_windows_amd64.zip
   - name: docker-registry
     type: docker-image
     source:
