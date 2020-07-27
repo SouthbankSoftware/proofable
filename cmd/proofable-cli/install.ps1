@@ -6,6 +6,6 @@ $downloadLink = "https://storage.googleapis.com/provendb-$Env/proofable-cli/$zip
 $zipFilePath = Join-Path -Path $InstallPath -ChildPath $zipFileName
 
 Write-Host "Installing from ``$zipFileName`` to ``$InstallPath``..."
-(new-object net.webclient).DownloadFile($downloadLink, $zipFilePath)
+(New-Object Net.WebClient).DownloadFile($downloadLink, $zipFilePath)
 Expand-Archive -Path $zipFilePath -DestinationPath $InstallPath -Force
 Remove-Item -Path $zipFilePath
