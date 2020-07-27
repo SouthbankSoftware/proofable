@@ -1,8 +1,25 @@
-# [proofable-cli](https://github.com/SouthbankSoftware/proofable/tree/master/cmd/proofable-cli)
+# [proofable-cli](https://github.com/SouthbankSoftware/proofable/tree/master/cmd/proofable-cli) <!-- omit in toc -->
 
 `proofable-cli` is the command-line interface (CLI) for [Proofable](https://docs.proofable.io/) API Service (`proofable-api`). At the moment, it supports certifying a file-system to blockchains
 
 <script id="asciicast-346585" src="https://asciinema.org/a/346585.js" data-autoplay="true" async></script>
+
+#### Table of contents  <!-- omit in toc -->
+- [Usage](#usage)
+  - [For macOS users](#for-macos-users)
+    - [Install via Homebrew](#install-via-homebrew)
+    - [Install directly](#install-directly)
+  - [For Linux users](#for-linux-users)
+    - [Install directly](#install-directly-1)
+  - [For Windows users](#for-windows-users)
+    - [Install directly](#install-directly-2)
+    - [Install directly in Windows Subsystem for Linux (WSL)](#install-directly-in-windows-subsystem-for-linux-wsl)
+  - [Build your own binary](#build-your-own-binary)
+  - [Examples](#examples)
+- [Binaries](#binaries)
+  - [Dev (cutting-edge) binaries](#dev-cutting-edge-binaries)
+  - [Prd (released) binaries](#prd-released-binaries)
+- [FAQ](#faq)
 
 ## Usage
 
@@ -151,7 +168,7 @@ Follow the [same steps](###for-linux-users) for Linux users
 
 ## FAQ
 
-### Error: "proofable-cli_darwin_amd64" cannot be opened because the developer cannot be verified
+### Error: "proofable-cli_darwin_amd64" cannot be opened because the developer cannot be verified <!-- omit in toc -->
 
 ![Mac Cannot Open Issue](../../docs/images/mac_cannot_open_issue.png)
 
