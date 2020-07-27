@@ -122,7 +122,7 @@ jobs:
         privileged: true
         file: proofable-cli/ci/task-build/task-build.yml
       - task: sign-and-archive
-        file: proofable-cli/ci/sign-and-archive/sign-and-archive.yml
+        file: proofable-cli/ci/task-sign-and-archive/task-sign-and-archive.yml
       - in_parallel:
           fail_fast: true
           limit: 3
