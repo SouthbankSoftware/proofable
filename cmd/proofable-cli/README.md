@@ -19,6 +19,7 @@
 - [Binaries](#binaries)
   - [Dev (cutting-edge) binaries](#dev-cutting-edge-binaries)
   - [Prd (released) binaries](#prd-released-binaries)
+- [Development](#development)
 - [FAQ](#faq)
 
 ## Usage
@@ -165,6 +166,22 @@ Follow the [same steps](###for-linux-users) for Linux users
 - [mac](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_darwin_amd64.tar.gz)
 - [linux](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_linux_amd64.tar.gz)
 - [windows](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_windows_amd64.zip)
+
+## Development
+
+### Run installation scripts locally <!-- omit in toc -->
+
+- `install.sh`:
+  
+  ```bash
+  ENV=dev bash install.sh
+  ```
+
+- `install.ps1`:
+
+  ```powershell
+  & ([ScriptBlock]::Create((Get-Content ./install.ps1 -Raw))) "dev"
+  ```
 
 ## FAQ
 
