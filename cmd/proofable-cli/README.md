@@ -105,7 +105,7 @@ To upgrade, simply repeat the installation steps
 
 #### Install directly in Windows Subsystem for Linux (WSL)
 
-Follow the [same steps](###for-linux-users) for Linux users
+Follow the [same steps](#for-linux-users) for Linux users
 
 ### Build your own binary
 
