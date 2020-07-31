@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-07T10:40:57+10:00
+ * @Last modified time: 2020-07-31T17:35:32+10:00
  */
 
 package cmd
@@ -125,7 +125,7 @@ The <path> is the root for those keys in the subproof, which is also the path th
 
 						fp := filepath.Join(filePath, filepath.ToSlash(strutil.String(kv.Key)))
 
-						ha, err := api.HashFile(fileHasher, fp)
+						ha, err := hasher.HashFile(fileHasher, fp)
 						if err != nil {
 							if os.IsNotExist(err) {
 								df.push(nil, kv, diff.KeyValueLeftKeyMissing)

@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T20:43:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-04-06T11:17:54+10:00
+ * @Last modified time: 2020-07-31T17:29:22+10:00
  */
 
 package api
@@ -28,8 +28,6 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io"
-	"os"
 	"path/filepath"
 	"sort"
 	"sync"
@@ -161,11 +159,11 @@ func GetFilePathKeyValueStream(
 		}
 
 		hashKey := func(key, fp string) (ha []byte, er error) {
-			hasher := hasherPool.Get().(hasher.Keccak)
+			h := hasherPool.Get().(hasher.Keccak)
 			// always put the hasher back
-			defer hasherPool.Put(hasher)
+			defer hasherPool.Put(h)
 
-			return HashFile(hasher, fp)
+			return hasher.HashFile(h, fp)
 		}
 
 		process := func(key, fp string, isRegular bool, results []*apiPB.KeyValue,
@@ -306,35 +304,5 @@ func GetFilePathKeyValueStream(
 
 	kvCH = kvChan
 	errCH = errChan
-	return
-}
-
-// HashFile hashes the given file and returns its hash value
-func HashFile(hasher hasher.Keccak, fp string) (ha []byte, er error) {
-	// always reset the hasher for future use
-	defer hasher.Reset()
-
-	hash := make([]byte, hasher.Size())
-
-	f, err := os.Open(fp)
-	if err != nil {
-		er = err
-		return
-	}
-	defer f.Close()
-
-	_, err = io.Copy(hasher, f)
-	if err != nil {
-		er = err
-		return
-	}
-
-	_, err = hasher.Read(hash)
-	if err != nil {
-		er = err
-		return
-	}
-
-	ha = hash
 	return
 }

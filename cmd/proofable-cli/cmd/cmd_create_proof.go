@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-10T15:08:44+10:00
+ * @Last modified time: 2020-07-30T21:31:53+10:00
  */
 
 package cmd
@@ -129,7 +129,6 @@ By default, if the path is a directory, the proof will be created under the dire
 
 					kvCH = api.InterceptKeyValueStream(ctx, kvCH,
 						func(kv *apiPB.KeyValue) *apiPB.KeyValue {
-
 							if bytes.HasPrefix(kv.Key, strutil.Bytes(api.MetadataPrefix)) {
 								colorcli.Printf("%s -> %s\n",
 									colorcli.HeaderWhite(
