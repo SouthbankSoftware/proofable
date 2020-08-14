@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-19T10:49:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-03T00:18:04+10:00
+ * @Last modified time: 2020-08-14T16:02:22+10:00
  */
 
 import _ from "lodash";
@@ -781,7 +781,7 @@ export class APIClient extends APIServiceClient {
    *
    * @param id trie Id
    * @param root trie root
-   * @param anchorType the anchor type the trie proof should be submitted to. Default: `Anchor.Type.ETH`
+   * @param anchorType the anchor type the trie proof should be submitted to. Default: `Anchor.Type.ETH`. You can find all available anchor types from [here](https://docs.proofable.io/node_sdk/docs/reference/interfaces/_index_.anchor.typemap.html) and their descriptions from [here](https://github.com/SouthbankSoftware/proofable/blob/master/docs/anchor.md#anchortype)
    */
   createTrieProof(
     id: string,
