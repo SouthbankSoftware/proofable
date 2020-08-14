@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 //
 // Proofable SDK example
 // Get some data from an Oracle database, anchor it to a blockchain
@@ -24,87 +25,85 @@
  * @Date:   2020-07-01
  */
 
-
-const oracledb = require('oracledb');
+const oracledb = require("oracledb");
 
 oracledb.autoCommit = true;
-const proofable = require('proofable');
+const proofable = require("proofable");
 
 const anchorType = proofable.Anchor.Type;
 const sortKeyValues = proofable.sortKeyValues;
 const dataToKeyValues = proofable.dataToKeyValues;
 
 // Define Oracle connections here or in enviroment variables
-let ORACLE_USERNAME = 'username';
-let ORACLE_PASSWORD = 'password';
-let ORACLE_SERVICE = 'oracleService';
-if ('ORACLE_PASSWORD' in process.env) {
-    ORACLE_PASSWORD = process.env.ORACLE_PASSWORD;
+let ORACLE_USERNAME = "username";
+let ORACLE_PASSWORD = "password";
+let ORACLE_SERVICE = "oracleService";
+if ("ORACLE_PASSWORD" in process.env) {
+  ORACLE_PASSWORD = process.env.ORACLE_PASSWORD;
 }
-if ('ORACLE_USERNAME' in process.env) {
-    ORACLE_USERNAME = process.env.ORACLE_USERNAME;
+if ("ORACLE_USERNAME" in process.env) {
+  ORACLE_USERNAME = process.env.ORACLE_USERNAME;
 }
-if ('ORACLE_SERVICE' in process.env) {
-    ORACLE_SERVICE = process.env.ORACLE_SERVICE;
+if ("ORACLE_SERVICE" in process.env) {
+  ORACLE_SERVICE = process.env.ORACLE_SERVICE;
 }
 
 const verbose = false;
 
-
 async function main() {
-    try {
-        const proofableClient = proofable.newAPIClient('api.proofable.io:443');
-        const oraConnection = await oracledb.getConnection({
-            user: ORACLE_USERNAME,
-            password: ORACLE_PASSWORD,
-            connectString: ORACLE_SERVICE
-        });
+  try {
+    const proofableClient = proofable.newAPIClient("api.proofable.io:443");
+    const oraConnection = await oracledb.getConnection({
+      user: ORACLE_USERNAME,
+      password: ORACLE_PASSWORD,
+      connectString: ORACLE_SERVICE,
+    });
 
-        const oracleData = await getOracleData(oraConnection);
+    const oracleData = await getOracleData(oraConnection);
 
-        // Create a TRIE proof for some data
-        const sortedOracleData = sortKeyValues(dataToKeyValues(oracleData));
-        const trie = await proofableClient.createTrieFromKeyValues(
-            sortedOracleData
-        );
+    // Create a TRIE proof for some data
+    const sortedOracleData = sortKeyValues(dataToKeyValues(oracleData));
+    const trie = await proofableClient.createTrieFromKeyValues(
+      sortedOracleData
+    );
 
-        // Anchor that proof to the blockchain
-        const trieProof = await proofableClient.anchorTrie(trie, anchorType.HEDERA);
-        console.log('trieProof->');
-        console.log(trieProof.toObject());
+    // Anchor that proof to the blockchain
+    const trieProof = await proofableClient.anchorTrie(trie, anchorType.HEDERA);
+    console.log("trieProof->");
+    console.log(trieProof.toObject());
 
-        // Save the trie to disk for use later
-        const trieFileName = trie.getId() + '.trie';
-        await proofableClient.exportTrie(trieProof.getTrieId(), trieFileName);
+    // Save the trie to disk for use later
+    const trieFileName = trie.getId() + ".trie";
+    await proofableClient.exportTrie(trieProof.getTrieId(), trieFileName);
 
-        // Validate that proof
-        const vp1 = await proofableClient.importAndVerifyTrieWithSortedKeyValues(
-            trieFileName,
-            sortedOracleData,
-            undefined,
-            trieFileName + '.dot'
-        );
+    // Validate that proof
+    const vp1 = await proofableClient.importAndVerifyTrieWithSortedKeyValues(
+      trieFileName,
+      sortedOracleData,
+      undefined,
+      trieFileName + ".dot"
+    );
 
-        console.log('Validated proof->', vp1);
+    console.log("Validated proof->", vp1);
 
-        tamperWithTable(oraConnection); // Changes the underlying data
-        const newOracleData = await getOracleData(oraConnection);
-        const newOracleSortedData = sortKeyValues(dataToKeyValues(newOracleData));
-        // Compare the new data to that in the trie
-        const vp2 = await proofableClient.importAndVerifyTrieWithSortedKeyValues(
-            trieFileName,
-            newOracleSortedData,
-            undefined,
-            trieFileName + '.dot'
-        );
+    tamperWithTable(oraConnection); // Changes the underlying data
+    const newOracleData = await getOracleData(oraConnection);
+    const newOracleSortedData = sortKeyValues(dataToKeyValues(newOracleData));
+    // Compare the new data to that in the trie
+    const vp2 = await proofableClient.importAndVerifyTrieWithSortedKeyValues(
+      trieFileName,
+      newOracleSortedData,
+      undefined,
+      trieFileName + ".dot"
+    );
 
-        console.log('validate proof after tampering->', vp2);
+    console.log("validate proof after tampering->", vp2);
 
-        proofableClient.close();
-    } catch (err) {
-        console.log(err.stack);
-    }
-    process.exit(0);
+    proofableClient.close();
+  } catch (err) {
+    console.log(err.stack);
+  }
+  process.exit(0);
 }
 
 //
@@ -112,26 +111,24 @@ async function main() {
 // NB: We are letting Oracle do the hashing which is not ideal
 //
 async function getOracleData(oraConnection) {
-    const output = {};
-    const sqlText = `SELECT to_char(id) id, to_char(ora_hash(concat(CONCAT(id,timestampx ),
+  const output = {};
+  const sqlText = `SELECT to_char(id) id, to_char(ora_hash(concat(CONCAT(id,timestampx ),
                             concat(numdata,logmessagex)))) hash 
                        FROM auditLog`;
-    const result = await oraConnection.execute(
-        sqlText
-    );
-    // Get the data into the format we like
-    result.rows.forEach((row) => {
-        output[row[0]] = row[1];
-    });
-    console.log('Retrieved data from Oracle');
-    return (output);
+  const result = await oraConnection.execute(sqlText);
+  // Get the data into the format we like
+  result.rows.forEach((row) => {
+    output[row[0]] = row[1];
+  });
+  console.log("Retrieved data from Oracle");
+  return output;
 }
 
 //
 // Change the Oracle data
 //
 async function tamperWithTable(oraConnection) {
-    const sqlText = `
+  const sqlText = `
             begin
                 update guy.auditLog set numdata=dbms_random.value() where id=1;
                 insert into AUDITLOG 
@@ -140,10 +137,8 @@ async function tamperWithTable(oraConnection) {
                 commit work;
             end; `;
 
-    const result = await oraConnection.execute(
-        sqlText
-    );
-    if (verbose) console.log(result);
-    return (result);
+  const result = await oraConnection.execute(sqlText);
+  if (verbose) console.log(result);
+  return result;
 }
 main();

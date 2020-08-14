@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-08-05T10:53:28+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-16T12:28:51+10:00
+ * @Last modified time: 2020-08-13T19:42:16+10:00
  */
 
 syntax = "proto3";
@@ -78,6 +78,8 @@ message Anchor {
     HEDERA = 6;
     // HEDERA_MAINNET is the anchor type for Hedera Mainnet
     HEDERA_MAINNET = 7;
+    // HYPERLEDGER is the anchor type for Hyperledger Fabric
+    HYPERLEDGER = 8;
   }
   // Type is the anchor type
   Type type = 1;

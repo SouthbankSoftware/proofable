@@ -256,6 +256,7 @@ Type represents an anchor type
 | CHP | 2 | CHP is the anchor type for Chainpoint (planned) |
 | HEDERA | 6 | HEDERA is the anchor type for Hedera Testnet |
 | HEDERA_MAINNET | 7 | HEDERA_MAINNET is the anchor type for Hedera Mainnet |
+| HYPERLEDGER | 8 | HYPERLEDGER is the anchor type for Hyperledger Fabric |
 
 
 

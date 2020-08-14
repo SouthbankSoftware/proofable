@@ -47,6 +47,7 @@ export namespace Anchor {
     CHP: 2;
     HEDERA: 6;
     HEDERA_MAINNET: 7;
+    HYPERLEDGER: 8;
   }
 
   export const Type: TypeMap;

@@ -406,7 +406,8 @@ proto.anchor.Anchor.Type = {
   BTC_MAINNET: 5,
   CHP: 2,
   HEDERA: 6,
-  HEDERA_MAINNET: 7
+  HEDERA_MAINNET: 7,
+  HYPERLEDGER: 8
 };
 
 /**
