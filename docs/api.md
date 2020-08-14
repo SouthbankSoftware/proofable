@@ -27,11 +27,8 @@
     - [VerifyProofReplyChunk](#api.VerifyProofReplyChunk)
     - [VerifyTrieProofRequest](#api.VerifyTrieProofRequest)
   
-  
-  
     - [APIService](#api.APIService)
   
-
 - [Scalar Value Types](#scalar-value-types)
 
 

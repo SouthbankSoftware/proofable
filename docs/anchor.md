@@ -20,10 +20,8 @@
     - [Batch.Status](#anchor.Batch.Status)
     - [Proof.Format](#anchor.Proof.Format)
   
-  
     - [AnchorService](#anchor.AnchorService)
   
-
 - [Scalar Value Types](#scalar-value-types)
 
 
