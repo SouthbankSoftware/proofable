@@ -7,3 +7,4 @@ data
 *.trie
 *.proofable
 *.subproofable
+.idea
