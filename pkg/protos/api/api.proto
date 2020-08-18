@@ -30,6 +30,7 @@ package api;
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
 import "anchor/anchor.proto";
 
 // APIService is a general purpose proving service that is fast and effective.
@@ -50,7 +51,12 @@ service APIService {
   // ExportTrie exports a trie's data
   rpc ExportTrie(TrieRequest) returns (stream DataChunk) {}
   // CreateTrie creates an empty trie
-  rpc CreateTrie(google.protobuf.Empty) returns (Trie) {}
+  rpc CreateTrie(google.protobuf.Empty) returns (Trie) {
+    option (google.api.http) = {
+      post: "/trie"
+      body: "*"
+    };
+  }
   // DeleteTrie deletes a trie. This destroys everything of a trie
   rpc DeleteTrie(TrieRequest) returns (Trie) {}
   // GetTrieKeyValues gets key-values of a trie. The returned KeyValues are
