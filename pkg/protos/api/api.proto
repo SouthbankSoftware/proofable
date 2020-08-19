@@ -42,14 +42,31 @@ import "anchor/anchor.proto";
 // that key-value
 service APIService {
   // GetTries gets all tries. Admin privilege is required
-  rpc GetTries(google.protobuf.Empty) returns (stream Trie) {}
+  rpc GetTries(google.protobuf.Empty) returns (stream Trie) {
+    option (google.api.http) = {
+      get: "/tries"
+    };
+  }
   // GetTrie gets a trie
-  rpc GetTrie(TrieRequest) returns (Trie) {}
+  rpc GetTrie(TrieRequest) returns (Trie) {
+    option (google.api.http) = {
+      get: "/trie"
+    };
+  }
   // ImportTrie creates a new trie from existing trie data. If the trie ID is
   // not provided in the metadata, a new one will be generated
-  rpc ImportTrie(stream DataChunk) returns (Trie) {}
+  rpc ImportTrie(stream DataChunk) returns (Trie) {
+    option (google.api.http) = {
+      post: "/import"
+      body: "*"
+    };
+  }
   // ExportTrie exports a trie's data
-  rpc ExportTrie(TrieRequest) returns (stream DataChunk) {}
+  rpc ExportTrie(TrieRequest) returns (stream DataChunk) {
+    option (google.api.http) = {
+      get: "/export"
+    };
+  }
   // CreateTrie creates an empty trie
   rpc CreateTrie(google.protobuf.Empty) returns (Trie) {
     option (google.api.http) = {
@@ -58,44 +75,102 @@ service APIService {
     };
   }
   // DeleteTrie deletes a trie. This destroys everything of a trie
-  rpc DeleteTrie(TrieRequest) returns (Trie) {}
+  rpc DeleteTrie(TrieRequest) returns (Trie) {
+    option (google.api.http) = {
+      delete: "/trie"
+    };
+  }
   // GetTrieKeyValues gets key-values of a trie. The returned KeyValues are
   // ordered by the keys lexicographically
-  rpc GetTrieKeyValues(TrieKeyValuesRequest) returns (stream KeyValue) {}
+  rpc GetTrieKeyValues(TrieKeyValuesRequest) returns (stream KeyValue) {
+    option (google.api.http) = {
+      get: "/trie/entries"
+    };
+  }
   // GetTrieKeyValue gets a key-value of a trie
-  rpc GetTrieKeyValue(TrieKeyValueRequest) returns (KeyValue) {}
+  rpc GetTrieKeyValue(TrieKeyValueRequest) returns (KeyValue) {
+    option (google.api.http) = {
+      get: "/trie/entry"
+    };
+  }
   // SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to
   // remove that key. Modifications to a trie will change its root hash
-  rpc SetTrieKeyValues(stream KeyValue) returns (Trie) {}
+  rpc SetTrieKeyValues(stream KeyValue) returns (Trie) {
+    option (google.api.http) = {
+      post: "/trie/entries"
+      body: "*"
+    };
+  }
   // GetTrieRoots gets roots of a trie. This is a series of roots showing the
   // modification history of a trie
-  rpc GetTrieRoots(TrieRootsRequest) returns (stream TrieRoot) {}
+  rpc GetTrieRoots(TrieRootsRequest) returns (stream TrieRoot) {
+    option (google.api.http) = {
+      get: "/trie/roots"
+    };
+  }
   // SetTrieRoot sets the root of a trie to the given one. This will add an
   // entry in the root history
-  rpc SetTrieRoot(SetTrieRootRequest) returns (Trie) {}
+  rpc SetTrieRoot(SetTrieRootRequest) returns (Trie) {
+    option (google.api.http) = {
+      post: "/trie/root"
+      body: "*"
+    };
+  }
   // GetTrieProofs gets proofs of a trie
-  rpc GetTrieProofs(TrieProofsRequest) returns (stream TrieProof) {}
+  rpc GetTrieProofs(TrieProofsRequest) returns (stream TrieProof) {
+    option (google.api.http) = {
+      get: "/trie/proofs"
+    };
+  }
   // GetTrieProof gets a proof of a trie. When not_before is not provided
   // (either nil or zero), the latest proof will be returned
-  rpc GetTrieProof(TrieProofRequest) returns (TrieProof) {}
+  rpc GetTrieProof(TrieProofRequest) returns (TrieProof) {
+    option (google.api.http) = {
+      get: "/trie/proof"
+    };
+  }
   // SubscribeTrieProof subscribes to proof changes of a trie. When not_before
   // is not provided (either nil or zero), the latest proof will be returned
   rpc SubscribeTrieProof(TrieProofRequest) returns (stream TrieProof) {}
   // CreateTrieProof creates a proof for a trie root
-  rpc CreateTrieProof(CreateTrieProofRequest) returns (TrieProof) {}
+  rpc CreateTrieProof(CreateTrieProofRequest) returns (TrieProof) {
+    option (google.api.http) = {
+      post: "/trie/proof"
+      body: "*"
+    };
+  }
   // DeleteTrieProof deletes a proof for a trie root
-  rpc DeleteTrieProof(DeleteTrieProofRequest) returns (TrieProof) {}
+  rpc DeleteTrieProof(DeleteTrieProofRequest) returns (TrieProof) {
+    option (google.api.http) = {
+      delete: "/trie/proof"
+    };
+  }
   // VerifyTrieProof verifies a proof for a trie root
   rpc VerifyTrieProof(VerifyTrieProofRequest)
-      returns (stream VerifyProofReplyChunk) {}
+      returns (stream VerifyProofReplyChunk) {
+    option (google.api.http) = {
+      post: "/trie/verify"
+      body: "*"
+    };
+  }
   // CreateKeyValuesProof creates a proof for the provided key-values out of a
   // trie proof. The new proof is self-contained and can be verified
   // independently
   rpc CreateKeyValuesProof(CreateKeyValuesProofRequest)
-      returns (stream DataChunk) {}
+      returns (stream DataChunk) {
+    option (google.api.http) = {
+      post: "/trie/proof/entries"
+      body: "*"
+    };
+  }
   // VerifyKeyValuesProof verifies a key-values proof
   rpc VerifyKeyValuesProof(stream DataChunk)
-      returns (stream VerifyProofReplyChunk) {}
+      returns (stream VerifyProofReplyChunk) {
+    option (google.api.http) = {
+      post: "/trie/verify/entries"
+      body: "*"
+    };
+  }
 }
 
 // Trie represents a dictionary of key-values that can be built incrementally,
