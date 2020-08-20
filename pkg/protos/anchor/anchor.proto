@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-08-05T10:53:28+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-08-13T19:42:16+10:00
+ * @Last modified time: 2020-08-20T13:18:45+10:00
  */
 
 syntax = "proto3";
@@ -68,6 +68,8 @@ message Anchor {
     ETH_MAINNET = 3;
     // ETH_ELASTOS is the anchor type for Elastos
     ETH_ELASTOS = 4;
+    // ETH_GOCHAIN is the anchor type for GoChain
+    ETH_GOCHAIN = 9;
     // BTC is the anchor type for Bitcoin Testnet
     BTC = 1;
     // BTC_MAINNET is the anchor type for Bitcoin Mainnet

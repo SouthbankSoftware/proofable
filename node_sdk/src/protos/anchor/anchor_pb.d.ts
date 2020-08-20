@@ -42,6 +42,7 @@ export namespace Anchor {
     ETH: 0;
     ETH_MAINNET: 3;
     ETH_ELASTOS: 4;
+    ETH_GOCHAIN: 9;
     BTC: 1;
     BTC_MAINNET: 5;
     CHP: 2;

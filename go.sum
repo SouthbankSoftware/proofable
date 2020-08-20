@@ -19,8 +19,6 @@ github.com/OneOfOne/xxhash v1.2.5/go.mod h1:eZbhyaAYD41SGSSsnmcpxVoRiQ/MPUTjUdII
 github.com/SouthbankSoftware/godirwalk v1.15.4-0.20200319040501-49f7c4f93f76 h1:WzydzhZwoOEsLYIXYOccvvPPdNidizAjtODQFXE+1zY=
 github.com/SouthbankSoftware/godirwalk v1.15.4-0.20200319040501-49f7c4f93f76/go.mod h1:j4mkqPuvaLI8mp1DroR3P6ad7cyYd4c1qeJ3RV7ULlk=
 github.com/SouthbankSoftware/provendb-verify v0.0.0-20190424005136-0b487ec084e1/go.mod h1:G6jVd89OpRY0DLE67Ju4QpPCst0RS2lbqKDK/KyNqLs=
-github.com/SouthbankSoftware/provendb-verify v0.0.0-20200618065249-413b050f87ed h1:y7VicC1pdd8cfeDWNgrynYCWYraSb35zetgRbCLeA1Y=
-github.com/SouthbankSoftware/provendb-verify v0.0.0-20200618065249-413b050f87ed/go.mod h1:AwXkP971+C2Za8DkrQ9jQgNGhn40U0qx4UDnGVY4Cf8=
 github.com/SouthbankSoftware/provendb-verify v0.0.0-20200708050604-5e179a9af7d3 h1:3E3TCZ7FkWTNLSWw+FxBiKC2FE2abHHgWQ3YFJWsd6s=
 github.com/SouthbankSoftware/provendb-verify v0.0.0-20200708050604-5e179a9af7d3/go.mod h1:AwXkP971+C2Za8DkrQ9jQgNGhn40U0qx4UDnGVY4Cf8=
 github.com/SouthbankSoftware/provenlogs v0.0.0-20190917053636-b1cb8400f31e/go.mod h1:ucWkCkKeko8yO91d/NBQi2Ph71zNc5tFHFHA5Gn4UHc=
