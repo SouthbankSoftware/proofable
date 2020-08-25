@@ -1,0 +1,1053 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/api.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/export": {
+      "get": {
+        "summary": "ExportTrie exports a trie's data",
+        "operationId": "ExportTrie",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/apiDataChunk"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "trie_id",
+            "description": "TrieId is the trie ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/import": {
+      "post": {
+        "summary": "ImportTrie creates a new trie from existing trie data. If the trie ID is\nnot provided in the metadata, a new one will be generated",
+        "operationId": "ImportTrie",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTrie"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " (streaming inputs)",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiDataChunk"
+            }
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie": {
+      "get": {
+        "summary": "GetTrie gets a trie",
+        "operationId": "GetTrie",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTrie"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "trie_id",
+            "description": "TrieId is the trie ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      },
+      "delete": {
+        "summary": "DeleteTrie deletes a trie. This destroys everything of a trie",
+        "operationId": "DeleteTrie",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTrie"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "trie_id",
+            "description": "TrieId is the trie ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      },
+      "post": {
+        "summary": "CreateTrie creates an empty trie",
+        "operationId": "CreateTrie",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTrie"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "properties": {}
+            }
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie/entries": {
+      "get": {
+        "summary": "GetTrieKeyValues gets key-values of a trie. The returned KeyValues are\nordered by the keys lexicographically",
+        "operationId": "GetTrieKeyValues",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/apiKeyValue"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "trie_id",
+            "description": "TrieId is the trie ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "description": "Root is the root hash (optional). When zero, the current root hash of the\ntrie will be used to retrieve the TrieKeyValues, and the request will be\nblocked until all ongoing updates are finished.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      },
+      "post": {
+        "summary": "SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to\nremove that key. Modifications to a trie will change its root hash",
+        "operationId": "SetTrieKeyValues",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTrie"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " (streaming inputs)",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiKeyValue"
+            }
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie/entry": {
+      "get": {
+        "summary": "GetTrieKeyValue gets a key-value of a trie",
+        "operationId": "GetTrieKeyValue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiKeyValue"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "trie_id",
+            "description": "TrieId is the trie ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "description": "Root is the root hash (optional). When zero, the current root hash of the\ntrie will be used to retrieve the TrieKeyValues, and the request will be\nblocked until all ongoing updates are finished.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "key.key",
+            "description": "Key is the key of the key-value.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "key.key_sep",
+            "description": "KeySep is the key separators for chained tries.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie/proof": {
+      "get": {
+        "summary": "GetTrieProof gets a proof of a trie. When not_before is not provided\n(either nil or zero), the latest proof will be returned",
+        "operationId": "GetTrieProof",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTrieProof"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "trie_id",
+            "description": "TrieId is the trie ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "proof_id",
+            "description": "ProofId is the trie proof ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "root_filter.root",
+            "description": "Root is the root hash. When zero, the current root hash of the trie will be\nused to retrieve the TrieProof, and the request will be blocked until all\nongoing updates are finished.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "root_filter.not_before",
+            "description": "NotBefore is the not before timestamp. When nil, this constraint is not\nused; when zero, the latest TrieProof for the root hash will be returned.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      },
+      "delete": {
+        "summary": "DeleteTrieProof deletes a proof for a trie root",
+        "operationId": "DeleteTrieProof",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTrieProof"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "trie_id",
+            "description": "TrieId is the trie ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "proof_id",
+            "description": "ProofId is the trie proof ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      },
+      "post": {
+        "summary": "CreateTrieProof creates a proof for a trie root",
+        "operationId": "CreateTrieProof",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTrieProof"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateTrieProofRequest"
+            }
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie/proof/entries": {
+      "post": {
+        "summary": "CreateKeyValuesProof creates a proof for the provided key-values out of a\ntrie proof. The new proof is self-contained and can be verified\nindependently",
+        "operationId": "CreateKeyValuesProof",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/apiDataChunk"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateKeyValuesProofRequest"
+            }
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie/proofs": {
+      "get": {
+        "summary": "GetTrieProofs gets proofs of a trie",
+        "operationId": "GetTrieProofs",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/apiTrieProof"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "trie_id",
+            "description": "TrieId is the trie ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "root_filter.root",
+            "description": "Root is the root hash. When zero, the current root hash of the trie will be\nused to retrieve the TrieProof, and the request will be blocked until all\nongoing updates are finished.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "root_filter.not_before",
+            "description": "NotBefore is the not before timestamp. When nil, this constraint is not\nused; when zero, the latest TrieProof for the root hash will be returned.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie/root": {
+      "post": {
+        "summary": "SetTrieRoot sets the root of a trie to the given one. This will add an\nentry in the root history",
+        "operationId": "SetTrieRoot",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTrie"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiSetTrieRootRequest"
+            }
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie/roots": {
+      "get": {
+        "summary": "GetTrieRoots gets roots of a trie. This is a series of roots showing the\nmodification history of a trie",
+        "operationId": "GetTrieRoots",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/apiTrieRoot"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "trie_id",
+            "description": "TrieId is the trie ID.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "root_filter.root",
+            "description": "Root is the root hash. When zero, the current root hash of the trie will be\nused to retrieve the TrieProof, and the request will be blocked until all\nongoing updates are finished.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "root_filter.not_before",
+            "description": "NotBefore is the not before timestamp. When nil, this constraint is not\nused; when zero, the latest TrieProof for the root hash will be returned.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie/verify": {
+      "post": {
+        "summary": "VerifyTrieProof verifies a proof for a trie root",
+        "operationId": "VerifyTrieProof",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/apiVerifyProofReplyChunk"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiVerifyTrieProofRequest"
+            }
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/trie/verify/entries": {
+      "post": {
+        "summary": "VerifyKeyValuesProof verifies a key-values proof",
+        "operationId": "VerifyKeyValuesProof",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/apiVerifyProofReplyChunk"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " (streaming inputs)",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiDataChunk"
+            }
+          }
+        ],
+        "tags": [
+          "APIService"
+        ]
+      }
+    },
+    "/tries": {
+      "get": {
+        "summary": "GetTries gets all tries. Admin privilege is required",
+        "operationId": "GetTries",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/apiTrie"
+            }
+          }
+        },
+        "tags": [
+          "APIService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "anchorAnchorType": {
+      "type": "string",
+      "enum": [
+        "ETH",
+        "ETH_MAINNET",
+        "ETH_ELASTOS",
+        "ETH_GOCHAIN",
+        "BTC",
+        "BTC_MAINNET",
+        "CHP",
+        "HEDERA",
+        "HEDERA_MAINNET",
+        "HYPERLEDGER"
+      ],
+      "default": "ETH",
+      "description": "- ETH: ETH is the anchor type for Ethereum Testnet\n - ETH_MAINNET: ETH_MAINNET is the anchor type for Ethereum Mainnet\n - ETH_ELASTOS: ETH_ELASTOS is the anchor type for Elastos\n - ETH_GOCHAIN: ETH_GOCHAIN is the anchor type for GoChain\n - BTC: BTC is the anchor type for Bitcoin Testnet\n - BTC_MAINNET: BTC_MAINNET is the anchor type for Bitcoin Mainnet\n - CHP: CHP is the anchor type for Chainpoint (planned)\n - HEDERA: HEDERA is the anchor type for Hedera Testnet\n - HEDERA_MAINNET: HEDERA_MAINNET is the anchor type for Hedera Mainnet\n - HYPERLEDGER: HYPERLEDGER is the anchor type for Hyperledger Fabric",
+      "title": "Type represents an anchor type"
+    },
+    "anchorBatchStatus": {
+      "type": "string",
+      "enum": [
+        "ERROR",
+        "BATCHING",
+        "QUEUING",
+        "PROCESSING",
+        "PENDING",
+        "CONFIRMED"
+      ],
+      "default": "ERROR",
+      "description": "- ERROR: ERROR means the batch has an error. FLOW: * -\u003e ERROR\n - BATCHING: BATCHING means the batch is batching for more hashes. FLOW: created_at -\u003e\nBATCHING -\u003e flushed_at\n - QUEUING: QUEUING means the batch is queuing to be processed. FLOW: flushed_at -\u003e\nQUEUING -\u003e started_at\n - PROCESSING: PROCESSING means the batch is constructing merkle roots and submitting\nhashes. FLOW: started_at -\u003e PROCESSING -\u003e submitted_at\n - PENDING: PENDING means the batch's root hash is pending to be confirmed. FLOW:\nsubmitted_at -\u003e PENDING -\u003e finalized_at\n - CONFIRMED: CONFIRMED means the batch's root hash is confirmed by the anchor's\nBlockchain. FLOW: finalized_at -\u003e CONFIRMED",
+      "title": "Status represents a batch's status"
+    },
+    "apiCreateKeyValuesProofRequest": {
+      "type": "object",
+      "properties": {
+        "trie_id": {
+          "type": "string",
+          "title": "TrieId is the trie ID"
+        },
+        "proof_id": {
+          "type": "string",
+          "title": "ProofId is the trie proof id"
+        },
+        "request": {
+          "$ref": "#/definitions/apiCreateTrieProofRequest",
+          "title": "Request is the request to create a new trie proof that is going to prove\nthe key-values"
+        },
+        "filter": {
+          "$ref": "#/definitions/apiKeyValuesFilter",
+          "title": "Filter is the key-values filter (optional). When zero, all key-values will\nbe included in the proof"
+        }
+      },
+      "title": "CreateKeyValuesProofRequest represents a create key-values proof request"
+    },
+    "apiCreateTrieProofRequest": {
+      "type": "object",
+      "properties": {
+        "trie_id": {
+          "type": "string",
+          "title": "TrieId is the trie ID"
+        },
+        "root": {
+          "type": "string",
+          "title": "Root is the root hash (optional). When zero, the current root hash of the\ntrie will be used to create the TrieProof, and the request will be blocked\nuntil all ongoing updates are finished"
+        },
+        "anchor_type": {
+          "$ref": "#/definitions/anchorAnchorType",
+          "title": "AnchorType is the anchor type the trie proof should be submitted to.\nDefault to ETH"
+        }
+      },
+      "title": "CreateTrieProofRequest represents a create trie proof request"
+    },
+    "apiDataChunk": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "format": "byte",
+          "title": "Data is the data within the DataChunk"
+        },
+        "trie_request": {
+          "$ref": "#/definitions/apiTrieRequest",
+          "title": "TrieRequest is the trie request"
+        },
+        "verify_key_values_proof_request": {
+          "$ref": "#/definitions/apiVerifyKeyValuesProofRequest",
+          "title": "VerifyKeyValuesProofRequest is the request to verify a key-values proof"
+        }
+      },
+      "title": "DataChunk represents a chunk of data transmitted in a gRPC stream"
+    },
+    "apiKey": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "format": "byte",
+          "title": "Key is the key of the key-value"
+        },
+        "key_sep": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": "KeySep is the key separators for chained tries"
+        }
+      },
+      "title": "Key represents a key of a key-value pair"
+    },
+    "apiKeyValue": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "format": "byte",
+          "title": "Key is the key of the key-value"
+        },
+        "key_sep": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": "KeySep is the key separators for chained tries"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte",
+          "title": "Value is the value of the key-value"
+        },
+        "trie_key_values_request": {
+          "$ref": "#/definitions/apiTrieKeyValuesRequest",
+          "title": "TrieKeyValuesRequest is the request to set or get key-values"
+        }
+      },
+      "title": "KeyValue represents a key-value"
+    },
+    "apiKeyValuesFilter": {
+      "type": "object",
+      "properties": {
+        "keys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiKey"
+          },
+          "title": "Keys are the keys of key-values that should be included in a key-value\nproof. Only those trie nodes are on the merkle paths of the given keys will\nbe included in the proof"
+        }
+      },
+      "title": "KeyValuesFilter represents a key-value filter"
+    },
+    "apiRootFilter": {
+      "type": "object",
+      "properties": {
+        "root": {
+          "type": "string",
+          "title": "Root is the root hash. When zero, the current root hash of the trie will be\nused to retrieve the TrieProof, and the request will be blocked until all\nongoing updates are finished"
+        },
+        "not_before": {
+          "type": "string",
+          "format": "date-time",
+          "title": "NotBefore is the not before timestamp. When nil, this constraint is not\nused; when zero, the latest TrieProof for the root hash will be returned"
+        }
+      },
+      "title": "RootFilter represents a root filter to query a proof"
+    },
+    "apiSetTrieRootRequest": {
+      "type": "object",
+      "properties": {
+        "trie_id": {
+          "type": "string",
+          "title": "TrieId is the trie ID"
+        },
+        "root": {
+          "type": "string",
+          "title": "Root is the root hash to set to"
+        }
+      },
+      "title": "SetTrieRootRequest represents a set trie root request"
+    },
+    "apiTrie": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Id is the trie ID"
+        },
+        "root": {
+          "type": "string",
+          "title": "Root is the root hash of the trie"
+        }
+      },
+      "title": "Trie represents a dictionary of key-values that can be built incrementally,\nwhose root hash at any given time can be also dervied efficiently. Once the\nroot hash is proven to a Blockchain, every key-value is also proven"
+    },
+    "apiTrieKeyValuesRequest": {
+      "type": "object",
+      "properties": {
+        "trie_id": {
+          "type": "string",
+          "title": "TrieId is the trie ID"
+        },
+        "root": {
+          "type": "string",
+          "title": "Root is the root hash (optional). When zero, the current root hash of the\ntrie will be used to retrieve the TrieKeyValues, and the request will be\nblocked until all ongoing updates are finished"
+        }
+      },
+      "title": "TrieKeyValuesRequest represents a trie key-values request. The returned\nKeyValues are ordered by the keys lexicographically"
+    },
+    "apiTrieProof": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Id is the ID of the trie proof"
+        },
+        "trie_id": {
+          "type": "string",
+          "title": "TrieId is the trie ID"
+        },
+        "root": {
+          "type": "string",
+          "title": "Root is the root hash of the trie proven by this proof"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "CreatedAt is the created at timestamp. The timestamp when the proof is\ncreated"
+        },
+        "status": {
+          "$ref": "#/definitions/anchorBatchStatus",
+          "title": "Status is the anchor batch status of the trie proof"
+        },
+        "error": {
+          "type": "string",
+          "title": "Error is the error message when status is ERROR"
+        },
+        "anchor_type": {
+          "$ref": "#/definitions/anchorAnchorType",
+          "title": "AnchorType is the anchor type the trie proof has been submitted to"
+        },
+        "txn_id": {
+          "type": "string",
+          "title": "TxnId is the Blockchain transaction ID"
+        },
+        "txn_uri": {
+          "type": "string",
+          "title": "TxnUri is the explorer URI for the Blockchain transaction"
+        },
+        "block_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "BlockTime is the Blockchain's block consensus timestamp in seconds"
+        },
+        "block_time_nano": {
+          "type": "string",
+          "format": "uint64",
+          "title": "BlockTimeNano is the Blockcahin's block consensus timestamp's nano part.\nFor most traditional blockchains, this will be zero. For Hedera, this will\nbe the nano part of the transaction's consensus timestamp"
+        },
+        "block_number": {
+          "type": "string",
+          "format": "uint64",
+          "title": "BlockNumber is the Blockchain's block number. For Hedera, this will be zero\nas there is no block concept and each transaction has its own consensus\ntimestamp which defines the transaction order"
+        },
+        "proof_root": {
+          "type": "string",
+          "title": "ProofRoot is the root hash of the trie proof, which is the anchor batch's\nroot hash the proof belongs to"
+        }
+      },
+      "title": "TrieProof represents a proof for a trie at a certain root, which can be\nviewed as a snapshot of all the key-values contained in the trie"
+    },
+    "apiTrieRequest": {
+      "type": "object",
+      "properties": {
+        "trie_id": {
+          "type": "string",
+          "title": "TrieId is the trie ID"
+        }
+      },
+      "title": "TrieRequest represents a trie request"
+    },
+    "apiTrieRoot": {
+      "type": "object",
+      "properties": {
+        "root": {
+          "type": "string",
+          "title": "Root is the root hash of the trie"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "CreatedAt is the created at timestamp. The timestamp when the root is\ncreated"
+        }
+      },
+      "title": "TrieRoot represents a root of a trie. Each modification made to the trie will\nlead to a new trie root"
+    },
+    "apiVerifyKeyValuesProofRequest": {
+      "type": "object",
+      "properties": {
+        "output_key_values": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "OutputKeyValues indicates whether to output key-values contained in the\ntrie"
+        },
+        "output_dot_graph": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "OutputDotGraph indicates whether to output a Graphviz dot graph to\nvisualize the trie"
+        }
+      },
+      "title": "VerifyKeyValuesProofRequest represents a verify key-values proof request"
+    },
+    "apiVerifyProofReply": {
+      "type": "object",
+      "properties": {
+        "verified": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "Verified indicates whether the proof is verified"
+        },
+        "error": {
+          "type": "string",
+          "title": "Error is the error message when the proof is falsified"
+        }
+      },
+      "title": "VerifyProofReply represents a verify proof reply"
+    },
+    "apiVerifyProofReplyChunk": {
+      "type": "object",
+      "properties": {
+        "key_value": {
+          "$ref": "#/definitions/apiKeyValue",
+          "title": "KeyValue is one of the key-values contained in the trie when the\nOutputKeyValues is true"
+        },
+        "dot_graph_chunk": {
+          "$ref": "#/definitions/apiDataChunk",
+          "title": "DotGraphChunk is a chunk of the Graphviz dot graph for the trie when the\nOutputDotGraph is true"
+        },
+        "reply": {
+          "$ref": "#/definitions/apiVerifyProofReply",
+          "title": "VerifyProofReply is the verify proof reply, which should be the data in\nthe last VerifyProofReplyChunk"
+        }
+      },
+      "title": "VerifyProofReplyChunk represents a chunk of data in the verify proof reply\nstream"
+    },
+    "apiVerifyTrieProofRequest": {
+      "type": "object",
+      "properties": {
+        "trie_id": {
+          "type": "string",
+          "title": "TrieId is the trie ID"
+        },
+        "proof_id": {
+          "type": "string",
+          "title": "ProofId is the trie proof ID"
+        },
+        "output_key_values": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "OutputKeyValues indicates whether to output key-values contained in the\ntrie"
+        },
+        "output_dot_graph": {
+          "type": "boolean",
+          "format": "boolean",
+          "title": "OutputDotGraph indicates whether to output a Graphviz dot graph to\nvisualize the trie"
+        }
+      },
+      "title": "VerifyTrieProofRequest represents a verify trie proof request"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "runtimeStreamError": {
+      "type": "object",
+      "properties": {
+        "grpc_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "http_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "http_status": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  },
+  "x-stream-definitions": {
+    "apiDataChunk": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/apiDataChunk"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of apiDataChunk"
+    },
+    "apiKeyValue": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/apiKeyValue"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of apiKeyValue"
+    },
+    "apiTrie": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/apiTrie"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of apiTrie"
+    },
+    "apiTrieProof": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/apiTrieProof"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of apiTrieProof"
+    },
+    "apiTrieRoot": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/apiTrieRoot"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of apiTrieRoot"
+    },
+    "apiVerifyProofReplyChunk": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/apiVerifyProofReplyChunk"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of apiVerifyProofReplyChunk"
+    }
+  }
+}
