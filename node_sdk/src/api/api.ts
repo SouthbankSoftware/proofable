@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-24T12:14:57+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-02T22:47:40+10:00
+ * @Last modified time: 2020-09-01T17:32:21+10:00
  */
 
 import _ from "lodash";
@@ -142,8 +142,7 @@ export function exportTrie(
   const stream = cli.exportTrie(TrieRequest.from(id));
 
   pipeToWritableStream(stream, outFile, undefined, (err) => {
-    outFile.end();
-    callback(err as grpc.ServiceError | null);
+    outFile.end(() => callback(err as grpc.ServiceError | null));
   });
 
   return stream;
@@ -493,8 +492,7 @@ export function createKeyValuesProof(
   const stream = cli.createKeyValuesProof(request);
 
   pipeToWritableStream(stream, outFile, undefined, (err) => {
-    outFile.end();
-    callback(err as grpc.ServiceError | null);
+    outFile.end(() => callback(err as grpc.ServiceError | null));
   });
 
   return stream;
