@@ -1,0 +1,425 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Anchor Service - Proofable Documentation</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><strong aria-hidden="true">2.</strong> Concepts</li><li><ol class="section"><li class="chapter-item expanded "><strong aria-hidden="true">2.1.</strong> Trie</li><li class="chapter-item expanded "><strong aria-hidden="true">2.2.</strong> Chain of Trust</li></ol></li><li class="chapter-item expanded "><strong aria-hidden="true">3.</strong> Anchor Types</li><li class="chapter-item expanded "><strong aria-hidden="true">4.</strong> CLI</li><li class="chapter-item expanded "><strong aria-hidden="true">5.</strong> Go SDK</li><li><ol class="section"><li class="chapter-item expanded "><strong aria-hidden="true">5.1.</strong> Getting started</li><li class="chapter-item expanded "><strong aria-hidden="true">5.2.</strong> Examples</li><li class="chapter-item expanded "><a href="../go_sdk/reference.html"><strong aria-hidden="true">5.3.</strong> Reference</a></li></ol></li><li class="chapter-item expanded "><strong aria-hidden="true">6.</strong> Node SDK</li><li><ol class="section"><li class="chapter-item expanded "><strong aria-hidden="true">6.1.</strong> Getting started</li><li class="chapter-item expanded "><strong aria-hidden="true">6.2.</strong> Examples</li><li class="chapter-item expanded "><a href="../node_sdk/reference.html"><strong aria-hidden="true">6.3.</strong> Reference</a></li></ol></li><li class="chapter-item expanded "><strong aria-hidden="true">7.</strong> REST</li><li class="chapter-item expanded "><strong aria-hidden="true">8.</strong> gRPC</li><li><ol class="section"><li class="chapter-item expanded "><a href="../grpc/api_service.html"><strong aria-hidden="true">8.1.</strong> API Service</a></li><li class="chapter-item expanded "><a href="../grpc/anchor_service.html" class="active"><strong aria-hidden="true">8.2.</strong> Anchor Service</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Proofable Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#anchor-service" id="anchor-service">Anchor Service</a></h1>
+<p>Anchor Service continuously anchors hashes to blockchains, which is similar
+to what Chainpoint does, but with much better performance and flexibility. It
+supports multiple anchor types and proof formats. Digital signing can be also
+done at the Merkle root level</p>
+<p>Protobuf definition: <a href="https://github.com/SouthbankSoftware/proofable/blob/master/pkg/protos/anchor/anchor.proto">anchor/anchor.proto</a></p>
+<h2><a class="header" href="#table-of-contents" id="table-of-contents">Table of Contents</a></h2>
+<ul>
+<li><a href="#anchorservice">AnchorService</a></li>
+<li><a href="#anchor">Anchor</a></li>
+<li><a href="#anchorrequest">AnchorRequest</a></li>
+<li><a href="#batch">Batch</a></li>
+<li><a href="#batchrequest">BatchRequest</a></li>
+<li><a href="#proof">Proof</a></li>
+<li><a href="#proofrequest">ProofRequest</a></li>
+<li><a href="#submitproofrequest">SubmitProofRequest</a></li>
+<li><a href="#subscribebatchesrequest">SubscribeBatchesRequest</a></li>
+<li><a href="#verifyproofreply">VerifyProofReply</a></li>
+<li><a href="#verifyproofrequest">VerifyProofRequest</a></li>
+<li><a href="#anchorstatus">Anchor.Status</a></li>
+<li><a href="#anchortype">Anchor.Type</a></li>
+<li><a href="#batchstatus">Batch.Status</a></li>
+<li><a href="#proofformat">Proof.Format</a></li>
+<li><a href="#scalar-value-types">Scalar Value Types</a></li>
+</ul>
+<h3><a class="header" href="#anchorservice" id="anchorservice">AnchorService</a></h3>
+<table><thead><tr><th>Method Name</th><th>Request Type</th><th>Response Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>GetAnchors</td><td><a href="#google.protobuf.Empty">.google.protobuf.Empty</a></td><td><a href="#anchor.Anchor">Anchor</a> stream</td><td>GetAnchors gets all anchors</td></tr>
+<tr><td>GetAnchor</td><td><a href="#anchor.AnchorRequest">AnchorRequest</a></td><td><a href="#anchor.Anchor">Anchor</a></td><td>GetAnchor gets an anchor</td></tr>
+<tr><td>GetProof</td><td><a href="#anchor.ProofRequest">ProofRequest</a></td><td><a href="#anchor.Proof">Proof</a></td><td>GetProof gets a proof</td></tr>
+<tr><td>SubmitProof</td><td><a href="#anchor.SubmitProofRequest">SubmitProofRequest</a></td><td><a href="#anchor.Proof">Proof</a></td><td>SubmitProof submits a proof for the given hash</td></tr>
+<tr><td>VerifyProof</td><td><a href="#anchor.VerifyProofRequest">VerifyProofRequest</a></td><td><a href="#anchor.VerifyProofReply">VerifyProofReply</a></td><td>VerifyProof verifies the given proof. When the proof is unverifiable, an exception is thrown</td></tr>
+<tr><td>GetBatch</td><td><a href="#anchor.BatchRequest">BatchRequest</a></td><td><a href="#anchor.Batch">Batch</a></td><td>GetBatch gets a batch</td></tr>
+<tr><td>SubscribeBatches</td><td><a href="#anchor.SubscribeBatchesRequest">SubscribeBatchesRequest</a></td><td><a href="#anchor.Batch">Batch</a> stream</td><td>SubscribeBatches subscribes to batch status updates</td></tr>
+</tbody></table>
+<!-- end services -->
+<h3><a class="header" href="#anchor" id="anchor">Anchor</a></h3>
+<p>Anchor represents an anchor of a Blockchain, through which a hash can be
+anchored to that Blockchain</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>Type is the anchor type</td></tr>
+<tr><td>status</td><td><a href="#anchor.Anchor.Status">Anchor.Status</a></td><td></td><td>Status is the anchor status</td></tr>
+<tr><td>error</td><td><a href="#string">string</a></td><td></td><td>Error is the error message when the anchor status is ERROR</td></tr>
+<tr><td>supported_formats</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td>repeated</td><td>SupportedFormats are the supported proof formats of the anchor</td></tr>
+</tbody></table>
+<h3><a class="header" href="#anchorrequest" id="anchorrequest">AnchorRequest</a></h3>
+<p>AnchorRequest represents a request to get information for the given anchor
+type</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>Type is the anchor type</td></tr>
+</tbody></table>
+<h3><a class="header" href="#batch" id="batch">Batch</a></h3>
+<p>Batch represents a batch of hashes. When hash stream comes in, Anchor Service
+will try to process them in batches, just like Blockchain processes
+transactions in blocks. This makes utilization of expensive resources, such
+as making Bitcoin transaction, more economic. Each batch's root hash will be
+embedded in a transaction made to the Blockchain</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td><a href="#string">string</a></td><td></td><td>Id is the batch ID</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the batch's anchor type</td></tr>
+<tr><td>proof_format</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td></td><td>ProofFormat is the batch's proof format, which determines how the merkle tree is constructed for the batch.</td></tr>
+<tr><td>status</td><td><a href="#anchor.Batch.Status">Batch.Status</a></td><td></td><td>Status is the batch status. FLOW: created_at -&gt; BATCHING -&gt; flushed_at -&gt; QUEUING -&gt; started_at -&gt; PROCESSING -&gt; submitted_at -&gt; PENDING -&gt; finalized_at -&gt; CONFIRMED / ERROR; * -&gt; ERROR; if a batch has not yet reached PENDING and its anchor has restarted, the batch will be put back to QUEUING</td></tr>
+<tr><td>error</td><td><a href="#string">string</a></td><td></td><td>Error is the error message when status is ERROR</td></tr>
+<tr><td>size</td><td><a href="#int64">int64</a></td><td></td><td>Size is the number of hashes contained in the batch</td></tr>
+<tr><td>created_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>CreateAt is the batch's created at timestamp. FLOW: created_at -&gt; BATCHING</td></tr>
+<tr><td>flushed_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>FlushedAt is the batch's flushed at timestamp. FLOW: BATCHING -&gt; flushed_at -&gt; QUEUING</td></tr>
+<tr><td>started_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>StartedAt is the batch's started at timestamp. FLOW: QUEUING -&gt; started_at -&gt; PROCESSING</td></tr>
+<tr><td>submitted_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>SubmittedAt is the batch's submitted at timestamp. FLOW: PROCESSING -&gt; submitted_at -&gt; PENDING</td></tr>
+<tr><td>finalized_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>FinalizedAt is the batch's finalized at timestamp. FLOW: * -&gt; finalized_at -&gt; CONFIRMED / ERROR. NOTE: this is not the real block confirmed time, use the timestamp in the batch data instead</td></tr>
+<tr><td>hash</td><td><a href="#string">string</a></td><td></td><td>Hash is the batch's root hash</td></tr>
+<tr><td>data</td><td><a href="#string">string</a></td><td></td><td>Data is the batch data in JSON</td></tr>
+</tbody></table>
+<h3><a class="header" href="#batchrequest" id="batchrequest">BatchRequest</a></h3>
+<p>BatchRequest represents a batch request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>batch_id</td><td><a href="#string">string</a></td><td></td><td>BatchId is the batch ID</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the batch's anchor type</td></tr>
+</tbody></table>
+<h3><a class="header" href="#proof" id="proof">Proof</a></h3>
+<p>Proof represents a Blockchain proof of a hash, which is a Merkle path from
+the hash to the root hash of the proof's batch</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>hash</td><td><a href="#string">string</a></td><td></td><td>Hash is the hash the proof is proving for</td></tr>
+<tr><td>batch_id</td><td><a href="#string">string</a></td><td></td><td>BatchId is the proof's batch ID</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the proof's anchor type</td></tr>
+<tr><td>batch_status</td><td><a href="#anchor.Batch.Status">Batch.Status</a></td><td></td><td>BatchStatus is the proof's batch status</td></tr>
+<tr><td>format</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td></td><td>Format is the proof format</td></tr>
+<tr><td>data</td><td><a href="#string">string</a></td><td></td><td>Data is the proof data in base64</td></tr>
+<tr><td>batch</td><td><a href="#anchor.Batch">Batch</a></td><td></td><td>Batch is the proof's batch detail</td></tr>
+</tbody></table>
+<h3><a class="header" href="#proofrequest" id="proofrequest">ProofRequest</a></h3>
+<p>ProofRequest represents a proof request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>hash</td><td><a href="#string">string</a></td><td></td><td>Hash is the hash the proof is proving for</td></tr>
+<tr><td>batch_id</td><td><a href="#string">string</a></td><td></td><td>BatchId is the proof's batch ID</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the proof's anchor type</td></tr>
+<tr><td>with_batch</td><td><a href="#bool">bool</a></td><td></td><td>WithBatch indicates whether to include the proof's batch detail</td></tr>
+</tbody></table>
+<h3><a class="header" href="#submitproofrequest" id="submitproofrequest">SubmitProofRequest</a></h3>
+<p>SubmitProofRequest represents a submit proof request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>hash</td><td><a href="#string">string</a></td><td></td><td>Hash is the hash to be submitted</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the anchor type to be used</td></tr>
+<tr><td>format</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td></td><td>Format is the proof format to be used</td></tr>
+<tr><td>skip_batching</td><td><a href="#bool">bool</a></td><td></td><td>SkipBatching indicates whether to skip batching and submit a proof for the hash directly</td></tr>
+<tr><td>with_batch</td><td><a href="#bool">bool</a></td><td></td><td>WithBatch indicates whether to include the batch detail in the reply</td></tr>
+</tbody></table>
+<h3><a class="header" href="#subscribebatchesrequest" id="subscribebatchesrequest">SubscribeBatchesRequest</a></h3>
+<p>SubscribeBatchesRequest represents a subscription request for batch
+information</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>filter</td><td><a href="#anchor.BatchRequest">BatchRequest</a></td><td></td><td>Filter is the batch filter. When nil, all batches of all anchors will be subscribed; otherwise, only the batches of the given anchor will be subscribed; if batch_id is non-empty, only the matched batch will be subscribed</td></tr>
+</tbody></table>
+<h3><a class="header" href="#verifyproofreply" id="verifyproofreply">VerifyProofReply</a></h3>
+<p>VerifyProofReply represents a verify proof reply</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>verified</td><td><a href="#bool">bool</a></td><td></td><td>Verified indicates whether the proof is verified</td></tr>
+<tr><td>error</td><td><a href="#string">string</a></td><td></td><td>Erorr is the error message when the proof is falsified</td></tr>
+<tr><td>provenHash</td><td><a href="#string">string</a></td><td></td><td>ProvenHash is the hash the proof is proving for</td></tr>
+</tbody></table>
+<h3><a class="header" href="#verifyproofrequest" id="verifyproofrequest">VerifyProofRequest</a></h3>
+<p>VerifyProofRequest represents a verify proof request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the proof's anchor type</td></tr>
+<tr><td>format</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td></td><td>Format is the proof format. If skipping the signature checking is desired, please use the corresponding non-signed format, eg. use CHP_PATH instead of CHP_PATH_SIGNED in request</td></tr>
+<tr><td>data</td><td><a href="#string">string</a></td><td></td><td>Data is the proof data in base64</td></tr>
+</tbody></table>
+<!-- end messages -->
+<h3><a class="header" href="#anchorstatus" id="anchorstatus">Anchor.Status</a></h3>
+<p>Status represents an anchor's status</p>
+<table><thead><tr><th>Name</th><th>Number</th><th>Description</th></tr></thead><tbody>
+<tr><td>ERROR</td><td>0</td><td>Error means the anchor has an error</td></tr>
+<tr><td>STOPPED</td><td>1</td><td>STOPPED means the anchor is stopped</td></tr>
+<tr><td>RUNNING</td><td>2</td><td>RUNNING means the anchor is running</td></tr>
+</tbody></table>
+<h3><a class="header" href="#anchortype" id="anchortype">Anchor.Type</a></h3>
+<p>Type represents an anchor type</p>
+<table><thead><tr><th>Name</th><th>Number</th><th>Description</th></tr></thead><tbody>
+<tr><td>ETH</td><td>0</td><td>ETH is the anchor type for Ethereum Testnet</td></tr>
+<tr><td>ETH_MAINNET</td><td>3</td><td>ETH_MAINNET is the anchor type for Ethereum Mainnet</td></tr>
+<tr><td>ETH_ELASTOS</td><td>4</td><td>ETH_ELASTOS is the anchor type for Elastos</td></tr>
+<tr><td>ETH_GOCHAIN</td><td>9</td><td>ETH_GOCHAIN is the anchor type for GoChain</td></tr>
+<tr><td>BTC</td><td>1</td><td>BTC is the anchor type for Bitcoin Testnet</td></tr>
+<tr><td>BTC_MAINNET</td><td>5</td><td>BTC_MAINNET is the anchor type for Bitcoin Mainnet</td></tr>
+<tr><td>CHP</td><td>2</td><td>CHP is the anchor type for Chainpoint (planned)</td></tr>
+<tr><td>HEDERA</td><td>6</td><td>HEDERA is the anchor type for Hedera Testnet</td></tr>
+<tr><td>HEDERA_MAINNET</td><td>7</td><td>HEDERA_MAINNET is the anchor type for Hedera Mainnet</td></tr>
+<tr><td>HYPERLEDGER</td><td>8</td><td>HYPERLEDGER is the anchor type for Hyperledger Fabric</td></tr>
+</tbody></table>
+<h3><a class="header" href="#batchstatus" id="batchstatus">Batch.Status</a></h3>
+<p>Status represents a batch's status</p>
+<table><thead><tr><th>Name</th><th>Number</th><th>Description</th></tr></thead><tbody>
+<tr><td>ERROR</td><td>0</td><td>ERROR means the batch has an error. FLOW: * -&gt; ERROR</td></tr>
+<tr><td>BATCHING</td><td>1</td><td>BATCHING means the batch is batching for more hashes. FLOW: created_at -&gt; BATCHING -&gt; flushed_at</td></tr>
+<tr><td>QUEUING</td><td>2</td><td>QUEUING means the batch is queuing to be processed. FLOW: flushed_at -&gt; QUEUING -&gt; started_at</td></tr>
+<tr><td>PROCESSING</td><td>3</td><td>PROCESSING means the batch is constructing merkle roots and submitting hashes. FLOW: started_at -&gt; PROCESSING -&gt; submitted_at</td></tr>
+<tr><td>PENDING</td><td>4</td><td>PENDING means the batch's root hash is pending to be confirmed. FLOW: submitted_at -&gt; PENDING -&gt; finalized_at</td></tr>
+<tr><td>CONFIRMED</td><td>5</td><td>CONFIRMED means the batch's root hash is confirmed by the anchor's Blockchain. FLOW: finalized_at -&gt; CONFIRMED</td></tr>
+</tbody></table>
+<h3><a class="header" href="#proofformat" id="proofformat">Proof.Format</a></h3>
+<p>Format represents a proof format</p>
+<table><thead><tr><th>Name</th><th>Number</th><th>Description</th></tr></thead><tbody>
+<tr><td>CHP_PATH</td><td>0</td><td>CHP_PATH means Chainpoint Path format, which is the format used by Chainpoint</td></tr>
+<tr><td>ETH_TRIE</td><td>1</td><td>ETH_TRIE means Ethereum Trie format</td></tr>
+<tr><td>CHP_PATH_SIGNED</td><td>2</td><td>CHP_PATH_SIGNED means signed Chainpoint Path format</td></tr>
+<tr><td>ETH_TRIE_SIGNED</td><td>3</td><td>ETH_TRIE_SIGNED means signed Ethereum Trie format</td></tr>
+</tbody></table>
+<!-- end enums -->
+<!-- end HasExtensions -->
+<!-- end files -->
+<h2><a class="header" href="#scalar-value-types" id="scalar-value-types">Scalar Value Types</a></h2>
+<table><thead><tr><th>.proto Type</th><th>Notes</th><th>C++</th><th>Java</th><th>Python</th><th>Go</th><th>C#</th><th>PHP</th><th>Ruby</th></tr></thead><tbody>
+<tr><td><a name="double" /> double</td><td></td><td>double</td><td>double</td><td>float</td><td>float64</td><td>double</td><td>float</td><td>Float</td></tr>
+<tr><td><a name="float" /> float</td><td></td><td>float</td><td>float</td><td>float</td><td>float32</td><td>float</td><td>float</td><td>Float</td></tr>
+<tr><td><a name="int32" /> int32</td><td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead.</td><td>int32</td><td>int</td><td>int</td><td>int32</td><td>int</td><td>integer</td><td>Bignum or Fixnum (as required)</td></tr>
+<tr><td><a name="int64" /> int64</td><td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead.</td><td>int64</td><td>long</td><td>int/long</td><td>int64</td><td>long</td><td>integer/string</td><td>Bignum</td></tr>
+<tr><td><a name="uint32" /> uint32</td><td>Uses variable-length encoding.</td><td>uint32</td><td>int</td><td>int/long</td><td>uint32</td><td>uint</td><td>integer</td><td>Bignum or Fixnum (as required)</td></tr>
+<tr><td><a name="uint64" /> uint64</td><td>Uses variable-length encoding.</td><td>uint64</td><td>long</td><td>int/long</td><td>uint64</td><td>ulong</td><td>integer/string</td><td>Bignum or Fixnum (as required)</td></tr>
+<tr><td><a name="sint32" /> sint32</td><td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s.</td><td>int32</td><td>int</td><td>int</td><td>int32</td><td>int</td><td>integer</td><td>Bignum or Fixnum (as required)</td></tr>
+<tr><td><a name="sint64" /> sint64</td><td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s.</td><td>int64</td><td>long</td><td>int/long</td><td>int64</td><td>long</td><td>integer/string</td><td>Bignum</td></tr>
+<tr><td><a name="fixed32" /> fixed32</td><td>Always four bytes. More efficient than uint32 if values are often greater than 2^28.</td><td>uint32</td><td>int</td><td>int</td><td>uint32</td><td>uint</td><td>integer</td><td>Bignum or Fixnum (as required)</td></tr>
+<tr><td><a name="fixed64" /> fixed64</td><td>Always eight bytes. More efficient than uint64 if values are often greater than 2^56.</td><td>uint64</td><td>long</td><td>int/long</td><td>uint64</td><td>ulong</td><td>integer/string</td><td>Bignum</td></tr>
+<tr><td><a name="sfixed32" /> sfixed32</td><td>Always four bytes.</td><td>int32</td><td>int</td><td>int</td><td>int32</td><td>int</td><td>integer</td><td>Bignum or Fixnum (as required)</td></tr>
+<tr><td><a name="sfixed64" /> sfixed64</td><td>Always eight bytes.</td><td>int64</td><td>long</td><td>int/long</td><td>int64</td><td>long</td><td>integer/string</td><td>Bignum</td></tr>
+<tr><td><a name="bool" /> bool</td><td></td><td>bool</td><td>boolean</td><td>boolean</td><td>bool</td><td>bool</td><td>boolean</td><td>TrueClass/FalseClass</td></tr>
+<tr><td><a name="string" /> string</td><td>A string must always contain UTF-8 encoded or 7-bit ASCII text.</td><td>string</td><td>String</td><td>str/unicode</td><td>string</td><td>string</td><td>string</td><td>String (UTF-8)</td></tr>
+<tr><td><a name="bytes" /> bytes</td><td>May contain any arbitrary sequence of bytes.</td><td>string</td><td>ByteString</td><td>str</td><td>[]byte</td><td>ByteString</td><td>string</td><td>String (ASCII-8BIT)</td></tr>
+</tbody></table>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../grpc/api_service.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../grpc/api_service.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
