@@ -19,9 +19,16 @@
  * @Author: guiguan
  * @Date:   2020-01-03T14:55:49+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-15T12:54:53+10:00
+ * @Last modified time: 2020-09-03T16:03:18+10:00
  */
 
+// API Service is a general purpose proving service that is fast and effective.
+// It provides a set of APIs to manipulate trie structures and generate
+// blockchain proofs for any digital assets. A trie is a dictionary of
+// key-values that can be built incrementally, whose root hash at any given time
+// can be also dervied efficiently. Once the root hash is proven to a
+// blockchain, every key-value is also proven, so as the digital asset stored in
+// that key-value
 syntax = "proto3";
 
 option go_package = "github.com/SouthbankSoftware/proofable/pkg/protos/api";
@@ -32,13 +39,6 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "anchor/anchor.proto";
 
-// APIService is a general purpose proving service that is fast and effective.
-// It provides a set of APIs to manipulate trie structures and generate
-// blockchain proofs for any digital assets. A trie is a dictionary of
-// key-values that can be built incrementally, whose root hash at any given time
-// can be also dervied efficiently. Once the root hash is proven to a
-// Blockchain, every key-value is also proven, so as the digital asset stored in
-// that key-value
 service APIService {
   // GetTries gets all tries. Admin privilege is required
   rpc GetTries(google.protobuf.Empty) returns (stream Trie) {}
@@ -94,7 +94,7 @@ service APIService {
 
 // Trie represents a dictionary of key-values that can be built incrementally,
 // whose root hash at any given time can be also dervied efficiently. Once the
-// root hash is proven to a Blockchain, every key-value is also proven
+// root hash is proven to a blockchain, every key-value is also proven
 message Trie {
   // Id is the trie ID
   string id = 1;
@@ -185,17 +185,17 @@ message TrieProof {
   string error = 6;
   // AnchorType is the anchor type the trie proof has been submitted to
   anchor.Anchor.Type anchor_type = 7;
-  // TxnId is the Blockchain transaction ID
+  // TxnId is the blockchain transaction ID
   string txn_id = 8;
-  // TxnUri is the explorer URI for the Blockchain transaction
+  // TxnUri is the explorer URI for the blockchain transaction
   string txn_uri = 12;
-  // BlockTime is the Blockchain's block consensus timestamp in seconds
+  // BlockTime is the blockchain's block consensus timestamp in seconds
   uint64 block_time = 9;
   // BlockTimeNano is the Blockcahin's block consensus timestamp's nano part.
   // For most traditional blockchains, this will be zero. For Hedera, this will
   // be the nano part of the transaction's consensus timestamp
   uint64 block_time_nano = 13;
-  // BlockNumber is the Blockchain's block number. For Hedera, this will be zero
+  // BlockNumber is the blockchain's block number. For Hedera, this will be zero
   // as there is no block concept and each transaction has its own consensus
   // timestamp which defines the transaction order
   uint64 block_number = 10;

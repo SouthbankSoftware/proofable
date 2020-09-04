@@ -1,8 +1,10 @@
 # [proofable-cli](https://github.com/SouthbankSoftware/proofable/tree/master/cmd/proofable-cli) <!-- omit in toc -->
 
-`proofable-cli` is the command-line interface (CLI) for [Proofable](https://docs.proofable.io/) API Service (`proofable-api`). At the moment, it supports certifying a file-system to blockchains
+<!-- ANCHOR: introduction -->
+[![Proofable CLI Deploy Status](https://concourse.provendb.com/api/v1/teams/main/pipelines/proofable-deploy/jobs/build-and-deploy/badge?title=cli)](http://concourse.provendb.com/teams/main/pipelines/proofable-deploy)
 
-<script id="asciicast-346585" src="https://asciinema.org/a/346585.js" data-autoplay="true" async></script>
+`proofable-cli` is the command-line interface (CLI) for [Proofable](https://docs.proofable.io/) API Service (`proofable-api`). At the moment, it supports certifying a file-system to blockchains
+<!-- ANCHOR_END: introduction -->
 
 #### Table of contents  <!-- omit in toc -->
 - [Usage](#usage)
@@ -24,6 +26,7 @@
 
 ## Usage
 
+<!-- ANCHOR: installation -->
 ### For macOS users
 
 #### Install via [Homebrew](https://brew.sh/)
@@ -112,9 +115,11 @@ Follow the [same steps](#for-linux-users) for Linux users
 1. make sure the latest golang is installed
 2. clone this repo
 3. `cd cmd/proofable-cli && make`
+<!-- ANCHOR_END: installation -->
 
 ### Examples
 
+<!-- ANCHOR: examples -->
 ```bash
 # for help
 ./proofable-cli -h
@@ -152,9 +157,11 @@ Follow the [same steps](#for-linux-users) for Linux users
 # verify a subproof for a path and output the subproof's Graphviz Dot Graph
 ./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof -d path/to/output/the/dot/graph.dot
 ```
+<!-- ANCHOR_END: examples -->
 
 ## Binaries
 
+<!-- ANCHOR: binaries -->
 ### Dev (cutting-edge) binaries
 
 - [mac](https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_darwin_amd64.tar.gz)
@@ -166,6 +173,7 @@ Follow the [same steps](#for-linux-users) for Linux users
 - [mac](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_darwin_amd64.tar.gz)
 - [linux](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_linux_amd64.tar.gz)
 - [windows](https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_windows_amd64.zip)
+<!-- ANCHOR_END: binaries -->
 
 ## Development
 
@@ -187,7 +195,7 @@ Follow the [same steps](#for-linux-users) for Linux users
 
 ### Error: "proofable-cli_darwin_amd64" cannot be opened because the developer cannot be verified <!-- omit in toc -->
 
-![Mac Cannot Open Issue](../../docs/images/mac_cannot_open_issue.png)
+![Mac Cannot Open Issue](https://docs.proofable.io/images/mac_cannot_open_issue.png)
 
 Use the following command to fix:
 

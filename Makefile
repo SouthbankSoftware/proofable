@@ -18,7 +18,7 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-07-10T17:11:38+10:00
+# @Last modified time: 2020-09-04T18:11:49+10:00
 
 PROJECT_NAME := proofable
 PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(PROJECT_NAME)
@@ -30,8 +30,6 @@ LD_FLAGS := -ldflags \
 "-X $(PROJECT_IMPORT_PATH)/cmd/$(APP_NAME)/cmd.version=$(APP_VERSION)"
 
 all: build
-
-.PHONY: run build build-regen generate test test-dev test-all clean playground doc grpcc
 
 run:
 	go run $(LD_FLAGS) ./cmd/$(APP_NAME)
@@ -54,10 +52,31 @@ test-all: test-dev
 clean:
 	go clean -testcache $(PKGS)
 	rm -f $(APP_NAME)* $(PLAYGROUND_NAME)*
+.PHONY: playground
 playground:
 	go run ./cmd/$(PLAYGROUND_NAME)/.
-doc:
+
+doc-init:
+	mkdir -p docs_output
+	cd docs_output && git clone https://github.com/SouthbankSoftware/proofable.git --single-branch --branch gh-pages gh-pages
+	cd node_sdk && npm install
+	make doc-node
+	ln -sf ../../docs_output/gh-pages/node_sdk/reference docs/node_sdk/
+doc-dev:
+	mdbook serve
+doc-build:
+	rm -rf docs_output/book
+	mdbook build
+doc-deploy:
+	rsync -r --exclude=node_sdk/reference --exclude=.git --delete docs_output/book/html/ docs_output/gh-pages
+doc-clean:
+	rm -rf docs/node_sdk/reference
+	rm -rf docs_output
+# we use pkg.go.dev instead of this
+doc-go:
 	# godoc doesn't support go module yet, so create a symlink in GOPATH as a workaround
 	mkdir -p $(GOPATH)/src/github.com/SouthbankSoftware
 	ln -sf $(PWD) $(GOPATH)/src/github.com/SouthbankSoftware
 	godoc -http=:6060
+doc-node:
+	cd node_sdk && npm run doc

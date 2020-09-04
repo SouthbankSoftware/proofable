@@ -22,8 +22,15 @@
 // @Author: guiguan
 // @Date:   2020-01-03T14:55:49+11:00
 // @Last modified by:   guiguan
-// @Last modified time: 2020-07-15T12:54:53+10:00
+// @Last modified time: 2020-09-03T16:03:18+10:00
 //
+// API Service is a general purpose proving service that is fast and effective.
+// It provides a set of APIs to manipulate trie structures and generate
+// blockchain proofs for any digital assets. A trie is a dictionary of
+// key-values that can be built incrementally, whose root hash at any given time
+// can be also dervied efficiently. Once the root hash is proven to a
+// blockchain, every key-value is also proven, so as the digital asset stored in
+// that key-value
 'use strict';
 var grpc = require('grpc');
 var api_api_pb = require('../api/api_pb.js');
@@ -230,13 +237,6 @@ function deserialize_google_protobuf_Empty(buffer_arg) {
 }
 
 
-// APIService is a general purpose proving service that is fast and effective.
-// It provides a set of APIs to manipulate trie structures and generate
-// blockchain proofs for any digital assets. A trie is a dictionary of
-// key-values that can be built incrementally, whose root hash at any given time
-// can be also dervied efficiently. Once the root hash is proven to a
-// Blockchain, every key-value is also proven, so as the digital asset stored in
-// that key-value
 var APIServiceService = exports.APIServiceService = {
   // GetTries gets all tries. Admin privilege is required
 getTries: {

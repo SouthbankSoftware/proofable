@@ -22,8 +22,12 @@
 // @Author: guiguan
 // @Date:   2019-08-05T10:53:28+10:00
 // @Last modified by:   guiguan
-// @Last modified time: 2020-08-20T13:18:45+10:00
+// @Last modified time: 2020-09-03T16:03:18+10:00
 //
+// Anchor Service continuously anchors hashes to blockchains, which is similar
+// to what Chainpoint does, but with much better performance and flexibility. It
+// supports multiple anchor types and proof formats. Digital signing can be also
+// done at the Merkle root level
 'use strict';
 var grpc = require('grpc');
 var anchor_anchor_pb = require('../anchor/anchor_pb.js');
@@ -152,10 +156,6 @@ function deserialize_google_protobuf_Empty(buffer_arg) {
 }
 
 
-// AnchorService continuously anchors hashes to Blockchains, which is similar to
-// what Chainpoint does, but with much better performance and flexibility. It
-// supports multiple anchor types and proof formats. Digital signing can be also
-// done at the Merkle root level.
 var AnchorServiceService = exports.AnchorServiceService = {
   // GetAnchors gets all anchors
 getAnchors: {

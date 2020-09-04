@@ -12,7 +12,7 @@
     "typedocOptions": {
         "name": "Proofable Node SDK",
         "mode": "library",
-        "out": "docs/reference",
+        "out": "../docs_output/gh-pages/node_sdk/reference",
         "includeDeclarations": true,
         "excludeExternals": true,
         "gitRevision": "master",

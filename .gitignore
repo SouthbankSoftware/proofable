@@ -1,4 +1,6 @@
 /local
+/docs_output
+/docs/node_sdk/reference
 /proofable-cli*
 data
 /playground

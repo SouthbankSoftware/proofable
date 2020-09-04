@@ -19,11 +19,10 @@
  * @Author: guiguan
  * @Date:   2020-03-18T13:41:11+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-02T14:48:29+10:00
+ * @Last modified time: 2020-09-03T00:54:10+10:00
  */
 
 package api
 
-//go:generate protoc --plugin=protoc-gen-doc=../protoc-gen-doc --doc_out=markdown,api.md:../../../docs --go_out=paths=source_relative,plugins=grpc:../ -I ../ api/api.proto
-//go:generate protoc --plugin=protoc-gen-doc=../protoc-gen-doc --doc_out=html,api.html:../../../docs -I ../ api/api.proto
+//go:generate protoc --plugin=protoc-gen-doc=../protoc-gen-doc --doc_out=../markdown.tmpl,api_service.md:../../../docs/grpc --go_out=paths=source_relative,plugins=grpc:../ -I ../ api/api.proto
 //go:generate protoc --plugin=protoc-gen-ts=../../../node_sdk/node_modules/.bin/protoc-gen-ts --plugin=protoc-gen-grpc=../../../node_sdk/node_modules/.bin/grpc_tools_node_protoc_plugin --ts_out=service=grpc-node:../../../node_sdk/src/protos --js_out=import_style=commonjs,binary:../../../node_sdk/src/protos --grpc_out=../../../node_sdk/src/protos -I ../ api/api.proto

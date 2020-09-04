@@ -19,9 +19,13 @@
  * @Author: guiguan
  * @Date:   2019-08-05T10:53:28+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-08-20T13:18:45+10:00
+ * @Last modified time: 2020-09-03T16:03:18+10:00
  */
 
+// Anchor Service continuously anchors hashes to blockchains, which is similar
+// to what Chainpoint does, but with much better performance and flexibility. It
+// supports multiple anchor types and proof formats. Digital signing can be also
+// done at the Merkle root level
 syntax = "proto3";
 
 option go_package = "github.com/SouthbankSoftware/proofable/pkg/protos/anchor";
@@ -35,10 +39,6 @@ package anchor;
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
-// AnchorService continuously anchors hashes to Blockchains, which is similar to
-// what Chainpoint does, but with much better performance and flexibility. It
-// supports multiple anchor types and proof formats. Digital signing can be also
-// done at the Merkle root level.
 service AnchorService {
   // GetAnchors gets all anchors
   rpc GetAnchors(google.protobuf.Empty) returns (stream Anchor) {}
@@ -57,8 +57,8 @@ service AnchorService {
   rpc SubscribeBatches(SubscribeBatchesRequest) returns (stream Batch) {}
 }
 
-// Anchor represents an anchor of a Blockchain, through which a hash can be
-// anchored to that Blockchain
+// Anchor represents an anchor of a blockchain, through which a hash can be
+// anchored to that blockchain
 message Anchor {
   // Type represents an anchor type
   enum Type {
@@ -103,10 +103,10 @@ message Anchor {
 }
 
 // Batch represents a batch of hashes. When hash stream comes in, Anchor Service
-// will try to process them in batches, just like Blockchain processes
+// will try to process them in batches, just like blockchain processes
 // transactions in blocks. This makes utilization of expensive resources, such
 // as making Bitcoin transaction, more economic. Each batch's root hash will be
-// embedded in a transaction made to the Blockchain
+// embedded in a transaction made to the blockchain
 message Batch {
   // Id is the batch ID
   string id = 1;
@@ -132,7 +132,7 @@ message Batch {
     // submitted_at -> PENDING -> finalized_at
     PENDING = 4;
     // CONFIRMED means the batch's root hash is confirmed by the anchor's
-    // Blockchain. FLOW: finalized_at -> CONFIRMED
+    // blockchain. FLOW: finalized_at -> CONFIRMED
     CONFIRMED = 5;
   }
   // Status is the batch status. FLOW: created_at -> BATCHING -> flushed_at ->
@@ -166,7 +166,7 @@ message Batch {
   string data = 13;
 }
 
-// Proof represents a Blockchain proof of a hash, which is a Merkle path from
+// Proof represents a blockchain proof of a hash, which is a Merkle path from
 // the hash to the root hash of the proof's batch
 message Proof {
   // Hash is the hash the proof is proving for

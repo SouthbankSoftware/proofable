@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-08-20T14:39:28+10:00
+ * @Last modified time: 2020-09-04T15:25:48+10:00
  */
 
 package cmd
@@ -208,7 +208,7 @@ By default, if the path is a directory, the proof will be created under the dire
 func init() {
 	cmdCreate.AddCommand(cmdCreateProof)
 
-	cmdCreateProof.Flags().StringP(nameAnchorType, "t", "ETH", "specify the anchor type. Please refer to https://github.com/SouthbankSoftware/proofable/blob/master/docs/anchor.md#anchortype for all available anchor types")
+	cmdCreateProof.Flags().StringP(nameAnchorType, "t", "ETH", "specify the anchor type. Please refer to https://docs.proofable.io/concepts/anchor_types.html for all available anchor types")
 	viper.BindPFlag(viperKeyCreateProofAnchorType, cmdCreateProof.Flags().Lookup(nameAnchorType))
 
 	cmdCreateProof.Flags().StringP(nameOutputPath, shorthandProofPath, "", "specify the proof output path")
