@@ -196,12 +196,18 @@
 <li>
 <p>Make changes to Markdown files in <code>docs</code> directory, which will trigger the dev server to hot-reload the docs in the browser. This is a good way for to preview the changes. Please note that anything other than a symbolic link or a Markdown file in <code>docs</code> will be copied to <code>docs_output/book/html</code> by <code>make doc-dev</code> or <code>mmake doc-build</code> then be synced to <code>docs_output/gh-pages</code> by <code>make doc-deploy</code> with extraneous files removed. So if you want to add a file to <code>gh-pages</code>, add to <code>docs</code> first, otherwise that file will be deleted during the syncing</p>
 </li>
+</ol>
+<p>Notes:</p>
+<ul>
 <li>
 <p>If you have changed the Node SDK code, you need to regenerate the Node SDK reference at <code>docs_output/gh-pages/node_sdk/reference</code></p>
 <pre><code class="language-zsh">make doc-node
 </code></pre>
 </li>
-</ol>
+<li>
+<p>If you want to temporarily ignore a link when building the docs, you can add it to <code>output.linkcheck.exclude</code> in <code>book.toml</code>. Please remember to remove it after you have fixed your problem</p>
+</li>
+</ul>
 <h2><a class="header" href="#deploy-updated-docs" id="deploy-updated-docs">Deploy updated docs</a></h2>
 <ol>
 <li>
@@ -216,7 +222,7 @@
 </code></pre>
 </li>
 <li>
-<p>Go to the <code>gh-pages</code> branch directory <code>cd docs_output/gh-pages</code>, review the changes and commit</p>
+<p>Go to the <code>gh-pages</code> checkout: <code>cd docs_output/gh-pages</code>, review the changes and commit</p>
 </li>
 </ol>
 

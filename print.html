@@ -353,7 +353,7 @@ if (!window.location.href.endsWith("/print.html")) {
 </li>
 </ul>
 <p>The packages in <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg"><code>pkg</code></a> altogether resembles a Go SDK for Proofable, which provides great convenience when consuming <code>proofable-api</code></p>
-<p>You can find the complete example source code <a href="https://github.com/SouthbankSoftware/proofable/examples/example.go">here</a>, which can be run as:</p>
+<p>You can find the complete example source code <a href="https://github.com/SouthbankSoftware/proofable/blob/master/examples/example.go">here</a>, which can be run as:</p>
 <pre><code class="language-go">go run examples/example.go
 </code></pre>
 <h2><a class="header" href="#step-1-authenticate-with-provendb" id="step-1-authenticate-with-provendb">Step 1: authenticate with ProvenDB</a></h2>
@@ -519,7 +519,7 @@ log.Printf(&quot;the subproof with a root hash of %s is anchored to %s in block 
 <p>Here are some more examples to help you with the Proofable Go SDK</p>
 <ul>
 <li>
-<p><a href="https://github.com/SouthbankSoftware/proofable/examples">Go SDK Examples</a>: source code of complete and runnable examples</p>
+<p><a href="https://github.com/SouthbankSoftware/proofable/tree/master/examples">Go SDK Examples</a>: source code of complete and runnable examples</p>
 </li>
 <li>
 <p><a href="https://github.com/SouthbankSoftware/proofable-image">ProofableImage</a>: builds trust into your image by creating a blockchain certificate for it. The image certificate can not only prove the image as a whole but also prove the pixel boxes and the metadata inside it. For more details, please read through this <a href="https://medium.com/@guiguan/build-trust-into-image-with-blockchain-4894c39bde7f">Medium post</a>.</p>
@@ -1303,12 +1303,18 @@ information</p>
 <li>
 <p>Make changes to Markdown files in <code>docs</code> directory, which will trigger the dev server to hot-reload the docs in the browser. This is a good way for to preview the changes. Please note that anything other than a symbolic link or a Markdown file in <code>docs</code> will be copied to <code>docs_output/book/html</code> by <code>make doc-dev</code> or <code>mmake doc-build</code> then be synced to <code>docs_output/gh-pages</code> by <code>make doc-deploy</code> with extraneous files removed. So if you want to add a file to <code>gh-pages</code>, add to <code>docs</code> first, otherwise that file will be deleted during the syncing</p>
 </li>
+</ol>
+<p>Notes:</p>
+<ul>
 <li>
 <p>If you have changed the Node SDK code, you need to regenerate the Node SDK reference at <code>docs_output/gh-pages/node_sdk/reference</code></p>
 <pre><code class="language-zsh">make doc-node
 </code></pre>
 </li>
-</ol>
+<li>
+<p>If you want to temporarily ignore a link when building the docs, you can add it to <code>output.linkcheck.exclude</code> in <code>book.toml</code>. Please remember to remove it after you have fixed your problem</p>
+</li>
+</ul>
 <h2><a class="header" href="#deploy-updated-docs" id="deploy-updated-docs">Deploy updated docs</a></h2>
 <ol>
 <li>
@@ -1323,7 +1329,7 @@ information</p>
 </code></pre>
 </li>
 <li>
-<p>Go to the <code>gh-pages</code> branch directory <code>cd docs_output/gh-pages</code>, review the changes and commit</p>
+<p>Go to the <code>gh-pages</code> checkout: <code>cd docs_output/gh-pages</code>, review the changes and commit</p>
 </li>
 </ol>
 <h1><a class="header" href="#publish-a-new-version" id="publish-a-new-version">Publish a new version</a></h1>
