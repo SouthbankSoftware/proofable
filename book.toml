@@ -14,5 +14,5 @@ git-repository-url = "https://github.com/SouthbankSoftware/proofable"
 [output.linkcheck]
 follow-web-links = true
 traverse-parent-directories = true
-exclude = ['https://github.com/SouthbankSoftware/proofable/examples']
+exclude = []
 command = 'bash -c "ln -s ../../../gh-pages/node_sdk/reference ../html/node_sdk/reference && mdbook-linkcheck"'

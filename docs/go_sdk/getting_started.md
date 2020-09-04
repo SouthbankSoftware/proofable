@@ -22,7 +22,7 @@ Now, let's go through a hello world example to:
 
 The packages in [`pkg`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg) altogether resembles a Go SDK for Proofable, which provides great convenience when consuming `proofable-api`
 
-You can find the complete example source code [here](https://github.com/SouthbankSoftware/proofable/examples/example.go), which can be run as:
+You can find the complete example source code [here](https://github.com/SouthbankSoftware/proofable/blob/master/examples/example.go), which can be run as:
 
 ```go
 go run examples/example.go

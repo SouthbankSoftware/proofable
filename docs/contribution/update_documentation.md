@@ -31,11 +31,14 @@
 
 2. Make changes to Markdown files in `docs` directory, which will trigger the dev server to hot-reload the docs in the browser. This is a good way for to preview the changes. Please note that anything other than a symbolic link or a Markdown file in `docs` will be copied to `docs_output/book/html` by `make doc-dev` or `mmake doc-build` then be synced to `docs_output/gh-pages` by `make doc-deploy` with extraneous files removed. So if you want to add a file to `gh-pages`, add to `docs` first, otherwise that file will be deleted during the syncing
 
-3. If you have changed the Node SDK code, you need to regenerate the Node SDK reference at `docs_output/gh-pages/node_sdk/reference`
+Notes:
+
+- If you have changed the Node SDK code, you need to regenerate the Node SDK reference at `docs_output/gh-pages/node_sdk/reference`
 
     ```zsh
     make doc-node
     ```
+- If you want to temporarily ignore a link when building the docs, you can add it to `output.linkcheck.exclude` in `book.toml`. Please remember to remove it after you have fixed your problem
 
 ## Deploy updated docs
 
