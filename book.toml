@@ -10,9 +10,10 @@ build-dir = "docs_output/book"
 
 [output.html]
 git-repository-url = "https://github.com/SouthbankSoftware/proofable"
+google-analytics = "UA-101162043-19"
 
 [output.linkcheck]
 follow-web-links = true
 traverse-parent-directories = true
-exclude = []
+exclude = ["https://storage.googleapis.com/provendb"]
 command = 'bash -c "ln -s ../../../gh-pages/node_sdk/reference ../html/node_sdk/reference && mdbook-linkcheck"'
