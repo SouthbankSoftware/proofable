@@ -95,7 +95,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><strong aria-hidden="true">2.</strong> Concepts</li><li><ol class="section"><li class="chapter-item expanded "><strong aria-hidden="true">2.1.</strong> Trie</li><li class="chapter-item expanded "><strong aria-hidden="true">2.2.</strong> Chain of Trust</li><li class="chapter-item expanded "><strong aria-hidden="true">2.3.</strong> Anchor Types</li></ol></li><li class="chapter-item expanded "><strong aria-hidden="true">3.</strong> CLI</li><li class="chapter-item expanded "><strong aria-hidden="true">4.</strong> Go SDK</li><li><ol class="section"><li class="chapter-item expanded "><strong aria-hidden="true">4.1.</strong> Getting started</li><li class="chapter-item expanded "><strong aria-hidden="true">4.2.</strong> Examples</li><li class="chapter-item expanded "><a href="go_sdk/reference.html"><strong aria-hidden="true">4.3.</strong> Reference</a></li></ol></li><li class="chapter-item expanded "><strong aria-hidden="true">5.</strong> Node SDK</li><li><ol class="section"><li class="chapter-item expanded "><strong aria-hidden="true">5.1.</strong> Getting started</li><li class="chapter-item expanded "><strong aria-hidden="true">5.2.</strong> Examples</li><li class="chapter-item expanded "><a href="node_sdk/reference.html"><strong aria-hidden="true">5.3.</strong> Reference</a></li></ol></li><li class="chapter-item expanded "><strong aria-hidden="true">6.</strong> REST</li><li class="chapter-item expanded "><strong aria-hidden="true">7.</strong> gRPC</li><li><ol class="section"><li class="chapter-item expanded "><a href="grpc/api_service.html"><strong aria-hidden="true">7.1.</strong> API Service</a></li><li class="chapter-item expanded "><a href="grpc/anchor_service.html"><strong aria-hidden="true">7.2.</strong> Anchor Service</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="concepts/index.html"><strong aria-hidden="true">2.</strong> Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="concepts/trie.html"><strong aria-hidden="true">2.1.</strong> Trie</a></li><li class="chapter-item expanded "><a href="concepts/chain_of_trust.html"><strong aria-hidden="true">2.2.</strong> Chain of Trust</a></li><li class="chapter-item expanded "><a href="concepts/anchor_types.html"><strong aria-hidden="true">2.3.</strong> Anchor Types</a></li></ol></li><li class="chapter-item expanded "><a href="cli/index.html"><strong aria-hidden="true">3.</strong> CLI</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="cli/demo.html"><strong aria-hidden="true">3.1.</strong> Demo</a></li><li class="chapter-item expanded "><a href="cli/installation.html"><strong aria-hidden="true">3.2.</strong> Installation</a></li><li class="chapter-item expanded "><a href="cli/usage.html"><strong aria-hidden="true">3.3.</strong> Usage</a></li></ol></li><li class="chapter-item expanded "><a href="go_sdk/index.html"><strong aria-hidden="true">4.</strong> Go SDK</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="go_sdk/getting_started.html"><strong aria-hidden="true">4.1.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="go_sdk/examples.html"><strong aria-hidden="true">4.2.</strong> Examples</a></li><li class="chapter-item expanded "><a href="go_sdk/reference.html"><strong aria-hidden="true">4.3.</strong> Reference</a></li></ol></li><li class="chapter-item expanded "><a href="node_sdk/index.html"><strong aria-hidden="true">5.</strong> Node SDK</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="node_sdk/getting_started.html"><strong aria-hidden="true">5.1.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="node_sdk/examples.html"><strong aria-hidden="true">5.2.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="node_sdk/typescript_example.html"><strong aria-hidden="true">5.2.1.</strong> Typescript Example</a></li></ol></li><li class="chapter-item expanded "><a href="node_sdk/reference.html"><strong aria-hidden="true">5.3.</strong> Reference</a></li></ol></li><li class="chapter-item expanded "><strong aria-hidden="true">6.</strong> REST</li><li class="chapter-item expanded "><a href="grpc/index.html"><strong aria-hidden="true">7.</strong> gRPC</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="grpc/demo.html"><strong aria-hidden="true">7.1.</strong> Demo</a></li><li class="chapter-item expanded "><a href="grpc/api_service.html"><strong aria-hidden="true">7.2.</strong> API Service</a></li><li class="chapter-item expanded "><a href="grpc/anchor_service.html"><strong aria-hidden="true">7.3.</strong> Anchor Service</a></li></ol></li><li class="chapter-item expanded "><a href="contribution/index.html"><strong aria-hidden="true">8.</strong> Contribution</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="contribution/update_documentation.html"><strong aria-hidden="true">8.1.</strong> Update documentation</a></li><li class="chapter-item expanded "><a href="contribution/publish_a_new_version.html"><strong aria-hidden="true">8.2.</strong> Publish a new version</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,6 +134,10 @@
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         
+                        <a href="https://github.com/SouthbankSoftware/proofable" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
                     </div>
                 </div>
 
@@ -162,16 +166,363 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p><a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc"><img src="https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&amp;logoColor=white&amp;style=flat-square" alt="go.dev reference" /></a>
+<a href="https://goreportcard.com/report/github.com/SouthbankSoftware/proofable"><img src="https://goreportcard.com/badge/github.com/SouthbankSoftware/proofable?style=flat-square" alt="Go Report Card" /></a>
+<a href="https://www.npmjs.com/package/proofable"><img src="https://img.shields.io/npm/v/proofable?style=flat-square" alt="NPM Package" /></a>
+<a href="http://concourse.provendb.com/teams/main/pipelines/proofable-test"><img src="https://concourse.provendb.com/api/v1/teams/main/pipelines/proofable-test/jobs/test/badge?title=pr" alt="Proofable Test Status" /></a>
+<a href="http://concourse.provendb.com/teams/main/pipelines/proofable-deploy"><img src="https://concourse.provendb.com/api/v1/teams/main/pipelines/proofable-deploy/jobs/build-and-deploy/badge?title=cli" alt="Proofable CLI Deploy Status" /></a></p>
 <p>Proofable is a general purpose proving framework for certifying digital assets to public blockchains. Overall, it consists:</p>
 <ul>
 <li>
-<p><strong>CLI</strong> (<code>proofable-cli</code>): the command-line interface (CLI) for API Service (<code>proofable-api</code>). At the moment, it supports proving a file-system to a blockchain</p>
+<p><a href="https://docs.proofable.io/cli"><strong>CLI</strong> (<code>proofable-cli</code>)</a>: the command-line interface (CLI) for API Service (<code>proofable-api</code>). At the moment, it supports proving a file-system to a blockchain</p>
 </li>
 <li>
-<p><strong>API Service</strong> (<code>proofable-api</code>): the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate trie structures and generate blockchain proofs for any digital asset. A <a href="https://docs.proofable.io/docs/trie.html">trie</a> is a dictionary of ordered key-values that can be built incrementally, whose root hash at any given time can be dervied efficiently. Once the root hash is proven to a Blockchain, every key-value is proven, so as the digital asset stored in that key-value</p>
+<p><a href="https://docs.proofable.io/grpc/api_service.html"><strong>API Service</strong> (<code>proofable-api</code>)</a>: the general purpose proving service that is fast and effective. It provides a set of APIs to manipulate <a href="https://docs.proofable.io/concepts/trie.html">trie structures</a> and generate blockchain proofs for any digital asset. A <a href="https://docs.proofable.io/concepts/trie.html">trie</a> is a dictionary of ordered key-values that can be built incrementally, whose root hash at any given time can be derived efficiently. Once the root hash is proven to a blockchain, every key-value is proven, so as the digital asset stored in that key-value</p>
 </li>
 <li>
-<p><strong>Anchor Service</strong> (<code>provendb-anchor</code>): the service continuously anchors hashes to Blockchains, which is similar to what Chainpoint does, but with much better performance and flexibility. It supports multiple anchor types and proof formats. Digital signing can be also done at the Merkle root level. It is consumed by <code>proofable-api</code>, and is not directly public-accessible at the moment</p>
+<p><a href="https://docs.proofable.io/grpc/anchor_service.html"><strong>Anchor Service</strong> (<code>provendb-anchor</code>)</a>: the service continuously anchors hashes to blockchains, which is similar to what Chainpoint does, but with much better performance and flexibility. It supports multiple anchor types and proof formats. Digital signing can be also done at the Merkle root level. It is consumed by <code>proofable-api</code>, which is not directly public-accessible at the moment</p>
+</li>
+</ul>
+<p>Links:</p>
+<ul>
+<li><a href="https://github.com/SouthbankSoftware/proofable">GitHub</a></li>
+<li><a href="https://www.proofable.io">Website</a></li>
+</ul>
+<h1><a class="header" href="#concepts" id="concepts">Concepts</a></h1>
+<p>Before diving into code, let's go through these high-level concepts that Proofable is built upon</p>
+<h1><a class="header" href="#trie" id="trie">Trie</a></h1>
+<p>A trie is a <a href="https://eth.wiki/en/fundamentals/patricia-tree">data structure</a> that behaves like a dictionary of key-values. Any data can be encoded as binaries in a key-value pair. The trie takes care of hashing the data and deriving the <a href="https://en.wikipedia.org/wiki/Merkle_tree">Merkle root</a>. Internally, the key-values of a trie are ordered lexicographically by their keys, which form a prefix tree, as follows:</p>
+<p><img src="concepts/../images/example_proof.svg" alt="Trie Dot Graph" /></p>
+<p>No matter what order the key-values are put in, the same bag of key-values will always result in the same trie with the same Merkle root. This determinism is known as commutative and associative of data hashing, which allows a trie to be built incrementally with efficiency. The inserts, lookups, updates, and deletes of key-values in a trie are all in O(log(n)). Thus, a new trie can be easily derived by modifying an existing trie. In storage-wise, each trie node is stored in a key-value store with the node's hash as the key and node's data as the value. This makes the trie storage agnostic and flexible enough to support all-sorts of key-value stores, such as embedded databases like LevelDB or blob storages like S3. This also makes modifying an existing trie memory and computation efficient, because only the modified trie nodes need to be loaded from the persistent store, and new nodes need to be saved back.</p>
+<p>In Proofable, we extended the trie to be an all-in-one solution package. When a trie is updated, a new trie root will be created, but previous trie node data are still there and immutable. The series of trie roots resembles the history of the trie data change. A trie proof can be created for each root, which means the hash of the root will be anchored to a blockchain of the user's choice permanently. Once the anchoring is confirmed, all the data contained in the trie at the given root will be mathmatically/cryptographically authenticated, i.e. it will be able to claim that the trie data exist exactly like this at the time of the confirmation. A key-values proof can be also extracted from a trie to independently prove a subset of the key-values the user is interested in, e.g. claiming that two key-values of particular interest exist exactly like this at the time of the confirmation. When all manipulations are done, the trie can be exported by the user and put in a safe place they have full control. Later on, the trie can be imported back to do further manipulations.</p>
+<p>Using the trie as the basis for Proofable and <a href="https://www.provendb.com/">ProvenDB</a> has the following advantages over more simplistic approaches:</p>
+<ul>
+<li>Very large amounts of data can be anchored to a blockchain in a single transaction. Only the root of a trie needs to be included in the blockchain transaction. The trie structure itself forms the link between that transaction and the individual elements being proved.</li>
+<li>The trie supports hierarchies of proof – we can generate proofs for a specific directory for instance, as well as proofs for all the items in the directory.</li>
+<li>The trie can be built incrementally, reducing the burden of recalculating an entire proof when new elements are added.</li>
+</ul>
+<h1><a class="header" href="#chain-of-trust" id="chain-of-trust">Chain of Trust</a></h1>
+<p><img src="concepts/../images/chain_of_trust.png" alt="Chain of Trust" /></p>
+<p>When a piece of information (data) is anchored to a blockchain using a Merkle trie, we can work backward using the corresponding Merkle path to assert that the data has existed from the time of the blockchain transaction. The Merkle path itself becomes a certificate for the data. We can generate such a certificate to prove that the data has existed from a timestamp. If the data is an image, then we can use the certificate to verify an arbitrary image and see whether someone has tampered with it. We can also use the timestamp to verify the certificate itself, such that when we trust the timestamp, we can check the validity of the certificate and then the image. In this way, the surface area for potential forgery attack is reduced to a block. Or if we remembered and trusted the transaction hash of the certificate, the attack surface is reduced to that transaction. The timestamp and transaction hash are the seed information like the <a href="https://en.wikipedia.org/wiki/First_principle">first principles</a> in philosophy which we can base our trust on. In this way, a chain of trust is formed from the blockchain seeds to our image contents as in above figure. For more details, please check out our Medium post <a href="https://medium.com/@guiguan/build-trust-into-image-with-blockchain-4894c39bde7f">Build Trust into Image with Blockchain</a></p>
+<h1><a class="header" href="#anchor-types" id="anchor-types">Anchor Types</a></h1>
+<p><a href="concepts/../grpc/anchor_service.html#anchortype">Anchor Types</a></p>
+<script type="text/javascript">
+if (!window.location.href.endsWith("/print.html")) {
+    window.location.replace("../grpc/anchor_service.html#anchortype");
+}
+</script>
+<h1><a class="header" href="#cli" id="cli">CLI</a></h1>
+<p><a href="http://concourse.provendb.com/teams/main/pipelines/proofable-deploy"><img src="https://concourse.provendb.com/api/v1/teams/main/pipelines/proofable-deploy/jobs/build-and-deploy/badge?title=cli" alt="Proofable CLI Deploy Status" /></a></p>
+<p><code>proofable-cli</code> is the command-line interface (CLI) for <a href="https://docs.proofable.io/">Proofable</a> API Service (<code>proofable-api</code>). At the moment, it supports certifying a file-system to blockchains</p>
+<ul>
+<li><a href="https://github.com/SouthbankSoftware/proofable/tree/master/cmd/proofable-cli">GitHub</a></li>
+</ul>
+<h1><a class="header" href="#demo" id="demo">Demo</a></h1>
+<p>This demo shows how to use <code>proofable-cli</code> to prove a directory of source code</p>
+<script id="asciicast-346585" src="https://asciinema.org/a/346585.js" data-autoplay="true" async></script>
+<h1><a class="header" href="#installation" id="installation">Installation</a></h1>
+<h3><a class="header" href="#for-macos-users" id="for-macos-users">For macOS users</a></h3>
+<h4><a class="header" href="#install-via-a-hrefhttpsbrewshhomebrewa" id="install-via-a-hrefhttpsbrewshhomebrewa">Install via <a href="https://brew.sh/">Homebrew</a></a></h4>
+<ol>
+<li><code>brew tap southbanksoftware/proofable</code></li>
+<li><code>brew install proofable-cli</code></li>
+</ol>
+<p>Later on, you can upgrade to the latest version using: <code>brew upgrade proofable-cli</code></p>
+<h4><a class="header" href="#install-directly" id="install-directly">Install directly</a></h4>
+<p>Copy and paste the following bash command in a <a href="https://support.apple.com/en-au/guide/terminal/welcome/mac">macOS Terminal</a>:</p>
+<pre><code class="language-bash">bash -c &quot;$(eval &quot;$(if [[ $(command -v curl) ]]; then echo &quot;curl -fsSL&quot;; else echo &quot;wget -qO-&quot;; fi) https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.sh&quot;)&quot;
+</code></pre>
+<p>Then hit return to run, which will install the latest <code>proofable-cli</code> binary into <code>/usr/local/bin</code>. Then you can use the CLI as:</p>
+<pre><code class="language-bash">proofable-cli -h
+</code></pre>
+<p>If you want to install the latest dev (cutting edge) binary, using:</p>
+<pre><code class="language-bash">ENV=dev bash -c &quot;$(eval &quot;$(if [[ $(command -v curl) ]]; then echo &quot;curl -fsSL&quot;; else echo &quot;wget -qO-&quot;; fi) https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.sh&quot;)&quot;
+</code></pre>
+<p>To upgrade, simply repeat the installation steps</p>
+<h3><a class="header" href="#for-linux-users" id="for-linux-users">For Linux users</a></h3>
+<h4><a class="header" href="#install-directly-1" id="install-directly-1">Install directly</a></h4>
+<p>Copy and paste the following bash command in a <a href="https://ubuntu.com/tutorials/command-line-for-beginners#1-overview">Linux shell prompt</a>:</p>
+<pre><code class="language-bash">sudo bash -c &quot;$(eval &quot;$(if [[ $(command -v curl) ]]; then echo &quot;curl -fsSL&quot;; else echo &quot;wget -qO-&quot;; fi) https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.sh&quot;)&quot;
+</code></pre>
+<p>Then hit return to run, which will install the latest <code>proofable-cli</code> binary into <code>/usr/local/bin</code>. Then you can use the CLI as:</p>
+<pre><code class="language-bash">proofable-cli -h
+</code></pre>
+<p>If you want to install the latest dev (cutting edge) binary, using:</p>
+<pre><code class="language-bash">sudo ENV=dev bash -c &quot;$(eval &quot;$(if [[ $(command -v curl) ]]; then echo &quot;curl -fsSL&quot;; else echo &quot;wget -qO-&quot;; fi) https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.sh&quot;)&quot;
+</code></pre>
+<p>To upgrade, simply repeat the installation steps</p>
+<h3><a class="header" href="#for-windows-users" id="for-windows-users">For Windows users</a></h3>
+<h4><a class="header" href="#install-directly-2" id="install-directly-2">Install directly</a></h4>
+<p>Copy and paste the following PowerShell command in a <a href="https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7">PowerShell prompt</a>:</p>
+<pre><code class="language-powershell">&amp; ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.ps1')))
+</code></pre>
+<p>Then hit return to run, which will install the latest <code>proofable-cli.exe</code> binary into your current directory. Then you can use the CLI as:</p>
+<pre><code class="language-powershell">.\proofable-cli.exe -h
+</code></pre>
+<p>If you want to install the latest dev (cutting edge) binary, using:</p>
+<pre><code class="language-bash">&amp; ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.ps1'))) &quot;dev&quot;
+</code></pre>
+<p>To upgrade, simply repeat the installation steps</p>
+<h4><a class="header" href="#install-directly-in-windows-subsystem-for-linux-wsl" id="install-directly-in-windows-subsystem-for-linux-wsl">Install directly in Windows Subsystem for Linux (WSL)</a></h4>
+<p>Follow the <a href="cli/installation.html#for-linux-users">same steps</a> for Linux users</p>
+<h3><a class="header" href="#build-your-own-binary" id="build-your-own-binary">Build your own binary</a></h3>
+<ol>
+<li>make sure the latest golang is installed</li>
+<li>clone this repo</li>
+<li><code>cd cmd/proofable-cli &amp;&amp; make</code></li>
+</ol>
+<h3><a class="header" href="#dev-cutting-edge-binaries" id="dev-cutting-edge-binaries">Dev (cutting-edge) binaries</a></h3>
+<ul>
+<li><a href="https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_darwin_amd64.tar.gz">mac</a></li>
+<li><a href="https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_linux_amd64.tar.gz">linux</a></li>
+<li><a href="https://storage.googleapis.com/provendb-dev/proofable-cli/proofable-cli_windows_amd64.zip">windows</a></li>
+</ul>
+<h3><a class="header" href="#prd-released-binaries" id="prd-released-binaries">Prd (released) binaries</a></h3>
+<ul>
+<li><a href="https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_darwin_amd64.tar.gz">mac</a></li>
+<li><a href="https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_linux_amd64.tar.gz">linux</a></li>
+<li><a href="https://storage.googleapis.com/provendb-prd/proofable-cli/proofable-cli_windows_amd64.zip">windows</a></li>
+</ul>
+<h1><a class="header" href="#usage" id="usage">Usage</a></h1>
+<pre><code class="language-bash"># for help
+./proofable-cli -h
+
+# authenticate with ProvenDB. You don't have to explicitly run this. When you execute a command that requires authentication, it will be automatically run
+./proofable-cli auth
+
+# remove existing authentication
+./proofable-cli auth -d
+
+# create a proof for a path
+./proofable-cli create proof path/to/the/data
+
+# create a proof for a path in a custom location
+./proofable-cli create proof path/to/the/data -p path/to/output/the/proof.pxproof
+
+# create a proof for a path including metadata
+./proofable-cli create proof path/to/the/data --include-metadata
+
+# verify a proof for a path
+./proofable-cli verify proof path/to/the/data
+
+# verify a proof for a path and output the proof's Graphviz Dot Graph
+./proofable-cli verify proof path/to/the/data -d path/to/output/the/dot/graph.dot
+
+# verify a proof for a path from a custom location
+./proofable-cli verify proof path/to/the/data -p path/to/the/proof.pxproof
+
+# create a subproof out of a proof
+./proofable-cli create subproof key1_of_the_proof key2_of_the_proof -p path/to/the/proof.pxproof -s path/to/output/the/subproof.pxsubproof
+
+# verify a subproof for a path
+./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof
+
+# verify a subproof for a path and output the subproof's Graphviz Dot Graph
+./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof -d path/to/output/the/dot/graph.dot
+</code></pre>
+<h1><a class="header" href="#go-sdk" id="go-sdk">Go SDK</a></h1>
+<p><a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc"><img src="https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&amp;logoColor=white&amp;style=flat-square" alt="go.dev reference" /></a>
+<a href="https://goreportcard.com/report/github.com/SouthbankSoftware/proofable"><img src="https://goreportcard.com/badge/github.com/SouthbankSoftware/proofable?style=flat-square" alt="Go Report Card" /></a></p>
+<p>Proofable Go SDK is the software development kit to help users build solutions around <code>proofable-api</code> service using Golang. It includes helpers to perform authentication, consume the Proofable stream-based gRPC APIs, handle file input and output, hash and diff data and build command line interface</p>
+<ul>
+<li><a href="https://github.com/SouthbankSoftware/proofable">GitHub</a></li>
+</ul>
+<h1><a class="header" href="#getting-started" id="getting-started">Getting started</a></h1>
+<p>To add the Proofable package to your Golang project, just run:</p>
+<pre><code class="language-go">go get github.com/SouthbankSoftware/proofable
+</code></pre>
+<p>Now, let's go through a hello world example to:</p>
+<ul>
+<li>
+<p>create a Proofable API client</p>
+</li>
+<li>
+<p>prove a bunch of key-values to Ethereum Testnet within a minute</p>
+</li>
+<li>
+<p>create a proof for them</p>
+</li>
+<li>
+<p>verify the proof</p>
+</li>
+<li>
+<p>extract a subproof for just one key-value out of the proof</p>
+</li>
+<li>
+<p>verify the subproof independently</p>
+</li>
+</ul>
+<p>The packages in <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg"><code>pkg</code></a> altogether resembles a Go SDK for Proofable, which provides great convenience when consuming <code>proofable-api</code></p>
+<p>You can find the complete example source code <a href="https://github.com/SouthbankSoftware/proofable/examples/example.go">here</a>, which can be run as:</p>
+<pre><code class="language-go">go run examples/example.go
+</code></pre>
+<h2><a class="header" href="#step-1-authenticate-with-provendb" id="step-1-authenticate-with-provendb">Step 1: authenticate with ProvenDB</a></h2>
+<p>This step will authenticate with ProvenDB so you can access <code>proofable-api</code>. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at <code>~/Library/Application\ Support/ProvenDB/auth.json</code>. The next time, when you invoke <code>AuthenticateForGRPC</code>, it will automatically use the saved token without prompting you to go through the authentication steps again. You can find more details from <a href="https://github.com/SouthbankSoftware/proofable/blob/master/pkg/auth/auth.go">here</a>. Please note that this authenticaton method is temporary, which will be replaced by an API key soon</p>
+<pre><code class="language-go">creds, err := authcli.AuthenticateForGRPC(ctx,
+    &quot;https://apigateway.provendb.com&quot;,
+    true,
+    &quot;&quot;,
+)
+</code></pre>
+<h2><a class="header" href="#step-2-create-a-proofable-api-client" id="step-2-create-a-proofable-api-client">Step 2: create a Proofable API client</a></h2>
+<p>This step creates a Proofable API gRPC client (<code>cli</code>) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#NewAPIClient"><code>NewAPIClient</code></a>, but in that case, you have to manually destroy the client after use</p>
+<pre><code class="language-go">api.WithAPIClient(
+    &quot;api.provendb.com:443&quot;,
+    creds,
+    func(cli apiPB.APIServiceClient) error {
+        // make use of the `cli` in this closure
+    })
+</code></pre>
+<h2><a class="header" href="#step-3-create-an-empty-trie" id="step-3-create-an-empty-trie">Step 3: create an empty trie</a></h2>
+<p>This step creates an empty <a href="go_sdk/./../concepts/trie.html">trie</a>, which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#CreateTrie"><code>CreateTrie</code></a>, but in that case, you have to manually destroy the trie using <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#DeleteTrie"><code>DeleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it</p>
+<pre><code class="language-go">api.WithTrie(ctx, cli, func(id, root string) error {
+    // make use of the trie, identified by the `id`, in this closure. The root will always be 0000000000000000000000000000000000000000000000000000000000000000 for an empty trie
+})
+</code></pre>
+<h2><a class="header" href="#step-4-set-the-key-values-we-want-to-prove" id="step-4-set-the-key-values-we-want-to-prove">Step 4: set the key-values we want to prove</a></h2>
+<p>This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#GetTrieKeyValues"><code>GetTrieKeyValues</code></a>, they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#SetTrieKeyValues"><code>SetTrieKeyValues</code></a> calls as a way to build up a large trie incrementally</p>
+<pre><code class="language-go">root, err := api.SetTrieKeyValues(ctx, cli, id, root,
+    []*apiPB.KeyValue{
+        {Key: []byte(&quot;balcony/wind/speed&quot;), Value: []byte(&quot;11km/h&quot;)},
+        {Key: []byte(&quot;balcony/wind/direction&quot;), Value: []byte(&quot;N&quot;)},
+        {Key: []byte(&quot;living_room/temp&quot;), Value: []byte(&quot;24.8℃&quot;)},
+        {Key: []byte(&quot;living_room/Co2&quot;), Value: []byte(&quot;564ppm&quot;)},
+    })
+</code></pre>
+<h2><a class="header" href="#step-5-create-a-proof-for-the-key-values" id="step-5-create-a-proof-for-the-key-values">Step 5: create a proof for the key-values</a></h2>
+<p>This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum (<a href="go_sdk/../grpc/anchor_service.html#anchortype"><code>ETH</code></a>). Please refer to <a href="go_sdk/../concepts/anchor_types.html">this</a> for all available anchor types. The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in</p>
+<pre><code class="language-go">triePf, err := api.CreateTrieProof(ctx, cli, id, root, anchorPB.Anchor_ETH)
+</code></pre>
+<h2><a class="header" href="#step-6-wait-for-the-proof-to-be-anchored-to-ethereum" id="step-6-wait-for-the-proof-to-be-anchored-to-ethereum">Step 6: wait for the proof to be anchored to Ethereum</a></h2>
+<p>This step waits the proof we have just created until it is anchored to Ethereum, during which we output the anchoring progress</p>
+<pre><code class="language-go">tpCH, errCH := api.SubscribeTrieProof(ctx, cli, id, triePf.GetId())
+
+for tp := range tpCH {
+    log.Printf(&quot;Anchoring proof: %s\n&quot;, tp.GetStatus())
+    triePf = tp
+
+    if tp.GetStatus() == anchorPB.Batch_ERROR {
+        return errors.New(tp.GetError())
+    }
+}
+
+// always check error from the error channel
+err = &lt;-errCH
+</code></pre>
+<h2><a class="header" href="#step-7-verify-the-proof" id="step-7-verify-the-proof">Step 7: verify the proof</a></h2>
+<p>This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof</p>
+<pre><code class="language-go">kvCH, rpCH, errCH := api.VerifyTrieProof(ctx, cli, id, triePf.GetId(),
+    true, &quot;proof.dot&quot;)
+
+// strip the anchor trie part from each key
+kvCH = api.InterceptKeyValueStream(ctx, kvCH,
+    api.StripCompoundKeyAnchorTriePart)
+
+log.Println(&quot;key-values contained in the proof:&quot;)
+for kv := range kvCH {
+    log.Printf(&quot;\t%s -&gt; %s\n&quot;,
+        strutil.String(kv.Key), strutil.String(kv.Value))
+}
+
+// always check error from the error channel
+err = &lt;-errCH
+if err != nil {
+    return err
+}
+
+rp := &lt;-rpCH
+if !rp.GetVerified() {
+    return fmt.Errorf(&quot;falsified proof: %s&quot;, rp.GetError())
+}
+
+log.Printf(&quot;the proof with a root hash of %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s\n&quot;,
+    triePf.GetProofRoot(),
+    triePf.GetAnchorType(),
+    triePf.GetBlockNumber(),
+    triePf.GetTxnId(),
+    time.Unix(int64(triePf.GetBlockTime()), 0).Format(time.UnixDate),
+    triePf.GetTxnUri(),
+)
+</code></pre>
+<p>This step will output the key-values contained in the proof:</p>
+<pre><code class="language-zsh">balcony/wind/direction -&gt; N
+balcony/wind/speed -&gt; 11km/h
+living_room/Co2 -&gt; 564ppm
+living_room/temp -&gt; 24.8℃
+</code></pre>
+<p>and a summary:</p>
+<pre><code class="language-zsh">the proof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH in block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue Mar 31 15:33:10 AEDT 2020, which can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232
+</code></pre>
+<p>and a Graphviz Dot Graph (<code>proof.dot</code>):</p>
+<p><img src="go_sdk/../images/example_proof.svg" alt="Proof Dot Graph" /></p>
+<h2><a class="header" href="#step-8-extract-a-subproof-for-just-one-key-value-out-of-the-proof" id="step-8-extract-a-subproof-for-just-one-key-value-out-of-the-proof">Step 8: extract a subproof for just one key-value out of the proof</a></h2>
+<p>This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key <code>living_room/Co2</code> only and nothing else. A subproof file named <code>living_room_Co2.subproofable</code> will be created in current working directory. You could also create a subproof for multiple key-values</p>
+<pre><code class="language-go">api.CreateKeyValuesProof(ctx, cli, id, triePf.GetId(),
+    &amp;apiPB.KeyValuesFilter{
+        Keys: []*apiPB.Key{
+            {Key: []byte(&quot;living_room/Co2&quot;)},
+        },
+    },
+    &quot;living_room_Co2.subproofable&quot;)
+</code></pre>
+<h2><a class="header" href="#step-9-verify-the-subproof-independently" id="step-9-verify-the-subproof-independently">Step 9: verify the subproof independently</a></h2>
+<p>This step independently verifies the subproof we have just created. The only thing needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof</p>
+<pre><code class="language-go">kvCH, rpCH, errCH := api.VerifyKeyValuesProof(ctx, cli,
+    &quot;living_room_Co2.subproofable&quot;,
+    true, &quot;living_room_Co2_subproof.dot&quot;)
+
+// strip the anchor trie part from each key
+kvCH = api.InterceptKeyValueStream(ctx, kvCH,
+    api.StripCompoundKeyAnchorTriePart)
+
+log.Println(&quot;key-values contained in the subproof:&quot;)
+for kv := range kvCH {
+    log.Printf(&quot;\t%s -&gt; %s\n&quot;,
+        strutil.String(kv.Key), strutil.String(kv.Value))
+}
+
+// always check error from the error channel
+err = &lt;-errCH
+if err != nil {
+    return err
+}
+
+rp := &lt;-rpCH
+if !rp.GetVerified() {
+    return fmt.Errorf(&quot;falsified subproof: %s&quot;, rp.GetError())
+}
+
+et, err := api.GetEthTrieFromKeyValuesProof(&quot;living_room_Co2.subproofable&quot;)
+if err != nil {
+    return err
+}
+merkleRoot := hex.EncodeToString(et.Root())
+
+log.Printf(&quot;the subproof with a root hash of %s is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s\n&quot;,
+    merkleRoot,
+    et.AnchorType,
+    et.BlockNumber,
+    et.TxnID,
+    time.Unix(int64(et.BlockTime), 0).Format(time.UnixDate),
+    et.TxnURI,
+)
+</code></pre>
+<p>This step will output the key-values contained in the subproof:</p>
+<pre><code class="language-zsh">living_room/Co2 -&gt; 564ppm
+</code></pre>
+<p>and a summary:</p>
+<pre><code class="language-zsh">the subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH in block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue Mar 31 15:33:10 AEDT 2020, which can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232
+</code></pre>
+<p>and a Graphviz Dot Graph (<code>living_room_Co2_subproof.dot</code>):</p>
+<p><img src="go_sdk/../images/example_subproof.svg" alt="Subproof Dot Graph" /></p>
+<h1><a class="header" href="#examples" id="examples">Examples</a></h1>
+<p>Here are some more examples to help you with the Proofable Go SDK</p>
+<ul>
+<li>
+<p><a href="https://github.com/SouthbankSoftware/proofable/examples">Go SDK Examples</a>: source code of complete and runnable examples</p>
+</li>
+<li>
+<p><a href="https://github.com/SouthbankSoftware/proofable-image">ProofableImage</a>: builds trust into your image by creating a blockchain certificate for it. The image certificate can not only prove the image as a whole but also prove the pixel boxes and the metadata inside it. For more details, please read through this <a href="https://medium.com/@guiguan/build-trust-into-image-with-blockchain-4894c39bde7f">Medium post</a>.</p>
 </li>
 </ul>
 <h1><a class="header" href="#reference" id="reference">Reference</a></h1>
@@ -181,6 +532,297 @@ if (!window.location.href.endsWith("/print.html")) {
     window.location.replace("https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc");
 }
 </script>
+<h1><a class="header" href="#node-sdk" id="node-sdk">Node SDK</a></h1>
+<p><a href="https://www.npmjs.com/package/proofable"><img src="https://img.shields.io/npm/v/proofable?style=flat-square" alt="NPM Package" /></a></p>
+<p>Proofable Node SDK is the software development kit to help users build solutions around <code>proofable-api</code> service using Node. It provides a set of promise-based APIs as well as more advanced callback and stream based APIs for dealing with the service. The promise-based APIs are convenient to be consumed in most use cases, while the callback and stream based APIs support more advanced features such as canceling and per-call gRPC options.</p>
+<ul>
+<li><a href="https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk">GitHub</a></li>
+</ul>
+<h1><a class="header" href="#getting-started-1" id="getting-started-1">Getting started</a></h1>
+<ol>
+<li>
+<p><code>npm i proofable</code>. We recommend the Node LTS versions: v12.16.3+</p>
+</li>
+<li>
+<p>create an authentication token using: <code>./proofable-cli auth</code>. You can find details from <a href="node_sdk/./typescript_example.html#step-1-authenticate-with-provendb">here</a></p>
+</li>
+<li>
+<p>import <a href="https://www.npmjs.com/package/proofable">Proofable package</a></p>
+<pre><code class="language-typescript">import { newAPIClient, Anchor, Key /* and more */ } from &quot;proofable&quot;;
+</code></pre>
+</li>
+<li>
+<p>create a Proofable API client</p>
+<pre><code class="language-typescript">const client = newAPIClient(&quot;api.proofable.io:443&quot;);
+</code></pre>
+</li>
+<li>
+<p>create a <a href="node_sdk/../concepts/trie.html">trie</a> from data</p>
+<pre><code class="language-typescript">const trie = await client.createTrieFromKeyValues(
+  dataToKeyValues({
+    &quot;balcony/wind/speed&quot;: &quot;11km/h&quot;,
+    &quot;balcony/wind/direction&quot;: &quot;N&quot;,
+    &quot;living_room/temp&quot;: &quot;24.8℃&quot;,
+    &quot;living_room/Co2&quot;: &quot;564ppm&quot;,
+  })
+);
+</code></pre>
+</li>
+<li>
+<p>anchor the trie to a blockchain that is <a href="node_sdk/../concepts/anchor_types.html">supported by Proofable</a>. Here we use <a href="https://www.hedera.com/">Hedera</a> testnet, as it is cool and fast</p>
+<pre><code class="language-typescript">const trieProof = await client.anchorTrie(trie, Anchor.Type.HEDERA);
+
+console.dir(trieProof.toObject());
+</code></pre>
+<p><img src="node_sdk/../images/example_basic_anchor_trie.png" alt="Anchor Trie Example" /></p>
+</li>
+<li>
+<p>export the trie for later use. This trie file is a self-contained certificate that can be used later on to do all sorts of manipulations, including verifiying the data</p>
+<pre><code class="language-typescript">await client.exportTrie(trieId, &quot;./example.proofable&quot;);
+</code></pre>
+</li>
+<li>
+<p>import and verify the trie we just exported. Note that in order to use this convenient and efficient verification API, we have to ensure the original key-values are sorted. This sorting can be done efficiently in real world case, e.g. when querying a database</p>
+<pre><code class="language-typescript">const result = await client.importAndVerifyTrieWithSortedKeyValues(
+  &quot;./example.proofable&quot;,
+  sortKeyValues(
+    dataToKeyValues({
+      &quot;balcony/wind/speed&quot;: &quot;11km/h&quot;,
+      &quot;balcony/wind/direction&quot;: &quot;N&quot;,
+      &quot;living_room/temp&quot;: &quot;24.8℃&quot;,
+      &quot;living_room/Co2&quot;: &quot;564ppm&quot;,
+    })
+  ),
+  undefined,
+  &quot;./example.proofable.dot&quot;
+);
+
+console.dir(result);
+</code></pre>
+<p><img src="node_sdk/../images/example_basic_import_and_verify_trie.png" alt="Import and Verify Trie Example" /></p>
+<p><img src="node_sdk/../images/example_basic_proof_dot.svg" alt="Proof Dot Graph Example" /></p>
+</li>
+<li>
+<p>create a key-values proof for the data subset directly from the already proved trie. This proof file is a self-contained certificate that proves the data subset</p>
+<pre><code class="language-typescript">await client.createKeyValuesProof(
+  result.trie!.id,
+  result.proof.id!,
+  KeyValuesFilter.from([
+    Key.from(&quot;balcony/wind/speed&quot;),
+    Key.from(&quot;living_room/Co2&quot;),
+  ]),
+  /*
+  or you can directly use `KeyValue`s:
+  KeyValuesFilter.from(
+    dataToKeyValues({
+      &quot;balcony/wind/speed&quot;: &quot;11km/h&quot;,
+      &quot;living_room/Co2&quot;: &quot;564ppm&quot;,
+    })
+  )
+  */
+  &quot;./example.subproofable&quot;
+);
+</code></pre>
+</li>
+<li>
+<p>verify the key-values proof we just created. Again, we need to sort the original data subset</p>
+<pre><code class="language-typescript">const result = await client.verifyKeyValuesProofWithSortedKeyValues(
+  &quot;./example.subproofable&quot;,
+  sortKeyValues(
+    dataToKeyValues({
+      &quot;balcony/wind/speed&quot;: &quot;11km/h&quot;,
+      &quot;living_room/Co2&quot;: &quot;564ppm&quot;,
+    })
+  ),
+  &quot;./example.subproofable.dot&quot;
+);
+
+console.dir(result);
+</code></pre>
+<p>As you can see, the <code>trie</code> and <code>proof.id</code> are <code>undefined</code> comparing to previous output, which indicates that the key-values proof is independent of any tries</p>
+<p><img src="node_sdk/../images/example_basic_verify_key_values_proof.png" alt="Verify Key-values Proof Example" /></p>
+<p><img src="node_sdk/../images/example_basic_subproof_dot.svg" alt="Subproof Dot Graph Example" /></p>
+</li>
+</ol>
+<p>You can find the complete source code of this guide from <a href="https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/typescript_basic.ts">here</a>, which can be run as:</p>
+<pre><code class="language-zsh">npm run example-basic
+</code></pre>
+<h1><a class="header" href="#examples-1" id="examples-1">Examples</a></h1>
+<p>Here are some more examples to help you with the Proofable Node SDK</p>
+<ul>
+<li><a href="https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk/src/examples">Node SDK Examples</a>: source code of complete and runnable examples
+<ul>
+<li><a href="node_sdk/./typescript_example.html">Typescript Example</a>: a detailed example written in TypeScript</li>
+</ul>
+</li>
+</ul>
+<h1><a class="header" href="#typescript-example" id="typescript-example">TypeScript Example</a></h1>
+<p>This is a detailed example written in TypeScript that demonstrates how to:</p>
+<ul>
+<li>
+<p>create a Proofable API client</p>
+</li>
+<li>
+<p>prove a bunch of key-values to Ethereum Testnet within a minute</p>
+</li>
+<li>
+<p>create a proof for them</p>
+</li>
+<li>
+<p>verify the proof</p>
+</li>
+<li>
+<p>extract a subproof for just one key-value out of the proof</p>
+</li>
+<li>
+<p>verify the subproof independently</p>
+</li>
+</ul>
+<p>You can find the complete example source code <a href="https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/typescript.ts">here</a>, which can be run as:</p>
+<pre><code class="language-zsh">npm run example
+</code></pre>
+<p>You can also find the Javascript version <a href="https://github.com/SouthbankSoftware/proofable/blob/master/node_sdk/src/examples/javascript.js">here</a>, which can be run as:</p>
+<pre><code class="language-zsh">npm run example-js
+</code></pre>
+<h2><a class="header" href="#step-1-authenticate-with-provendb-1" id="step-1-authenticate-with-provendb-1">Step 1: authenticate with ProvenDB</a></h2>
+<p>This step will authenticate with ProvenDB so you can access <code>proofable-api</code>. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at <code>~/Library/Application\ Support/ProvenDB/auth.json</code>. You can find more etails from <a href="https://docs.proofable.io/node_sdk/reference/index.html#getauthmetadata">here</a>. Please note that this authenticaton method is temporary, which will be replaced by an API key soon</p>
+<ol>
+<li>download <a href="node_sdk/../cli/installation.html"><code>proofable-cli</code></a></li>
+<li>sign in/up to ProvenDB: <code>./proofable-cli auth</code></li>
+<li>you are all set. You only need to do this once</li>
+</ol>
+<h2><a class="header" href="#step-2-create-a-proofable-api-client-1" id="step-2-create-a-proofable-api-client-1">Step 2: create a Proofable API client</a></h2>
+<p>This step creates a Proofable API gRPC <a href="https://docs.proofable.io/node_sdk/reference/classes/_index_.apiclient.html"><code>client</code></a>. After using the client, you can destroy the client using <a href="https://docs.proofable.io/node_sdk/reference/classes/_index_.apiclient.html#close"><code>client.close()</code></a></p>
+<pre><code class="language-typescript">const client = newAPIClient(&quot;api.proofable.io:443&quot;);
+</code></pre>
+<h2><a class="header" href="#step-3-create-an-empty-trie-1" id="step-3-create-an-empty-trie-1">Step 3: create an empty trie</a></h2>
+<p>This step creates an empty <a href="node_sdk/../concepts/trie.html">trie</a> with root <code>0000000000000000000000000000000000000000000000000000000000000000</code>, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using <a href="https://docs.proofable.io/node_sdk/reference/classes/_index_.apiclient.html#deletetrie"><code>deleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it</p>
+<pre><code class="language-typescript">let trie = await client.createTrie();
+</code></pre>
+<h2><a class="header" href="#step-4-set-the-key-values-we-want-to-prove-1" id="step-4-set-the-key-values-we-want-to-prove-1">Step 4: set the key-values we want to prove</a></h2>
+<p>This step sets a bunch of key-values that we want to prove in the trie we have just created. In the example, they are my home sensor readings. Both key and value can be arbitrary binaries. They key order doesn't matter. When getting key-values from the trie, e.g. <a href="https://docs.proofable.io/node_sdk/reference/classes/_index_.apiclient.html#gettriekeyvalues"><code>getTrieKeyValues</code></a>, they will always be sorted according to the key's alphabetical order. When setting key-values, you can also make multiple <a href="https://docs.proofable.io/node_sdk/reference/classes/_index_.apiclient.html#settriekeyvalues"><code>setTrieKeyValues</code></a> calls as a way to build up a large trie incrementally</p>
+<pre><code class="language-typescript">trie = await client.setTrieKeyValues(trie.getId(), trie.getRoot(), [
+  KeyValue.from(&quot;balcony/wind/speed&quot;, &quot;11km/h&quot;),
+  KeyValue.from(&quot;balcony/wind/direction&quot;, &quot;N&quot;),
+  KeyValue.from(&quot;living_room/temp&quot;, &quot;24.8℃&quot;),
+  KeyValue.from(&quot;living_room/Co2&quot;, &quot;564ppm&quot;),
+]);
+</code></pre>
+<h2><a class="header" href="#step-5-create-a-proof-for-the-key-values-1" id="step-5-create-a-proof-for-the-key-values-1">Step 5: create a proof for the key-values</a></h2>
+<p>This step creates a proof, a.k.a. trie proof, to prove the trie at the given root to Ethereum (<a href="node_sdk/../grpc/anchor_service.html#anchortype"><code>ETH</code></a>). Please refer to <a href="node_sdk/../concepts/anchor_types.html">this</a> for all available anchor types. The trie at the given root contains all the key-values we want to prove. When the trie is proven, so are the key-values contained in</p>
+<pre><code class="language-typescript">let trieProof = await client.createTrieProof(
+  trie.getId(),
+  trie.getRoot(),
+  Anchor.Type.ETH
+);
+</code></pre>
+<h2><a class="header" href="#step-6-wait-for-the-proof-to-be-anchored-to-ethereum-1" id="step-6-wait-for-the-proof-to-be-anchored-to-ethereum-1">Step 6: wait for the proof to be anchored to Ethereum</a></h2>
+<p>This step waits for the proof we have just created until it is anchored to Ethereum, during which we output the anchoring progress</p>
+<pre><code class="language-typescript">for await (const tp of client.subscribeTrieProof(
+  trie.getId(),
+  trieProof.getId()
+)) {
+  console.log(&quot;Anchoring proof: %s&quot;, Batch.StatusName[tp.getStatus()]);
+  trieProof = tp;
+
+  if (tp.getStatus() === Batch.Status.ERROR) {
+    throw new Error(tp.getError());
+  }
+}
+</code></pre>
+<h2><a class="header" href="#step-7-verify-the-proof-1" id="step-7-verify-the-proof-1">Step 7: verify the proof</a></h2>
+<p>This step verifies the proof we have just created. The verification is supposed to be run at any time after the proof has been created and when we want to make sure our proof is valid as well as retrieving information out from the proof</p>
+<pre><code class="language-typescript">for await (const val of client.verifyTrieProof(
+  trie.getId(),
+  trieProof.getId(),
+  true,
+  &quot;proof.dot&quot;
+)) {
+  if (val instanceof VerifyProofReply) {
+    if (!val.getVerified()) {
+      console.error(&quot;falsified proof: %s&quot;, val.getError());
+      return;
+    }
+  } else {
+    // strip the anchor trie part from each key
+    const kv = stripCompoundKeyAnchorTriePart(val).to();
+
+    console.log(&quot;\t%s -&gt; %s&quot;, kv.key, kv.val);
+  }
+}
+
+console.log(
+  &quot;\nthe proof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s&quot;,
+  trieProof.getRoot(),
+  Anchor.TypeName[trieProof.getAnchorType()],
+  trieProof.getBlockNumber(),
+  trieProof.getTxnId(),
+  new Date(trieProof.getBlockTime() * 1000).toUTCString(),
+  trieProof.getTxnUri()
+);
+</code></pre>
+<p>This step will output the key-values contained in the proof:</p>
+<pre><code class="language-zsh">balcony/wind/direction -&gt; N
+balcony/wind/speed -&gt; 11km/h
+living_room/Co2 -&gt; 564ppm
+living_room/temp -&gt; 24.8℃
+</code></pre>
+<p>and a summary:</p>
+<pre><code class="language-zsh">the proof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH in block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue, 31 Mar 2020 15:33:10 AEDT, which can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232
+</code></pre>
+<p>and a Graphviz Dot Graph (<code>proof.dot</code>):</p>
+<p><img src="https://github.com/SouthbankSoftware/proofable/raw/master/docs/images/example_proof.svg" alt="Proof Dot Graph" /></p>
+<h2><a class="header" href="#step-8-extract-a-subproof-for-just-one-key-value-out-of-the-proof-1" id="step-8-extract-a-subproof-for-just-one-key-value-out-of-the-proof-1">Step 8: extract a subproof for just one key-value out of the proof</a></h2>
+<p>This step extracts a subproof, a.k.a. key-values proof, out of the proof we have just created. The subproof proves the key <code>living_room/Co2</code> only and nothing else. A subproof file named <code>living_room_Co2.subproofable</code> will be created in current working directory. You could also create a subproof for multiple key-values</p>
+<pre><code class="language-typescript">await client.createKeyValuesProof(
+  trie.getId(),
+  trieProof.getId(),
+  KeyValuesFilter.from([Key.from(&quot;living_room/Co2&quot;)]),
+  &quot;living_room_Co2.subproofable&quot;
+);
+</code></pre>
+<h2><a class="header" href="#step-9-verify-the-subproof-independently-1" id="step-9-verify-the-subproof-independently-1">Step 9: verify the subproof independently</a></h2>
+<p>This step independently verifies the subproof we have just created. The only thing needed in order to verify the subproof is the subproof file itself. The verification is supposed to be run at any time after the subproof has been created and when we want to make sure our subproof is valid as well as retrieving information out from the subproof</p>
+<pre><code class="language-typescript">for await (const val of client.verifyKeyValuesProof(
+  &quot;living_room_Co2.subproofable&quot;,
+  true,
+  &quot;living_room_Co2_subproof.dot&quot;
+)) {
+  if (val instanceof VerifyProofReply) {
+    if (!val.getVerified()) {
+      console.error(&quot;falsified subproof: %s&quot;, val.getError());
+      return;
+    }
+  } else {
+    // strip the anchor trie part from each key
+    const kv = stripCompoundKeyAnchorTriePart(val).to();
+
+    console.log(&quot;\t%s -&gt; %s&quot;, kv.key, kv.val);
+  }
+}
+
+const ethTrie = await getEthTrieFromKeyValuesProof(
+  &quot;living_room_Co2.subproofable&quot;
+);
+
+console.log(
+  &quot;\nthe subproof with a root hash of %s is anchored to %s in block %s with transaction %s on %s, which can be viewed at %s&quot;,
+  ethTrie.root,
+  ethTrie.anchorType,
+  ethTrie.blockNumber,
+  ethTrie.txnId,
+  new Date(ethTrie.blockTime * 1000).toUTCString(),
+  ethTrie.txnUri
+);
+</code></pre>
+<p>This step will output the key-values contained in the subproof:</p>
+<pre><code class="language-zsh">living_room/Co2 -&gt; 564ppm
+</code></pre>
+<p>and a summary:</p>
+<pre><code class="language-zsh">the subproof with a root hash of 4711b3b18e379dbdfabd6440428d20cae5784a518605acec48e126e33383f24e is anchored to ETH in block 6231667 with transaction 8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232 at Tue, 31 Mar 2020 15:33:10 AEDT, which can be viewed at https://rinkeby.etherscan.io/tx/0x8e26def59e1a7289e6c322bc49ee4f23f015c17cebafa53c19b6e34561270232
+</code></pre>
+<p>and a Graphviz Dot Graph (<code>living_room_Co2_subproof.dot</code>):</p>
+<p><img src="https://github.com/SouthbankSoftware/proofable/raw/master/docs/images/example_subproof.svg" alt="Subproof Dot Graph" /></p>
 <h1><a class="header" href="#reference-1" id="reference-1">Reference</a></h1>
 <p><a href="node_sdk/../node_sdk/reference/index.html">Proofable Node SDK Reference</a></p>
 <script type="text/javascript">
@@ -188,6 +830,14 @@ if (!window.location.href.endsWith("/print.html")) {
     window.location.replace("../node_sdk/reference/index.html");
 }
 </script>
+<h1><a class="header" href="#grpc" id="grpc">gRPC</a></h1>
+<p>gRPC is the modern wire protocol that connects client applications with Proofable services. Although you can directly consume the gRPC APIs to use Proofable in any language that supports gRPC, we recommend you to use the available Proofable SDK for your language</p>
+<ul>
+<li><a href="https://github.com/SouthbankSoftware/proofable/tree/master/pkg/protos">GitHub</a></li>
+</ul>
+<h1><a class="header" href="#demo-1" id="demo-1">Demo</a></h1>
+<p>This demo shows how to consume the raw gRPC APIs via <a href="https://github.com/ktr0731/evans">evans</a> to prove 3 key-values</p>
+<script id="asciicast-346588" data-autoplay="true" src="https://asciinema.org/a/346588.js" async></script>
 <h1><a class="header" href="#api-service" id="api-service">API Service</a></h1>
 <p>API Service is a general purpose proving service that is fast and effective.
 It provides a set of APIs to manipulate trie structures and generate
@@ -306,10 +956,10 @@ that key-value</p>
 <tr><td>trie_id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>TrieId is the trie ID</td></tr>
 <tr><td>root</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>Root is the root hash to set to</td></tr>
 </tbody></table>
-<h3><a class="header" href="#trie" id="trie">Trie</a></h3>
+<h3><a class="header" href="#trie-1" id="trie-1">Trie</a></h3>
 <p>Trie represents a dictionary of key-values that can be built incrementally,
 whose root hash at any given time can be also dervied efficiently. Once the
-root hash is proven to a Blockchain, every key-value is also proven</p>
+root hash is proven to a blockchain, every key-value is also proven</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>Id is the trie ID</td></tr>
 <tr><td>root</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>Root is the root hash of the trie</td></tr>
@@ -339,11 +989,11 @@ viewed as a snapshot of all the key-values contained in the trie</p>
 <tr><td>status</td><td><a href="grpc/api_service.html#anchor.Batch.Status">anchor.Batch.Status</a></td><td></td><td>Status is the anchor batch status of the trie proof</td></tr>
 <tr><td>error</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>Error is the error message when status is ERROR</td></tr>
 <tr><td>anchor_type</td><td><a href="grpc/api_service.html#anchor.Anchor.Type">anchor.Anchor.Type</a></td><td></td><td>AnchorType is the anchor type the trie proof has been submitted to</td></tr>
-<tr><td>txn_id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>TxnId is the Blockchain transaction ID</td></tr>
-<tr><td>txn_uri</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>TxnUri is the explorer URI for the Blockchain transaction</td></tr>
-<tr><td>block_time</td><td><a href="grpc/api_service.html#uint64">uint64</a></td><td></td><td>BlockTime is the Blockchain's block consensus timestamp in seconds</td></tr>
+<tr><td>txn_id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>TxnId is the blockchain transaction ID</td></tr>
+<tr><td>txn_uri</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>TxnUri is the explorer URI for the blockchain transaction</td></tr>
+<tr><td>block_time</td><td><a href="grpc/api_service.html#uint64">uint64</a></td><td></td><td>BlockTime is the blockchain's block consensus timestamp in seconds</td></tr>
 <tr><td>block_time_nano</td><td><a href="grpc/api_service.html#uint64">uint64</a></td><td></td><td>BlockTimeNano is the Blockcahin's block consensus timestamp's nano part. For most traditional blockchains, this will be zero. For Hedera, this will be the nano part of the transaction's consensus timestamp</td></tr>
-<tr><td>block_number</td><td><a href="grpc/api_service.html#uint64">uint64</a></td><td></td><td>BlockNumber is the Blockchain's block number. For Hedera, this will be zero as there is no block concept and each transaction has its own consensus timestamp which defines the transaction order</td></tr>
+<tr><td>block_number</td><td><a href="grpc/api_service.html#uint64">uint64</a></td><td></td><td>BlockNumber is the blockchain's block number. For Hedera, this will be zero as there is no block concept and each transaction has its own consensus timestamp which defines the transaction order</td></tr>
 <tr><td>proof_root</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>ProofRoot is the root hash of the trie proof, which is the anchor batch's root hash the proof belongs to</td></tr>
 </tbody></table>
 <h3><a class="header" href="#trieproofrequest" id="trieproofrequest">TrieProofRequest</a></h3>
@@ -467,8 +1117,8 @@ done at the Merkle root level</p>
 </tbody></table>
 <!-- end services -->
 <h3><a class="header" href="#anchor" id="anchor">Anchor</a></h3>
-<p>Anchor represents an anchor of a Blockchain, through which a hash can be
-anchored to that Blockchain</p>
+<p>Anchor represents an anchor of a blockchain, through which a hash can be
+anchored to that blockchain</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>type</td><td><a href="grpc/anchor_service.html#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>Type is the anchor type</td></tr>
 <tr><td>status</td><td><a href="grpc/anchor_service.html#anchor.Anchor.Status">Anchor.Status</a></td><td></td><td>Status is the anchor status</td></tr>
@@ -483,10 +1133,10 @@ type</p>
 </tbody></table>
 <h3><a class="header" href="#batch" id="batch">Batch</a></h3>
 <p>Batch represents a batch of hashes. When hash stream comes in, Anchor Service
-will try to process them in batches, just like Blockchain processes
+will try to process them in batches, just like blockchain processes
 transactions in blocks. This makes utilization of expensive resources, such
 as making Bitcoin transaction, more economic. Each batch's root hash will be
-embedded in a transaction made to the Blockchain</p>
+embedded in a transaction made to the blockchain</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>id</td><td><a href="grpc/anchor_service.html#string">string</a></td><td></td><td>Id is the batch ID</td></tr>
 <tr><td>anchor_type</td><td><a href="grpc/anchor_service.html#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the batch's anchor type</td></tr>
@@ -509,7 +1159,7 @@ embedded in a transaction made to the Blockchain</p>
 <tr><td>anchor_type</td><td><a href="grpc/anchor_service.html#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the batch's anchor type</td></tr>
 </tbody></table>
 <h3><a class="header" href="#proof" id="proof">Proof</a></h3>
-<p>Proof represents a Blockchain proof of a hash, which is a Merkle path from
+<p>Proof represents a blockchain proof of a hash, which is a Merkle path from
 the hash to the root hash of the proof's batch</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>hash</td><td><a href="grpc/anchor_service.html#string">string</a></td><td></td><td>Hash is the hash the proof is proving for</td></tr>
@@ -587,7 +1237,7 @@ information</p>
 <tr><td>QUEUING</td><td>2</td><td>QUEUING means the batch is queuing to be processed. FLOW: flushed_at -&gt; QUEUING -&gt; started_at</td></tr>
 <tr><td>PROCESSING</td><td>3</td><td>PROCESSING means the batch is constructing merkle roots and submitting hashes. FLOW: started_at -&gt; PROCESSING -&gt; submitted_at</td></tr>
 <tr><td>PENDING</td><td>4</td><td>PENDING means the batch's root hash is pending to be confirmed. FLOW: submitted_at -&gt; PENDING -&gt; finalized_at</td></tr>
-<tr><td>CONFIRMED</td><td>5</td><td>CONFIRMED means the batch's root hash is confirmed by the anchor's Blockchain. FLOW: finalized_at -&gt; CONFIRMED</td></tr>
+<tr><td>CONFIRMED</td><td>5</td><td>CONFIRMED means the batch's root hash is confirmed by the anchor's blockchain. FLOW: finalized_at -&gt; CONFIRMED</td></tr>
 </tbody></table>
 <h3><a class="header" href="#proofformat" id="proofformat">Proof.Format</a></h3>
 <p>Format represents a proof format</p>
@@ -618,6 +1268,99 @@ information</p>
 <tr><td><a name="string" /> string</td><td>A string must always contain UTF-8 encoded or 7-bit ASCII text.</td><td>string</td><td>String</td><td>str/unicode</td><td>string</td><td>string</td><td>string</td><td>String (UTF-8)</td></tr>
 <tr><td><a name="bytes" /> bytes</td><td>May contain any arbitrary sequence of bytes.</td><td>string</td><td>ByteString</td><td>str</td><td>[]byte</td><td>ByteString</td><td>string</td><td>String (ASCII-8BIT)</td></tr>
 </tbody></table>
+<h1><a class="header" href="#contribution" id="contribution">Contribution</a></h1>
+<p>Here is the documentation for our contributors</p>
+<h1><a class="header" href="#update-documentation" id="update-documentation">Update documentation</a></h1>
+<h2><a class="header" href="#setup-docs-compiling-environment" id="setup-docs-compiling-environment">Setup docs compiling environment</a></h2>
+<ol>
+<li>
+<p>Make sure the following dependencies are installed:</p>
+<ul>
+<li>Node: LTS version v12.16.3+</li>
+<li>Rust: v1.46.0+</li>
+</ul>
+</li>
+<li>
+<p>Install <a href="https://github.com/rust-lang/mdBook"><code>mdBook</code></a></p>
+<pre><code class="language-zsh">cargo install mdbook
+</code></pre>
+</li>
+<li>
+<p>Initialize docs compiling environment</p>
+<pre><code class="language-zsh">make doc-init
+</code></pre>
+<p>You can use <code>make doc-clean</code> to cleanup files generated in this step. If you want to redo the initialization, please do a cleanup first</p>
+</li>
+</ol>
+<h2><a class="header" href="#update-docs" id="update-docs">Update docs</a></h2>
+<ol>
+<li>
+<p>Run docs dev server:</p>
+<pre><code class="language-zsh">make doc-dev
+</code></pre>
+<p>and a open browser tab at <code>http://localhost:3000</code></p>
+</li>
+<li>
+<p>Make changes to Markdown files in <code>docs</code> directory, which will trigger the dev server to hot-reload the docs in the browser. This is a good way for to preview the changes. Please note that anything other than a symbolic link or a Markdown file in <code>docs</code> will be copied to <code>docs_output/book/html</code> by <code>make doc-dev</code> or <code>mmake doc-build</code> then be synced to <code>docs_output/gh-pages</code> by <code>make doc-deploy</code> with extraneous files removed. So if you want to add a file to <code>gh-pages</code>, add to <code>docs</code> first, otherwise that file will be deleted during the syncing</p>
+</li>
+<li>
+<p>If you have changed the Node SDK code, you need to regenerate the Node SDK reference at <code>docs_output/gh-pages/node_sdk/reference</code></p>
+<pre><code class="language-zsh">make doc-node
+</code></pre>
+</li>
+</ol>
+<h2><a class="header" href="#deploy-updated-docs" id="deploy-updated-docs">Deploy updated docs</a></h2>
+<ol>
+<li>
+<p>Make a production build of the docs</p>
+<pre><code class="language-zsh">make doc-build
+</code></pre>
+<p>this will generate the htmls in <code>docs_output/book</code></p>
+</li>
+<li>
+<p>Sync changes to the checked out <code>gh-pages</code> branch at <code>docs_output/gh-pages</code> from <code>docs_output/book/html</code></p>
+<pre><code class="language-zsh">make doc-deploy
+</code></pre>
+</li>
+<li>
+<p>Go to the <code>gh-pages</code> branch directory <code>cd docs_output/gh-pages</code>, review the changes and commit</p>
+</li>
+</ol>
+<h1><a class="header" href="#publish-a-new-version" id="publish-a-new-version">Publish a new version</a></h1>
+<h2><a class="header" href="#node-sdk-npm" id="node-sdk-npm">Node SDK (NPM)</a></h2>
+<ol>
+<li><code>npm login</code> (southbanksoftwareadmin)</li>
+<li><code>npm version patch</code> (or minor, major)</li>
+<li><code>npm publish</code></li>
+</ol>
+<h2><a class="header" href="#go-sdk--proofable-cli" id="go-sdk--proofable-cli">Go SDK &amp; Proofable CLI</a></h2>
+<ol>
+<li>
+<p>tag the commit using the version from CI</p>
+</li>
+<li>
+<p>copy binaries from <code>dev</code> to <code>stg</code></p>
+<pre><code class="language-zsh">gsutil -m cp -ra public-read &quot;gs://provendb-dev/proofable-cli/*&quot; &quot;gs://provendb-stg/proofable-cli&quot;
+</code></pre>
+</li>
+<li>
+<p>copy binaries from <code>stg</code> to <code>prd</code></p>
+<pre><code class="language-zsh">gsutil -m cp -ra public-read &quot;gs://provendb-stg/proofable-cli/*&quot; &quot;gs://provendb-prd/proofable-cli&quot;
+</code></pre>
+</li>
+<li>
+<p>publish a new version to Proofable Homebrew tap</p>
+<pre><code class="language-zsh"># prerequisite: brew tap southbanksoftware/proofable
+cd $(brew --repo southbanksoftware/proofable)
+code Formula/proofable-cli.rb
+# then: modify the `url` to new version and remove `sha256`
+brew fetch proofable-cli --build-from-source
+# then: record the new sha256 back to the `proofable-cli.rb`
+git commit -am &quot;Release v0.2.8&quot; # change v0.2.8 to the appropriate version number
+git push
+</code></pre>
+</li>
+</ol>
 
                     </main>
 
