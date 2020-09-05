@@ -9,7 +9,3 @@ Proofable Node SDK is the software development kit to help users build solutions
 - [Documentation](https://docs.proofable.io/node_sdk/)
 - [GitHub](https://github.com/SouthbankSoftware/proofable/tree/master/node_sdk)
 - [Website](https://www.proofable.io)
-
-## Getting Started
-
-

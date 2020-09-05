@@ -1,3 +1,1 @@
-docs/*.html linguist-generated=true
-node_sdk/docs/* linguist-generated=true
 node_sdk/src/protos/**/*_pb.js linguist-generated=true
