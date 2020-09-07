@@ -173,7 +173,8 @@
 <h2><a class="header" href="#go-sdk--proofable-cli" id="go-sdk--proofable-cli">Go SDK &amp; Proofable CLI</a></h2>
 <ol>
 <li>
-<p>tag the commit using the version from CI</p>
+<p>tag the commit using the version from <a href="https://concourse.provendb.com/teams/main/pipelines/proofable-deploy/jobs/build-and-deploy/builds/latest">CI</a></p>
+<p><img src="../images/proofable-cli_ci_version.png" alt="Proofable CLI CI Version" /></p>
 </li>
 <li>
 <p>copy binaries from <code>dev</code> to <code>stg</code></p>
@@ -186,16 +187,43 @@
 </code></pre>
 </li>
 <li>
-<p>publish a new version to Proofable Homebrew tap</p>
-<pre><code class="language-zsh"># prerequisite: brew tap southbanksoftware/proofable
-cd $(brew --repo southbanksoftware/proofable)
-code Formula/proofable-cli.rb
-# then: modify the `url` to new version and remove `sha256`
-brew fetch proofable-cli --build-from-source
-# then: record the new sha256 back to the `proofable-cli.rb`
-git commit -am &quot;Release v0.2.8&quot; # change v0.2.8 to the appropriate version number
-git push
+<p>publish a new version to <a href="https://github.com/SouthbankSoftware/homebrew-proofable">Proofable Homebrew tap</a>:</p>
+<ol>
+<li>
+<p>make sure the <a href="https://github.com/SouthbankSoftware/homebrew-proofable">tap</a> is enabled. You can skip this step if it has already been done</p>
+<pre><code class="language-zsh">brew tap southbanksoftware/proofable
 </code></pre>
+</li>
+<li>
+<p>go to edit the checked out Formula file</p>
+<pre><code class="language-zsh">cd $(brew --repo southbanksoftware/proofable)
+code Formula/proofable-cli.rb
+</code></pre>
+</li>
+<li>
+<p>modify the <code>url</code> to point to the new version (the CI binary version in step 1) and remove the <code>sha256</code> field, then run the following to get the new sha256 hash</p>
+<pre><code class="language-zsh">brew fetch proofable-cli --build-from-source
+</code></pre>
+<p>Finally, re-add the <code>sha256</code> field in <code>proofable-cli.rb</code></p>
+</li>
+<li>
+<p>create a PR for the change</p>
+<pre><code class="language-zsh"># change v0.2.13 to the correct version
+git checkout -b release/v0.2.13
+git commit -am &quot;Release v0.2.13&quot;
+gh pr create --title &quot;Release v0.2.13&quot; --body &quot;Normal release&quot;
+</code></pre>
+</li>
+<li>
+<p>wait for the PR test to pass and merge</p>
+</li>
+<li>
+<p>checkout out <code>master</code> and pull the latest for future development</p>
+<pre><code class="language-zsh">git checkout master
+git pull
+</code></pre>
+</li>
+</ol>
 </li>
 </ol>
 

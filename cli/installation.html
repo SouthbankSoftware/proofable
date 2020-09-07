@@ -183,6 +183,12 @@
 </code></pre>
 <p>To upgrade, simply repeat the installation steps</p>
 <h3><a class="header" href="#for-linux-users" id="for-linux-users">For Linux users</a></h3>
+<h4><a class="header" href="#install-via-a-hrefhttpsbrewshhomebrewa-1" id="install-via-a-hrefhttpsbrewshhomebrewa-1">Install via <a href="https://brew.sh/">Homebrew</a></a></h4>
+<ol>
+<li><code>brew tap southbanksoftware/proofable</code></li>
+<li><code>brew install proofable-cli</code></li>
+</ol>
+<p>Later on, you can upgrade to the latest version using: <code>brew upgrade proofable-cli</code></p>
 <h4><a class="header" href="#install-directly-1" id="install-directly-1">Install directly</a></h4>
 <p>Copy and paste the following bash command in a <a href="https://ubuntu.com/tutorials/command-line-for-beginners#1-overview">Linux shell prompt</a>:</p>
 <pre><code class="language-bash">sudo bash -c &quot;$(eval &quot;$(if [[ $(command -v curl) ]]; then echo &quot;curl -fsSL&quot;; else echo &quot;wget -qO-&quot;; fi) https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/cmd/proofable-cli/install.sh&quot;)&quot;
