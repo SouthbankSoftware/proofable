@@ -12,6 +12,7 @@
     - [Install via Homebrew](#install-via-homebrew)
     - [Install directly](#install-directly)
   - [For Linux users](#for-linux-users)
+    - [Install via Homebrew](#install-via-homebrew-1)
     - [Install directly](#install-directly-1)
   - [For Windows users](#for-windows-users)
     - [Install directly](#install-directly-2)
@@ -59,6 +60,13 @@ ENV=dev bash -c "$(eval "$(if [[ $(command -v curl) ]]; then echo "curl -fsSL"; 
 To upgrade, simply repeat the installation steps
 
 ### For Linux users
+
+#### Install via [Homebrew](https://brew.sh/)
+
+1. `brew tap southbanksoftware/proofable`
+2. `brew install proofable-cli`
+
+Later on, you can upgrade to the latest version using: `brew upgrade proofable-cli`
 
 #### Install directly
 
