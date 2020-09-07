@@ -1,1 +1,2 @@
+pkg/protos/**/*.pb.go linguist-generated=true
 node_sdk/src/protos/**/*_pb.js linguist-generated=true
