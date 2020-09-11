@@ -18,7 +18,7 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-09-04T18:11:49+10:00
+# @Last modified time: 2020-09-10T23:59:57+10:00
 
 PROJECT_NAME := proofable
 PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(PROJECT_NAME)
@@ -59,11 +59,12 @@ playground:
 doc-init:
 	mkdir -p docs_output
 	cd docs_output && git clone https://github.com/SouthbankSoftware/proofable.git --single-branch --branch gh-pages gh-pages
+	cd docs_output && git clone https://github.com/SouthbankSoftware/provendb-releases.git --single-branch --branch prd prd-releases
 	cd node_sdk && npm install
 	make doc-node
 	ln -sf ../../docs_output/gh-pages/node_sdk/reference docs/node_sdk/
 doc-dev:
-	mdbook serve
+	mdbook serve -n 0.0.0.0
 doc-build:
 	rm -rf docs_output/book
 	mdbook build
@@ -80,3 +81,6 @@ doc-go:
 	godoc -http=:6060
 doc-node:
 	cd node_sdk && npm run doc
+doc-anchortypes:
+	cd docs_output/prd-releases && git config pull.ff only
+	go run ./tools/anchor-types-updater

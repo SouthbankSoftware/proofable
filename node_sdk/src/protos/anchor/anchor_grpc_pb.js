@@ -22,7 +22,7 @@
 // @Author: guiguan
 // @Date:   2019-08-05T10:53:28+10:00
 // @Last modified by:   guiguan
-// @Last modified time: 2020-09-03T16:03:18+10:00
+// @Last modified time: 2020-09-11T09:53:55+10:00
 //
 // Anchor Service continuously anchors hashes to blockchains, which is similar
 // to what Chainpoint does, but with much better performance and flexibility. It

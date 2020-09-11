@@ -33,6 +33,12 @@
 
 Notes:
 
+- If you have changed the anchor types in protos or their configuration in `provendb-releases`, you need to regenerate the Anchor Types page at `docs/concepts/anchor_types.md`
+
+    ```zsh
+    make doc-anchortypes
+    ```
+
 - If you have changed the Node SDK code, you need to regenerate the Node SDK reference at `docs_output/gh-pages/node_sdk/reference`
 
     ```zsh

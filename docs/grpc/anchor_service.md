@@ -215,20 +215,22 @@ Status represents an anchor's status
 
 
 ### Anchor.Type
-Type represents an anchor type
+Type represents an anchor type. Please refer to this
+[list](https://docs.proofable.io/concepts/anchor_types.html) for all
+available anchor types
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| ETH | 0 | ETH is the anchor type for Ethereum Testnet |
-| ETH_MAINNET | 3 | ETH_MAINNET is the anchor type for Ethereum Mainnet |
-| ETH_ELASTOS | 4 | ETH_ELASTOS is the anchor type for Elastos |
-| ETH_GOCHAIN | 9 | ETH_GOCHAIN is the anchor type for GoChain |
-| BTC | 1 | BTC is the anchor type for Bitcoin Testnet |
-| BTC_MAINNET | 5 | BTC_MAINNET is the anchor type for Bitcoin Mainnet |
-| CHP | 2 | CHP is the anchor type for Chainpoint (planned) |
-| HEDERA | 6 | HEDERA is the anchor type for Hedera Testnet |
-| HEDERA_MAINNET | 7 | HEDERA_MAINNET is the anchor type for Hedera Mainnet |
-| HYPERLEDGER | 8 | HYPERLEDGER is the anchor type for Hyperledger Fabric |
+| ETH | 0 | [Ethereum](https://ethereum.org/) Rinkeby Testnet |
+| ETH_MAINNET | 3 | Ethereum Mainnet. [Ethereum](https://ethereum.org/) is the second-largest cryptocurrency |
+| ETH_ELASTOS | 4 | [Elastos](https://www.elastos.org/), which employs a "main chain-sidechain architecture" |
+| ETH_GOCHAIN | 9 | [GoChain](https://gochain.io/), which is scalable, low cost and energy efficient |
+| BTC | 1 | [Bitcoin](https://bitcoin.org/) Testnet |
+| BTC_MAINNET | 5 | Bitcoin Mainnet. [Bitcoin](https://bitcoin.org/) is the largest cryptocurrency |
+| CHP | 2 | [Chainpoint](https://chainpoint.org/) |
+| HEDERA | 6 | Hedera Testnet |
+| HEDERA_MAINNET | 7 | Hedera Mainnet. [Hedera](https://www.hedera.com/) is a DAG based blockchain that provides much better TPS than tranditional blockchains |
+| HYPERLEDGER | 8 | [Hyperledger Fabric](https://www.hyperledger.org/use/fabric), which is a modular blockchain framework for private enterprises |
 
 
 ### Batch.Status

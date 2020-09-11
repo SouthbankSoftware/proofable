@@ -25,29 +25,37 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// Type represents an anchor type
+// Type represents an anchor type. Please refer to this
+// [list](https://docs.proofable.io/concepts/anchor_types.html) for all
+// available anchor types
 type Anchor_Type int32
 
 const (
-	// ETH is the anchor type for Ethereum Testnet
+	// [Ethereum](https://ethereum.org/) Rinkeby Testnet
 	Anchor_ETH Anchor_Type = 0
-	// ETH_MAINNET is the anchor type for Ethereum Mainnet
+	// Ethereum Mainnet. [Ethereum](https://ethereum.org/) is the second-largest
+	// cryptocurrency
 	Anchor_ETH_MAINNET Anchor_Type = 3
-	// ETH_ELASTOS is the anchor type for Elastos
+	// [Elastos](https://www.elastos.org/), which employs a "main
+	// chain-sidechain architecture"
 	Anchor_ETH_ELASTOS Anchor_Type = 4
-	// ETH_GOCHAIN is the anchor type for GoChain
+	// [GoChain](https://gochain.io/), which is scalable, low cost and energy
+	// efficient
 	Anchor_ETH_GOCHAIN Anchor_Type = 9
-	// BTC is the anchor type for Bitcoin Testnet
+	// [Bitcoin](https://bitcoin.org/) Testnet
 	Anchor_BTC Anchor_Type = 1
-	// BTC_MAINNET is the anchor type for Bitcoin Mainnet
+	// Bitcoin Mainnet. [Bitcoin](https://bitcoin.org/) is the largest
+	// cryptocurrency
 	Anchor_BTC_MAINNET Anchor_Type = 5
-	// CHP is the anchor type for Chainpoint (planned)
+	// [Chainpoint](https://chainpoint.org/)
 	Anchor_CHP Anchor_Type = 2
-	// HEDERA is the anchor type for Hedera Testnet
+	// Hedera Testnet
 	Anchor_HEDERA Anchor_Type = 6
-	// HEDERA_MAINNET is the anchor type for Hedera Mainnet
+	// Hedera Mainnet. [Hedera](https://www.hedera.com/) is a DAG based
+	// blockchain that provides much better TPS than tranditional blockchains
 	Anchor_HEDERA_MAINNET Anchor_Type = 7
-	// HYPERLEDGER is the anchor type for Hyperledger Fabric
+	// [Hyperledger Fabric](https://www.hyperledger.org/use/fabric), which is a
+	// modular blockchain framework for private enterprises
 	Anchor_HYPERLEDGER Anchor_Type = 8
 )
 
@@ -80,7 +88,7 @@ func (x Anchor_Type) String() string {
 	return proto.EnumName(Anchor_Type_name, int32(x))
 }
 func (Anchor_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{0, 0}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{0, 0}
 }
 
 // Status represents an anchor's status
@@ -110,7 +118,7 @@ func (x Anchor_Status) String() string {
 	return proto.EnumName(Anchor_Status_name, int32(x))
 }
 func (Anchor_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{0, 1}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{0, 1}
 }
 
 // Status represents a batch's status
@@ -157,7 +165,7 @@ func (x Batch_Status) String() string {
 	return proto.EnumName(Batch_Status_name, int32(x))
 }
 func (Batch_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{1, 0}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{1, 0}
 }
 
 // Format represents a proof format
@@ -192,7 +200,7 @@ func (x Proof_Format) String() string {
 	return proto.EnumName(Proof_Format_name, int32(x))
 }
 func (Proof_Format) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{2, 0}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{2, 0}
 }
 
 // Anchor represents an anchor of a blockchain, through which a hash can be
@@ -215,7 +223,7 @@ func (m *Anchor) Reset()         { *m = Anchor{} }
 func (m *Anchor) String() string { return proto.CompactTextString(m) }
 func (*Anchor) ProtoMessage()    {}
 func (*Anchor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{0}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{0}
 }
 func (m *Anchor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Anchor.Unmarshal(m, b)
@@ -314,7 +322,7 @@ func (m *Batch) Reset()         { *m = Batch{} }
 func (m *Batch) String() string { return proto.CompactTextString(m) }
 func (*Batch) ProtoMessage()    {}
 func (*Batch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{1}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{1}
 }
 func (m *Batch) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Batch.Unmarshal(m, b)
@@ -451,7 +459,7 @@ func (m *Proof) Reset()         { *m = Proof{} }
 func (m *Proof) String() string { return proto.CompactTextString(m) }
 func (*Proof) ProtoMessage()    {}
 func (*Proof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{2}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{2}
 }
 func (m *Proof) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Proof.Unmarshal(m, b)
@@ -534,7 +542,7 @@ func (m *AnchorRequest) Reset()         { *m = AnchorRequest{} }
 func (m *AnchorRequest) String() string { return proto.CompactTextString(m) }
 func (*AnchorRequest) ProtoMessage()    {}
 func (*AnchorRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{3}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{3}
 }
 func (m *AnchorRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnchorRequest.Unmarshal(m, b)
@@ -580,7 +588,7 @@ func (m *ProofRequest) Reset()         { *m = ProofRequest{} }
 func (m *ProofRequest) String() string { return proto.CompactTextString(m) }
 func (*ProofRequest) ProtoMessage()    {}
 func (*ProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{4}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{4}
 }
 func (m *ProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProofRequest.Unmarshal(m, b)
@@ -650,7 +658,7 @@ func (m *SubmitProofRequest) Reset()         { *m = SubmitProofRequest{} }
 func (m *SubmitProofRequest) String() string { return proto.CompactTextString(m) }
 func (*SubmitProofRequest) ProtoMessage()    {}
 func (*SubmitProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{5}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{5}
 }
 func (m *SubmitProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SubmitProofRequest.Unmarshal(m, b)
@@ -724,7 +732,7 @@ func (m *VerifyProofRequest) Reset()         { *m = VerifyProofRequest{} }
 func (m *VerifyProofRequest) String() string { return proto.CompactTextString(m) }
 func (*VerifyProofRequest) ProtoMessage()    {}
 func (*VerifyProofRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{6}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{6}
 }
 func (m *VerifyProofRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyProofRequest.Unmarshal(m, b)
@@ -782,7 +790,7 @@ func (m *VerifyProofReply) Reset()         { *m = VerifyProofReply{} }
 func (m *VerifyProofReply) String() string { return proto.CompactTextString(m) }
 func (*VerifyProofReply) ProtoMessage()    {}
 func (*VerifyProofReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{7}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{7}
 }
 func (m *VerifyProofReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VerifyProofReply.Unmarshal(m, b)
@@ -838,7 +846,7 @@ func (m *BatchRequest) Reset()         { *m = BatchRequest{} }
 func (m *BatchRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchRequest) ProtoMessage()    {}
 func (*BatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{8}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{8}
 }
 func (m *BatchRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchRequest.Unmarshal(m, b)
@@ -889,7 +897,7 @@ func (m *SubscribeBatchesRequest) Reset()         { *m = SubscribeBatchesRequest
 func (m *SubscribeBatchesRequest) String() string { return proto.CompactTextString(m) }
 func (*SubscribeBatchesRequest) ProtoMessage()    {}
 func (*SubscribeBatchesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_anchor_de9701350ab36ba0, []int{9}
+	return fileDescriptor_anchor_6b2cfdd642ff0be9, []int{9}
 }
 func (m *SubscribeBatchesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SubscribeBatchesRequest.Unmarshal(m, b)
@@ -1274,9 +1282,9 @@ var _AnchorService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "anchor/anchor.proto",
 }
 
-func init() { proto.RegisterFile("anchor/anchor.proto", fileDescriptor_anchor_de9701350ab36ba0) }
+func init() { proto.RegisterFile("anchor/anchor.proto", fileDescriptor_anchor_6b2cfdd642ff0be9) }
 
-var fileDescriptor_anchor_de9701350ab36ba0 = []byte{
+var fileDescriptor_anchor_6b2cfdd642ff0be9 = []byte{
 	// 1102 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcd, 0x72, 0xdb, 0x36,
 	0x17, 0x35, 0x49, 0x91, 0x96, 0x2e, 0x25, 0x85, 0x1f, 0x92, 0xaf, 0x55, 0xd4, 0x69, 0xe3, 0x61,

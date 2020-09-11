@@ -9,6 +9,7 @@ require (
 	github.com/fatih/color v1.7.0
 	github.com/golang/protobuf v1.3.2
 	github.com/google/go-cmp v0.4.0
+	github.com/gookit/config/v2 v2.0.17
 	github.com/karrick/godirwalk v1.15.3
 	github.com/korovkin/limiter v0.0.0-20170610225302-6b837f5fd496
 	github.com/manifoldco/promptui v0.6.0
@@ -22,7 +23,6 @@ require (
 	golang.org/x/lint v0.0.0-20190930215403-16217165b5de // indirect
 	golang.org/x/net v0.0.0-20200425230154-ff2c4b7c35a0
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/tools v0.0.0-20191029190741-b9c20aec41a5 // indirect
 	google.golang.org/grpc v1.26.0
 	src.techknowlogick.com/xgo v0.0.0-20200514233805-209a5cf70012
 )
