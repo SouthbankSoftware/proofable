@@ -205,12 +205,19 @@
 <p><img src="concepts/../images/chain_of_trust.png" alt="Chain of Trust" /></p>
 <p>When a piece of information (data) is anchored to a blockchain by Proofable using a Merkle trie, we can work backward using the corresponding Merkle trie path to assert that the data has existed from the time of the blockchain transaction. The Merkle trie path itself becomes a certificate for the data. We can generate such a certificate to prove that the data has existed from a timestamp. If the data is an image, then we can use the certificate to verify an arbitrary image and see whether someone has tampered with it. We can also use the timestamp to verify the certificate itself, such that when we trust the timestamp, we can check the validity of the certificate and then the image. In this way, the surface area for potential forgery attack is reduced to a block. Or if we remembered and trusted the transaction hash of the certificate, the attack surface is reduced to that transaction. The timestamp and transaction hash are the seed information like the <a href="https://en.wikipedia.org/wiki/First_principle">first principles</a> in philosophy which we can base our trust on. In this way, a chain of trust is formed from the blockchain seeds to our image contents as in above figure. For more details, please check out our Medium post <a href="https://medium.com/@guiguan/build-trust-into-image-with-blockchain-4894c39bde7f">Build Trust into Image with Blockchain</a></p>
 <h1><a class="header" href="#anchor-types" id="anchor-types">Anchor Types</a></h1>
-<p><a href="concepts/../grpc/anchor_service.html#anchortype">Anchor Types</a></p>
-<script type="text/javascript">
-if (!window.location.href.endsWith("/print.html")) {
-    window.location.replace("../grpc/anchor_service.html#anchortype");
-}
-</script>
+<p>An anchor type is a type of blockchain that is supported by Proofable to anchor your data. The following list represents the available anchor types in Proofable's production environment</p>
+<table><thead><tr><th>Name</th><th>Number</th><th>Running</th><th>Batch Size</th><th>Batch Time</th><th>Description</th></tr></thead><tbody>
+<tr><td>ETH</td><td>0</td><td>YES</td><td>16384</td><td>30s</td><td><a href="https://ethereum.org/">Ethereum</a> Rinkeby Testnet</td></tr>
+<tr><td>ETH_MAINNET</td><td>3</td><td>YES</td><td>32768</td><td>10m</td><td>Ethereum Mainnet. <a href="https://ethereum.org/">Ethereum</a> is the second-largest cryptocurrency</td></tr>
+<tr><td>ETH_ELASTOS</td><td>4</td><td></td><td></td><td></td><td><a href="https://www.elastos.org/">Elastos</a>, which employs a &quot;main chain-sidechain architecture&quot;</td></tr>
+<tr><td>ETH_GOCHAIN</td><td>9</td><td></td><td></td><td></td><td><a href="https://gochain.io/">GoChain</a>, which is scalable, low cost and energy efficient</td></tr>
+<tr><td>BTC</td><td>1</td><td>YES</td><td>32768</td><td>1m</td><td><a href="https://bitcoin.org/">Bitcoin</a> Testnet</td></tr>
+<tr><td>BTC_MAINNET</td><td>5</td><td>YES</td><td>32768</td><td>3h</td><td>Bitcoin Mainnet. <a href="https://bitcoin.org/">Bitcoin</a> is the largest cryptocurrency</td></tr>
+<tr><td>CHP</td><td>2</td><td></td><td></td><td></td><td><a href="https://chainpoint.org/">Chainpoint</a></td></tr>
+<tr><td>HEDERA</td><td>6</td><td>YES</td><td>3072</td><td>3s</td><td>Hedera Testnet</td></tr>
+<tr><td>HEDERA_MAINNET</td><td>7</td><td>YES</td><td>3072</td><td>3s</td><td>Hedera Mainnet. <a href="https://www.hedera.com/">Hedera</a> is a DAG based blockchain that provides much better TPS than tranditional blockchains</td></tr>
+<tr><td>HYPERLEDGER</td><td>8</td><td></td><td></td><td></td><td><a href="https://www.hyperledger.org/use/fabric">Hyperledger Fabric</a>, which is a modular blockchain framework for private enterprises</td></tr>
+</tbody></table>
 <h1><a class="header" href="#cli" id="cli">CLI</a></h1>
 <p><a href="http://concourse.provendb.com/teams/main/pipelines/proofable-deploy"><img src="https://concourse.provendb.com/api/v1/teams/main/pipelines/proofable-deploy/jobs/build-and-deploy/badge?title=cli" alt="Proofable CLI Deploy Status" /></a></p>
 <p><code>proofable-cli</code> is the command-line interface (CLI) for <a href="https://docs.proofable.io/">Proofable</a> API Service (<code>proofable-api</code>). At the moment, it supports certifying a file-system to blockchains</p>
@@ -1222,18 +1229,20 @@ information</p>
 <tr><td>RUNNING</td><td>2</td><td>RUNNING means the anchor is running</td></tr>
 </tbody></table>
 <h3><a class="header" href="#anchortype" id="anchortype">Anchor.Type</a></h3>
-<p>Type represents an anchor type</p>
+<p>Type represents an anchor type. Please refer to this
+<a href="https://docs.proofable.io/concepts/anchor_types.html">list</a> for all
+available anchor types</p>
 <table><thead><tr><th>Name</th><th>Number</th><th>Description</th></tr></thead><tbody>
-<tr><td>ETH</td><td>0</td><td>ETH is the anchor type for Ethereum Testnet</td></tr>
-<tr><td>ETH_MAINNET</td><td>3</td><td>ETH_MAINNET is the anchor type for Ethereum Mainnet</td></tr>
-<tr><td>ETH_ELASTOS</td><td>4</td><td>ETH_ELASTOS is the anchor type for Elastos</td></tr>
-<tr><td>ETH_GOCHAIN</td><td>9</td><td>ETH_GOCHAIN is the anchor type for GoChain</td></tr>
-<tr><td>BTC</td><td>1</td><td>BTC is the anchor type for Bitcoin Testnet</td></tr>
-<tr><td>BTC_MAINNET</td><td>5</td><td>BTC_MAINNET is the anchor type for Bitcoin Mainnet</td></tr>
-<tr><td>CHP</td><td>2</td><td>CHP is the anchor type for Chainpoint (planned)</td></tr>
-<tr><td>HEDERA</td><td>6</td><td>HEDERA is the anchor type for Hedera Testnet</td></tr>
-<tr><td>HEDERA_MAINNET</td><td>7</td><td>HEDERA_MAINNET is the anchor type for Hedera Mainnet</td></tr>
-<tr><td>HYPERLEDGER</td><td>8</td><td>HYPERLEDGER is the anchor type for Hyperledger Fabric</td></tr>
+<tr><td>ETH</td><td>0</td><td><a href="https://ethereum.org/">Ethereum</a> Rinkeby Testnet</td></tr>
+<tr><td>ETH_MAINNET</td><td>3</td><td>Ethereum Mainnet. <a href="https://ethereum.org/">Ethereum</a> is the second-largest cryptocurrency</td></tr>
+<tr><td>ETH_ELASTOS</td><td>4</td><td><a href="https://www.elastos.org/">Elastos</a>, which employs a &quot;main chain-sidechain architecture&quot;</td></tr>
+<tr><td>ETH_GOCHAIN</td><td>9</td><td><a href="https://gochain.io/">GoChain</a>, which is scalable, low cost and energy efficient</td></tr>
+<tr><td>BTC</td><td>1</td><td><a href="https://bitcoin.org/">Bitcoin</a> Testnet</td></tr>
+<tr><td>BTC_MAINNET</td><td>5</td><td>Bitcoin Mainnet. <a href="https://bitcoin.org/">Bitcoin</a> is the largest cryptocurrency</td></tr>
+<tr><td>CHP</td><td>2</td><td><a href="https://chainpoint.org/">Chainpoint</a></td></tr>
+<tr><td>HEDERA</td><td>6</td><td>Hedera Testnet</td></tr>
+<tr><td>HEDERA_MAINNET</td><td>7</td><td>Hedera Mainnet. <a href="https://www.hedera.com/">Hedera</a> is a DAG based blockchain that provides much better TPS than tranditional blockchains</td></tr>
+<tr><td>HYPERLEDGER</td><td>8</td><td><a href="https://www.hyperledger.org/use/fabric">Hyperledger Fabric</a>, which is a modular blockchain framework for private enterprises</td></tr>
 </tbody></table>
 <h3><a class="header" href="#batchstatus" id="batchstatus">Batch.Status</a></h3>
 <p>Status represents a batch's status</p>
@@ -1312,6 +1321,11 @@ information</p>
 </ol>
 <p>Notes:</p>
 <ul>
+<li>
+<p>If you have changed the anchor types in protos or their configuration in <code>provendb-releases</code>, you need to regenerate the Anchor Types page at <code>docs/concepts/anchor_types.md</code></p>
+<pre><code class="language-zsh">make doc-anchortypes
+</code></pre>
+</li>
 <li>
 <p>If you have changed the Node SDK code, you need to regenerate the Node SDK reference at <code>docs_output/gh-pages/node_sdk/reference</code></p>
 <pre><code class="language-zsh">make doc-node
