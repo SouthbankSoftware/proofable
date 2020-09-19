@@ -2,7 +2,7 @@
 
 An anchor type is a type of blockchain that is supported by Proofable to anchor your data. The following list represents the available anchor types in Proofable's production environment
 
-| Name | Number | Running | Batch Size | Batch Time | Description |
+| Name | Number | Available | Batch Size | Batch Time | Description |
 |------|--------|---------|------------|------------|-------------|
 {{range . -}}
   | {{.Name}} | {{.Number}} | {{if .Enabled}}YES{{end}} | {{.BatchSize}} | {{.BatchTime}} | {{.Description}} |

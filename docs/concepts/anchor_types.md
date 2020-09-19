@@ -2,7 +2,7 @@
 
 An anchor type is a type of blockchain that is supported by Proofable to anchor your data. The following list represents the available anchor types in Proofable's production environment
 
-| Name | Number | Running | Batch Size | Batch Time | Description |
+| Name | Number | Available | Batch Size | Batch Time | Description |
 |------|--------|---------|------------|------------|-------------|
 | ETH | 0 | YES | 16384 | 30s | [Ethereum](https://ethereum.org/) Rinkeby Testnet |
 | ETH_MAINNET | 3 | YES | 32768 | 10m | Ethereum Mainnet. [Ethereum](https://ethereum.org/) is the second-largest cryptocurrency |
