@@ -1,2 +1,2 @@
-ignores: ["grpc-tools", "ts-protoc-gen", "@types/jest", "eslint-import-resolver-typescript", "proofable", "oracledb"]
-ignore-dirs: ["dist", "docs", "node_modules"]
+ignores: ["grpc-tools", "ts-protoc-gen", "@types/jest", "eslint-import-resolver-typescript"]
+ignore-patterns: ["dist", "node_modules", "src/examples"]
