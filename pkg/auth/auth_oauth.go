@@ -18,8 +18,8 @@
  *
  * @Author: guiguan
  * @Date:   2020-03-11T11:29:59+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2020-07-22T12:07:12+10:00
+ * @Last modified by:   Michael Harrison
+ * @Last modified time: 2020-10-13T13:02:04+11:00
  */
 
 package auth
@@ -30,6 +30,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -72,9 +73,10 @@ func (a *Auth) SignInWithOauth(ctx context.Context, provider string) error {
 		sm.HandleFunc("/loginSucceeded", func(w http.ResponseWriter, r *http.Request) {
 			var er error
 
+			key := strings.Join(r.URL.Query()["authToken"], "")
 			defer func() {
 				if er != nil {
-					renderTemplate(templateLoginFailed, w)
+					renderTemplate(templateLoginFailed, w, key)
 				}
 
 				closeSRVWithErr(er)
@@ -96,7 +98,7 @@ func (a *Auth) SignInWithOauth(ctx context.Context, provider string) error {
 				return
 			}
 
-			er = renderTemplate(templateLoginSucceeded, w)
+			er = renderTemplate(templateLoginSucceeded, w, key)
 		})
 
 		sm.HandleFunc("/loginFailed", func(w http.ResponseWriter, r *http.Request) {
@@ -106,7 +108,7 @@ func (a *Auth) SignInWithOauth(ctx context.Context, provider string) error {
 				closeSRVWithErr(er)
 			}()
 
-			renderTemplate(templateLoginFailed, w)
+			renderTemplate(templateLoginFailed, w, "")
 
 			er = errors.New("login failed")
 		})
