@@ -20,8 +20,8 @@
  *
  * @Author: Michael Harrison (Mike@Southbanksoftware.com)
  * @Date:   2020-02-21T11:28:11+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2020-07-23T16:15:02+10:00
+ * @Last modified by:   Michael Harrison
+ * @Last modified time: 2020-10-13T13:07:25+11:00
  */
 
 package auth
@@ -31,16 +31,17 @@ import (
 	"io"
 )
 
-func renderTemplate(tpl string, w io.Writer) error {
-	tp, err := template.New("").Parse(tpl)
+func renderTemplate(tpl string, w io.Writer, key string) error {
+	tp, err := template.New("loginSucceeded").Parse(tpl)
 	if err != nil {
 		return err
 	}
-
 	return tp.Execute(w, struct {
 		Title string
+		Key   string
 	}{
 		Title: "ProvenDB",
+		Key:   key,
 	})
 }
 
@@ -53,7 +54,7 @@ var (
       <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
       <style>
       html {
-        height: 100%;
+        height: calc(100% - 36px);
         background-color: white;
       }
       body {
@@ -142,11 +143,42 @@ var (
         letter-spacing: normal;
         text-align: center;
         color: #808495;
-			}
+      }
+      .keyArea {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: end;
+        height:auto;
+      }
+      .keyArea p {
+        height: auto;
+        width: auto;
+        margin-right: 12px;
+        margin-bottom: 4px;
+      }
+      .key {
+        border: 1px solid rgba(128, 132, 149, 0.5);
+        border-radius: 0.5em;
+        resize: none;
+        width: 450px;
+        padding:4px;
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        letter-spacing: normal;
+        text-align: left;
+        color: #808495;
+      }
       .blue {
         border: none;
         background-image: linear-gradient(258deg, #42d9fc 127%, #35b3d4 22%);
 			}
+      .links {
+        height: 55px;
+      }
 			.blue a {
 				font-family: Poppins;
         font-size: 15px;
@@ -183,6 +215,10 @@ var (
           </g>
       </svg>
       
+      </div>
+      <div class="keyArea">
+        <p>Your API key is:</p>
+        <textarea rows="4" class="key">{{.Key}}</textarea>
       </div>
       <div class="middle">
         <div class="left">
@@ -240,15 +276,14 @@ var (
         </div>
         <div class="right">
           <h1>Authentication Passed!</h1>
-					<p>Congratulations! Authentication with the CLI has successfully passed. You may now close this browser window and continue through the CLI.</p>
-          <p>Other Links:</p>
+          <p>Congratulations! Authentication with the CLI has successfully passed. You may now close this browser window and continue through the CLI.</p>
+          <p class="links">Other Links:</p>
           <div class="buttons">
             <button class="blue"><a href="https://app.provendb.com/app/dashboard" >ProvenDB UI</a></button>
             <button><a href="https://provendb.com/homepage">Home</a></button>
           </div>
         </div>
       </div>
-    
     </body>
   </html>`
 
@@ -390,7 +425,6 @@ var (
               <path id="prefix__Path_12936" d="M151.1 70.6v1.331a2.2 2.2 0 01-2.207 2.207h-19.509a2.146 2.146 0 01-1.962-1.226 11.844 11.844 0 01-2.522.385 4.1 4.1 0 004.029 3.223h20.493a4.1 4.1 0 004.1-4.1v-.28a12.326 12.326 0 01-2.422-1.54z" class="prefix__cls-1" data-name="Path 12936" transform="translate(-124.9 -47.48)"/>
           </g>
       </svg>
-      
       </div>
       <div class="middle">
         <div class="left">
