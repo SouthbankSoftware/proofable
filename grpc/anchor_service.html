@@ -190,29 +190,29 @@ done at the Merkle root level</p>
 </ul>
 <h3><a class="header" href="#anchorservice" id="anchorservice">AnchorService</a></h3>
 <table><thead><tr><th>Method Name</th><th>Request Type</th><th>Response Type</th><th>Description</th></tr></thead><tbody>
-<tr><td>GetAnchors</td><td><a href="#google.protobuf.Empty">.google.protobuf.Empty</a></td><td><a href="#anchor.Anchor">Anchor</a> stream</td><td>GetAnchors gets all anchors</td></tr>
-<tr><td>GetAnchor</td><td><a href="#anchor.AnchorRequest">AnchorRequest</a></td><td><a href="#anchor.Anchor">Anchor</a></td><td>GetAnchor gets an anchor</td></tr>
-<tr><td>GetProof</td><td><a href="#anchor.ProofRequest">ProofRequest</a></td><td><a href="#anchor.Proof">Proof</a></td><td>GetProof gets a proof</td></tr>
-<tr><td>SubmitProof</td><td><a href="#anchor.SubmitProofRequest">SubmitProofRequest</a></td><td><a href="#anchor.Proof">Proof</a></td><td>SubmitProof submits a proof for the given hash</td></tr>
-<tr><td>VerifyProof</td><td><a href="#anchor.VerifyProofRequest">VerifyProofRequest</a></td><td><a href="#anchor.VerifyProofReply">VerifyProofReply</a></td><td>VerifyProof verifies the given proof. When the proof is unverifiable, an exception is thrown</td></tr>
-<tr><td>GetBatch</td><td><a href="#anchor.BatchRequest">BatchRequest</a></td><td><a href="#anchor.Batch">Batch</a></td><td>GetBatch gets a batch</td></tr>
-<tr><td>SubscribeBatches</td><td><a href="#anchor.SubscribeBatchesRequest">SubscribeBatchesRequest</a></td><td><a href="#anchor.Batch">Batch</a> stream</td><td>SubscribeBatches subscribes to batch status updates</td></tr>
+<tr><td>GetAnchors</td><td><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Empty">google.protobuf.Empty</a></td><td><a href="#anchor">Anchor</a> stream</td><td>GetAnchors gets all anchors</td></tr>
+<tr><td>GetAnchor</td><td><a href="#anchorrequest">AnchorRequest</a></td><td><a href="#anchor">Anchor</a></td><td>GetAnchor gets an anchor</td></tr>
+<tr><td>GetProof</td><td><a href="#proofrequest">ProofRequest</a></td><td><a href="#proof">Proof</a></td><td>GetProof gets a proof</td></tr>
+<tr><td>SubmitProof</td><td><a href="#submitproofrequest">SubmitProofRequest</a></td><td><a href="#proof">Proof</a></td><td>SubmitProof submits a proof for the given hash</td></tr>
+<tr><td>VerifyProof</td><td><a href="#verifyproofrequest">VerifyProofRequest</a></td><td><a href="#verifyproofreply">VerifyProofReply</a></td><td>VerifyProof verifies the given proof. When the proof is unverifiable, an exception is thrown</td></tr>
+<tr><td>GetBatch</td><td><a href="#batchrequest">BatchRequest</a></td><td><a href="#batch">Batch</a></td><td>GetBatch gets a batch</td></tr>
+<tr><td>SubscribeBatches</td><td><a href="#subscribebatchesrequest">SubscribeBatchesRequest</a></td><td><a href="#batch">Batch</a> stream</td><td>SubscribeBatches subscribes to batch status updates</td></tr>
 </tbody></table>
 <!-- end services -->
 <h3><a class="header" href="#anchor" id="anchor">Anchor</a></h3>
 <p>Anchor represents an anchor of a blockchain, through which a hash can be
 anchored to that blockchain</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
-<tr><td>type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>Type is the anchor type</td></tr>
-<tr><td>status</td><td><a href="#anchor.Anchor.Status">Anchor.Status</a></td><td></td><td>Status is the anchor status</td></tr>
+<tr><td>type</td><td><a href="#anchortype">Anchor.Type</a></td><td></td><td>Type is the anchor type</td></tr>
+<tr><td>status</td><td><a href="#anchorstatus">Anchor.Status</a></td><td></td><td>Status is the anchor status</td></tr>
 <tr><td>error</td><td><a href="#string">string</a></td><td></td><td>Error is the error message when the anchor status is ERROR</td></tr>
-<tr><td>supported_formats</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td>repeated</td><td>SupportedFormats are the supported proof formats of the anchor</td></tr>
+<tr><td>supported_formats</td><td><a href="#proofformat">Proof.Format</a></td><td>repeated</td><td>SupportedFormats are the supported proof formats of the anchor</td></tr>
 </tbody></table>
 <h3><a class="header" href="#anchorrequest" id="anchorrequest">AnchorRequest</a></h3>
 <p>AnchorRequest represents a request to get information for the given anchor
 type</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
-<tr><td>type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>Type is the anchor type</td></tr>
+<tr><td>type</td><td><a href="#anchortype">Anchor.Type</a></td><td></td><td>Type is the anchor type</td></tr>
 </tbody></table>
 <h3><a class="header" href="#batch" id="batch">Batch</a></h3>
 <p>Batch represents a batch of hashes. When hash stream comes in, Anchor Service
@@ -222,16 +222,16 @@ as making Bitcoin transaction, more economic. Each batch's root hash will be
 embedded in a transaction made to the blockchain</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>id</td><td><a href="#string">string</a></td><td></td><td>Id is the batch ID</td></tr>
-<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the batch's anchor type</td></tr>
-<tr><td>proof_format</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td></td><td>ProofFormat is the batch's proof format, which determines how the merkle tree is constructed for the batch.</td></tr>
-<tr><td>status</td><td><a href="#anchor.Batch.Status">Batch.Status</a></td><td></td><td>Status is the batch status. FLOW: created_at -&gt; BATCHING -&gt; flushed_at -&gt; QUEUING -&gt; started_at -&gt; PROCESSING -&gt; submitted_at -&gt; PENDING -&gt; finalized_at -&gt; CONFIRMED / ERROR; * -&gt; ERROR; if a batch has not yet reached PENDING and its anchor has restarted, the batch will be put back to QUEUING</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchortype">Anchor.Type</a></td><td></td><td>AnchorType is the batch's anchor type</td></tr>
+<tr><td>proof_format</td><td><a href="#proofformat">Proof.Format</a></td><td></td><td>ProofFormat is the batch's proof format, which determines how the merkle tree is constructed for the batch.</td></tr>
+<tr><td>status</td><td><a href="#batchstatus">Batch.Status</a></td><td></td><td>Status is the batch status. FLOW: created_at -&gt; BATCHING -&gt; flushed_at -&gt; QUEUING -&gt; started_at -&gt; PROCESSING -&gt; submitted_at -&gt; PENDING -&gt; finalized_at -&gt; CONFIRMED / ERROR; * -&gt; ERROR; if a batch has not yet reached PENDING and its anchor has restarted, the batch will be put back to QUEUING</td></tr>
 <tr><td>error</td><td><a href="#string">string</a></td><td></td><td>Error is the error message when status is ERROR</td></tr>
 <tr><td>size</td><td><a href="#int64">int64</a></td><td></td><td>Size is the number of hashes contained in the batch</td></tr>
-<tr><td>created_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>CreateAt is the batch's created at timestamp. FLOW: created_at -&gt; BATCHING</td></tr>
-<tr><td>flushed_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>FlushedAt is the batch's flushed at timestamp. FLOW: BATCHING -&gt; flushed_at -&gt; QUEUING</td></tr>
-<tr><td>started_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>StartedAt is the batch's started at timestamp. FLOW: QUEUING -&gt; started_at -&gt; PROCESSING</td></tr>
-<tr><td>submitted_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>SubmittedAt is the batch's submitted at timestamp. FLOW: PROCESSING -&gt; submitted_at -&gt; PENDING</td></tr>
-<tr><td>finalized_at</td><td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>FinalizedAt is the batch's finalized at timestamp. FLOW: * -&gt; finalized_at -&gt; CONFIRMED / ERROR. NOTE: this is not the real block confirmed time, use the timestamp in the batch data instead</td></tr>
+<tr><td>created_at</td><td><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>CreateAt is the batch's created at timestamp. FLOW: created_at -&gt; BATCHING</td></tr>
+<tr><td>flushed_at</td><td><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>FlushedAt is the batch's flushed at timestamp. FLOW: BATCHING -&gt; flushed_at -&gt; QUEUING</td></tr>
+<tr><td>started_at</td><td><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>StartedAt is the batch's started at timestamp. FLOW: QUEUING -&gt; started_at -&gt; PROCESSING</td></tr>
+<tr><td>submitted_at</td><td><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>SubmittedAt is the batch's submitted at timestamp. FLOW: PROCESSING -&gt; submitted_at -&gt; PENDING</td></tr>
+<tr><td>finalized_at</td><td><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td><td></td><td>FinalizedAt is the batch's finalized at timestamp. FLOW: * -&gt; finalized_at -&gt; CONFIRMED / ERROR. NOTE: this is not the real block confirmed time, use the timestamp in the batch data instead</td></tr>
 <tr><td>hash</td><td><a href="#string">string</a></td><td></td><td>Hash is the batch's root hash</td></tr>
 <tr><td>data</td><td><a href="#string">string</a></td><td></td><td>Data is the batch data in JSON</td></tr>
 </tbody></table>
@@ -239,7 +239,7 @@ embedded in a transaction made to the blockchain</p>
 <p>BatchRequest represents a batch request</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>batch_id</td><td><a href="#string">string</a></td><td></td><td>BatchId is the batch ID</td></tr>
-<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the batch's anchor type</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchortype">Anchor.Type</a></td><td></td><td>AnchorType is the batch's anchor type</td></tr>
 </tbody></table>
 <h3><a class="header" href="#proof" id="proof">Proof</a></h3>
 <p>Proof represents a blockchain proof of a hash, which is a Merkle path from
@@ -247,26 +247,26 @@ the hash to the root hash of the proof's batch</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>hash</td><td><a href="#string">string</a></td><td></td><td>Hash is the hash the proof is proving for</td></tr>
 <tr><td>batch_id</td><td><a href="#string">string</a></td><td></td><td>BatchId is the proof's batch ID</td></tr>
-<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the proof's anchor type</td></tr>
-<tr><td>batch_status</td><td><a href="#anchor.Batch.Status">Batch.Status</a></td><td></td><td>BatchStatus is the proof's batch status</td></tr>
-<tr><td>format</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td></td><td>Format is the proof format</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchortype">Anchor.Type</a></td><td></td><td>AnchorType is the proof's anchor type</td></tr>
+<tr><td>batch_status</td><td><a href="#batchstatus">Batch.Status</a></td><td></td><td>BatchStatus is the proof's batch status</td></tr>
+<tr><td>format</td><td><a href="#proofformat">Proof.Format</a></td><td></td><td>Format is the proof format</td></tr>
 <tr><td>data</td><td><a href="#string">string</a></td><td></td><td>Data is the proof data in base64</td></tr>
-<tr><td>batch</td><td><a href="#anchor.Batch">Batch</a></td><td></td><td>Batch is the proof's batch detail</td></tr>
+<tr><td>batch</td><td><a href="#batch">Batch</a></td><td></td><td>Batch is the proof's batch detail</td></tr>
 </tbody></table>
 <h3><a class="header" href="#proofrequest" id="proofrequest">ProofRequest</a></h3>
 <p>ProofRequest represents a proof request</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>hash</td><td><a href="#string">string</a></td><td></td><td>Hash is the hash the proof is proving for</td></tr>
 <tr><td>batch_id</td><td><a href="#string">string</a></td><td></td><td>BatchId is the proof's batch ID</td></tr>
-<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the proof's anchor type</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchortype">Anchor.Type</a></td><td></td><td>AnchorType is the proof's anchor type</td></tr>
 <tr><td>with_batch</td><td><a href="#bool">bool</a></td><td></td><td>WithBatch indicates whether to include the proof's batch detail</td></tr>
 </tbody></table>
 <h3><a class="header" href="#submitproofrequest" id="submitproofrequest">SubmitProofRequest</a></h3>
 <p>SubmitProofRequest represents a submit proof request</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>hash</td><td><a href="#string">string</a></td><td></td><td>Hash is the hash to be submitted</td></tr>
-<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the anchor type to be used</td></tr>
-<tr><td>format</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td></td><td>Format is the proof format to be used</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchortype">Anchor.Type</a></td><td></td><td>AnchorType is the anchor type to be used</td></tr>
+<tr><td>format</td><td><a href="#proofformat">Proof.Format</a></td><td></td><td>Format is the proof format to be used</td></tr>
 <tr><td>skip_batching</td><td><a href="#bool">bool</a></td><td></td><td>SkipBatching indicates whether to skip batching and submit a proof for the hash directly</td></tr>
 <tr><td>with_batch</td><td><a href="#bool">bool</a></td><td></td><td>WithBatch indicates whether to include the batch detail in the reply</td></tr>
 </tbody></table>
@@ -274,7 +274,7 @@ the hash to the root hash of the proof's batch</p>
 <p>SubscribeBatchesRequest represents a subscription request for batch
 information</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
-<tr><td>filter</td><td><a href="#anchor.BatchRequest">BatchRequest</a></td><td></td><td>Filter is the batch filter. When nil, all batches of all anchors will be subscribed; otherwise, only the batches of the given anchor will be subscribed; if batch_id is non-empty, only the matched batch will be subscribed</td></tr>
+<tr><td>filter</td><td><a href="#batchrequest">BatchRequest</a></td><td></td><td>Filter is the batch filter. When nil, all batches of all anchors will be subscribed; otherwise, only the batches of the given anchor will be subscribed; if batch_id is non-empty, only the matched batch will be subscribed</td></tr>
 </tbody></table>
 <h3><a class="header" href="#verifyproofreply" id="verifyproofreply">VerifyProofReply</a></h3>
 <p>VerifyProofReply represents a verify proof reply</p>
@@ -286,8 +286,8 @@ information</p>
 <h3><a class="header" href="#verifyproofrequest" id="verifyproofrequest">VerifyProofRequest</a></h3>
 <p>VerifyProofRequest represents a verify proof request</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
-<tr><td>anchor_type</td><td><a href="#anchor.Anchor.Type">Anchor.Type</a></td><td></td><td>AnchorType is the proof's anchor type</td></tr>
-<tr><td>format</td><td><a href="#anchor.Proof.Format">Proof.Format</a></td><td></td><td>Format is the proof format. If skipping the signature checking is desired, please use the corresponding non-signed format, eg. use CHP_PATH instead of CHP_PATH_SIGNED in request</td></tr>
+<tr><td>anchor_type</td><td><a href="#anchortype">Anchor.Type</a></td><td></td><td>AnchorType is the proof's anchor type</td></tr>
+<tr><td>format</td><td><a href="#proofformat">Proof.Format</a></td><td></td><td>Format is the proof format. If skipping the signature checking is desired, please use the corresponding non-signed format, eg. use CHP_PATH instead of CHP_PATH_SIGNED in request</td></tr>
 <tr><td>data</td><td><a href="#string">string</a></td><td></td><td>Data is the proof data in base64</td></tr>
 </tbody></table>
 <!-- end messages -->
