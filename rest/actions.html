@@ -1,0 +1,764 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Actions - Proofable Documentation</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../concepts/index.html"><strong aria-hidden="true">2.</strong> Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/trie.html"><strong aria-hidden="true">2.1.</strong> Trie</a></li><li class="chapter-item expanded "><a href="../concepts/chain_of_trust.html"><strong aria-hidden="true">2.2.</strong> Chain of Trust</a></li><li class="chapter-item expanded "><a href="../concepts/anchor_types.html"><strong aria-hidden="true">2.3.</strong> Anchor Types</a></li></ol></li><li class="chapter-item expanded "><a href="../cli/index.html"><strong aria-hidden="true">3.</strong> CLI</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cli/demo.html"><strong aria-hidden="true">3.1.</strong> Demo</a></li><li class="chapter-item expanded "><a href="../cli/installation.html"><strong aria-hidden="true">3.2.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../cli/usage.html"><strong aria-hidden="true">3.3.</strong> Usage</a></li></ol></li><li class="chapter-item expanded "><a href="../go_sdk/index.html"><strong aria-hidden="true">4.</strong> Go SDK</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../go_sdk/getting_started.html"><strong aria-hidden="true">4.1.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="../go_sdk/examples.html"><strong aria-hidden="true">4.2.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../go_sdk/reference.html"><strong aria-hidden="true">4.3.</strong> Reference</a></li></ol></li><li class="chapter-item expanded "><a href="../node_sdk/index.html"><strong aria-hidden="true">5.</strong> Node SDK</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../node_sdk/getting_started.html"><strong aria-hidden="true">5.1.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="../node_sdk/examples.html"><strong aria-hidden="true">5.2.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../node_sdk/typescript_example.html"><strong aria-hidden="true">5.2.1.</strong> Typescript Example</a></li></ol></li><li class="chapter-item expanded "><a href="../node_sdk/reference.html"><strong aria-hidden="true">5.3.</strong> Reference</a></li></ol></li><li class="chapter-item expanded "><a href="../rest/index.html"><strong aria-hidden="true">6.</strong> REST</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rest/actions.html" class="active"><strong aria-hidden="true">6.1.</strong> Actions</a></li><li class="chapter-item expanded "><a href="../rest/types.html"><strong aria-hidden="true">6.2.</strong> Types</a></li></ol></li><li class="chapter-item expanded "><a href="../grpc/index.html"><strong aria-hidden="true">7.</strong> gRPC</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../grpc/demo.html"><strong aria-hidden="true">7.1.</strong> Demo</a></li><li class="chapter-item expanded "><a href="../grpc/api_service.html"><strong aria-hidden="true">7.2.</strong> API Service</a></li><li class="chapter-item expanded "><a href="../grpc/anchor_service.html"><strong aria-hidden="true">7.3.</strong> Anchor Service</a></li></ol></li><li class="chapter-item expanded "><a href="../contribution/index.html"><strong aria-hidden="true">8.</strong> Contribution</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../contribution/update_documentation.html"><strong aria-hidden="true">8.1.</strong> Update documentation</a></li><li class="chapter-item expanded "><a href="../contribution/publish_a_new_version.html"><strong aria-hidden="true">8.2.</strong> Publish a new version</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Proofable Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/SouthbankSoftware/proofable" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#actions" id="actions">Actions</a></h1>
+<ul>
+<li><a href="#anchortrie">AnchorTrie</a></li>
+<li><a href="#createtrie">CreateTrie</a></li>
+<li><a href="#deleteitem">DeleteItem</a></li>
+<li><a href="#deleteproof">DeleteProof</a></li>
+<li><a href="#deletetrie">DeleteTrie</a></li>
+<li><a href="#getitem">GetItem</a></li>
+<li><a href="#getitems">GetItems</a></li>
+<li><a href="#getproof">GetProof</a></li>
+<li><a href="#getproofs">GetProofs</a></li>
+<li><a href="#getroots">GetRoots</a></li>
+<li><a href="#gettrie">GetTrie</a></li>
+<li><a href="#prove">Prove</a></li>
+<li><a href="#putitem">PutItem</a></li>
+<li><a href="#putitems">PutItems</a></li>
+<li><a href="#verify">Verify</a></li>
+<li><a href="#verifyproof">VerifyProof</a></li>
+</ul>
+<h2><a class="header" href="#anchortrie" id="anchortrie">AnchorTrie</a></h2>
+<p>Creates a new <a href="./types.html#trieproof-type">TrieProof</a> by submitting the trie for blockchain anchoring.</p>
+<h3><a class="header" href="#http-request" id="http-request">HTTP Request</a></h3>
+<pre><code>POST /tries/{trie-id}/anchor
+</code></pre>
+<h4><a class="header" href="#request-query-parameters" id="request-query-parameters">Request Query Parameters</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">anchorType</td><td align="left">string</td><td align="left">The anchor type.</td></tr>
+</tbody></table>
+<h4><a class="header" href="#response-body" id="response-body">Response Body</a></h4>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties in the response body.</p>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">proof</td><td align="left"><a href="./types.html#trieproof-type">TrieProof</a></td><td align="left">The trie proof submitted for anchoring.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example" id="example">Example</a></h3>
+<h4><a class="header" href="#request" id="request">Request</a></h4>
+<pre><code>POST /tries/tHYF4XwaujFCO3NBFbPAF0/anchor?anchorType=ETH
+</code></pre>
+<h4><a class="header" href="#response" id="response">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;proof&quot;: {
+        &quot;id&quot;: &quot;pokEUxLX8lswgjjT3OVnWs&quot;,
+        &quot;trieId&quot;: &quot;tHYF4XwaujFCO3NBFbPAF0&quot;,
+        &quot;root&quot;: &quot;0000000000000000000000000000000000000000000000000000000000000000&quot;,
+        &quot;createdAt&quot;: &quot;2020-10-07T06:43:07.700472507Z&quot;,
+        &quot;status&quot;: &quot;BATCHING&quot;,
+        &quot;anchorType&quot;: &quot;ETH&quot;,
+        &quot;proofRoot&quot;: &quot;0000000000000000000000000000000000000000000000000000000000000000&quot;
+    }
+}
+</code></pre>
+<h2><a class="header" href="#createtrie" id="createtrie">CreateTrie</a></h2>
+<p>Creates a new trie.</p>
+<h3><a class="header" href="#http-request-1" id="http-request-1">HTTP Request</a></h3>
+<pre><code>POST /tries
+</code></pre>
+<h3><a class="header" href="#request-body" id="request-body">Request Body</a></h3>
+<p>No request body required.</p>
+<h3><a class="header" href="#response-body-1" id="response-body-1">Response Body</a></h3>
+<p>If successful, this method returns a <code>201 CREATED</code> response code.</p>
+<h4><a class="header" href="#properties" id="properties">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">trie</td><td align="left"><a href="./types.html#trie-type">Trie</a></td><td align="left">The created trie.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-1" id="example-1">Example</a></h3>
+<h4><a class="header" href="#response-1" id="response-1">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;trie&quot; : {
+        &quot;id&quot;: &quot;thBGjbeaX3nVh2Zxl3z5gt&quot;,
+        &quot;root&quot;: &quot;0000000000000000000000000000000000000000000000000000000000000000&quot;
+    }
+}
+</code></pre>
+<h2><a class="header" href="#deleteitem" id="deleteitem">DeleteItem</a></h2>
+<p>Deletes a single <a href="./types.html#trieitem-type">TrieItem</a> from a trie.</p>
+<h3><a class="header" href="#http-request-2" id="http-request-2">HTTP Request</a></h3>
+<pre><code>DELETE /tries/{trie-id}/items/{item-key}
+</code></pre>
+<h3><a class="header" href="#response-body-2" id="response-body-2">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties in the response body.</p>
+<h4><a class="header" href="#properties-1" id="properties-1">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">updatedRoot</td><td align="left">string</td><td align="left">The new root of the trie.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-2" id="example-2">Example</a></h3>
+<h4><a class="header" href="#request-1" id="request-1">Request</a></h4>
+<pre><code>DELETE /tries/tBnXlLjoCI-WgFzjaDxgae/items/key-1
+</code></pre>
+<h4><a class="header" href="#response-2" id="response-2">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;updatedRoot&quot;: &quot;b28935cba5c8b49d255a9ed59a950179688e79345b5af16f4df7b0abdf4f370b&quot;
+}
+</code></pre>
+<h2><a class="header" href="#deleteproof" id="deleteproof">DeleteProof</a></h2>
+<p>Deletes a <a href="./types.html#trieproof-type">TrieProof</a>.</p>
+<h3><a class="header" href="#http-request-3" id="http-request-3">HTTP Request</a></h3>
+<pre><code>DELETE /tries/{trie-id}/proofs/{proof-id}
+</code></pre>
+<h3><a class="header" href="#response-body-3" id="response-body-3">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties in the response body.</p>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">proof</td><td align="left"><a href="./types.html#trieproof-type">TrieProof</a></td><td align="left">The deleted trie proof.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-3" id="example-3">Example</a></h3>
+<h3><a class="header" href="#request-2" id="request-2">Request</a></h3>
+<pre><code>DELETE /tries/tAgYKIN6lQ7zIFRD8pCteg/proofs/pekk6DlPqz0QaHzPMuOGcB
+</code></pre>
+<h3><a class="header" href="#response-3" id="response-3">Response</a></h3>
+<pre><code class="language-json">{
+    &quot;proof&quot;: {
+        &quot;id&quot;: &quot;pekk6DlPqz0QaHzPMuOGcB&quot;,
+        &quot;trieId&quot;: &quot;tAgYKIN6lQ7zIFRD8pCteg&quot;,
+        &quot;root&quot;: &quot;c745c59d907512f3d023ed6e1e654e72e1dfba5422691c434bc3c2432f1472dd&quot;,
+        &quot;createdAt&quot;: &quot;2020-10-07T22:09:53.717798766Z&quot;,
+        &quot;status&quot;: &quot;CONFIRMED&quot;,
+        &quot;anchorType&quot;: &quot;ETH&quot;,
+        &quot;txnId&quot;: &quot;ee2bf8ca4d4000ea39cf8e184319b81f86a0e50fc0034bcfef7f62aebc467d81&quot;,
+        &quot;txnUri&quot;: &quot;https://rinkeby.etherscan.io/tx/0xee2bf8ca4d4000ea39cf8e184319b81f86a0e50fc0034bcfef7f62aebc467d81&quot;,
+        &quot;blockTime&quot;: 1602108624,
+        &quot;blockNumber&quot;: 7330146,
+        &quot;proofRoot&quot;: &quot;dad814e53cb616d51ed5a389a8e9a91812051b4102535446c4898131158ed916&quot;
+    }
+}
+</code></pre>
+<h2><a class="header" href="#deletetrie" id="deletetrie">DeleteTrie</a></h2>
+<p>Deletes a <a href="./types.html#trie">Trie</a>.</p>
+<h3><a class="header" href="#http-request-4" id="http-request-4">HTTP Request</a></h3>
+<pre><code>DELETE /tries/{trie-id}
+</code></pre>
+<h3><a class="header" href="#response-body-4" id="response-body-4">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code.</p>
+<h4><a class="header" href="#properties-2" id="properties-2">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">trie</td><td align="left"><a href="./types.html#trie-type">Trie</a></td><td align="left">The deleted trie.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-4" id="example-4">Example</a></h3>
+<h4><a class="header" href="#response-4" id="response-4">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;trie&quot; : {
+        &quot;id&quot;: &quot;thBGjbeaX3nVh2Zxl3z5gt&quot;,
+        &quot;root&quot;: &quot;0000000000000000000000000000000000000000000000000000000000000000&quot;
+    }
+}
+</code></pre>
+<h2><a class="header" href="#getitem" id="getitem">GetItem</a></h2>
+<p>Retrieves a single <a href="./types.html#trieitem-type">TrieItem</a> from a specific trie.</p>
+<h3><a class="header" href="#http-request-5" id="http-request-5">HTTP Request</a></h3>
+<pre><code>GET /tries/{trie-id}/items/{item-key}
+</code></pre>
+<h3><a class="header" href="#response-body-5" id="response-body-5">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code.</p>
+<h4><a class="header" href="#properties-3" id="properties-3">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">item</td><td align="left"><a href="./types.html#trie-type">TrieItem</a></td><td align="left">The trie item.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-5" id="example-5">Example</a></h3>
+<h4><a class="header" href="#response-5" id="response-5">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;item&quot;: [
+        {
+            &quot;key&quot;: &quot;Hello, World!&quot;,
+            &quot;value&quot;: &quot;SGVsbG8sIFdvcmxkIQ==&quot;
+        }
+    ]
+}
+</code></pre>
+<h2><a class="header" href="#getitems" id="getitems">GetItems</a></h2>
+<p>Retrieves all <a href="./types.html#trieitem-type">TrieItem</a>'s from a specific trie.</p>
+<h3><a class="header" href="#http-request-6" id="http-request-6">HTTP Request</a></h3>
+<pre><code>GET /tries/{trie-id}/items
+</code></pre>
+<h3><a class="header" href="#response-body-6" id="response-body-6">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties in the response body.</p>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">items</td><td align="left">[ ] <a href="./types.html#trie-type">TrieItem</a></td><td align="left">An array of trie items.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-6" id="example-6">Example</a></h3>
+<h4><a class="header" href="#response-6" id="response-6">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;items&quot;: [
+        {
+            &quot;key&quot;: &quot;Hello, World!&quot;,
+            &quot;value&quot;: &quot;SGVsbG8sIFdvcmxkIQ==&quot;
+        }
+    ]
+}
+</code></pre>
+<h2><a class="header" href="#getproof" id="getproof">GetProof</a></h2>
+<p>Retrieves a <a href="./types.html#trieproof-type">TrieProof</a>.</p>
+<h3><a class="header" href="#http-request-7" id="http-request-7">HTTP Request</a></h3>
+<pre><code>GET /tries/{trie-id}/proofs/{proof-id}
+</code></pre>
+<h3><a class="header" href="#response-body-7" id="response-body-7">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties in the response body.</p>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">proof</td><td align="left"><a href="./types.html#trieproof-type">TrieProof</a></td><td align="left">The trie proof.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-7" id="example-7">Example</a></h3>
+<h3><a class="header" href="#request-3" id="request-3">Request</a></h3>
+<pre><code>GET /tries/tBnXlLjoCI-WgFzjaDxgae/proofs/p1K2Nn0P010xEgzaV524Hk
+</code></pre>
+<h3><a class="header" href="#response-7" id="response-7">Response</a></h3>
+<pre><code class="language-json">{
+    &quot;proof&quot;: {
+        &quot;id&quot;: &quot;p1K2Nn0P010xEgzaV524Hk&quot;,
+        &quot;trieId&quot;: &quot;tBnXlLjoCI-WgFzjaDxgae&quot;,
+        &quot;root&quot;: &quot;c745c59d907512f3d023ed6e1e654e72e1dfba5422691c434bc3c2432f1472dd&quot;,
+        &quot;createdAt&quot;: &quot;2020-10-07T02:37:08.0056553Z&quot;,
+        &quot;status&quot;: &quot;BATCHING&quot;,
+        &quot;anchorType&quot;: &quot;ETH&quot;,
+        &quot;proofRoot&quot;: &quot;0000000000000000000000000000000000000000000000000000000000000000&quot;
+    }
+}
+</code></pre>
+<h2><a class="header" href="#getproofs" id="getproofs">GetProofs</a></h2>
+<p>Retrieve all <a href="./types.html#trieproof-type">TrieProof</a>'s for a given trie.</p>
+<h3><a class="header" href="#http-request-8" id="http-request-8">HTTP Request</a></h3>
+<pre><code>GET /tries/{trie-id}/proofs
+</code></pre>
+<h3><a class="header" href="#response-body-8" id="response-body-8">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties in the response body.</p>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">proofs</td><td align="left">[ ] <a href="./types.html#trieproof-type">TrieProof</a></td><td align="left">An array of trie proofs for the given trie.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-8" id="example-8">Example</a></h3>
+<h4><a class="header" href="#request-4" id="request-4">Request</a></h4>
+<pre><code>GET /tries/tVoXJnrmXW-BQTQsN-TQjW/proofs
+</code></pre>
+<h4><a class="header" href="#response-8" id="response-8">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;proofs&quot;: [
+        {
+            &quot;id&quot;: &quot;p0633loCr2bMfGFSkEw8i-&quot;,
+            &quot;trieId&quot;: &quot;tVoXJnrmXW-BQTQsN-TQjW&quot;,
+            &quot;root&quot;: &quot;3c74322c9dfe3aa6d82f9d5b3642eab9195ad0a25b7e1d28b8d338899a6f338c&quot;,
+            &quot;createdAt&quot;: &quot;2020-09-18T02:11:12.09027431Z&quot;,
+            &quot;status&quot;: &quot;CONFIRMED&quot;,
+            &quot;anchorType&quot;: &quot;ETH&quot;,
+            &quot;txnId&quot;: &quot;291c1e13108c62fc5f4e1c0c09929f1d36259f6386f096882ab92a08bc7b2cea&quot;,
+            &quot;txnUri&quot;: &quot;https://rinkeby.etherscan.io/tx/0x291c1e13108c62fc5f4e1c0c09929f1d36259f6386f096882ab92a08bc7b2cea&quot;,
+            &quot;blockTime&quot;: 1600395098,
+            &quot;blockNumber&quot;: 7215935,
+            &quot;proofRoot&quot;: &quot;7ab109a79c9721e6e199cd4545cd5de95bef8ee7032808ae44ec44c4c13dd9cb&quot;
+        }
+    ]
+}
+</code></pre>
+<h2><a class="header" href="#getroots" id="getroots">GetRoots</a></h2>
+<h3><a class="header" href="#http-request-9" id="http-request-9">HTTP Request</a></h3>
+<pre><code>GET /tries/{trie-id}/roots
+</code></pre>
+<h3><a class="header" href="#response-body-9" id="response-body-9">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties.</p>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">roots</td><td align="left">[ ] <a href="./types.html#trieroot-type">TrieRoot</a></td><td align="left">An array of roots the trie has.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-9" id="example-9">Example</a></h3>
+<h4><a class="header" href="#request-5" id="request-5">Request</a></h4>
+<pre><code>GET /tries/thBGjbeaX3nVh2Zxl3z5gt/roots
+</code></pre>
+<h4><a class="header" href="#response-9" id="response-9">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;roots&quot;: [
+        {
+            &quot;root&quot;: &quot;3c74322c9dfe3aa6d82f9d5b3642eab9195ad0a25b7e1d28b8d338899a6f338c&quot;,
+            &quot;createdAt&quot;: &quot;2020-09-17T23:42:04.385479769Z&quot;
+        }
+    ]
+}
+</code></pre>
+<h2><a class="header" href="#gettrie" id="gettrie">GetTrie</a></h2>
+<p>Retrieves a <a href="./types.html#trie-type">Trie</a>.</p>
+<h3><a class="header" href="#http-request-10" id="http-request-10">HTTP Request</a></h3>
+<pre><code>GET /tries/{trie-id}
+</code></pre>
+<h3><a class="header" href="#response-body-10" id="response-body-10">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code.</p>
+<h4><a class="header" href="#properties-4" id="properties-4">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">trie</td><td align="left"><a href="./types.html#trie-type">Trie</a></td><td align="left">The trie.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-10" id="example-10">Example</a></h3>
+<h4><a class="header" href="#response-10" id="response-10">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;trie&quot; : {    
+        &quot;id&quot;: &quot;thBGjbeaX3nVh2Zxl3z5gt&quot;,
+        &quot;root&quot;: &quot;3c74322c9dfe3aa6d82f9d5b3642eab9195ad0a25b7e1d28b8d338899a6f338c&quot;
+    }
+}
+</code></pre>
+<h2><a class="header" href="#prove" id="prove">Prove</a></h2>
+<p>Anchors a set of key/values to the blockchain and returns a <a href="./types.html#trieproof-type">TrieProof</a>.</p>
+<h3><a class="header" href="#http-request-11" id="http-request-11">HTTP Request</a></h3>
+<pre><code>POST /prove
+</code></pre>
+<h3><a class="header" href="#request-body-1" id="request-body-1">Request Body</a></h3>
+<h4><a class="header" href="#json-representation" id="json-representation">JSON Representation</a></h4>
+<pre><code class="language-json">{
+    &quot;anchorType&quot; : &quot;string&quot;,
+    &quot;items&quot; : [
+        { &quot;key&quot; : &quot;string&quot;, &quot;value&quot; : &quot;string (base64)&quot; }
+    ]
+}
+</code></pre>
+<h4><a class="header" href="#properties-5" id="properties-5">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">anchorType</td><td align="left">string</td><td align="left">The blockchain anchor type to submit the proof to. One of [ ]. Defaults to <strong>ETH</strong>.</td></tr>
+<tr><td align="left">items</td><td align="left">[ ] <a href="./types.html#trieitem-type">TrieItem</a></td><td align="left">The array of items to create a proof for. Minimum of 1 item.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#response-body-11" id="response-body-11">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties in the response body.</p>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">proof</td><td align="left"><a href="./types.html#trieproof-type">TrieProof</a></td><td align="left">The proof created.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-11" id="example-11">Example</a></h3>
+<h4><a class="header" href="#request-6" id="request-6">Request</a></h4>
+<pre><code>POST /prove
+</code></pre>
+<pre><code class="language-json">{
+    &quot;anchorType&quot; : &quot;ETH&quot;,
+    &quot;items&quot; : [
+        { &quot;key&quot; : &quot;Hello, World!&quot;, &quot;value&quot; : &quot;SGVsbG8sIFdvcmxkIQ==&quot; }
+    ]
+}
+</code></pre>
+<h4><a class="header" href="#response-11" id="response-11">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;proof&quot;: {
+        &quot;id&quot;: &quot;p1K2Nn0P010xEgzaV524Hk&quot;,
+        &quot;trieId&quot;: &quot;tBnXlLjoCI-WgFzjaDxgae&quot;,
+        &quot;root&quot;: &quot;c745c59d907512f3d023ed6e1e654e72e1dfba5422691c434bc3c2432f1472dd&quot;,
+        &quot;createdAt&quot;: &quot;2020-10-07T02:37:08.0056553Z&quot;,
+        &quot;status&quot;: &quot;BATCHING&quot;,
+        &quot;anchorType&quot;: &quot;ETH&quot;,
+        &quot;proofRoot&quot;: &quot;0000000000000000000000000000000000000000000000000000000000000000&quot;
+    }
+}
+</code></pre>
+<h2><a class="header" href="#putitem" id="putitem">PutItem</a></h2>
+<p>Adds a single <a href="./types.html#trieitem-type">TrieItem</a> to a trie.</p>
+<h3><a class="header" href="#http-request-12" id="http-request-12">HTTP Request</a></h3>
+<pre><code>POST /tries/{trie-id}/items/{item-key}
+</code></pre>
+<h3><a class="header" href="#request-body-2" id="request-body-2">Request Body</a></h3>
+<h4><a class="header" href="#json-representation-1" id="json-representation-1">JSON Representation</a></h4>
+<pre><code class="language-json">{
+    &quot;value&quot; : &quot;string&quot;
+}
+</code></pre>
+<h4><a class="header" href="#properties-6" id="properties-6">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">value</td><td align="left">string</td><td align="left">The base64 encoded value to add.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#response-body-12" id="response-body-12">Response Body</a></h3>
+<p>If successful, this method returns a <code>201 CREATED</code> response code and the following properties in the response body.</p>
+<h4><a class="header" href="#properties-7" id="properties-7">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">updatedRoot</td><td align="left">string</td><td align="left">The new root of the trie.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-12" id="example-12">Example</a></h3>
+<pre><code>POST /tries/tBnXlLjoCI-WgFzjaDxgae/items/key-1
+</code></pre>
+<h4><a class="header" href="#request-7" id="request-7">Request</a></h4>
+<pre><code class="language-json">{
+    &quot;value&quot; : &quot;SGVsbG8sIFdvcmxkIQ==&quot;
+}
+</code></pre>
+<h4><a class="header" href="#response-12" id="response-12">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;updatedRoot&quot;: &quot;b28935cba5c8b49d255a9ed59a950179688e79345b5af16f4df7b0abdf4f370b&quot;
+}
+</code></pre>
+<h2><a class="header" href="#putitems" id="putitems">PutItems</a></h2>
+<p>Adds <a href="./types.html#trieitem-type">TrieItem</a>'s to a trie.</p>
+<h3><a class="header" href="#http-request-13" id="http-request-13">HTTP Request</a></h3>
+<pre><code>POST /tries/{trie-id}/items
+</code></pre>
+<h3><a class="header" href="#request-body-3" id="request-body-3">Request Body</a></h3>
+<h4><a class="header" href="#json-representation-2" id="json-representation-2">JSON Representation</a></h4>
+<pre><code class="language-json">{
+    &quot;items&quot; : [
+        { &quot;key&quot; : &quot;string&quot;, &quot;value&quot; : &quot;string (base64)&quot; },
+        { &quot;key&quot; : &quot;string&quot;, &quot;value&quot; : &quot;string (base64)&quot; }
+    ]
+}
+</code></pre>
+<h4><a class="header" href="#properties-8" id="properties-8">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">items</td><td align="left">[ ] <a href="./types.html#trieitem-type">TrieItem</a></td><td align="left">An array of items to add.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#response-body-13" id="response-body-13">Response Body</a></h3>
+<p>If successful, this method returns a <code>201 CREATED</code> response code and the following properties in the response body.</p>
+<h4><a class="header" href="#properties-9" id="properties-9">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">updatedRoot</td><td align="left">string</td><td align="left">The new root of the trie.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-13" id="example-13">Example</a></h3>
+<h4><a class="header" href="#request-8" id="request-8">Request</a></h4>
+<pre><code class="language-json">{
+    &quot;items&quot; : [
+        { &quot;key&quot; : &quot;key-1&quot;, &quot;value&quot; : &quot;SGVsbG8s&quot; },
+        { &quot;key&quot; : &quot;key-2&quot;, &quot;value&quot; : &quot;V29ybGQh&quot; }
+    ]
+}
+</code></pre>
+<h4><a class="header" href="#response-13" id="response-13">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;updatedRoot&quot;: &quot;b28935cba5c8b49d255a9ed59a950179688e79345b5af16f4df7b0abdf4f370b&quot;
+}
+</code></pre>
+<h2><a class="header" href="#verify" id="verify">Verify</a></h2>
+<p>Verifies an anchored <a href="./types.html#trieproof-type">TrieProof</a>. </p>
+<h3><a class="header" href="#http-request-14" id="http-request-14">HTTP Request</a></h3>
+<pre><code>POST /verify
+</code></pre>
+<h3><a class="header" href="#request-body-4" id="request-body-4">Request Body</a></h3>
+<h4><a class="header" href="#json-representation-3" id="json-representation-3">JSON Representation</a></h4>
+<pre><code class="language-json">{
+    &quot;proofId&quot; : &quot;string&quot;,
+    &quot;trieId&quot; : &quot;string&quot;,
+    &quot;outputItems&quot; : true
+}
+</code></pre>
+<h4><a class="header" href="#properties-10" id="properties-10">Properties</a></h4>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">outputItems</td><td align="left">bool</td><td align="left">Optional. Return the items contained in the proof.</td></tr>
+<tr><td align="left">proofId</td><td align="left">string</td><td align="left">The anchored proof id of the trie.</td></tr>
+<tr><td align="left">trieId</td><td align="left">string</td><td align="left">The trie ID the proof was created for.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#response-body-14" id="response-body-14">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties in the response body.</p>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">error</td><td align="left">string</td><td align="left">An error message if the proof failed verification.</td></tr>
+<tr><td align="left">items</td><td align="left">[ ] <a href="./types.html#trieitem-type">TrieItem</a></td><td align="left">The array of items that are contained in the proof.</td></tr>
+<tr><td align="left">proof</td><td align="left"><a href="./types.html#trieproof-type">TrieProof</a></td><td align="left">The proof verified.</td></tr>
+<tr><td align="left">verified</td><td align="left">bool</td><td align="left">The status of the proof.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-14" id="example-14">Example</a></h3>
+<h4><a class="header" href="#request-9" id="request-9">Request</a></h4>
+<pre><code class="language-json">{
+    &quot;proofId&quot; : &quot;p1K2Nn0P010xEgzaV524Hk&quot;,
+    &quot;trieId&quot; : &quot;tBnXlLjoCI-WgFzjaDxgae&quot;,
+    &quot;outputItems&quot; : true
+}
+</code></pre>
+<h4><a class="header" href="#response-14" id="response-14">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;verified&quot;: true,
+    &quot;proof&quot;: {
+        &quot;id&quot;: &quot;p1K2Nn0P010xEgzaV524Hk&quot;,
+        &quot;trieId&quot;: &quot;tBnXlLjoCI-WgFzjaDxgae&quot;,
+        &quot;root&quot;: &quot;c745c59d907512f3d023ed6e1e654e72e1dfba5422691c434bc3c2432f1472dd&quot;,
+        &quot;createdAt&quot;: &quot;2020-10-07T02:37:08.0056553Z&quot;,
+        &quot;status&quot;: &quot;CONFIRMED&quot;,
+        &quot;anchorType&quot;: &quot;ETH&quot;,
+        &quot;txnId&quot;: &quot;dc4933c7bf4e4d0b584bed392a8b6067678a001e5137e4780cd55263377394a4&quot;,
+        &quot;txnUri&quot;: &quot;https://rinkeby.etherscan.io/tx/0xdc4933c7bf4e4d0b584bed392a8b6067678a001e5137e4780cd55263377394a4&quot;,
+        &quot;blockTime&quot;: 1602038247,
+        &quot;blockNumber&quot;: 7325459,
+        &quot;proofRoot&quot;: &quot;dad814e53cb616d51ed5a389a8e9a91812051b4102535446c4898131158ed916&quot;
+    },
+    &quot;items&quot;: [
+        {
+            &quot;key&quot;: &quot;Hello, World!&quot;,
+            &quot;value&quot;: &quot;SGVsbG8sIFdvcmxkIQ==&quot;
+        }
+    ]
+}
+</code></pre>
+<h2><a class="header" href="#verifyproof" id="verifyproof">VerifyProof</a></h2>
+<p>Verifies an anchored <a href="./types.html#trieproof-type">TrieProof</a>.</p>
+<h3><a class="header" href="#http-request-15" id="http-request-15">HTTP Request</a></h3>
+<pre><code>GET /tries/{trie-id}/verify/{proof-id}
+</code></pre>
+<h3><a class="header" href="#optional-query-parameters" id="optional-query-parameters">Optional Query Parameters</a></h3>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">outputItems</td><td align="left">bool</td><td align="left">Optional. Return the items belonging the proof.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#response-body-15" id="response-body-15">Response Body</a></h3>
+<p>If successful, this method returns a <code>200 OK</code> response code and the following properties in the response body.</p>
+<table><thead><tr><th align="left">Property</th><th align="left">Type</th><th align="left">Description</th></tr></thead><tbody>
+<tr><td align="left">error</td><td align="left">string</td><td align="left">An error message if the proof failed verification.</td></tr>
+<tr><td align="left">items</td><td align="left">[ ] <a href="./types.html#trieitem-type">TrieItem</a></td><td align="left">The array of items that are contained in the proof.</td></tr>
+<tr><td align="left">proof</td><td align="left"><a href="./types.html#trieproof-type">TrieProof</a></td><td align="left">The proof verified.</td></tr>
+<tr><td align="left">verified</td><td align="left">bool</td><td align="left">The status of the proof.</td></tr>
+</tbody></table>
+<h3><a class="header" href="#example-15" id="example-15">Example</a></h3>
+<h4><a class="header" href="#request-10" id="request-10">Request</a></h4>
+<pre><code>GET /tries/tBnXlLjoCI-WgFzjaDxgae/verify/p1K2Nn0P010xEgzaV524Hk?outputItems=true
+</code></pre>
+<h4><a class="header" href="#response-15" id="response-15">Response</a></h4>
+<pre><code class="language-json">{
+    &quot;verified&quot;: true,
+    &quot;proof&quot;: {
+        &quot;id&quot;: &quot;p1K2Nn0P010xEgzaV524Hk&quot;,
+        &quot;trieId&quot;: &quot;tBnXlLjoCI-WgFzjaDxgae&quot;,
+        &quot;root&quot;: &quot;c745c59d907512f3d023ed6e1e654e72e1dfba5422691c434bc3c2432f1472dd&quot;,
+        &quot;createdAt&quot;: &quot;2020-10-07T02:37:08.0056553Z&quot;,
+        &quot;status&quot;: &quot;CONFIRMED&quot;,
+        &quot;anchorType&quot;: &quot;ETH&quot;,
+        &quot;txnId&quot;: &quot;dc4933c7bf4e4d0b584bed392a8b6067678a001e5137e4780cd55263377394a4&quot;,
+        &quot;txnUri&quot;: &quot;https://rinkeby.etherscan.io/tx/0xdc4933c7bf4e4d0b584bed392a8b6067678a001e5137e4780cd55263377394a4&quot;,
+        &quot;blockTime&quot;: 1602038247,
+        &quot;blockNumber&quot;: 7325459,
+        &quot;proofRoot&quot;: &quot;dad814e53cb616d51ed5a389a8e9a91812051b4102535446c4898131158ed916&quot;
+    },
+    &quot;items&quot;: [
+        {
+            &quot;key&quot;: &quot;Hello, World!&quot;,
+            &quot;value&quot;: &quot;SGVsbG8sIFdvcmxkIQ==&quot;
+        }
+    ]
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../rest/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../rest/types.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../rest/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../rest/types.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+        <!-- Google Analytics Tag -->
+        <script type="text/javascript">
+            var localAddrs = ["localhost", "127.0.0.1", ""];
+
+            // make sure we don't activate google analytics if the developer is
+            // inspecting the book locally...
+            if (localAddrs.indexOf(document.location.hostname) === -1) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+                ga('create', 'UA-101162043-19', 'auto');
+                ga('send', 'pageview');
+            }
+        </script>
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
