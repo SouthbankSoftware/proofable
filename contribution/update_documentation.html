@@ -164,6 +164,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#update-documentation" id="update-documentation">Update documentation</a></h1>
+<p>The follow operations should be performed in <code>master</code> branch unless otherwise specified</p>
 <h2><a class="header" href="#setup-docs-compiling-environment" id="setup-docs-compiling-environment">Setup docs compiling environment</a></h2>
 <ol>
 <li>
@@ -216,18 +217,25 @@
 <h2><a class="header" href="#deploy-updated-docs" id="deploy-updated-docs">Deploy updated docs</a></h2>
 <ol>
 <li>
-<p>Make a production build of the docs</p>
+<p>Make a production build of the docs:</p>
 <pre><code class="language-zsh">make doc-build
 </code></pre>
 <p>this will generate the htmls in <code>docs_output/book</code></p>
 </li>
 <li>
-<p>Sync changes to the checked out <code>gh-pages</code> branch at <code>docs_output/gh-pages</code> from <code>docs_output/book/html</code></p>
+<p>Sync changes to the directory <code>docs_output/gh-pages</code> (the checkout of <code>gh-pages</code> branch) from <code>docs_output/book/html</code>:</p>
 <pre><code class="language-zsh">make doc-deploy
 </code></pre>
 </li>
 <li>
-<p>Go to the <code>gh-pages</code> checkout: <code>cd docs_output/gh-pages</code>, review the changes and commit</p>
+<p>Go to the <code>docs_output/gh-pages</code> directory, review changes and perform a git commit on <code>gh-pages</code> branch:</p>
+<pre><code class="language-zsh">cd docs_output/gh-pages
+# review changes
+git status
+# commit
+git add .
+git commit -am &quot;Some meaningful commit message&quot;
+</code></pre>
 </li>
 </ol>
 
