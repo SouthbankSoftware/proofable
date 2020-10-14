@@ -18,7 +18,7 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-09-10T23:59:57+10:00
+# @Last modified time: 2020-10-14T20:18:17+11:00
 
 PROJECT_NAME := proofable
 PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(PROJECT_NAME)
@@ -69,6 +69,7 @@ doc-build:
 	rm -rf docs_output/book
 	mdbook build
 doc-deploy:
+	cd docs_output/gh-pages && git config pull.ff only && git pull
 	rsync -r --exclude=node_sdk/reference --exclude=.git --delete docs_output/book/html/ docs_output/gh-pages
 doc-clean:
 	rm -rf docs/node_sdk/reference
@@ -82,5 +83,5 @@ doc-go:
 doc-node:
 	cd node_sdk && npm run doc
 doc-anchortypes:
-	cd docs_output/prd-releases && git config pull.ff only
+	cd docs_output/prd-releases && git config pull.ff only && git pull
 	go run ./tools/anchor-types-updater

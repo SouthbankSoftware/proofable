@@ -1,5 +1,7 @@
 # Update documentation
 
+The follow operations should be performed in `master` branch unless otherwise specified
+
 ## Setup docs compiling environment
 
 1. Make sure the following dependencies are installed:
@@ -48,7 +50,7 @@ Notes:
 
 ## Deploy updated docs
 
-1. Make a production build of the docs
+1. Make a production build of the docs:
 
     ```zsh
     make doc-build
@@ -56,10 +58,19 @@ Notes:
 
    this will generate the htmls in `docs_output/book`
 
-2. Sync changes to the checked out `gh-pages` branch at `docs_output/gh-pages` from `docs_output/book/html`
+2. Sync changes to the directory `docs_output/gh-pages` (the checkout of `gh-pages` branch) from `docs_output/book/html`:
 
     ```zsh
     make doc-deploy
     ```
 
-3. Go to the `gh-pages` checkout: `cd docs_output/gh-pages`, review the changes and commit
+3. Go to the `docs_output/gh-pages` directory, review changes and perform a git commit on `gh-pages` branch:
+
+    ```zsh
+    cd docs_output/gh-pages
+    # review changes
+    git status
+    # commit
+    git add .
+    git commit -am "Some meaningful commit message"
+    ```

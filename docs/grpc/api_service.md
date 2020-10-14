@@ -41,25 +41,25 @@ Protobuf definition: [api/api.proto](https://github.com/SouthbankSoftware/proofa
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetTries | [.google.protobuf.Empty](#google.protobuf.Empty) | [Trie](#api.Trie) stream | GetTries gets all tries. Admin privilege is required |
-| GetTrie | [TrieRequest](#api.TrieRequest) | [Trie](#api.Trie) | GetTrie gets a trie |
-| ImportTrie | [DataChunk](#api.DataChunk) stream | [Trie](#api.Trie) | ImportTrie creates a new trie from existing trie data. If the trie ID is not provided in the metadata, a new one will be generated |
-| ExportTrie | [TrieRequest](#api.TrieRequest) | [DataChunk](#api.DataChunk) stream | ExportTrie exports a trie's data |
-| CreateTrie | [.google.protobuf.Empty](#google.protobuf.Empty) | [Trie](#api.Trie) | CreateTrie creates an empty trie |
-| DeleteTrie | [TrieRequest](#api.TrieRequest) | [Trie](#api.Trie) | DeleteTrie deletes a trie. This destroys everything of a trie |
-| GetTrieKeyValues | [TrieKeyValuesRequest](#api.TrieKeyValuesRequest) | [KeyValue](#api.KeyValue) stream | GetTrieKeyValues gets key-values of a trie. The returned KeyValues are ordered by the keys lexicographically |
-| GetTrieKeyValue | [TrieKeyValueRequest](#api.TrieKeyValueRequest) | [KeyValue](#api.KeyValue) | GetTrieKeyValue gets a key-value of a trie |
-| SetTrieKeyValues | [KeyValue](#api.KeyValue) stream | [Trie](#api.Trie) | SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to remove that key. Modifications to a trie will change its root hash |
-| GetTrieRoots | [TrieRootsRequest](#api.TrieRootsRequest) | [TrieRoot](#api.TrieRoot) stream | GetTrieRoots gets roots of a trie. This is a series of roots showing the modification history of a trie |
-| SetTrieRoot | [SetTrieRootRequest](#api.SetTrieRootRequest) | [Trie](#api.Trie) | SetTrieRoot sets the root of a trie to the given one. This will add an entry in the root history |
-| GetTrieProofs | [TrieProofsRequest](#api.TrieProofsRequest) | [TrieProof](#api.TrieProof) stream | GetTrieProofs gets proofs of a trie |
-| GetTrieProof | [TrieProofRequest](#api.TrieProofRequest) | [TrieProof](#api.TrieProof) | GetTrieProof gets a proof of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned |
-| SubscribeTrieProof | [TrieProofRequest](#api.TrieProofRequest) | [TrieProof](#api.TrieProof) stream | SubscribeTrieProof subscribes to proof changes of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned |
-| CreateTrieProof | [CreateTrieProofRequest](#api.CreateTrieProofRequest) | [TrieProof](#api.TrieProof) | CreateTrieProof creates a proof for a trie root |
-| DeleteTrieProof | [DeleteTrieProofRequest](#api.DeleteTrieProofRequest) | [TrieProof](#api.TrieProof) | DeleteTrieProof deletes a proof for a trie root |
-| VerifyTrieProof | [VerifyTrieProofRequest](#api.VerifyTrieProofRequest) | [VerifyProofReplyChunk](#api.VerifyProofReplyChunk) stream | VerifyTrieProof verifies a proof for a trie root |
-| CreateKeyValuesProof | [CreateKeyValuesProofRequest](#api.CreateKeyValuesProofRequest) | [DataChunk](#api.DataChunk) stream | CreateKeyValuesProof creates a proof for the provided key-values out of a trie proof. The new proof is self-contained and can be verified independently |
-| VerifyKeyValuesProof | [DataChunk](#api.DataChunk) stream | [VerifyProofReplyChunk](#api.VerifyProofReplyChunk) stream | VerifyKeyValuesProof verifies a key-values proof |
+| GetTries | [google.protobuf.Empty](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Empty) | [Trie](#trie) stream | GetTries gets all tries. Admin privilege is required |
+| GetTrie | [TrieRequest](#trierequest) | [Trie](#trie) | GetTrie gets a trie |
+| ImportTrie | [DataChunk](#datachunk) stream | [Trie](#trie) | ImportTrie creates a new trie from existing trie data. If the trie ID is not provided in the metadata, a new one will be generated |
+| ExportTrie | [TrieRequest](#trierequest) | [DataChunk](#datachunk) stream | ExportTrie exports a trie's data |
+| CreateTrie | [google.protobuf.Empty](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Empty) | [Trie](#trie) | CreateTrie creates an empty trie |
+| DeleteTrie | [TrieRequest](#trierequest) | [Trie](#trie) | DeleteTrie deletes a trie. This destroys everything of a trie |
+| GetTrieKeyValues | [TrieKeyValuesRequest](#triekeyvaluesrequest) | [KeyValue](#keyvalue) stream | GetTrieKeyValues gets key-values of a trie. The returned KeyValues are ordered by the keys lexicographically |
+| GetTrieKeyValue | [TrieKeyValueRequest](#triekeyvaluerequest) | [KeyValue](#keyvalue) | GetTrieKeyValue gets a key-value of a trie |
+| SetTrieKeyValues | [KeyValue](#keyvalue) stream | [Trie](#trie) | SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to remove that key. Modifications to a trie will change its root hash |
+| GetTrieRoots | [TrieRootsRequest](#trierootsrequest) | [TrieRoot](#trieroot) stream | GetTrieRoots gets roots of a trie. This is a series of roots showing the modification history of a trie |
+| SetTrieRoot | [SetTrieRootRequest](#settrierootrequest) | [Trie](#trie) | SetTrieRoot sets the root of a trie to the given one. This will add an entry in the root history |
+| GetTrieProofs | [TrieProofsRequest](#trieproofsrequest) | [TrieProof](#trieproof) stream | GetTrieProofs gets proofs of a trie |
+| GetTrieProof | [TrieProofRequest](#trieproofrequest) | [TrieProof](#trieproof) | GetTrieProof gets a proof of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned |
+| SubscribeTrieProof | [TrieProofRequest](#trieproofrequest) | [TrieProof](#trieproof) stream | SubscribeTrieProof subscribes to proof changes of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned |
+| CreateTrieProof | [CreateTrieProofRequest](#createtrieproofrequest) | [TrieProof](#trieproof) | CreateTrieProof creates a proof for a trie root |
+| DeleteTrieProof | [DeleteTrieProofRequest](#deletetrieproofrequest) | [TrieProof](#trieproof) | DeleteTrieProof deletes a proof for a trie root |
+| VerifyTrieProof | [VerifyTrieProofRequest](#verifytrieproofrequest) | [VerifyProofReplyChunk](#verifyproofreplychunk) stream | VerifyTrieProof verifies a proof for a trie root |
+| CreateKeyValuesProof | [CreateKeyValuesProofRequest](#createkeyvaluesproofrequest) | [DataChunk](#datachunk) stream | CreateKeyValuesProof creates a proof for the provided key-values out of a trie proof. The new proof is self-contained and can be verified independently |
+| VerifyKeyValuesProof | [DataChunk](#datachunk) stream | [VerifyProofReplyChunk](#verifyproofreplychunk) stream | VerifyKeyValuesProof verifies a key-values proof |
 
  <!-- end services -->
 
@@ -72,8 +72,8 @@ CreateKeyValuesProofRequest represents a create key-values proof request
 | ----- | ---- | ----- | ----------- |
 | trie_id | [string](#string) |  | TrieId is the trie ID |
 | proof_id | [string](#string) |  | ProofId is the trie proof id |
-| request | [CreateTrieProofRequest](#api.CreateTrieProofRequest) |  | Request is the request to create a new trie proof that is going to prove the key-values |
-| filter | [KeyValuesFilter](#api.KeyValuesFilter) |  | Filter is the key-values filter (optional). When zero, all key-values will be included in the proof |
+| request | [CreateTrieProofRequest](#createtrieproofrequest) |  | Request is the request to create a new trie proof that is going to prove the key-values |
+| filter | [KeyValuesFilter](#keyvaluesfilter) |  | Filter is the key-values filter (optional). When zero, all key-values will be included in the proof |
 
 
 
@@ -87,7 +87,7 @@ CreateTrieProofRequest represents a create trie proof request
 | ----- | ---- | ----- | ----------- |
 | trie_id | [string](#string) |  | TrieId is the trie ID |
 | root | [string](#string) |  | Root is the root hash (optional). When zero, the current root hash of the trie will be used to create the TrieProof, and the request will be blocked until all ongoing updates are finished |
-| anchor_type | [anchor.Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the anchor type the trie proof should be submitted to. Default to ETH |
+| anchor_type | [anchor.Anchor.Type](anchor_service.html#anchortype) |  | AnchorType is the anchor type the trie proof should be submitted to. Default to ETH |
 
 
 
@@ -100,8 +100,8 @@ DataChunk represents a chunk of data transmitted in a gRPC stream
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | data | [bytes](#bytes) |  | Data is the data within the DataChunk |
-| trie_request | [TrieRequest](#api.TrieRequest) |  | TrieRequest is the trie request |
-| verify_key_values_proof_request | [VerifyKeyValuesProofRequest](#api.VerifyKeyValuesProofRequest) |  | VerifyKeyValuesProofRequest is the request to verify a key-values proof |
+| trie_request | [TrieRequest](#trierequest) |  | TrieRequest is the trie request |
+| verify_key_values_proof_request | [VerifyKeyValuesProofRequest](#verifykeyvaluesproofrequest) |  | VerifyKeyValuesProofRequest is the request to verify a key-values proof |
 
 
 
@@ -142,7 +142,7 @@ KeyValue represents a key-value
 | key | [bytes](#bytes) |  | Key is the key of the key-value |
 | key_sep | [uint32](#uint32) | repeated | KeySep is the key separators for chained tries |
 | value | [bytes](#bytes) |  | Value is the value of the key-value |
-| trie_key_values_request | [TrieKeyValuesRequest](#api.TrieKeyValuesRequest) |  | TrieKeyValuesRequest is the request to set or get key-values |
+| trie_key_values_request | [TrieKeyValuesRequest](#triekeyvaluesrequest) |  | TrieKeyValuesRequest is the request to set or get key-values |
 
 
 
@@ -154,7 +154,7 @@ KeyValuesFilter represents a key-value filter
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| keys | [Key](#api.Key) | repeated | Keys are the keys of key-values that should be included in a key-value proof. Only those trie nodes are on the merkle paths of the given keys will be included in the proof |
+| keys | [Key](#key) | repeated | Keys are the keys of key-values that should be included in a key-value proof. Only those trie nodes are on the merkle paths of the given keys will be included in the proof |
 
 
 
@@ -167,7 +167,7 @@ RootFilter represents a root filter to query a proof
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | root | [string](#string) |  | Root is the root hash. When zero, the current root hash of the trie will be used to retrieve the TrieProof, and the request will be blocked until all ongoing updates are finished |
-| not_before | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | NotBefore is the not before timestamp. When nil, this constraint is not used; when zero, the latest TrieProof for the root hash will be returned |
+| not_before | [google.protobuf.Timestamp](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp) |  | NotBefore is the not before timestamp. When nil, this constraint is not used; when zero, the latest TrieProof for the root hash will be returned |
 
 
 
@@ -209,7 +209,7 @@ TrieKeyValueRequest represents a trie key-value request
 | ----- | ---- | ----- | ----------- |
 | trie_id | [string](#string) |  | TrieId is the trie ID |
 | root | [string](#string) |  | Root is the root hash (optional). When zero, the current root hash of the trie will be used to retrieve the TrieKeyValues, and the request will be blocked until all ongoing updates are finished |
-| key | [Key](#api.Key) |  | Key is the key of the key-value |
+| key | [Key](#key) |  | Key is the key of the key-value |
 
 
 
@@ -239,10 +239,10 @@ viewed as a snapshot of all the key-values contained in the trie
 | id | [string](#string) |  | Id is the ID of the trie proof |
 | trie_id | [string](#string) |  | TrieId is the trie ID |
 | root | [string](#string) |  | Root is the root hash of the trie proven by this proof |
-| created_at | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | CreatedAt is the created at timestamp. The timestamp when the proof is created |
-| status | [anchor.Batch.Status](#anchor.Batch.Status) |  | Status is the anchor batch status of the trie proof |
+| created_at | [google.protobuf.Timestamp](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp) |  | CreatedAt is the created at timestamp. The timestamp when the proof is created |
+| status | [anchor.Batch.Status](anchor_service.html#batchstatus) |  | Status is the anchor batch status of the trie proof |
 | error | [string](#string) |  | Error is the error message when status is ERROR |
-| anchor_type | [anchor.Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the anchor type the trie proof has been submitted to |
+| anchor_type | [anchor.Anchor.Type](anchor_service.html#anchortype) |  | AnchorType is the anchor type the trie proof has been submitted to |
 | txn_id | [string](#string) |  | TxnId is the blockchain transaction ID |
 | txn_uri | [string](#string) |  | TxnUri is the explorer URI for the blockchain transaction |
 | block_time | [uint64](#uint64) |  | BlockTime is the blockchain's block consensus timestamp in seconds |
@@ -262,7 +262,7 @@ TrieProofRequest represents a trie proof request
 | ----- | ---- | ----- | ----------- |
 | trie_id | [string](#string) |  | TrieId is the trie ID |
 | proof_id | [string](#string) |  | ProofId is the trie proof ID |
-| root_filter | [RootFilter](#api.RootFilter) |  | RootFilter is the root filter. A nil filter equals a zero filter |
+| root_filter | [RootFilter](#rootfilter) |  | RootFilter is the root filter. A nil filter equals a zero filter |
 
 
 
@@ -277,7 +277,7 @@ chronologically
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trie_id | [string](#string) |  | TrieId is the trie ID |
-| root_filter | [RootFilter](#api.RootFilter) |  | RootFilter is the root filter (optional). When nil, all TrieProofs will be returned |
+| root_filter | [RootFilter](#rootfilter) |  | RootFilter is the root filter (optional). When nil, all TrieProofs will be returned |
 
 
 
@@ -303,7 +303,7 @@ lead to a new trie root
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | root | [string](#string) |  | Root is the root hash of the trie |
-| created_at | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | CreatedAt is the created at timestamp. The timestamp when the root is created |
+| created_at | [google.protobuf.Timestamp](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp) |  | CreatedAt is the created at timestamp. The timestamp when the root is created |
 
 
 
@@ -317,7 +317,7 @@ in chronological order
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trie_id | [string](#string) |  | TrieId is the trie ID |
-| root_filter | [RootFilter](#api.RootFilter) |  | RootFilter is the root filter (optional). When nil, all TrieRoots will be returned |
+| root_filter | [RootFilter](#rootfilter) |  | RootFilter is the root filter (optional). When nil, all TrieRoots will be returned |
 
 
 
@@ -356,9 +356,9 @@ stream
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| key_value | [KeyValue](#api.KeyValue) |  | KeyValue is one of the key-values contained in the trie when the OutputKeyValues is true |
-| dot_graph_chunk | [DataChunk](#api.DataChunk) |  | DotGraphChunk is a chunk of the Graphviz dot graph for the trie when the OutputDotGraph is true |
-| reply | [VerifyProofReply](#api.VerifyProofReply) |  | VerifyProofReply is the verify proof reply, which should be the data in the last VerifyProofReplyChunk |
+| key_value | [KeyValue](#keyvalue) |  | KeyValue is one of the key-values contained in the trie when the OutputKeyValues is true |
+| dot_graph_chunk | [DataChunk](#datachunk) |  | DotGraphChunk is a chunk of the Graphviz dot graph for the trie when the OutputDotGraph is true |
+| reply | [VerifyProofReply](#verifyproofreply) |  | VerifyProofReply is the verify proof reply, which should be the data in the last VerifyProofReplyChunk |
 
 
 

@@ -30,13 +30,13 @@ Protobuf definition: [anchor/anchor.proto](https://github.com/SouthbankSoftware/
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetAnchors | [.google.protobuf.Empty](#google.protobuf.Empty) | [Anchor](#anchor.Anchor) stream | GetAnchors gets all anchors |
-| GetAnchor | [AnchorRequest](#anchor.AnchorRequest) | [Anchor](#anchor.Anchor) | GetAnchor gets an anchor |
-| GetProof | [ProofRequest](#anchor.ProofRequest) | [Proof](#anchor.Proof) | GetProof gets a proof |
-| SubmitProof | [SubmitProofRequest](#anchor.SubmitProofRequest) | [Proof](#anchor.Proof) | SubmitProof submits a proof for the given hash |
-| VerifyProof | [VerifyProofRequest](#anchor.VerifyProofRequest) | [VerifyProofReply](#anchor.VerifyProofReply) | VerifyProof verifies the given proof. When the proof is unverifiable, an exception is thrown |
-| GetBatch | [BatchRequest](#anchor.BatchRequest) | [Batch](#anchor.Batch) | GetBatch gets a batch |
-| SubscribeBatches | [SubscribeBatchesRequest](#anchor.SubscribeBatchesRequest) | [Batch](#anchor.Batch) stream | SubscribeBatches subscribes to batch status updates |
+| GetAnchors | [google.protobuf.Empty](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Empty) | [Anchor](#anchor) stream | GetAnchors gets all anchors |
+| GetAnchor | [AnchorRequest](#anchorrequest) | [Anchor](#anchor) | GetAnchor gets an anchor |
+| GetProof | [ProofRequest](#proofrequest) | [Proof](#proof) | GetProof gets a proof |
+| SubmitProof | [SubmitProofRequest](#submitproofrequest) | [Proof](#proof) | SubmitProof submits a proof for the given hash |
+| VerifyProof | [VerifyProofRequest](#verifyproofrequest) | [VerifyProofReply](#verifyproofreply) | VerifyProof verifies the given proof. When the proof is unverifiable, an exception is thrown |
+| GetBatch | [BatchRequest](#batchrequest) | [Batch](#batch) | GetBatch gets a batch |
+| SubscribeBatches | [SubscribeBatchesRequest](#subscribebatchesrequest) | [Batch](#batch) stream | SubscribeBatches subscribes to batch status updates |
 
  <!-- end services -->
 
@@ -48,10 +48,10 @@ anchored to that blockchain
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| type | [Anchor.Type](#anchor.Anchor.Type) |  | Type is the anchor type |
-| status | [Anchor.Status](#anchor.Anchor.Status) |  | Status is the anchor status |
+| type | [Anchor.Type](#anchortype) |  | Type is the anchor type |
+| status | [Anchor.Status](#anchorstatus) |  | Status is the anchor status |
 | error | [string](#string) |  | Error is the error message when the anchor status is ERROR |
-| supported_formats | [Proof.Format](#anchor.Proof.Format) | repeated | SupportedFormats are the supported proof formats of the anchor |
+| supported_formats | [Proof.Format](#proofformat) | repeated | SupportedFormats are the supported proof formats of the anchor |
 
 
 
@@ -64,7 +64,7 @@ type
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| type | [Anchor.Type](#anchor.Anchor.Type) |  | Type is the anchor type |
+| type | [Anchor.Type](#anchortype) |  | Type is the anchor type |
 
 
 
@@ -81,16 +81,16 @@ embedded in a transaction made to the blockchain
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  | Id is the batch ID |
-| anchor_type | [Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the batch's anchor type |
-| proof_format | [Proof.Format](#anchor.Proof.Format) |  | ProofFormat is the batch's proof format, which determines how the merkle tree is constructed for the batch. |
-| status | [Batch.Status](#anchor.Batch.Status) |  | Status is the batch status. FLOW: created_at -> BATCHING -> flushed_at -> QUEUING -> started_at -> PROCESSING -> submitted_at -> PENDING -> finalized_at -> CONFIRMED / ERROR; * -> ERROR; if a batch has not yet reached PENDING and its anchor has restarted, the batch will be put back to QUEUING |
+| anchor_type | [Anchor.Type](#anchortype) |  | AnchorType is the batch's anchor type |
+| proof_format | [Proof.Format](#proofformat) |  | ProofFormat is the batch's proof format, which determines how the merkle tree is constructed for the batch. |
+| status | [Batch.Status](#batchstatus) |  | Status is the batch status. FLOW: created_at -> BATCHING -> flushed_at -> QUEUING -> started_at -> PROCESSING -> submitted_at -> PENDING -> finalized_at -> CONFIRMED / ERROR; * -> ERROR; if a batch has not yet reached PENDING and its anchor has restarted, the batch will be put back to QUEUING |
 | error | [string](#string) |  | Error is the error message when status is ERROR |
 | size | [int64](#int64) |  | Size is the number of hashes contained in the batch |
-| created_at | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | CreateAt is the batch's created at timestamp. FLOW: created_at -> BATCHING |
-| flushed_at | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | FlushedAt is the batch's flushed at timestamp. FLOW: BATCHING -> flushed_at -> QUEUING |
-| started_at | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | StartedAt is the batch's started at timestamp. FLOW: QUEUING -> started_at -> PROCESSING |
-| submitted_at | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | SubmittedAt is the batch's submitted at timestamp. FLOW: PROCESSING -> submitted_at -> PENDING |
-| finalized_at | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | FinalizedAt is the batch's finalized at timestamp. FLOW: * -> finalized_at -> CONFIRMED / ERROR. NOTE: this is not the real block confirmed time, use the timestamp in the batch data instead |
+| created_at | [google.protobuf.Timestamp](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp) |  | CreateAt is the batch's created at timestamp. FLOW: created_at -> BATCHING |
+| flushed_at | [google.protobuf.Timestamp](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp) |  | FlushedAt is the batch's flushed at timestamp. FLOW: BATCHING -> flushed_at -> QUEUING |
+| started_at | [google.protobuf.Timestamp](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp) |  | StartedAt is the batch's started at timestamp. FLOW: QUEUING -> started_at -> PROCESSING |
+| submitted_at | [google.protobuf.Timestamp](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp) |  | SubmittedAt is the batch's submitted at timestamp. FLOW: PROCESSING -> submitted_at -> PENDING |
+| finalized_at | [google.protobuf.Timestamp](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp) |  | FinalizedAt is the batch's finalized at timestamp. FLOW: * -> finalized_at -> CONFIRMED / ERROR. NOTE: this is not the real block confirmed time, use the timestamp in the batch data instead |
 | hash | [string](#string) |  | Hash is the batch's root hash |
 | data | [string](#string) |  | Data is the batch data in JSON |
 
@@ -105,7 +105,7 @@ BatchRequest represents a batch request
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | batch_id | [string](#string) |  | BatchId is the batch ID |
-| anchor_type | [Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the batch's anchor type |
+| anchor_type | [Anchor.Type](#anchortype) |  | AnchorType is the batch's anchor type |
 
 
 
@@ -120,11 +120,11 @@ the hash to the root hash of the proof's batch
 | ----- | ---- | ----- | ----------- |
 | hash | [string](#string) |  | Hash is the hash the proof is proving for |
 | batch_id | [string](#string) |  | BatchId is the proof's batch ID |
-| anchor_type | [Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the proof's anchor type |
-| batch_status | [Batch.Status](#anchor.Batch.Status) |  | BatchStatus is the proof's batch status |
-| format | [Proof.Format](#anchor.Proof.Format) |  | Format is the proof format |
+| anchor_type | [Anchor.Type](#anchortype) |  | AnchorType is the proof's anchor type |
+| batch_status | [Batch.Status](#batchstatus) |  | BatchStatus is the proof's batch status |
+| format | [Proof.Format](#proofformat) |  | Format is the proof format |
 | data | [string](#string) |  | Data is the proof data in base64 |
-| batch | [Batch](#anchor.Batch) |  | Batch is the proof's batch detail |
+| batch | [Batch](#batch) |  | Batch is the proof's batch detail |
 
 
 
@@ -138,7 +138,7 @@ ProofRequest represents a proof request
 | ----- | ---- | ----- | ----------- |
 | hash | [string](#string) |  | Hash is the hash the proof is proving for |
 | batch_id | [string](#string) |  | BatchId is the proof's batch ID |
-| anchor_type | [Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the proof's anchor type |
+| anchor_type | [Anchor.Type](#anchortype) |  | AnchorType is the proof's anchor type |
 | with_batch | [bool](#bool) |  | WithBatch indicates whether to include the proof's batch detail |
 
 
@@ -152,8 +152,8 @@ SubmitProofRequest represents a submit proof request
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | hash | [string](#string) |  | Hash is the hash to be submitted |
-| anchor_type | [Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the anchor type to be used |
-| format | [Proof.Format](#anchor.Proof.Format) |  | Format is the proof format to be used |
+| anchor_type | [Anchor.Type](#anchortype) |  | AnchorType is the anchor type to be used |
+| format | [Proof.Format](#proofformat) |  | Format is the proof format to be used |
 | skip_batching | [bool](#bool) |  | SkipBatching indicates whether to skip batching and submit a proof for the hash directly |
 | with_batch | [bool](#bool) |  | WithBatch indicates whether to include the batch detail in the reply |
 
@@ -168,7 +168,7 @@ information
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| filter | [BatchRequest](#anchor.BatchRequest) |  | Filter is the batch filter. When nil, all batches of all anchors will be subscribed; otherwise, only the batches of the given anchor will be subscribed; if batch_id is non-empty, only the matched batch will be subscribed |
+| filter | [BatchRequest](#batchrequest) |  | Filter is the batch filter. When nil, all batches of all anchors will be subscribed; otherwise, only the batches of the given anchor will be subscribed; if batch_id is non-empty, only the matched batch will be subscribed |
 
 
 
@@ -194,8 +194,8 @@ VerifyProofRequest represents a verify proof request
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| anchor_type | [Anchor.Type](#anchor.Anchor.Type) |  | AnchorType is the proof's anchor type |
-| format | [Proof.Format](#anchor.Proof.Format) |  | Format is the proof format. If skipping the signature checking is desired, please use the corresponding non-signed format, eg. use CHP_PATH instead of CHP_PATH_SIGNED in request |
+| anchor_type | [Anchor.Type](#anchortype) |  | AnchorType is the proof's anchor type |
+| format | [Proof.Format](#proofformat) |  | Format is the proof format. If skipping the signature checking is desired, please use the corresponding non-signed format, eg. use CHP_PATH instead of CHP_PATH_SIGNED in request |
 | data | [string](#string) |  | Data is the proof data in base64 |
 
 

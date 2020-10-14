@@ -1,3 +1,16 @@
+{{- define "TypeLink"}}{{with trimPrefix "." . -}}
+[{{.}}]({{$service_name := . | regexFind "^[a-z0-9_]+\\." | trimSuffix "." -}}
+  {{if len $service_name -}}
+    {{if hasPrefix "google" $service_name -}}
+      https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#{{.}}
+    {{- else -}}
+      {{$service_name}}_service.html#{{. | trimPrefix (print $service_name ".") | lower | replace "." ""}}
+    {{- end -}}
+  {{- else -}}
+    #{{. | lower | replace "." ""}}{{end}})
+  {{- end -}}
+{{- end -}}
+
 {{range .Files}}
 {{- $file_name := .Name -}}
 # {{(index .Services 0).Name | trimSuffix "Service"}} Service
@@ -8,17 +21,17 @@ Protobuf definition: [{{.Name}}](https://github.com/SouthbankSoftware/proofable/
 ## Table of Contents
 {{- if .Services -}}
 {{range .Services}}
-- [{{.Name}}](#{{lower .LongName | replace "." ""}})
+- [{{.Name}}](#{{.LongName | lower | replace "." ""}})
 {{- end}}
 {{- end -}}
 {{- if .Messages -}}
 {{range .Messages}}
-- [{{.LongName}}](#{{lower .LongName | replace "." ""}})
+- [{{.LongName}}](#{{.LongName | lower | replace "." ""}})
 {{- end}}
 {{- end -}}
 {{- if .Enums -}}
 {{range .Enums}}
-- [{{.LongName}}](#{{lower .LongName | replace "." ""}})
+- [{{.LongName}}](#{{.LongName | lower | replace "." ""}})
 {{- end}}
 {{- end -}}
 {{- if .Extensions -}}
@@ -35,7 +48,7 @@ Protobuf definition: [{{.Name}}](https://github.com/SouthbankSoftware/proofable/
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 {{range .Methods -}}
-  | {{.Name}} | [{{.RequestLongType}}](#{{.RequestFullType}}){{if .RequestStreaming}} stream{{end}} | [{{.ResponseLongType}}](#{{.ResponseFullType}}){{if .ResponseStreaming}} stream{{end}} | {{nobr .Description}} |
+  | {{.Name}} | {{template "TypeLink" .RequestLongType}}{{if .RequestStreaming}} stream{{end}} | {{template "TypeLink" .ResponseLongType}}{{if .ResponseStreaming}} stream{{end}} | {{nobr .Description}} |
 {{end}}
 {{end}} <!-- end services -->
 
@@ -47,7 +60,7 @@ Protobuf definition: [{{.Name}}](https://github.com/SouthbankSoftware/proofable/
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 {{range .Fields -}}
-  | {{.Name}} | [{{.LongType}}](#{{.FullType}}) | {{.Label}} | {{if (index .Options "deprecated"|default false)}}**Deprecated.** {{end}}{{nobr .Description}}{{if .DefaultValue}} Default: {{.DefaultValue}}{{end}} |
+  | {{.Name}} | {{template "TypeLink" .LongType}} | {{.Label}} | {{if (index .Options "deprecated"|default false)}}**Deprecated.** {{end}}{{nobr .Description}}{{if .DefaultValue}} Default: {{.DefaultValue}}{{end}} |
 {{end}}
 {{end}}
 
