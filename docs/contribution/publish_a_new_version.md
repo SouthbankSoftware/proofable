@@ -2,9 +2,11 @@
 
 ## Node SDK (NPM)
 
-1. `npm login` (southbanksoftwareadmin)
-2. `npm version patch` (or minor, major)
-3. `npm publish`
+1. `cd node_sdk`
+2. `npm login` (southbanksoftwareadmin)
+3. `npm version patch` (or minor, major)
+4. `npm publish`
+5. remember to regenerate and update Node SDK documentation as well if that is necessary
 
 ## Go SDK & Proofable CLI
 
