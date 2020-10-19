@@ -13,13 +13,16 @@ Protobuf definition: [api/api.proto](https://github.com/SouthbankSoftware/proofa
 - [APIService](#apiservice)
 - [CreateKeyValuesProofRequest](#createkeyvaluesproofrequest)
 - [CreateTrieProofRequest](#createtrieproofrequest)
+- [CreateTrieRequest](#createtrierequest)
 - [DataChunk](#datachunk)
 - [DeleteTrieProofRequest](#deletetrieproofrequest)
+- [ImportTrieRequest](#importtrierequest)
 - [Key](#key)
 - [KeyValue](#keyvalue)
 - [KeyValuesFilter](#keyvaluesfilter)
 - [RootFilter](#rootfilter)
 - [SetTrieRootRequest](#settrierootrequest)
+- [SetTrieStorageTypeRequest](#settriestoragetyperequest)
 - [Trie](#trie)
 - [TrieKeyValueRequest](#triekeyvaluerequest)
 - [TrieKeyValuesRequest](#triekeyvaluesrequest)
@@ -33,6 +36,7 @@ Protobuf definition: [api/api.proto](https://github.com/SouthbankSoftware/proofa
 - [VerifyProofReply](#verifyproofreply)
 - [VerifyProofReplyChunk](#verifyproofreplychunk)
 - [VerifyTrieProofRequest](#verifytrieproofrequest)
+- [Trie.StorageType](#triestoragetype)
 - [Scalar Value Types](#scalar-value-types)
 
 
@@ -45,13 +49,14 @@ Protobuf definition: [api/api.proto](https://github.com/SouthbankSoftware/proofa
 | GetTrie | [TrieRequest](#trierequest) | [Trie](#trie) | GetTrie gets a trie |
 | ImportTrie | [DataChunk](#datachunk) stream | [Trie](#trie) | ImportTrie creates a new trie from existing trie data. If the trie ID is not provided in the metadata, a new one will be generated |
 | ExportTrie | [TrieRequest](#trierequest) | [DataChunk](#datachunk) stream | ExportTrie exports a trie's data |
-| CreateTrie | [google.protobuf.Empty](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Empty) | [Trie](#trie) | CreateTrie creates an empty trie |
+| CreateTrie | [CreateTrieRequest](#createtrierequest) | [Trie](#trie) | CreateTrie creates an empty trie |
 | DeleteTrie | [TrieRequest](#trierequest) | [Trie](#trie) | DeleteTrie deletes a trie. This destroys everything of a trie |
 | GetTrieKeyValues | [TrieKeyValuesRequest](#triekeyvaluesrequest) | [KeyValue](#keyvalue) stream | GetTrieKeyValues gets key-values of a trie. The returned KeyValues are ordered by the keys lexicographically |
 | GetTrieKeyValue | [TrieKeyValueRequest](#triekeyvaluerequest) | [KeyValue](#keyvalue) | GetTrieKeyValue gets a key-value of a trie |
 | SetTrieKeyValues | [KeyValue](#keyvalue) stream | [Trie](#trie) | SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to remove that key. Modifications to a trie will change its root hash |
 | GetTrieRoots | [TrieRootsRequest](#trierootsrequest) | [TrieRoot](#trieroot) stream | GetTrieRoots gets roots of a trie. This is a series of roots showing the modification history of a trie |
 | SetTrieRoot | [SetTrieRootRequest](#settrierootrequest) | [Trie](#trie) | SetTrieRoot sets the root of a trie to the given one. This will add an entry in the root history |
+| SetTrieStorageType | [SetTrieStorageTypeRequest](#settriestoragetyperequest) | [Trie](#trie) | SetTrieStorageType sets the storage type of a trie |
 | GetTrieProofs | [TrieProofsRequest](#trieproofsrequest) | [TrieProof](#trieproof) stream | GetTrieProofs gets proofs of a trie |
 | GetTrieProof | [TrieProofRequest](#trieproofrequest) | [TrieProof](#trieproof) | GetTrieProof gets a proof of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned |
 | SubscribeTrieProof | [TrieProofRequest](#trieproofrequest) | [TrieProof](#trieproof) stream | SubscribeTrieProof subscribes to proof changes of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned |
@@ -93,6 +98,18 @@ CreateTrieProofRequest represents a create trie proof request
 
 
 
+### CreateTrieRequest
+CreateTrieRequest represents a create trie request
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| storage_type | [Trie.StorageType](#triestoragetype) |  | StorageType is the storage type of the trie to be created |
+
+
+
+
+
 ### DataChunk
 DataChunk represents a chunk of data transmitted in a gRPC stream
 
@@ -100,7 +117,7 @@ DataChunk represents a chunk of data transmitted in a gRPC stream
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | data | [bytes](#bytes) |  | Data is the data within the DataChunk |
-| trie_request | [TrieRequest](#trierequest) |  | TrieRequest is the trie request |
+| import_trie_request | [ImportTrieRequest](#importtrierequest) |  | ImportTrieRequest is the import trie request |
 | verify_key_values_proof_request | [VerifyKeyValuesProofRequest](#verifykeyvaluesproofrequest) |  | VerifyKeyValuesProofRequest is the request to verify a key-values proof |
 
 
@@ -115,6 +132,19 @@ DeleteTrieProofRequest represents a delete trie proof request
 | ----- | ---- | ----- | ----------- |
 | trie_id | [string](#string) |  | TrieId is the trie ID |
 | proof_id | [string](#string) |  | ProofId is the trie proof ID |
+
+
+
+
+
+### ImportTrieRequest
+ImportTrieRequest represents an import trie request
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| trie_id | [string](#string) |  | TrieId is the trie ID |
+| storage_type | [Trie.StorageType](#triestoragetype) |  | StorageType is the storage type of the trie |
 
 
 
@@ -186,6 +216,19 @@ SetTrieRootRequest represents a set trie root request
 
 
 
+### SetTrieStorageTypeRequest
+SetTrieStorageTypeRequest represents a set trie storage type request
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| trie_id | [string](#string) |  | TrieId is the trie ID |
+| storage_type | [Trie.StorageType](#triestoragetype) |  | StorageType is the storage type of the trie to be updated to |
+
+
+
+
+
 ### Trie
 Trie represents a dictionary of key-values that can be built incrementally,
 whose root hash at any given time can be also dervied efficiently. Once the
@@ -196,6 +239,7 @@ root hash is proven to a blockchain, every key-value is also proven
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  | Id is the trie ID |
 | root | [string](#string) |  | Root is the root hash of the trie |
+| storage_type | [Trie.StorageType](#triestoragetype) |  | StorageType is the storage type of the trie |
 
 
 
@@ -379,6 +423,15 @@ VerifyTrieProofRequest represents a verify trie proof request
 
 
  <!-- end messages -->
+
+
+### Trie.StorageType
+StorageType represents a trie storage type
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| LOCAL | 0 | LOCAL means the trie is stored temporarily on API Service's local disk |
+| CLOUD | 1 | CLOUD means the trie is stored persistently on a cloud storage provider |
 
  <!-- end enums -->
 

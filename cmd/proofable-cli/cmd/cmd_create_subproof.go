@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-07T10:40:57+10:00
+ * @Last modified time: 2020-10-05T22:50:13+11:00
  */
 
 package cmd
@@ -102,7 +102,7 @@ Each <key> must be a valid key from the output of "%s/%s %s"
 			viper.GetString(viperKeyAPIHostPort),
 			creds,
 			func(cli apiPB.APIServiceClient) error {
-				return api.WithImportedTrie(ctx, cli, "", triePath,
+				return api.WithImportedTrie(ctx, cli, "", apiPB.Trie_LOCAL, triePath,
 					func(id, root string) error {
 						tp, err := api.GetTrieProof(ctx, cli, id, "", root)
 						if err != nil {

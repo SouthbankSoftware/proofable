@@ -12,13 +12,14 @@ interface IAPIServiceService extends grpc.ServiceDefinition<grpc.UntypedServiceI
   getTrie: grpc.MethodDefinition<api_api_pb.TrieRequest, api_api_pb.Trie>;
   importTrie: grpc.MethodDefinition<api_api_pb.DataChunk, api_api_pb.Trie>;
   exportTrie: grpc.MethodDefinition<api_api_pb.TrieRequest, api_api_pb.DataChunk>;
-  createTrie: grpc.MethodDefinition<google_protobuf_empty_pb.Empty, api_api_pb.Trie>;
+  createTrie: grpc.MethodDefinition<api_api_pb.CreateTrieRequest, api_api_pb.Trie>;
   deleteTrie: grpc.MethodDefinition<api_api_pb.TrieRequest, api_api_pb.Trie>;
   getTrieKeyValues: grpc.MethodDefinition<api_api_pb.TrieKeyValuesRequest, api_api_pb.KeyValue>;
   getTrieKeyValue: grpc.MethodDefinition<api_api_pb.TrieKeyValueRequest, api_api_pb.KeyValue>;
   setTrieKeyValues: grpc.MethodDefinition<api_api_pb.KeyValue, api_api_pb.Trie>;
   getTrieRoots: grpc.MethodDefinition<api_api_pb.TrieRootsRequest, api_api_pb.TrieRoot>;
   setTrieRoot: grpc.MethodDefinition<api_api_pb.SetTrieRootRequest, api_api_pb.Trie>;
+  setTrieStorageType: grpc.MethodDefinition<api_api_pb.SetTrieStorageTypeRequest, api_api_pb.Trie>;
   getTrieProofs: grpc.MethodDefinition<api_api_pb.TrieProofsRequest, api_api_pb.TrieProof>;
   getTrieProof: grpc.MethodDefinition<api_api_pb.TrieProofRequest, api_api_pb.TrieProof>;
   subscribeTrieProof: grpc.MethodDefinition<api_api_pb.TrieProofRequest, api_api_pb.TrieProof>;
@@ -43,9 +44,9 @@ export class APIServiceClient extends grpc.Client {
   importTrie(metadata: grpc.Metadata | null, options: grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientWritableStream<api_api_pb.DataChunk>;
   exportTrie(argument: api_api_pb.TrieRequest, metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null): grpc.ClientReadableStream<api_api_pb.DataChunk>;
   exportTrie(argument: api_api_pb.TrieRequest, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): grpc.ClientReadableStream<api_api_pb.DataChunk>;
-  createTrie(argument: google_protobuf_empty_pb.Empty, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
-  createTrie(argument: google_protobuf_empty_pb.Empty, metadataOrOptions: grpc.Metadata | grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
-  createTrie(argument: google_protobuf_empty_pb.Empty, metadata: grpc.Metadata | null, options: grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
+  createTrie(argument: api_api_pb.CreateTrieRequest, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
+  createTrie(argument: api_api_pb.CreateTrieRequest, metadataOrOptions: grpc.Metadata | grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
+  createTrie(argument: api_api_pb.CreateTrieRequest, metadata: grpc.Metadata | null, options: grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
   deleteTrie(argument: api_api_pb.TrieRequest, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
   deleteTrie(argument: api_api_pb.TrieRequest, metadataOrOptions: grpc.Metadata | grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
   deleteTrie(argument: api_api_pb.TrieRequest, metadata: grpc.Metadata | null, options: grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
@@ -62,6 +63,9 @@ export class APIServiceClient extends grpc.Client {
   setTrieRoot(argument: api_api_pb.SetTrieRootRequest, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
   setTrieRoot(argument: api_api_pb.SetTrieRootRequest, metadataOrOptions: grpc.Metadata | grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
   setTrieRoot(argument: api_api_pb.SetTrieRootRequest, metadata: grpc.Metadata | null, options: grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
+  setTrieStorageType(argument: api_api_pb.SetTrieStorageTypeRequest, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
+  setTrieStorageType(argument: api_api_pb.SetTrieStorageTypeRequest, metadataOrOptions: grpc.Metadata | grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
+  setTrieStorageType(argument: api_api_pb.SetTrieStorageTypeRequest, metadata: grpc.Metadata | null, options: grpc.CallOptions | null, callback: grpc.requestCallback<api_api_pb.Trie>): grpc.ClientUnaryCall;
   getTrieProofs(argument: api_api_pb.TrieProofsRequest, metadataOrOptions?: grpc.Metadata | grpc.CallOptions | null): grpc.ClientReadableStream<api_api_pb.TrieProof>;
   getTrieProofs(argument: api_api_pb.TrieProofsRequest, metadata?: grpc.Metadata | null, options?: grpc.CallOptions | null): grpc.ClientReadableStream<api_api_pb.TrieProof>;
   getTrieProof(argument: api_api_pb.TrieProofRequest, callback: grpc.requestCallback<api_api_pb.TrieProof>): grpc.ClientUnaryCall;

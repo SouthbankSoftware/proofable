@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-07T10:40:57+10:00
+ * @Last modified time: 2020-10-13T18:16:55+11:00
  */
 
 package cmd
@@ -28,6 +28,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/SouthbankSoftware/proofable/pkg/api"
@@ -101,8 +102,8 @@ var cmdVerifyProof = &cobra.Command{
 				defer func() {
 					endTime := time.Now()
 					totalTime := endTime.Sub(totalTimeStart)
+					importTime := walkTimeStart.Sub(totalTimeStart)
 					walkTime := endTime.Sub(walkTimeStart)
-					importTime := totalTime - walkTime
 
 					colorcli.Infolnf("finished verification in %s\n\timport: %s\n\twalk: %s",
 						totalTime,
@@ -110,64 +111,80 @@ var cmdVerifyProof = &cobra.Command{
 						walkTime)
 				}()
 
-				return api.WithImportedTrie(ctx, cli, "", trieInputPath,
-					func(id, root string) error {
-						tp, err := api.GetTrieProof(ctx, cli, id, "", root)
+				verifyProof := func(id, proofID string) error {
+					walkTimeStart = time.Now()
+
+					rightStream, rpCH, rightErrCH := api.VerifyTrieProof(ctx, cli, id, proofID,
+						true, dotGraphOutputPath)
+
+					rightStream = api.InterceptKeyValueStream(ctx, rightStream,
+						api.StripCompoundKeyAnchorTriePart)
+
+					trieMetadata, err := getFileTrieRootMetadata(rightStream)
+					if err == nil {
+						if trieMetadata.Version != fileTrieVersion {
+							return fmt.Errorf("file proof version mismatched, expected `%v` but got `%v`",
+								fileTrieVersion, trieMetadata.Version)
+						}
+
+						// make sure it is ordered
+						leftStream, leftErrCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, true,
+							func(key, fp string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
+								if trieMetadata.IncludeMetadata {
+									return api.GetFilePathKeyMetadataKeyValues(key, fp, de)
+								}
+
+								return
+							})
+
+						err = diff.OrderedKeyValueStreams(leftStream, rightStream, df.push)
 						if err != nil {
 							return err
 						}
 
-						triePf = tp
-
-						walkTimeStart = time.Now()
-
-						rightStream, rpCH, rightErrCH := api.VerifyTrieProof(ctx, cli, id, tp.GetId(),
-							true, dotGraphOutputPath)
-
-						rightStream = api.InterceptKeyValueStream(ctx, rightStream,
-							api.StripCompoundKeyAnchorTriePart)
-
-						trieMetadata, err := getFileTrieRootMetadata(rightStream)
-						if err == nil {
-							if trieMetadata.Version != fileTrieVersion {
-								return fmt.Errorf("file proof version mismatched, expected `%v` but got `%v`",
-									fileTrieVersion, trieMetadata.Version)
-							}
-
-							// make sure it is ordered
-							leftStream, leftErrCH := api.GetFilePathKeyValueStream(ctx, filePath, 0, true,
-								func(key, fp string, de *godirwalk.Dirent) (kvs []*apiPB.KeyValue, er error) {
-									if trieMetadata.IncludeMetadata {
-										return api.GetFilePathKeyMetadataKeyValues(key, fp, de)
-									}
-
-									return
-								})
-
-							err = diff.OrderedKeyValueStreams(leftStream, rightStream, df.push)
-							if err != nil {
-								return err
-							}
-
-							err = <-leftErrCH
-							if err != nil {
-								return err
-							}
-						}
-
-						err = <-rightErrCH
+						err = <-leftErrCH
 						if err != nil {
 							return err
 						}
+					}
 
-						verifiable = true
-						rp := <-rpCH
-						if !rp.GetVerified() {
-							return errors.New(rp.GetError())
-						}
+					err = <-rightErrCH
+					if err != nil {
+						return err
+					}
 
-						return nil
-					})
+					verifiable = true
+					rp := <-rpCH
+					if !rp.GetVerified() {
+						return errors.New(rp.GetError())
+					}
+
+					return nil
+				}
+
+				cloudTrie := &CloudTrie{}
+
+				// try cloud trie first, if fails, try local trie
+				err := cloudTrie.Load(trieInputPath)
+				if err != nil {
+					if os.IsNotExist(err) {
+						return err
+					}
+
+					// try local trie
+					return api.WithImportedTrie(ctx, cli, "", apiPB.Trie_LOCAL, trieInputPath,
+						func(id, root string) error {
+							tp, err := api.GetTrieProof(ctx, cli, id, "", root)
+							if err != nil {
+								return err
+							}
+
+							triePf = tp
+							return verifyProof(id, tp.GetId())
+						})
+				}
+
+				return verifyProof(cloudTrie.ID, cloudTrie.ProofID)
 			})
 		if err != nil {
 			if verifiable {

@@ -22,7 +22,7 @@
 // @Author: guiguan
 // @Date:   2020-01-03T14:55:49+11:00
 // @Last modified by:   guiguan
-// @Last modified time: 2020-09-03T16:03:18+10:00
+// @Last modified time: 2020-10-05T17:05:35+11:00
 //
 // API Service is a general purpose proving service that is fast and effective.
 // It provides a set of APIs to manipulate trie structures and generate
@@ -58,6 +58,17 @@ function serialize_api_CreateTrieProofRequest(arg) {
 
 function deserialize_api_CreateTrieProofRequest(buffer_arg) {
   return api_api_pb.CreateTrieProofRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_api_CreateTrieRequest(arg) {
+  if (!(arg instanceof api_api_pb.CreateTrieRequest)) {
+    throw new Error('Expected argument of type api.CreateTrieRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_api_CreateTrieRequest(buffer_arg) {
+  return api_api_pb.CreateTrieRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_api_DataChunk(arg) {
@@ -102,6 +113,17 @@ function serialize_api_SetTrieRootRequest(arg) {
 
 function deserialize_api_SetTrieRootRequest(buffer_arg) {
   return api_api_pb.SetTrieRootRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_api_SetTrieStorageTypeRequest(arg) {
+  if (!(arg instanceof api_api_pb.SetTrieStorageTypeRequest)) {
+    throw new Error('Expected argument of type api.SetTrieStorageTypeRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_api_SetTrieStorageTypeRequest(buffer_arg) {
+  return api_api_pb.SetTrieStorageTypeRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_api_Trie(arg) {
@@ -292,10 +314,10 @@ createTrie: {
     path: '/api.APIService/CreateTrie',
     requestStream: false,
     responseStream: false,
-    requestType: google_protobuf_empty_pb.Empty,
+    requestType: api_api_pb.CreateTrieRequest,
     responseType: api_api_pb.Trie,
-    requestSerialize: serialize_google_protobuf_Empty,
-    requestDeserialize: deserialize_google_protobuf_Empty,
+    requestSerialize: serialize_api_CreateTrieRequest,
+    requestDeserialize: deserialize_api_CreateTrieRequest,
     responseSerialize: serialize_api_Trie,
     responseDeserialize: deserialize_api_Trie,
   },
@@ -372,6 +394,18 @@ setTrieRoot: {
     responseType: api_api_pb.Trie,
     requestSerialize: serialize_api_SetTrieRootRequest,
     requestDeserialize: deserialize_api_SetTrieRootRequest,
+    responseSerialize: serialize_api_Trie,
+    responseDeserialize: deserialize_api_Trie,
+  },
+  // SetTrieStorageType sets the storage type of a trie
+setTrieStorageType: {
+    path: '/api.APIService/SetTrieStorageType',
+    requestStream: false,
+    responseStream: false,
+    requestType: api_api_pb.SetTrieStorageTypeRequest,
+    responseType: api_api_pb.Trie,
+    requestSerialize: serialize_api_SetTrieStorageTypeRequest,
+    requestDeserialize: deserialize_api_SetTrieStorageTypeRequest,
     responseSerialize: serialize_api_Trie,
     responseDeserialize: deserialize_api_Trie,
   },
