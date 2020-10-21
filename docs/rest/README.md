@@ -9,6 +9,8 @@
 
 The endpoint for Proofable REST API is `https://api.proofable.io/rest`.
 
+A Postman collection is available for download [here](https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/docs/rest/Proofable.postman_collection.json).
+
 ### Quick Start
 
 Let's prove and verify **Hello, World!**.
