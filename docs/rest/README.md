@@ -57,8 +57,9 @@ curl -d '{ "anchorType" : "ETH", "items" : [ { "key" : "Hello, World!", "value" 
 
 #### [GetProof](./actions.md#getproof)
 
-In order to verify our newly created proof, we need to wait for it to be confirmed on the blockchain. Make a request to the following
-endpoint with your `trieId` and `proofId`.
+In order to verify our newly created proof, we need to wait for it to be confirmed on the blockchain. To check this, we gather the `id` 
+from the proof returned and use it as our `proofId`, and combine this with our `trieId` to make a request to the following
+endpoint:
 
 ```
 GET https://api.proofable.io/rest/tries/{trie-id}/proofs/{proof-id}
@@ -92,9 +93,8 @@ curl -H "Authorization: Bearer $YOUR_TOKEN" -H "Content-Type: application/json" 
 
 #### [Verify](./actions.md#verify)
 
-Once your proof status is **CONFIRMED**, you a successfully anchored proof and you can now verify it! Simply make a POST request using the
-`trieId` and `proofId` you received in the previous step, as well as the item we added, so we can validate
-that the value hasn't changed.
+Once your proof status is **CONFIRMED**, you have successfully anchored your proof and you can now verify it! 
+Simply make a POST request using the `trieId` and `proofId` you received in the previous step and make a request to the following endpoint:
  
 ```
 POST https://api.proofable.io/rest/verify
