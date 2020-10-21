@@ -855,6 +855,7 @@ if (!window.location.href.endsWith("/print.html")) {
 </ul>
 <h2><a class="header" href="#getting-started-2" id="getting-started-2">Getting Started</a></h2>
 <p>The endpoint for Proofable REST API is <code>https://api.proofable.io/rest</code>.</p>
+<p>A Postman collection is available for download <a href="https://raw.githubusercontent.com/SouthbankSoftware/proofable/master/docs/rest/Proofable.postman_collection.json">here</a>.</p>
 <h3><a class="header" href="#quick-start" id="quick-start">Quick Start</a></h3>
 <p>Let's prove and verify <strong>Hello, World!</strong>.</p>
 <h4><a class="header" href="#a-hrefrestactionshtmlproveprovea" id="a-hrefrestactionshtmlproveprovea"><a href="rest/./actions.html#prove">Prove</a></a></h4>
@@ -888,8 +889,9 @@ to prove need to be <strong>base64</strong> encoded.</p>
 }
 </code></pre>
 <h4><a class="header" href="#a-hrefrestactionshtmlgetproofgetproofa" id="a-hrefrestactionshtmlgetproofgetproofa"><a href="rest/./actions.html#getproof">GetProof</a></a></h4>
-<p>In order to verify our newly created proof, we need to wait for it to be confirmed on the blockchain. Make a request to the following
-endpoint with your <code>trieId</code> and <code>proofId</code>.</p>
+<p>In order to verify our newly created proof, we need to wait for it to be confirmed on the blockchain. To check this, we gather the <code>id</code> 
+from the proof returned and use it as our <code>proofId</code>, and combine this with our <code>trieId</code> to make a request to the following
+endpoint:</p>
 <pre><code>GET https://api.proofable.io/rest/tries/{trie-id}/proofs/{proof-id}
 </code></pre>
 <h5><a class="header" href="#using-curl-1" id="using-curl-1">Using <code>curl</code></a></h5>
@@ -913,9 +915,8 @@ endpoint with your <code>trieId</code> and <code>proofId</code>.</p>
 }
 </code></pre>
 <h4><a class="header" href="#a-hrefrestactionshtmlverifyverifya" id="a-hrefrestactionshtmlverifyverifya"><a href="rest/./actions.html#verify">Verify</a></a></h4>
-<p>Once your proof status is <strong>CONFIRMED</strong>, you a successfully anchored proof and you can now verify it! Simply make a POST request using the
-<code>trieId</code> and <code>proofId</code> you received in the previous step, as well as the item we added, so we can validate
-that the value hasn't changed.</p>
+<p>Once your proof status is <strong>CONFIRMED</strong>, you have successfully anchored your proof and you can now verify it! 
+Simply make a POST request using the <code>trieId</code> and <code>proofId</code> you received in the previous step and make a request to the following endpoint:</p>
 <pre><code>POST https://api.proofable.io/rest/verify
 </code></pre>
 <h5><a class="header" href="#request-body-1" id="request-body-1">Request Body</a></h5>

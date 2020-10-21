@@ -1,0 +1,573 @@
+{
+	"info": {
+		"_postman_id": "053f0208-f5c2-423f-8e9b-229bbec2f613",
+		"name": "Proofable",
+		"description": "A collection of requests to Proofable.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AnchorTrie",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/anchor?anchorType=ETH",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"anchor"
+					],
+					"query": [
+						{
+							"key": "anchorType",
+							"value": "ETH"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateTrie",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries"
+					]
+				},
+				"description": "Creates a new trie."
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteItem",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/items/{{item-key}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"items",
+						"{{item-key}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteProof",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/proofs/{{proof-id}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"proofs",
+						"{{proof-id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteTrie",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}"
+					]
+				},
+				"description": "Deletes a trie."
+			},
+			"response": []
+		},
+		{
+			"name": "GetItem",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/items/{{item-key}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"items",
+						"{{item-key}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetItems",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/items",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetProof",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/proofs/{{proof-id}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"proofs",
+						"{{proof-id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetProofs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/proofs",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"proofs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRoots",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/roots",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"roots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetTrie",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}"
+					]
+				},
+				"description": "Retrieves the trie information."
+			},
+			"response": []
+		},
+		{
+			"name": "PutItem",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"value\" : \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/items/{{item-key}}",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"items",
+						"{{item-key}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PutItems",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\" : [\n        { \"key\" : \"Hello\", \"value\" : \"SGVsbG8s\"},\n        { \"key\" : \"World\", \"value\" : \"V29ybGQh\"}\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/items",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Prove",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"anchorType\" : \"ETH\",\n    \"items\" : [\n        { \"key\" : \"Hello, World!\", \"value\" : \"SGVsbG8sIFdvcmxkIQ==\" }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/prove",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"prove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"trieId\" : \"tKkyIoqfI6Yi-tOYRkaY7C\",\n    \"proofId\" : \"p1K2Nn0P010xEgzaV524Hk\",\n    \"outputItems\" : true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/verify",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VerifyProof",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/tries/{{trie-id}}/verify/{{proof-id}}?outputItems=true",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"tries",
+						"{{trie-id}}",
+						"verify",
+						"{{proof-id}}"
+					],
+					"query": [
+						{
+							"key": "outputItems",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "dfe8d058-ccc3-480d-8c1e-b1293e477683",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "2d33cdae-71ec-4d60-ac70-c8a8324d174d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "bfaa38bc-6f10-447e-b19c-63f7e99dff06",
+			"key": "base-url",
+			"value": "https://api.proofable.io/rest"
+		},
+		{
+			"id": "bc937b47-bb6c-4299-b033-450939532d24",
+			"key": "trie-id",
+			"value": ""
+		},
+		{
+			"id": "b2c77873-7836-47d0-9e13-9188ab737d36",
+			"key": "proof-id",
+			"value": ""
+		},
+		{
+			"id": "88d400c5-f47d-43e8-aae3-69fb245baa94",
+			"key": "token",
+			"value": ""
+		},
+		{
+			"id": "9798ffec-d665-4eef-8aed-d98b91162f78",
+			"key": "item-key",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
