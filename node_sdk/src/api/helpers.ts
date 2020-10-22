@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-07-02T11:42:17+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-07-10T15:22:06+10:00
+ * @Last modified time: 2020-10-22T16:34:34+11:00
  */
 
 import util from "util";
@@ -74,9 +74,10 @@ export function sortKeyValues(keyValues: KeyValue[]): KeyValue[] {
 
 export async function createTrieFromKeyValues(
   cli: APIClient,
-  keyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>
+  keyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>,
+  storageType: Trie.ValueOfStorageType = Trie.StorageType.LOCAL
 ): Promise<Trie> {
-  const trie = await cli.createTrie();
+  const trie = await cli.createTrie(storageType);
 
   return cli.setTrieKeyValues(trie.getId(), trie.getRoot(), keyValues);
 }

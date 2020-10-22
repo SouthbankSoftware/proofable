@@ -20,7 +20,7 @@
  * @Author: guiguan
  * @Date:   2020-06-19T10:49:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-09-21T16:47:52+10:00
+ * @Last modified time: 2020-10-22T16:39:26+11:00
  */
 
 import _ from "lodash";
@@ -31,13 +31,16 @@ import {
   APIServiceClient,
   CreateKeyValuesProofRequest,
   CreateTrieProofRequest,
+  CreateTrieRequest,
   DataChunk,
   DeleteTrieProofRequest,
+  ImportTrieRequest,
   Key,
   KeyValue,
   KeyValuesFilter,
   RootFilter,
   SetTrieRootRequest,
+  SetTrieStorageTypeRequest,
   Trie,
   TrieKeyValueRequest,
   TrieKeyValuesRequest,
@@ -75,6 +78,7 @@ import {
   setTrieKeyValues,
   setTrieKeyValuesPromise,
   setTrieRootPromise,
+  setTrieStorageTypePromise,
   subscribeTrieProofPromise,
   verifyKeyValuesProof,
   verifyKeyValuesProofPromise,
@@ -112,6 +116,22 @@ Anchor.StatusName = _.invert(Anchor.Status) as any;
 Batch.StatusName = _.invert(Batch.Status) as any;
 
 declare module "../protos/api/api_pb.d" {
+  namespace Trie {
+    type ValueOfStorageType = Trie.StorageTypeMap[keyof Trie.StorageTypeMap];
+    let StorageTypeName: Record<ValueOfStorageType, keyof Trie.StorageTypeMap>;
+  }
+
+  namespace CreateTrieRequest {
+    function from(storageType?: Trie.ValueOfStorageType): CreateTrieRequest;
+  }
+
+  namespace ImportTrieRequest {
+    function from(
+      id: string,
+      storageType?: Trie.ValueOfStorageType
+    ): ImportTrieRequest;
+  }
+
   namespace TrieRequest {
     function from(id: string): TrieRequest;
   }
@@ -159,6 +179,13 @@ declare module "../protos/api/api_pb.d" {
     function from(id: string, root: string): SetTrieRootRequest;
   }
 
+  namespace SetTrieStorageTypeRequest {
+    function from(
+      id: string,
+      storageType?: Trie.ValueOfStorageType
+    ): SetTrieStorageTypeRequest;
+  }
+
   namespace CreateTrieProofRequest {
     function from(
       id: string,
@@ -196,6 +223,25 @@ declare module "../protos/api/api_pb.d" {
     valTo(encoding?: "utf8" | "hex"): string;
   }
 }
+
+Trie.StorageTypeName = _.invert(Trie.StorageType) as any;
+
+CreateTrieRequest.from = (storageType = Trie.StorageType.LOCAL) => {
+  const r = new CreateTrieRequest();
+
+  r.setStorageType(storageType);
+
+  return r;
+};
+
+ImportTrieRequest.from = (id, storageType = Trie.StorageType.LOCAL) => {
+  const r = new ImportTrieRequest();
+
+  r.setTrieId(id);
+  r.setStorageType(storageType);
+
+  return r;
+};
 
 TrieRequest.from = (id) => {
   const tr = new TrieRequest();
@@ -287,6 +333,15 @@ SetTrieRootRequest.from = (id, root) => {
 
   r.setTrieId(id);
   r.setRoot(root);
+
+  return r;
+};
+
+SetTrieStorageTypeRequest.from = (id, storageType = Trie.StorageType.LOCAL) => {
+  const r = new SetTrieStorageTypeRequest();
+
+  r.setTrieId(id);
+  r.setStorageType(storageType);
 
   return r;
 };
@@ -398,12 +453,18 @@ export class APIClient extends APIServiceClient {
    *
    * @param id trie ID
    * @param path the trie input file path
+   * @param storageType storage type of the trie. Default: `Trie.StorageType.LOCAL`
    */
-  importTrie(id: string, path: string): Promise<Trie>;
   importTrie(
     id: string,
     path: string,
-    callback: grpc.requestCallback<Trie>
+    storageType?: Trie.ValueOfStorageType
+  ): Promise<Trie>;
+  importTrie(
+    id: string,
+    path: string,
+    callback: grpc.requestCallback<Trie>,
+    storageType?: Trie.ValueOfStorageType
   ): SurfaceCall;
   importTrie(
     callback: grpc.requestCallback<Trie>
@@ -417,13 +478,13 @@ export class APIClient extends APIServiceClient {
     options: grpc.CallOptions | null,
     callback: grpc.requestCallback<Trie>
   ): grpc.ClientWritableStream<DataChunk>;
-  importTrie(arg1: any, arg2?: any, arg3?: any): any {
+  importTrie(arg1: any, arg2?: any, arg3?: any, arg4?: any): any {
     if (typeof arg1 === "string") {
       if (typeof arg3 === "function") {
-        return importTrie(this, arg1, arg2, arg3);
+        return importTrie(this, arg1, arg2, arg3, arg4);
       }
 
-      return importTriePromise(this, arg1, arg2);
+      return importTriePromise(this, arg1, arg2, arg3);
     }
 
     return super.importTrie(arg1, arg2, arg3);
@@ -464,29 +525,34 @@ export class APIClient extends APIServiceClient {
 
   /**
    * Creates a new trie
+   *
+   * @param storageType storage type of the trie. Default: `Trie.StorageType.LOCAL`
    */
-  createTrie(): Promise<Trie>;
-  createTrie(callback: grpc.requestCallback<Trie>): SurfaceCall;
+  createTrie(storageType?: Trie.ValueOfStorageType): Promise<Trie>;
   createTrie(
-    argument: Empty,
+    callback: grpc.requestCallback<Trie>,
+    storageType?: Trie.ValueOfStorageType
+  ): SurfaceCall;
+  createTrie(
+    argument: CreateTrieRequest,
     callback: grpc.requestCallback<Trie>
   ): grpc.ClientUnaryCall;
   createTrie(
-    argument: Empty,
+    argument: CreateTrieRequest,
     metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
     callback: grpc.requestCallback<Trie>
   ): grpc.ClientUnaryCall;
   createTrie(
-    argument: Empty,
+    argument: CreateTrieRequest,
     metadata: grpc.Metadata | null,
     options: grpc.CallOptions | null,
     callback: grpc.requestCallback<Trie>
   ): grpc.ClientUnaryCall;
   createTrie(arg1?: any, arg2?: any, arg3?: any, arg4?: any): any {
-    if (!arg1) {
-      return createTriePromise(this);
+    if (typeof arg1 === "number" || arg1 == undefined) {
+      return createTriePromise(this, arg1);
     } else if (typeof arg1 === "function") {
-      return createTrie(this, arg1);
+      return createTrie(this, arg1, arg2);
     }
 
     return super.createTrie(arg1, arg2, arg3, arg4);
@@ -496,11 +562,13 @@ export class APIClient extends APIServiceClient {
    * Creates a new trie with the given key-values
    *
    * @param keyValues the key-values
+   * @param storageType storage type of the trie. Default: `Trie.StorageType.LOCAL`
    */
   createTrieFromKeyValues(
-    keyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>
+    keyValues: Iterable<KeyValue> | AsyncIterable<KeyValue>,
+    storageType?: Trie.ValueOfStorageType
   ): Promise<Trie> {
-    return createTrieFromKeyValues(this, keyValues);
+    return createTrieFromKeyValues(this, keyValues, storageType);
   }
 
   /**
@@ -690,6 +758,39 @@ export class APIClient extends APIServiceClient {
     }
 
     return super.setTrieRoot(arg1, arg2, arg3, arg4);
+  }
+
+  /**
+   * Sets the storage type of a trie
+   *
+   * @param id trie ID
+   * @param storageType storage type of the trie. Default: `Trie.StorageType.LOCAL`
+   */
+  setTrieStorageType(
+    id: string,
+    storageType?: Trie.ValueOfStorageType
+  ): Promise<Trie>;
+  setTrieStorageType(
+    argument: SetTrieStorageTypeRequest,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientUnaryCall;
+  setTrieStorageType(
+    argument: SetTrieStorageTypeRequest,
+    metadataOrOptions: grpc.Metadata | grpc.CallOptions | null,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientUnaryCall;
+  setTrieStorageType(
+    argument: SetTrieStorageTypeRequest,
+    metadata: grpc.Metadata | null,
+    options: grpc.CallOptions | null,
+    callback: grpc.requestCallback<Trie>
+  ): grpc.ClientUnaryCall;
+  setTrieStorageType(arg1: any, arg2: any, arg3?: any, arg4?: any): any {
+    if (typeof arg1 === "string") {
+      return setTrieStorageTypePromise(this, arg1, arg2);
+    }
+
+    return super.setTrieStorageType(arg1, arg2, arg3, arg4);
   }
 
   /**

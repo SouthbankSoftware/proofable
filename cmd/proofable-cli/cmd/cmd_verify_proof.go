@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-10-13T18:16:55+11:00
+ * @Last modified time: 2020-10-21T18:18:40+11:00
  */
 
 package cmd
@@ -172,7 +172,7 @@ var cmdVerifyProof = &cobra.Command{
 					}
 
 					// try local trie
-					return api.WithImportedTrie(ctx, cli, "", apiPB.Trie_LOCAL, trieInputPath,
+					return api.WithImportedTrie(ctx, cli, "", trieInputPath, apiPB.Trie_LOCAL,
 						func(id, root string) error {
 							tp, err := api.GetTrieProof(ctx, cli, id, "", root)
 							if err != nil {

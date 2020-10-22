@@ -46,6 +46,8 @@ const client = newAPIClient("api.proofable.io:443");
 
 This step creates an empty [trie](../concepts/trie.md) with root `0000000000000000000000000000000000000000000000000000000000000000`, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using [`deleteTrie`](https://docs.proofable.io/node_sdk/reference/classes/_index_.apiclient.html#deletetrie) or wait for `proofable-api` to garbage collect it
 
+This creates a local trie (`Trie.StorageType.LOCAL`), which is temporarily persisted in each Proofable API service instance. You can also choose to create a cloud trie with `client.createTrie(Trie.StorageType.CLOUD)`, which will be persisted in Proofable cloud storage. The cloud trie has a much longer retention period and supports high-availability and large data volume. Also, you don't have to consistently export and import cloud tries for manipulations. Proofable talks directly to the cloud storage for you, which is ideal for incrementally building and storing large tries
+
 ```typescript
 let trie = await client.createTrie();
 ```

@@ -16,7 +16,7 @@
    const client = newAPIClient("api.proofable.io:443");
    ```
 
-5. create a [trie](../concepts/trie.html) from data
+5. create a [trie](../concepts/trie.html) from data. This creates a local trie (`Trie.StorageType.LOCAL`), which is temporarily persisted in each Proofable API service instance. You can also choose to create a cloud trie with `client.createTrieFromKeyValues(keyValues, Trie.StorageType.CLOUD)`, which will be persisted in Proofable cloud storage. The cloud trie has a much longer retention period and supports high-availability and large data volume. Also, you don't have to consistently export and import cloud tries for manipulations. Proofable talks directly to the cloud storage for you, which is ideal for incrementally building and storing large tries
 
    ```typescript
    const trie = await client.createTrieFromKeyValues(

@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-06-24T12:14:57+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-09-01T17:32:21+10:00
+ * @Last modified time: 2020-10-22T16:40:24+11:00
  */
 
 import _ from "lodash";
@@ -33,7 +33,9 @@ import {
   CleanupFn,
   CreateKeyValuesProofRequest,
   CreateTrieProofRequest,
+  CreateTrieRequest,
   DeleteTrieProofRequest,
+  ImportTrieRequest,
   Key,
   KeyValue,
   KeyValuesFilter,
@@ -41,6 +43,7 @@ import {
   pipeToWritableStream,
   RootFilter,
   SetTrieRootRequest,
+  SetTrieStorageTypeRequest,
   Trie,
   TrieKeyValueRequest,
   TrieKeyValuesRequest,
@@ -78,7 +81,8 @@ export function importTrie(
   cli: APIClient,
   id: string,
   path: string,
-  callback: grpc.requestCallback<Trie>
+  callback: grpc.requestCallback<Trie>,
+  storageType: Trie.ValueOfStorageType = Trie.StorageType.LOCAL
 ): SurfaceCall {
   const inFile = fs.createReadStream(path);
 
@@ -102,7 +106,7 @@ export function importTrie(
     inFile,
     stream,
     (dc) => {
-      dc.setTrieRequest(TrieRequest.from(id));
+      dc.setImportTrieRequest(ImportTrieRequest.from(id, storageType));
     },
     (err) => {
       // and here
@@ -118,17 +122,24 @@ export function importTrie(
 export function importTriePromise(
   cli: APIClient,
   id: string,
-  path: string
+  path: string,
+  storageType: Trie.ValueOfStorageType = Trie.StorageType.LOCAL
 ): Promise<Trie> {
   return new Promise((resolve, reject) => {
-    importTrie(cli, id, path, (err, value) => {
-      if (err) {
-        reject(err);
-        return;
-      }
+    importTrie(
+      cli,
+      id,
+      path,
+      (err, value) => {
+        if (err) {
+          reject(err);
+          return;
+        }
 
-      resolve(value);
-    });
+        resolve(value);
+      },
+      storageType
+    );
   });
 }
 
@@ -167,21 +178,29 @@ export function exportTriePromise(
 
 export function createTrie(
   cli: APIClient,
-  callback: grpc.requestCallback<Trie>
+  callback: grpc.requestCallback<Trie>,
+  storageType: Trie.ValueOfStorageType = Trie.StorageType.LOCAL
 ): SurfaceCall {
-  return cli.createTrie(new Empty(), callback);
+  return cli.createTrie(CreateTrieRequest.from(storageType), callback);
 }
 
-export function createTriePromise(cli: APIClient): Promise<Trie> {
+export function createTriePromise(
+  cli: APIClient,
+  storageType: Trie.ValueOfStorageType = Trie.StorageType.LOCAL
+): Promise<Trie> {
   return new Promise((resolve, reject) => {
-    createTrie(cli, (err, value) => {
-      if (err) {
-        reject(err);
-        return;
-      }
+    createTrie(
+      cli,
+      (err, value) => {
+        if (err) {
+          reject(err);
+          return;
+        }
 
-      resolve(value);
-    });
+        resolve(value);
+      },
+      storageType
+    );
   });
 }
 
@@ -294,6 +313,26 @@ export async function setTrieKeyValuesPromise(
     stream.end();
 
     return stream;
+  });
+}
+
+export async function setTrieStorageTypePromise(
+  cli: APIClient,
+  id: string,
+  storageType: Trie.ValueOfStorageType = Trie.StorageType.LOCAL
+): Promise<Trie> {
+  return new Promise((resolve, reject) => {
+    cli.setTrieStorageType(
+      SetTrieStorageTypeRequest.from(id, storageType),
+      (err, value) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(value);
+      }
+    );
   });
 }
 
