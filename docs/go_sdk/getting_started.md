@@ -46,7 +46,7 @@ This step creates a Proofable API gRPC client (`cli`) to be used in a closure. W
 
 ```go
 api.WithAPIClient(
-    "api.provendb.com:443",
+    "api.proofable.io:443",
     creds,
     func(cli apiPB.APIServiceClient) error {
         // make use of the `cli` in this closure
