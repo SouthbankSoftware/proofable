@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-15T08:42:02+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-22T18:04:39+10:00
+ * @Last modified time: 2020-10-21T18:18:23+11:00
  */
 
 package api
@@ -95,17 +95,10 @@ func GetTrie(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
 	id string,
-) (root string, er error) {
-	tr, err := cli.GetTrie(ctx, &apiPB.TrieRequest{
+) (tr *apiPB.Trie, er error) {
+	return cli.GetTrie(ctx, &apiPB.TrieRequest{
 		TrieId: id,
 	})
-	if err != nil {
-		er = err
-		return
-	}
-
-	root = tr.GetRoot()
-	return
 }
 
 // ImportTrie imports the trie data and creates a new trie. If ID is zero, a new trie ID will be
@@ -113,8 +106,9 @@ func GetTrie(
 func ImportTrie(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
-	id,
+	id string,
 	path string,
+	storageType apiPB.Trie_StorageType,
 ) (newID, root string, er error) {
 	impCli, err := cli.ImportTrie(ctx)
 	if err != nil {
@@ -132,9 +126,10 @@ func ImportTrie(
 	wc := apiPB.NewDataStreamWriter(
 		impCli,
 		func() (md apiPB.DataChunkMetadata, er error) {
-			md = &apiPB.DataChunk_TrieRequest{
-				TrieRequest: &apiPB.TrieRequest{
-					TrieId: id,
+			md = &apiPB.DataChunk_ImportTrieRequest{
+				ImportTrieRequest: &apiPB.ImportTrieRequest{
+					TrieId:      id,
+					StorageType: storageType,
 				},
 			}
 			return
@@ -163,10 +158,11 @@ func ImportTrie(
 func WithImportedTrie(
 	ctx context.Context,
 	cli apiPB.APIServiceClient,
-	id,
+	id string,
 	path string,
+	storageType apiPB.Trie_StorageType,
 	fn func(id, root string) error) (er error) {
-	newID, root, err := ImportTrie(ctx, cli, id, path)
+	newID, root, err := ImportTrie(ctx, cli, id, path, storageType)
 	if err != nil {
 		return err
 	}
@@ -208,9 +204,14 @@ func ExportTrie(
 }
 
 // CreateTrie creates a new empty trie
-func CreateTrie(ctx context.Context, cli apiPB.APIServiceClient) (
-	id, root string, er error) {
-	tr, err := cli.CreateTrie(ctx, &empty.Empty{})
+func CreateTrie(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	storageType apiPB.Trie_StorageType,
+) (id, root string, er error) {
+	tr, err := cli.CreateTrie(ctx, &apiPB.CreateTrieRequest{
+		StorageType: storageType,
+	})
 	if err != nil {
 		er = err
 		return
@@ -230,9 +231,13 @@ func DeleteTrie(ctx context.Context, cli apiPB.APIServiceClient, id string) erro
 }
 
 // WithTrie provides a new trie to the closure that is automatically destroyed when done
-func WithTrie(ctx context.Context, cli apiPB.APIServiceClient,
-	fn func(id, root string) error) (er error) {
-	id, root, err := CreateTrie(ctx, cli)
+func WithTrie(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	storageType apiPB.Trie_StorageType,
+	fn func(id, root string) error,
+) (er error) {
+	id, root, err := CreateTrie(ctx, cli, storageType)
 	if err != nil {
 		return err
 	}
@@ -472,6 +477,20 @@ func SetTrieRoot(
 	_, er = cli.SetTrieRoot(ctx, &apiPB.SetTrieRootRequest{
 		TrieId: id,
 		Root:   root,
+	})
+	return
+}
+
+// SetTrieStorageType sets the storage type of a trie
+func SetTrieStorageType(
+	ctx context.Context,
+	cli apiPB.APIServiceClient,
+	id string,
+	storageType apiPB.Trie_StorageType,
+) (er error) {
+	_, er = cli.SetTrieStorageType(ctx, &apiPB.SetTrieStorageTypeRequest{
+		TrieId:      id,
+		StorageType: storageType,
 	})
 	return
 }
@@ -739,7 +758,13 @@ func VerifyTrieProof(
 			return nil
 		})
 
-		er = eg.Wait()
+		err = eg.Wait()
+		if err != nil {
+			er = err
+			return
+		}
+
+		er = sr.Err()
 		return
 	}()
 
@@ -917,7 +942,13 @@ func VerifyKeyValuesProof(
 			return nil
 		})
 
-		er = eg.Wait()
+		err = eg.Wait()
+		if err != nil {
+			er = err
+			return
+		}
+
+		er = sr.Err()
 		return
 	}()
 

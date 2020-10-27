@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-03-31T12:29:46+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-09-03T18:29:32+10:00
+ * @Last modified time: 2020-10-21T17:21:59+11:00
  */
 
 package main
@@ -59,7 +59,7 @@ func main() {
 		creds,
 		func(cli apiPB.APIServiceClient) error {
 			// create an empty trie
-			err := api.WithTrie(ctx, cli, func(id, root string) error {
+			err := api.WithTrie(ctx, cli, apiPB.Trie_LOCAL, func(id, root string) error {
 				// set the key-values we want to prove. Note: the root is changed after we modify
 				// the trie
 				root, err := api.SetTrieKeyValues(ctx, cli, id, root,

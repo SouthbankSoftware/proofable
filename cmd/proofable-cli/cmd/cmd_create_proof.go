@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T16:21:53+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-09-04T15:25:48+10:00
+ * @Last modified time: 2020-10-13T18:20:00+11:00
  */
 
 package cmd
@@ -43,9 +43,11 @@ import (
 
 const (
 	nameAnchorType      = "anchor-type"
+	nameStoreInCloud    = "store-in-cloud"
 	nameIncludeMetadata = "include-metadata"
 
 	viperKeyCreateProofAnchorType      = nameCreate + "." + nameProof + "." + nameAnchorType
+	viperKeyCreateProofStoreInCloud    = nameCreate + "." + nameProof + "." + nameStoreInCloud
 	viperKeyCreateProofOutputPath      = nameCreate + "." + nameProof + "." + nameOutputPath
 	viperKeyCreateProofIncludeMetadata = nameCreate + "." + nameProof + "." + nameIncludeMetadata
 )
@@ -92,9 +94,17 @@ By default, if the path is a directory, the proof will be created under the dire
 			viper.GetString(viperKeyAPIHostPort),
 			creds,
 			func(cli apiPB.APIServiceClient) error {
-				return api.WithTrie(ctx, cli, func(id, _ string) error {
-					includeMetadata := viper.GetBool(viperKeyCreateProofIncludeMetadata)
+				storeInCloud := viper.GetBool(viperKeyCreateProofStoreInCloud)
 
+				createProof := func(id string) error {
+					var (
+						totalTimeStart,
+						anchorTimeStart,
+						exportTimeStart time.Time
+					)
+
+					totalTimeStart = time.Now()
+					includeMetadata := viper.GetBool(viperKeyCreateProofIncludeMetadata)
 					first := true
 
 					// no need to keep in order
@@ -157,6 +167,8 @@ By default, if the path is a directory, the proof will be created under the dire
 						return err
 					}
 
+					anchorTimeStart = time.Now()
+
 					triePf, err := api.CreateTrieProof(ctx, cli, id, root, anchorType)
 					if err != nil {
 						return err
@@ -178,10 +190,35 @@ By default, if the path is a directory, the proof will be created under the dire
 						return err
 					}
 
-					err = api.ExportTrie(ctx, cli, id, trieOutputPath)
-					if err != nil {
-						return err
+					exportTimeStart = time.Now()
+
+					if storeInCloud {
+						// save metadata only
+						err := (&CloudTrie{
+							ID:      triePf.GetTrieId(),
+							ProofID: triePf.GetId(),
+						}).Save(trieOutputPath)
+						if err != nil {
+							return err
+						}
+					} else {
+						err := api.ExportTrie(ctx, cli, id, trieOutputPath)
+						if err != nil {
+							return err
+						}
 					}
+
+					endTime := time.Now()
+					totalTime := endTime.Sub(totalTimeStart)
+					loadTime := anchorTimeStart.Sub(totalTimeStart)
+					anchorTime := exportTimeStart.Sub(anchorTimeStart)
+					exportTime := endTime.Sub(exportTimeStart)
+
+					colorcli.Infolnf("finished creation in %s\n\tload: %s\n\tanchor: %s\n\texport: %s",
+						totalTime,
+						loadTime,
+						anchorTime,
+						exportTime)
 
 					colorcli.Oklnf("the proof has successfully been created at %s with %v key-values and a root hash of %s, which is anchored to %s in block %v with transaction %s at %s, which can be viewed at %s",
 						colorcli.Green(trieOutputPath),
@@ -200,6 +237,19 @@ By default, if the path is a directory, the proof will be created under the dire
 						colorcli.Green(triePf.GetTxnUri()))
 
 					return nil
+				}
+
+				if storeInCloud {
+					id, _, err := api.CreateTrie(ctx, cli, apiPB.Trie_CLOUD)
+					if err != nil {
+						return err
+					}
+
+					return createProof(id)
+				}
+
+				return api.WithTrie(ctx, cli, apiPB.Trie_LOCAL, func(id, _ string) error {
+					return createProof(id)
 				})
 			})
 	},
@@ -210,6 +260,9 @@ func init() {
 
 	cmdCreateProof.Flags().StringP(nameAnchorType, "t", "ETH", "specify the anchor type. Please refer to https://docs.proofable.io/concepts/anchor_types.html for all available anchor types")
 	viper.BindPFlag(viperKeyCreateProofAnchorType, cmdCreateProof.Flags().Lookup(nameAnchorType))
+
+	cmdCreateProof.Flags().BoolP(nameStoreInCloud, "c", false, "specify whether to store the proof in Proofable cloud")
+	viper.BindPFlag(viperKeyCreateProofStoreInCloud, cmdCreateProof.Flags().Lookup(nameStoreInCloud))
 
 	cmdCreateProof.Flags().StringP(nameOutputPath, shorthandProofPath, "", "specify the proof output path")
 	viper.BindPFlag(viperKeyCreateProofOutputPath, cmdCreateProof.Flags().Lookup(nameOutputPath))

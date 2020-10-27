@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-01-03T14:55:49+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-09-03T16:03:18+10:00
+ * @Last modified time: 2020-10-05T17:05:35+11:00
  */
 
 // API Service is a general purpose proving service that is fast and effective.
@@ -50,7 +50,7 @@ service APIService {
   // ExportTrie exports a trie's data
   rpc ExportTrie(TrieRequest) returns (stream DataChunk) {}
   // CreateTrie creates an empty trie
-  rpc CreateTrie(google.protobuf.Empty) returns (Trie) {}
+  rpc CreateTrie(CreateTrieRequest) returns (Trie) {}
   // DeleteTrie deletes a trie. This destroys everything of a trie
   rpc DeleteTrie(TrieRequest) returns (Trie) {}
   // GetTrieKeyValues gets key-values of a trie. The returned KeyValues are
@@ -67,6 +67,8 @@ service APIService {
   // SetTrieRoot sets the root of a trie to the given one. This will add an
   // entry in the root history
   rpc SetTrieRoot(SetTrieRootRequest) returns (Trie) {}
+  // SetTrieStorageType sets the storage type of a trie
+  rpc SetTrieStorageType(SetTrieStorageTypeRequest) returns (Trie) {}
   // GetTrieProofs gets proofs of a trie
   rpc GetTrieProofs(TrieProofsRequest) returns (stream TrieProof) {}
   // GetTrieProof gets a proof of a trie. When not_before is not provided
@@ -96,10 +98,19 @@ service APIService {
 // whose root hash at any given time can be also dervied efficiently. Once the
 // root hash is proven to a blockchain, every key-value is also proven
 message Trie {
+  // StorageType represents a trie storage type
+  enum StorageType {
+    // LOCAL means the trie is stored temporarily on API Service's local disk
+    LOCAL = 0;
+    // CLOUD means the trie is stored persistently on a cloud storage provider
+    CLOUD = 1;
+  }
   // Id is the trie ID
   string id = 1;
   // Root is the root hash of the trie
   string root = 2;
+  // StorageType is the storage type of the trie
+  StorageType storage_type = 3;
 }
 
 // DataChunk represents a chunk of data transmitted in a gRPC stream
@@ -109,8 +120,8 @@ message DataChunk {
   // Metadata is the metadata of the DataChunk stream, which is available in the
   // first DataChunk
   oneof metadata {
-    // TrieRequest is the trie request
-    TrieRequest trie_request = 2;
+    // ImportTrieRequest is the import trie request
+    ImportTrieRequest import_trie_request = 2;
     // VerifyKeyValuesProofRequest is the request to verify a key-values proof
     VerifyKeyValuesProofRequest verify_key_values_proof_request = 3;
   }
@@ -270,6 +281,14 @@ message SetTrieRootRequest {
   string root = 2;
 }
 
+// SetTrieStorageTypeRequest represents a set trie storage type request
+message SetTrieStorageTypeRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // StorageType is the storage type of the trie to be updated to
+  Trie.StorageType storage_type = 2;
+}
+
 // TrieProofsRequest represents a trie proofs request. The returned TrieProofs
 // are ordered by root lexicographically then by created at timestamp
 // chronologically
@@ -292,6 +311,20 @@ message TrieProofRequest {
     // RootFilter is the root filter. A nil filter equals a zero filter
     RootFilter root_filter = 3;
   }
+}
+
+// CreateTrieRequest represents a create trie request
+message CreateTrieRequest {
+  // StorageType is the storage type of the trie to be created
+  Trie.StorageType storage_type = 1;
+}
+
+// ImportTrieRequest represents an import trie request
+message ImportTrieRequest {
+  // TrieId is the trie ID
+  string trie_id = 1;
+  // StorageType is the storage type of the trie
+  Trie.StorageType storage_type = 2;
 }
 
 // CreateTrieProofRequest represents a create trie proof request

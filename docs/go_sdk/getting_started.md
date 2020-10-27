@@ -30,7 +30,7 @@ go run examples/example.go
 
 ## Step 1: authenticate with ProvenDB
 
-This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. The next time, when you invoke `AuthenticateForGRPC`, it will automatically use the saved token without prompting you to go through the authentication steps again. You can find more details from [here](https://github.com/SouthbankSoftware/proofable/blob/master/pkg/auth/auth.go). Please note that this authenticaton method is temporary, which will be replaced by an API key soon
+This step will authenticate with ProvenDB so you can access `proofable-api`. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at `~/Library/Application\ Support/ProvenDB/auth.json`. The next time, when you invoke `AuthenticateForGRPC`, it will automatically use the saved token without prompting you to go through the authentication steps again. You can find more details from [here](https://github.com/SouthbankSoftware/proofable/blob/master/pkg/auth/auth.go). Please note that this authentication method is temporary, which will be replaced by an API key soon
 
 ```go
 creds, err := authcli.AuthenticateForGRPC(ctx,
@@ -55,10 +55,12 @@ api.WithAPIClient(
 
 ## Step 3: create an empty trie
 
-This step creates an empty [trie](./../concepts/trie.md), which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#CreateTrie), but in that case, you have to manually destroy the trie using [`DeleteTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#DeleteTrie) or wait for `proofable-api` to garbage collect it
+This step creates an empty [trie](./../concepts/trie.md), which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using [`CreateTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#CreateTrie), but in that case, you have to manually destroy the trie using [`DeleteTrie`](https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#DeleteTrie) or wait for `proofable-api` to garbage collect it. 
+
+This creates a local trie (`apiPB.Trie_LOCAL`), which is temporarily persisted in each Proofable API service instance. You can also choose to create a cloud trie with `apiPB.Trie_CLOUD`, which will be persisted in Proofable cloud storage. The cloud trie has a much longer retention period and supports high-availability and large data volume. Also, you don't have to consistently export and import cloud tries for manipulations. Proofable talks directly to the cloud storage for you, which is ideal for incrementally building and storing large tries
 
 ```go
-api.WithTrie(ctx, cli, func(id, root string) error {
+api.WithTrie(ctx, cli, apiPB.Trie_LOCAL, func(id, root string) error {
     // make use of the trie, identified by the `id`, in this closure. The root will always be 0000000000000000000000000000000000000000000000000000000000000000 for an empty trie
 })
 ```

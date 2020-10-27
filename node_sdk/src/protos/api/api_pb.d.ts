@@ -13,6 +13,9 @@ export class Trie extends jspb.Message {
   getRoot(): string;
   setRoot(value: string): void;
 
+  getStorageType(): Trie.StorageTypeMap[keyof Trie.StorageTypeMap];
+  setStorageType(value: Trie.StorageTypeMap[keyof Trie.StorageTypeMap]): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Trie.AsObject;
   static toObject(includeInstance: boolean, msg: Trie): Trie.AsObject;
@@ -27,7 +30,15 @@ export namespace Trie {
   export type AsObject = {
     id: string,
     root: string,
+    storageType: Trie.StorageTypeMap[keyof Trie.StorageTypeMap],
   }
+
+  export interface StorageTypeMap {
+    LOCAL: 0;
+    CLOUD: 1;
+  }
+
+  export const StorageType: StorageTypeMap;
 }
 
 export class DataChunk extends jspb.Message {
@@ -36,10 +47,10 @@ export class DataChunk extends jspb.Message {
   getData_asB64(): string;
   setData(value: Uint8Array | string): void;
 
-  hasTrieRequest(): boolean;
-  clearTrieRequest(): void;
-  getTrieRequest(): TrieRequest | undefined;
-  setTrieRequest(value?: TrieRequest): void;
+  hasImportTrieRequest(): boolean;
+  clearImportTrieRequest(): void;
+  getImportTrieRequest(): ImportTrieRequest | undefined;
+  setImportTrieRequest(value?: ImportTrieRequest): void;
 
   hasVerifyKeyValuesProofRequest(): boolean;
   clearVerifyKeyValuesProofRequest(): void;
@@ -60,13 +71,13 @@ export class DataChunk extends jspb.Message {
 export namespace DataChunk {
   export type AsObject = {
     data: Uint8Array | string,
-    trieRequest?: TrieRequest.AsObject,
+    importTrieRequest?: ImportTrieRequest.AsObject,
     verifyKeyValuesProofRequest?: VerifyKeyValuesProofRequest.AsObject,
   }
 
   export enum MetadataCase {
     METADATA_NOT_SET = 0,
-    TRIE_REQUEST = 2,
+    IMPORT_TRIE_REQUEST = 2,
     VERIFY_KEY_VALUES_PROOF_REQUEST = 3,
   }
 }
@@ -455,6 +466,30 @@ export namespace SetTrieRootRequest {
   }
 }
 
+export class SetTrieStorageTypeRequest extends jspb.Message {
+  getTrieId(): string;
+  setTrieId(value: string): void;
+
+  getStorageType(): Trie.StorageTypeMap[keyof Trie.StorageTypeMap];
+  setStorageType(value: Trie.StorageTypeMap[keyof Trie.StorageTypeMap]): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): SetTrieStorageTypeRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: SetTrieStorageTypeRequest): SetTrieStorageTypeRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: SetTrieStorageTypeRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SetTrieStorageTypeRequest;
+  static deserializeBinaryFromReader(message: SetTrieStorageTypeRequest, reader: jspb.BinaryReader): SetTrieStorageTypeRequest;
+}
+
+export namespace SetTrieStorageTypeRequest {
+  export type AsObject = {
+    trieId: string,
+    storageType: Trie.StorageTypeMap[keyof Trie.StorageTypeMap],
+  }
+}
+
 export class TrieProofsRequest extends jspb.Message {
   getTrieId(): string;
   setTrieId(value: string): void;
@@ -517,6 +552,50 @@ export namespace TrieProofRequest {
     QUERY_NOT_SET = 0,
     PROOF_ID = 2,
     ROOT_FILTER = 3,
+  }
+}
+
+export class CreateTrieRequest extends jspb.Message {
+  getStorageType(): Trie.StorageTypeMap[keyof Trie.StorageTypeMap];
+  setStorageType(value: Trie.StorageTypeMap[keyof Trie.StorageTypeMap]): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): CreateTrieRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: CreateTrieRequest): CreateTrieRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: CreateTrieRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CreateTrieRequest;
+  static deserializeBinaryFromReader(message: CreateTrieRequest, reader: jspb.BinaryReader): CreateTrieRequest;
+}
+
+export namespace CreateTrieRequest {
+  export type AsObject = {
+    storageType: Trie.StorageTypeMap[keyof Trie.StorageTypeMap],
+  }
+}
+
+export class ImportTrieRequest extends jspb.Message {
+  getTrieId(): string;
+  setTrieId(value: string): void;
+
+  getStorageType(): Trie.StorageTypeMap[keyof Trie.StorageTypeMap];
+  setStorageType(value: Trie.StorageTypeMap[keyof Trie.StorageTypeMap]): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ImportTrieRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: ImportTrieRequest): ImportTrieRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ImportTrieRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ImportTrieRequest;
+  static deserializeBinaryFromReader(message: ImportTrieRequest, reader: jspb.BinaryReader): ImportTrieRequest;
+}
+
+export namespace ImportTrieRequest {
+  export type AsObject = {
+    trieId: string,
+    storageType: Trie.StorageTypeMap[keyof Trie.StorageTypeMap],
   }
 }
 

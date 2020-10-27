@@ -18,7 +18,7 @@
 # @Author: guiguan
 # @Date:   2019-06-03T13:42:50+10:00
 # @Last modified by:   guiguan
-# @Last modified time: 2020-10-14T20:18:17+11:00
+# @Last modified time: 2020-10-21T17:24:07+11:00
 
 PROJECT_NAME := proofable
 PROJECT_IMPORT_PATH := github.com/SouthbankSoftware/$(PROJECT_NAME)
@@ -34,7 +34,7 @@ all: build
 run:
 	go run $(LD_FLAGS) ./cmd/$(APP_NAME)
 run-example:
-	go run $(LD_FLAGS) ./docs/example.go
+	go run $(LD_FLAGS) ./examples/example.go
 build:
 	go build $(LD_FLAGS) ./cmd/$(APP_NAME)
 build-regen: generate build

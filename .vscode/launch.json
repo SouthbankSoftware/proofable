@@ -40,10 +40,10 @@
             "name": "Node SDK Example",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceFolder}/node_sdk/src/examples/typescript.ts",
+            "program": "${workspaceFolder}/node_sdk/src/examples/typescript_basic.ts",
             "preLaunchTask": "build node_sdk",
             "outFiles": [
-                "${workspaceFolder}/node_sdk/dist/examples/typescript.js"
+                "${workspaceFolder}/node_sdk/dist/examples/typescript_basic.js"
             ],
             "cwd": "${workspaceFolder}/node_sdk",
         },
