@@ -203,7 +203,7 @@
 <h2><a class="header" href="#step-2-create-a-proofable-api-client" id="step-2-create-a-proofable-api-client">Step 2: create a Proofable API client</a></h2>
 <p>This step creates a Proofable API gRPC client (<code>cli</code>) to be used in a closure. When the closure exits, the client will be automatically destroyed. You could also create a client without a closure using <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#NewAPIClient"><code>NewAPIClient</code></a>, but in that case, you have to manually destroy the client after use</p>
 <pre><code class="language-go">api.WithAPIClient(
-    &quot;api.provendb.com:443&quot;,
+    &quot;api.proofable.io:443&quot;,
     creds,
     func(cli apiPB.APIServiceClient) error {
         // make use of the `cli` in this closure
