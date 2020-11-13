@@ -7,6 +7,7 @@
   "scripts": {
     "example": "npm run build && node dist/examples/typescript.js",
     "example-basic": "npm run build && node dist/examples/typescript_basic.js",
+    "example-fs": "npm run build && node dist/examples/typescript_fs.js",
     "example-js": "npm run build && node dist/examples/javascript.js",
     "build": "tsc -p tsconfig.build.json && cpx 'src/**/*.{js,d.ts}' dist",
     "clean": "rimraf ./dist '*.proofable' '*.subproofable' '*.dot'",
