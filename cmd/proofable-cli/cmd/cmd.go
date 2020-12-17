@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2019-09-16T15:59:40+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-10-05T22:47:31+11:00
+ * @Last modified time: 2020-12-17T14:52:39+11:00
  */
 
 package cmd
@@ -47,6 +47,7 @@ const (
 	nameSubproof   = "subproof"
 	nameCreate     = "create"
 	nameVerify     = "verify"
+	nameOffline    = "offline"
 	namePath       = "path"
 	nameInputPath  = "input-path"
 	nameOutputPath = "output-path"
