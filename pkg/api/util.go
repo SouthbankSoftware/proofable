@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-02-18T16:30:55+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-06-22T17:48:55+10:00
+ * @Last modified time: 2020-12-17T16:45:21+11:00
  */
 
 package api
@@ -34,9 +34,9 @@ import (
 )
 
 const (
-	// anchorKeySepLen is the length of the key separator for the top anchor trie. For normal
+	// AnchorKeySepLen is the length of the key separator for the top anchor trie. For normal
 	// Proof_ETH_TRIE format, it should be 1; for signed Proof_ETH_TRIE_SIGNED, it should be 2
-	anchorKeySepLen = 1
+	AnchorKeySepLen = 1
 )
 
 // InterceptKeyValueStream intercepts the key-value stream with the given callback function
@@ -70,12 +70,12 @@ func InterceptKeyValueStream(
 func StripCompoundKeyAnchorTriePart(
 	kv *apiPB.KeyValue,
 ) *apiPB.KeyValue {
-	if len(kv.KeySep) < anchorKeySepLen {
+	if len(kv.KeySep) < AnchorKeySepLen {
 		return kv
 	}
 
-	kv.Key = kv.Key[kv.KeySep[anchorKeySepLen-1]:]
-	kv.KeySep = kv.KeySep[anchorKeySepLen:]
+	kv.Key = kv.Key[kv.KeySep[AnchorKeySepLen-1]:]
+	kv.KeySep = kv.KeySep[AnchorKeySepLen:]
 
 	return kv
 }
