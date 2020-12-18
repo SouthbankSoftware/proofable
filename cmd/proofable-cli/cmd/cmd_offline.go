@@ -19,7 +19,7 @@
  * @Author: guiguan
  * @Date:   2020-12-17T14:50:13+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-12-17T17:55:52+11:00
+ * @Last modified time: 2020-12-18T11:42:03+11:00
  */
 
 package cmd
@@ -43,6 +43,7 @@ import (
 	"github.com/SouthbankSoftware/proofable/pkg/trienodes"
 	"github.com/ethereum/go-ethereum/ethdb/memorydb"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var cmdOffline = &cobra.Command{
@@ -138,10 +139,20 @@ var cmdOffline = &cobra.Command{
 		rootHash := subproofHeader.Root()
 		rootHashStr := hex.EncodeToString(rootHash)
 
+		quiet := viper.GetBool(viperKeyQuiet)
+
+		totalKV := 0
+
 		err = trienodes.VerifyChainedTrieNodesStore(trienodes.VerifyTrieNodesStoreOption{
 			Store: store,
 			Node:  trie.HashNode(rootHash),
 			OnKeyValue: func(kv apiPB.KeyValue) error {
+				totalKV++
+
+				if quiet {
+					return nil
+				}
+
 				strippedKV := api.StripCompoundKeyAnchorTriePart(&kv)
 
 				colorcli.Printf("%s %s -> %s\n",
@@ -162,9 +173,14 @@ var cmdOffline = &cobra.Command{
 			return errSilentExitWithNonZeroCode
 		}
 
-		colorcli.Printf("\nThe subproof at %s with a root hash of %s contains the above key-values, and claims that it has been anchored to %s in block %v with transaction %s at %s\n\nPlease %s the transaction details (timestamp, payload...) at %s\n",
+		if !quiet {
+			colorcli.Printf("\n")
+		}
+
+		colorcli.Printf("The subproof at %s with a root hash of %s contains %s key-values, and claims that it has been anchored to %s in block %v with transaction %s at %s\n\nPlease %s the transaction details (timestamp, payload...) at %s\n",
 			colorcli.Green(subproofPath),
 			colorcli.Green(rootHashStr),
+			colorcli.Green(totalKV),
 			colorcli.Green(subproofHeader.AnchorType),
 			colorcli.Green(anchorPB.GetBlockNumberString(
 				subproofHeader.AnchorType,
