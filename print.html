@@ -310,7 +310,7 @@
 ./proofable-cli create proof path/to/the/data
 
 # create a proof for a path in a custom location
-./proofable-cli create proof path/to/the/data -p path/to/output/the/proof.pxproof
+./proofable-cli create proof path/to/the/data -p path/to/output/the/proof.proofable
 
 # create a proof for a path including metadata
 ./proofable-cli create proof path/to/the/data --include-metadata
@@ -322,16 +322,19 @@
 ./proofable-cli verify proof path/to/the/data -d path/to/output/the/dot/graph.dot
 
 # verify a proof for a path from a custom location
-./proofable-cli verify proof path/to/the/data -p path/to/the/proof.pxproof
+./proofable-cli verify proof path/to/the/data -p path/to/the/proof.proofable
 
 # create a subproof out of a proof
-./proofable-cli create subproof key1_of_the_proof key2_of_the_proof -p path/to/the/proof.pxproof -s path/to/output/the/subproof.pxsubproof
+./proofable-cli create subproof key1_of_the_proof key2_of_the_proof -p path/to/the/proof.proofable -s path/to/output/the/subproof.subproofable
 
 # verify a subproof for a path
-./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof
+./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.subproofable
 
 # verify a subproof for a path and output the subproof's Graphviz Dot Graph
-./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.pxsubproof -d path/to/output/the/dot/graph.dot
+./proofable-cli verify subproof path/to/the/data -s path/to/the/subproof.subproofable -d path/to/output/the/dot/graph.dot
+
+# offline verify a subproof
+./proofable-cli offline path/to/the/subproof.subproofable
 </code></pre>
 <h1><a class="header" href="#go-sdk" id="go-sdk">Go SDK</a></h1>
 <p><a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc"><img src="https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&amp;logoColor=white&amp;style=flat-square" alt="go.dev reference" /></a>
@@ -370,7 +373,7 @@
 <pre><code class="language-go">go run examples/example.go
 </code></pre>
 <h2><a class="header" href="#step-1-authenticate-with-provendb" id="step-1-authenticate-with-provendb">Step 1: authenticate with ProvenDB</a></h2>
-<p>This step will authenticate with ProvenDB so you can access <code>proofable-api</code>. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at <code>~/Library/Application\ Support/ProvenDB/auth.json</code>. The next time, when you invoke <code>AuthenticateForGRPC</code>, it will automatically use the saved token without prompting you to go through the authentication steps again. You can find more details from <a href="https://github.com/SouthbankSoftware/proofable/blob/master/pkg/auth/auth.go">here</a>. Please note that this authenticaton method is temporary, which will be replaced by an API key soon</p>
+<p>This step will authenticate with ProvenDB so you can access <code>proofable-api</code>. When you are successfully authenticated, an access token will be saved to a global location on your machine. On Mac, it is located at <code>~/Library/Application\ Support/ProvenDB/auth.json</code>. The next time, when you invoke <code>AuthenticateForGRPC</code>, it will automatically use the saved token without prompting you to go through the authentication steps again. You can find more details from <a href="https://github.com/SouthbankSoftware/proofable/blob/master/pkg/auth/auth.go">here</a>. Please note that this authentication method is temporary, which will be replaced by an API key soon</p>
 <pre><code class="language-go">creds, err := authcli.AuthenticateForGRPC(ctx,
     &quot;https://apigateway.provendb.com&quot;,
     true,
@@ -387,8 +390,9 @@
     })
 </code></pre>
 <h2><a class="header" href="#step-3-create-an-empty-trie" id="step-3-create-an-empty-trie">Step 3: create an empty trie</a></h2>
-<p>This step creates an empty <a href="go_sdk/./../concepts/trie.html">trie</a>, which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#CreateTrie"><code>CreateTrie</code></a>, but in that case, you have to manually destroy the trie using <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#DeleteTrie"><code>DeleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it</p>
-<pre><code class="language-go">api.WithTrie(ctx, cli, func(id, root string) error {
+<p>This step creates an empty <a href="go_sdk/./../concepts/trie.html">trie</a>, which is a dictionary that can hold key-values, to be used in a closure. When the closure exits, the trie will be automatically destroyed. You could also create an empty trie without a closure using <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#CreateTrie"><code>CreateTrie</code></a>, but in that case, you have to manually destroy the trie using <a href="https://pkg.go.dev/github.com/SouthbankSoftware/proofable/pkg/api?tab=doc#DeleteTrie"><code>DeleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it. </p>
+<p>This creates a local trie (<code>apiPB.Trie_LOCAL</code>), which is temporarily persisted in each Proofable API service instance. You can also choose to create a cloud trie with <code>apiPB.Trie_CLOUD</code>, which will be persisted in Proofable cloud storage. The cloud trie has a much longer retention period and supports high-availability and large data volume. Also, you don't have to consistently export and import cloud tries for manipulations. Proofable talks directly to the cloud storage for you, which is ideal for incrementally building and storing large tries</p>
+<pre><code class="language-go">api.WithTrie(ctx, cli, apiPB.Trie_LOCAL, func(id, root string) error {
     // make use of the trie, identified by the `id`, in this closure. The root will always be 0000000000000000000000000000000000000000000000000000000000000000 for an empty trie
 })
 </code></pre>
@@ -570,7 +574,7 @@ if (!window.location.href.endsWith("/print.html")) {
 </code></pre>
 </li>
 <li>
-<p>create a <a href="node_sdk/../concepts/trie.html">trie</a> from data</p>
+<p>create a <a href="node_sdk/../concepts/trie.html">trie</a> from data. This creates a local trie (<code>Trie.StorageType.LOCAL</code>), which is temporarily persisted in each Proofable API service instance. You can also choose to create a cloud trie with <code>client.createTrieFromKeyValues(keyValues, Trie.StorageType.CLOUD)</code>, which will be persisted in Proofable cloud storage. The cloud trie has a much longer retention period and supports high-availability and large data volume. Also, you don't have to consistently export and import cloud tries for manipulations. Proofable talks directly to the cloud storage for you, which is ideal for incrementally building and storing large tries</p>
 <pre><code class="language-typescript">const trie = await client.createTrieFromKeyValues(
   dataToKeyValues({
     &quot;balcony/wind/speed&quot;: &quot;11km/h&quot;,
@@ -710,6 +714,7 @@ console.dir(result);
 </code></pre>
 <h2><a class="header" href="#step-3-create-an-empty-trie-1" id="step-3-create-an-empty-trie-1">Step 3: create an empty trie</a></h2>
 <p>This step creates an empty <a href="node_sdk/../concepts/trie.html">trie</a> with root <code>0000000000000000000000000000000000000000000000000000000000000000</code>, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using <a href="https://docs.proofable.io/node_sdk/reference/classes/_index_.apiclient.html#deletetrie"><code>deleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it</p>
+<p>This creates a local trie (<code>Trie.StorageType.LOCAL</code>), which is temporarily persisted in each Proofable API service instance. You can also choose to create a cloud trie with <code>client.createTrie(Trie.StorageType.CLOUD)</code>, which will be persisted in Proofable cloud storage. The cloud trie has a much longer retention period and supports high-availability and large data volume. Also, you don't have to consistently export and import cloud tries for manipulations. Proofable talks directly to the cloud storage for you, which is ideal for incrementally building and storing large tries</p>
 <pre><code class="language-typescript">let trie = await client.createTrie();
 </code></pre>
 <h2><a class="header" href="#step-4-set-the-key-values-we-want-to-prove-1" id="step-4-set-the-key-values-we-want-to-prove-1">Step 4: set the key-values we want to prove</a></h2>
@@ -1568,13 +1573,16 @@ that key-value</p>
 <li><a href="grpc/api_service.html#apiservice">APIService</a></li>
 <li><a href="grpc/api_service.html#createkeyvaluesproofrequest">CreateKeyValuesProofRequest</a></li>
 <li><a href="grpc/api_service.html#createtrieproofrequest">CreateTrieProofRequest</a></li>
+<li><a href="grpc/api_service.html#createtrierequest">CreateTrieRequest</a></li>
 <li><a href="grpc/api_service.html#datachunk">DataChunk</a></li>
 <li><a href="grpc/api_service.html#deletetrieproofrequest">DeleteTrieProofRequest</a></li>
+<li><a href="grpc/api_service.html#importtrierequest">ImportTrieRequest</a></li>
 <li><a href="grpc/api_service.html#key">Key</a></li>
 <li><a href="grpc/api_service.html#keyvalue">KeyValue</a></li>
 <li><a href="grpc/api_service.html#keyvaluesfilter">KeyValuesFilter</a></li>
 <li><a href="grpc/api_service.html#rootfilter">RootFilter</a></li>
 <li><a href="grpc/api_service.html#settrierootrequest">SetTrieRootRequest</a></li>
+<li><a href="grpc/api_service.html#settriestoragetyperequest">SetTrieStorageTypeRequest</a></li>
 <li><a href="grpc/api_service.html#trie">Trie</a></li>
 <li><a href="grpc/api_service.html#triekeyvaluerequest">TrieKeyValueRequest</a></li>
 <li><a href="grpc/api_service.html#triekeyvaluesrequest">TrieKeyValuesRequest</a></li>
@@ -1588,6 +1596,7 @@ that key-value</p>
 <li><a href="grpc/api_service.html#verifyproofreply">VerifyProofReply</a></li>
 <li><a href="grpc/api_service.html#verifyproofreplychunk">VerifyProofReplyChunk</a></li>
 <li><a href="grpc/api_service.html#verifytrieproofrequest">VerifyTrieProofRequest</a></li>
+<li><a href="grpc/api_service.html#triestoragetype">Trie.StorageType</a></li>
 <li><a href="grpc/api_service.html#scalar-value-types">Scalar Value Types</a></li>
 </ul>
 <h3><a class="header" href="#apiservice" id="apiservice">APIService</a></h3>
@@ -1596,13 +1605,14 @@ that key-value</p>
 <tr><td>GetTrie</td><td><a href="grpc/api_service.html#trierequest">TrieRequest</a></td><td><a href="grpc/api_service.html#trie">Trie</a></td><td>GetTrie gets a trie</td></tr>
 <tr><td>ImportTrie</td><td><a href="grpc/api_service.html#datachunk">DataChunk</a> stream</td><td><a href="grpc/api_service.html#trie">Trie</a></td><td>ImportTrie creates a new trie from existing trie data. If the trie ID is not provided in the metadata, a new one will be generated</td></tr>
 <tr><td>ExportTrie</td><td><a href="grpc/api_service.html#trierequest">TrieRequest</a></td><td><a href="grpc/api_service.html#datachunk">DataChunk</a> stream</td><td>ExportTrie exports a trie's data</td></tr>
-<tr><td>CreateTrie</td><td><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Empty">google.protobuf.Empty</a></td><td><a href="grpc/api_service.html#trie">Trie</a></td><td>CreateTrie creates an empty trie</td></tr>
+<tr><td>CreateTrie</td><td><a href="grpc/api_service.html#createtrierequest">CreateTrieRequest</a></td><td><a href="grpc/api_service.html#trie">Trie</a></td><td>CreateTrie creates an empty trie</td></tr>
 <tr><td>DeleteTrie</td><td><a href="grpc/api_service.html#trierequest">TrieRequest</a></td><td><a href="grpc/api_service.html#trie">Trie</a></td><td>DeleteTrie deletes a trie. This destroys everything of a trie</td></tr>
 <tr><td>GetTrieKeyValues</td><td><a href="grpc/api_service.html#triekeyvaluesrequest">TrieKeyValuesRequest</a></td><td><a href="grpc/api_service.html#keyvalue">KeyValue</a> stream</td><td>GetTrieKeyValues gets key-values of a trie. The returned KeyValues are ordered by the keys lexicographically</td></tr>
 <tr><td>GetTrieKeyValue</td><td><a href="grpc/api_service.html#triekeyvaluerequest">TrieKeyValueRequest</a></td><td><a href="grpc/api_service.html#keyvalue">KeyValue</a></td><td>GetTrieKeyValue gets a key-value of a trie</td></tr>
 <tr><td>SetTrieKeyValues</td><td><a href="grpc/api_service.html#keyvalue">KeyValue</a> stream</td><td><a href="grpc/api_service.html#trie">Trie</a></td><td>SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to remove that key. Modifications to a trie will change its root hash</td></tr>
 <tr><td>GetTrieRoots</td><td><a href="grpc/api_service.html#trierootsrequest">TrieRootsRequest</a></td><td><a href="grpc/api_service.html#trieroot">TrieRoot</a> stream</td><td>GetTrieRoots gets roots of a trie. This is a series of roots showing the modification history of a trie</td></tr>
 <tr><td>SetTrieRoot</td><td><a href="grpc/api_service.html#settrierootrequest">SetTrieRootRequest</a></td><td><a href="grpc/api_service.html#trie">Trie</a></td><td>SetTrieRoot sets the root of a trie to the given one. This will add an entry in the root history</td></tr>
+<tr><td>SetTrieStorageType</td><td><a href="grpc/api_service.html#settriestoragetyperequest">SetTrieStorageTypeRequest</a></td><td><a href="grpc/api_service.html#trie">Trie</a></td><td>SetTrieStorageType sets the storage type of a trie</td></tr>
 <tr><td>GetTrieProofs</td><td><a href="grpc/api_service.html#trieproofsrequest">TrieProofsRequest</a></td><td><a href="grpc/api_service.html#trieproof">TrieProof</a> stream</td><td>GetTrieProofs gets proofs of a trie</td></tr>
 <tr><td>GetTrieProof</td><td><a href="grpc/api_service.html#trieproofrequest">TrieProofRequest</a></td><td><a href="grpc/api_service.html#trieproof">TrieProof</a></td><td>GetTrieProof gets a proof of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned</td></tr>
 <tr><td>SubscribeTrieProof</td><td><a href="grpc/api_service.html#trieproofrequest">TrieProofRequest</a></td><td><a href="grpc/api_service.html#trieproof">TrieProof</a> stream</td><td>SubscribeTrieProof subscribes to proof changes of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned</td></tr>
@@ -1628,11 +1638,16 @@ that key-value</p>
 <tr><td>root</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>Root is the root hash (optional). When zero, the current root hash of the trie will be used to create the TrieProof, and the request will be blocked until all ongoing updates are finished</td></tr>
 <tr><td>anchor_type</td><td><a href="grpc/anchor_service.html#anchortype">anchor.Anchor.Type</a></td><td></td><td>AnchorType is the anchor type the trie proof should be submitted to. Default to ETH</td></tr>
 </tbody></table>
+<h3><a class="header" href="#createtrierequest" id="createtrierequest">CreateTrieRequest</a></h3>
+<p>CreateTrieRequest represents a create trie request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>storage_type</td><td><a href="grpc/api_service.html#triestoragetype">Trie.StorageType</a></td><td></td><td>StorageType is the storage type of the trie to be created</td></tr>
+</tbody></table>
 <h3><a class="header" href="#datachunk" id="datachunk">DataChunk</a></h3>
 <p>DataChunk represents a chunk of data transmitted in a gRPC stream</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>data</td><td><a href="grpc/api_service.html#bytes">bytes</a></td><td></td><td>Data is the data within the DataChunk</td></tr>
-<tr><td>trie_request</td><td><a href="grpc/api_service.html#trierequest">TrieRequest</a></td><td></td><td>TrieRequest is the trie request</td></tr>
+<tr><td>import_trie_request</td><td><a href="grpc/api_service.html#importtrierequest">ImportTrieRequest</a></td><td></td><td>ImportTrieRequest is the import trie request</td></tr>
 <tr><td>verify_key_values_proof_request</td><td><a href="grpc/api_service.html#verifykeyvaluesproofrequest">VerifyKeyValuesProofRequest</a></td><td></td><td>VerifyKeyValuesProofRequest is the request to verify a key-values proof</td></tr>
 </tbody></table>
 <h3><a class="header" href="#deletetrieproofrequest" id="deletetrieproofrequest">DeleteTrieProofRequest</a></h3>
@@ -1640,6 +1655,12 @@ that key-value</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>trie_id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>TrieId is the trie ID</td></tr>
 <tr><td>proof_id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>ProofId is the trie proof ID</td></tr>
+</tbody></table>
+<h3><a class="header" href="#importtrierequest" id="importtrierequest">ImportTrieRequest</a></h3>
+<p>ImportTrieRequest represents an import trie request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>trie_id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>TrieId is the trie ID</td></tr>
+<tr><td>storage_type</td><td><a href="grpc/api_service.html#triestoragetype">Trie.StorageType</a></td><td></td><td>StorageType is the storage type of the trie</td></tr>
 </tbody></table>
 <h3><a class="header" href="#key" id="key">Key</a></h3>
 <p>Key represents a key of a key-value pair</p>
@@ -1672,6 +1693,12 @@ that key-value</p>
 <tr><td>trie_id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>TrieId is the trie ID</td></tr>
 <tr><td>root</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>Root is the root hash to set to</td></tr>
 </tbody></table>
+<h3><a class="header" href="#settriestoragetyperequest" id="settriestoragetyperequest">SetTrieStorageTypeRequest</a></h3>
+<p>SetTrieStorageTypeRequest represents a set trie storage type request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>trie_id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>TrieId is the trie ID</td></tr>
+<tr><td>storage_type</td><td><a href="grpc/api_service.html#triestoragetype">Trie.StorageType</a></td><td></td><td>StorageType is the storage type of the trie to be updated to</td></tr>
+</tbody></table>
 <h3><a class="header" href="#trie-1" id="trie-1">Trie</a></h3>
 <p>Trie represents a dictionary of key-values that can be built incrementally,
 whose root hash at any given time can be also dervied efficiently. Once the
@@ -1679,6 +1706,7 @@ root hash is proven to a blockchain, every key-value is also proven</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>id</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>Id is the trie ID</td></tr>
 <tr><td>root</td><td><a href="grpc/api_service.html#string">string</a></td><td></td><td>Root is the root hash of the trie</td></tr>
+<tr><td>storage_type</td><td><a href="grpc/api_service.html#triestoragetype">Trie.StorageType</a></td><td></td><td>StorageType is the storage type of the trie</td></tr>
 </tbody></table>
 <h3><a class="header" href="#triekeyvaluerequest" id="triekeyvaluerequest">TrieKeyValueRequest</a></h3>
 <p>TrieKeyValueRequest represents a trie key-value request</p>
@@ -1775,6 +1803,12 @@ stream</p>
 <tr><td>output_dot_graph</td><td><a href="grpc/api_service.html#bool">bool</a></td><td></td><td>OutputDotGraph indicates whether to output a Graphviz dot graph to visualize the trie</td></tr>
 </tbody></table>
 <!-- end messages -->
+<h3><a class="header" href="#triestoragetype" id="triestoragetype">Trie.StorageType</a></h3>
+<p>StorageType represents a trie storage type</p>
+<table><thead><tr><th>Name</th><th>Number</th><th>Description</th></tr></thead><tbody>
+<tr><td>LOCAL</td><td>0</td><td>LOCAL means the trie is stored temporarily on API Service's local disk</td></tr>
+<tr><td>CLOUD</td><td>1</td><td>CLOUD means the trie is stored persistently on a cloud storage provider</td></tr>
+</tbody></table>
 <!-- end enums -->
 <!-- end HasExtensions -->
 <!-- end files -->

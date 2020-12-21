@@ -204,6 +204,7 @@
 </code></pre>
 <h2><a class="header" href="#step-3-create-an-empty-trie" id="step-3-create-an-empty-trie">Step 3: create an empty trie</a></h2>
 <p>This step creates an empty <a href="../concepts/trie.html">trie</a> with root <code>0000000000000000000000000000000000000000000000000000000000000000</code>, which is a dictionary that can hold key-values. After using the trie, you can destroy the trie using <a href="https://docs.proofable.io/node_sdk/reference/classes/_index_.apiclient.html#deletetrie"><code>deleteTrie</code></a> or wait for <code>proofable-api</code> to garbage collect it</p>
+<p>This creates a local trie (<code>Trie.StorageType.LOCAL</code>), which is temporarily persisted in each Proofable API service instance. You can also choose to create a cloud trie with <code>client.createTrie(Trie.StorageType.CLOUD)</code>, which will be persisted in Proofable cloud storage. The cloud trie has a much longer retention period and supports high-availability and large data volume. Also, you don't have to consistently export and import cloud tries for manipulations. Proofable talks directly to the cloud storage for you, which is ideal for incrementally building and storing large tries</p>
 <pre><code class="language-typescript">let trie = await client.createTrie();
 </code></pre>
 <h2><a class="header" href="#step-4-set-the-key-values-we-want-to-prove" id="step-4-set-the-key-values-we-want-to-prove">Step 4: set the key-values we want to prove</a></h2>

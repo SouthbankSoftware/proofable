@@ -177,13 +177,16 @@ that key-value</p>
 <li><a href="#apiservice">APIService</a></li>
 <li><a href="#createkeyvaluesproofrequest">CreateKeyValuesProofRequest</a></li>
 <li><a href="#createtrieproofrequest">CreateTrieProofRequest</a></li>
+<li><a href="#createtrierequest">CreateTrieRequest</a></li>
 <li><a href="#datachunk">DataChunk</a></li>
 <li><a href="#deletetrieproofrequest">DeleteTrieProofRequest</a></li>
+<li><a href="#importtrierequest">ImportTrieRequest</a></li>
 <li><a href="#key">Key</a></li>
 <li><a href="#keyvalue">KeyValue</a></li>
 <li><a href="#keyvaluesfilter">KeyValuesFilter</a></li>
 <li><a href="#rootfilter">RootFilter</a></li>
 <li><a href="#settrierootrequest">SetTrieRootRequest</a></li>
+<li><a href="#settriestoragetyperequest">SetTrieStorageTypeRequest</a></li>
 <li><a href="#trie">Trie</a></li>
 <li><a href="#triekeyvaluerequest">TrieKeyValueRequest</a></li>
 <li><a href="#triekeyvaluesrequest">TrieKeyValuesRequest</a></li>
@@ -197,6 +200,7 @@ that key-value</p>
 <li><a href="#verifyproofreply">VerifyProofReply</a></li>
 <li><a href="#verifyproofreplychunk">VerifyProofReplyChunk</a></li>
 <li><a href="#verifytrieproofrequest">VerifyTrieProofRequest</a></li>
+<li><a href="#triestoragetype">Trie.StorageType</a></li>
 <li><a href="#scalar-value-types">Scalar Value Types</a></li>
 </ul>
 <h3><a class="header" href="#apiservice" id="apiservice">APIService</a></h3>
@@ -205,13 +209,14 @@ that key-value</p>
 <tr><td>GetTrie</td><td><a href="#trierequest">TrieRequest</a></td><td><a href="#trie">Trie</a></td><td>GetTrie gets a trie</td></tr>
 <tr><td>ImportTrie</td><td><a href="#datachunk">DataChunk</a> stream</td><td><a href="#trie">Trie</a></td><td>ImportTrie creates a new trie from existing trie data. If the trie ID is not provided in the metadata, a new one will be generated</td></tr>
 <tr><td>ExportTrie</td><td><a href="#trierequest">TrieRequest</a></td><td><a href="#datachunk">DataChunk</a> stream</td><td>ExportTrie exports a trie's data</td></tr>
-<tr><td>CreateTrie</td><td><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Empty">google.protobuf.Empty</a></td><td><a href="#trie">Trie</a></td><td>CreateTrie creates an empty trie</td></tr>
+<tr><td>CreateTrie</td><td><a href="#createtrierequest">CreateTrieRequest</a></td><td><a href="#trie">Trie</a></td><td>CreateTrie creates an empty trie</td></tr>
 <tr><td>DeleteTrie</td><td><a href="#trierequest">TrieRequest</a></td><td><a href="#trie">Trie</a></td><td>DeleteTrie deletes a trie. This destroys everything of a trie</td></tr>
 <tr><td>GetTrieKeyValues</td><td><a href="#triekeyvaluesrequest">TrieKeyValuesRequest</a></td><td><a href="#keyvalue">KeyValue</a> stream</td><td>GetTrieKeyValues gets key-values of a trie. The returned KeyValues are ordered by the keys lexicographically</td></tr>
 <tr><td>GetTrieKeyValue</td><td><a href="#triekeyvaluerequest">TrieKeyValueRequest</a></td><td><a href="#keyvalue">KeyValue</a></td><td>GetTrieKeyValue gets a key-value of a trie</td></tr>
 <tr><td>SetTrieKeyValues</td><td><a href="#keyvalue">KeyValue</a> stream</td><td><a href="#trie">Trie</a></td><td>SetTrieKeyValues sets key-values of a trie. Set an empty value for a key to remove that key. Modifications to a trie will change its root hash</td></tr>
 <tr><td>GetTrieRoots</td><td><a href="#trierootsrequest">TrieRootsRequest</a></td><td><a href="#trieroot">TrieRoot</a> stream</td><td>GetTrieRoots gets roots of a trie. This is a series of roots showing the modification history of a trie</td></tr>
 <tr><td>SetTrieRoot</td><td><a href="#settrierootrequest">SetTrieRootRequest</a></td><td><a href="#trie">Trie</a></td><td>SetTrieRoot sets the root of a trie to the given one. This will add an entry in the root history</td></tr>
+<tr><td>SetTrieStorageType</td><td><a href="#settriestoragetyperequest">SetTrieStorageTypeRequest</a></td><td><a href="#trie">Trie</a></td><td>SetTrieStorageType sets the storage type of a trie</td></tr>
 <tr><td>GetTrieProofs</td><td><a href="#trieproofsrequest">TrieProofsRequest</a></td><td><a href="#trieproof">TrieProof</a> stream</td><td>GetTrieProofs gets proofs of a trie</td></tr>
 <tr><td>GetTrieProof</td><td><a href="#trieproofrequest">TrieProofRequest</a></td><td><a href="#trieproof">TrieProof</a></td><td>GetTrieProof gets a proof of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned</td></tr>
 <tr><td>SubscribeTrieProof</td><td><a href="#trieproofrequest">TrieProofRequest</a></td><td><a href="#trieproof">TrieProof</a> stream</td><td>SubscribeTrieProof subscribes to proof changes of a trie. When not_before is not provided (either nil or zero), the latest proof will be returned</td></tr>
@@ -237,11 +242,16 @@ that key-value</p>
 <tr><td>root</td><td><a href="#string">string</a></td><td></td><td>Root is the root hash (optional). When zero, the current root hash of the trie will be used to create the TrieProof, and the request will be blocked until all ongoing updates are finished</td></tr>
 <tr><td>anchor_type</td><td><a href="anchor_service.html#anchortype">anchor.Anchor.Type</a></td><td></td><td>AnchorType is the anchor type the trie proof should be submitted to. Default to ETH</td></tr>
 </tbody></table>
+<h3><a class="header" href="#createtrierequest" id="createtrierequest">CreateTrieRequest</a></h3>
+<p>CreateTrieRequest represents a create trie request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>storage_type</td><td><a href="#triestoragetype">Trie.StorageType</a></td><td></td><td>StorageType is the storage type of the trie to be created</td></tr>
+</tbody></table>
 <h3><a class="header" href="#datachunk" id="datachunk">DataChunk</a></h3>
 <p>DataChunk represents a chunk of data transmitted in a gRPC stream</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>data</td><td><a href="#bytes">bytes</a></td><td></td><td>Data is the data within the DataChunk</td></tr>
-<tr><td>trie_request</td><td><a href="#trierequest">TrieRequest</a></td><td></td><td>TrieRequest is the trie request</td></tr>
+<tr><td>import_trie_request</td><td><a href="#importtrierequest">ImportTrieRequest</a></td><td></td><td>ImportTrieRequest is the import trie request</td></tr>
 <tr><td>verify_key_values_proof_request</td><td><a href="#verifykeyvaluesproofrequest">VerifyKeyValuesProofRequest</a></td><td></td><td>VerifyKeyValuesProofRequest is the request to verify a key-values proof</td></tr>
 </tbody></table>
 <h3><a class="header" href="#deletetrieproofrequest" id="deletetrieproofrequest">DeleteTrieProofRequest</a></h3>
@@ -249,6 +259,12 @@ that key-value</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>trie_id</td><td><a href="#string">string</a></td><td></td><td>TrieId is the trie ID</td></tr>
 <tr><td>proof_id</td><td><a href="#string">string</a></td><td></td><td>ProofId is the trie proof ID</td></tr>
+</tbody></table>
+<h3><a class="header" href="#importtrierequest" id="importtrierequest">ImportTrieRequest</a></h3>
+<p>ImportTrieRequest represents an import trie request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>trie_id</td><td><a href="#string">string</a></td><td></td><td>TrieId is the trie ID</td></tr>
+<tr><td>storage_type</td><td><a href="#triestoragetype">Trie.StorageType</a></td><td></td><td>StorageType is the storage type of the trie</td></tr>
 </tbody></table>
 <h3><a class="header" href="#key" id="key">Key</a></h3>
 <p>Key represents a key of a key-value pair</p>
@@ -281,6 +297,12 @@ that key-value</p>
 <tr><td>trie_id</td><td><a href="#string">string</a></td><td></td><td>TrieId is the trie ID</td></tr>
 <tr><td>root</td><td><a href="#string">string</a></td><td></td><td>Root is the root hash to set to</td></tr>
 </tbody></table>
+<h3><a class="header" href="#settriestoragetyperequest" id="settriestoragetyperequest">SetTrieStorageTypeRequest</a></h3>
+<p>SetTrieStorageTypeRequest represents a set trie storage type request</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
+<tr><td>trie_id</td><td><a href="#string">string</a></td><td></td><td>TrieId is the trie ID</td></tr>
+<tr><td>storage_type</td><td><a href="#triestoragetype">Trie.StorageType</a></td><td></td><td>StorageType is the storage type of the trie to be updated to</td></tr>
+</tbody></table>
 <h3><a class="header" href="#trie" id="trie">Trie</a></h3>
 <p>Trie represents a dictionary of key-values that can be built incrementally,
 whose root hash at any given time can be also dervied efficiently. Once the
@@ -288,6 +310,7 @@ root hash is proven to a blockchain, every key-value is also proven</p>
 <table><thead><tr><th>Field</th><th>Type</th><th>Label</th><th>Description</th></tr></thead><tbody>
 <tr><td>id</td><td><a href="#string">string</a></td><td></td><td>Id is the trie ID</td></tr>
 <tr><td>root</td><td><a href="#string">string</a></td><td></td><td>Root is the root hash of the trie</td></tr>
+<tr><td>storage_type</td><td><a href="#triestoragetype">Trie.StorageType</a></td><td></td><td>StorageType is the storage type of the trie</td></tr>
 </tbody></table>
 <h3><a class="header" href="#triekeyvaluerequest" id="triekeyvaluerequest">TrieKeyValueRequest</a></h3>
 <p>TrieKeyValueRequest represents a trie key-value request</p>
@@ -384,6 +407,12 @@ stream</p>
 <tr><td>output_dot_graph</td><td><a href="#bool">bool</a></td><td></td><td>OutputDotGraph indicates whether to output a Graphviz dot graph to visualize the trie</td></tr>
 </tbody></table>
 <!-- end messages -->
+<h3><a class="header" href="#triestoragetype" id="triestoragetype">Trie.StorageType</a></h3>
+<p>StorageType represents a trie storage type</p>
+<table><thead><tr><th>Name</th><th>Number</th><th>Description</th></tr></thead><tbody>
+<tr><td>LOCAL</td><td>0</td><td>LOCAL means the trie is stored temporarily on API Service's local disk</td></tr>
+<tr><td>CLOUD</td><td>1</td><td>CLOUD means the trie is stored persistently on a cloud storage provider</td></tr>
+</tbody></table>
 <!-- end enums -->
 <!-- end HasExtensions -->
 <!-- end files -->
