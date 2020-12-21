@@ -35,7 +35,7 @@ The follow operations should be performed in `master` branch unless otherwise sp
 
 Notes:
 
-- If you have changed the anchor types in protos or their configuration in `provendb-releases`, you need to regenerate the Anchor Types page at `docs/concepts/anchor_types.md`
+- If you have changed the anchor types in protos or their configuration in `tools/anchor-types-updater/manifests` (previously in `provendb-releases` before moving to the new cluster), you need to regenerate the Anchor Types page at `docs/concepts/anchor_types.md`
 
     ```zsh
     make doc-anchortypes

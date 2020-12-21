@@ -19,15 +19,15 @@
  * @Author: guiguan
  * @Date:   2020-09-10T16:04:39+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2020-09-10T23:37:33+10:00
+ * @Last modified time: 2020-12-21T17:36:44+11:00
  */
 
 package main
 
 const (
 	filePathAnchorProto       = "./pkg/protos/anchor/anchor.proto"
-	fileAnchorBaseValues      = "./docs_output/prd-releases/charts/provendb-anchor/values.yaml"
-	fileAnchorOverwriteValues = "./docs_output/prd-releases/releases/prd/provendb-anchor.yaml"
+	fileAnchorBaseValues      = "./tools/anchor-types-updater/manifests/values.yaml"
+	fileAnchorOverwriteValues = "./tools/anchor-types-updater/manifests/provendb-anchor.yaml"
 	fileMarkdownTemplate      = "./tools/anchor-types-updater/markdown.tmpl"
 	fileOutputMarkdown        = "./docs/concepts/anchor_types.md"
 )

@@ -1,0 +1,70 @@
+# this is an excerpt from provendb-releases/charts/provendb-anchor/values.yaml, which captures base
+# layer from proofable-manifests/bases/anchor/config.yaml
+
+anchor:
+  eth:
+    testnet:
+      enabled: true
+      batch:
+        size: 16384
+        time: "30s"
+        ttl: "12h"
+      txnTimeout: "1h"
+    mainnet:
+      enabled: false
+      batch:
+        size: 32768
+        time: "10m"
+        ttl: "12h"
+      txnTimeout: "1h"
+    elastos:
+      enabled: false
+      batch:
+        size: 16384
+        time: "30s"
+        ttl: "12h"
+      txnTimeout: "1h"
+    gochain:
+      enabled: true
+      batch:
+        size: 16384
+        time: 30s
+        ttl: 12h
+      txn-timeout: 1h
+  btc:
+    testnet:
+      enabled: false
+      batch:
+        size: 32768
+        time: "1m"
+        ttl: "48h"
+      txn-timeout: 3h
+    mainnet:
+      enabled: false
+      batch:
+        size: 32768
+        time: "1m"
+        ttl: "48h"
+      txn-timeout: 3h
+  hedera:
+    testnet:
+      enabled: true
+      batch:
+        size: 3072
+        time: "3s"
+        ttl: "15m"
+      txn-timeout: 3m
+    mainnet:
+      enabled: true
+      batch:
+        size: 3072
+        time: "3s"
+        ttl: "15m"
+      txn-timeout: 20m
+  hyperledger:
+    enabled: true
+    batch:
+      size: 3072
+      time: 3s
+      ttl: 15m
+    txn-timeout: 3m

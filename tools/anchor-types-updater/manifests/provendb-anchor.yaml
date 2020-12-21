@@ -1,0 +1,16 @@
+# this is an excerpt from provendb-releases/releases/prd/provendb-anchor.yaml, which captures
+# overwriting layers from proofable-manifests/prd/proofable-prd/anchor
+
+spec:
+  values:
+    anchor:
+      eth:
+        mainnet:
+          enabled: true
+      btc:
+        testnet:
+          enabled: true
+        mainnet:
+          enabled: true
+          batch:
+            time: 3h
