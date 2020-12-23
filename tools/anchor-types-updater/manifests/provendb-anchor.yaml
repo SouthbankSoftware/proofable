@@ -1,5 +1,5 @@
 # this is an excerpt from provendb-releases/releases/prd/provendb-anchor.yaml, which captures
-# overwriting layers from proofable-manifests/prd/proofable-prd/anchor
+# overlays from proofable-manifests/prd/proofable-prd/anchor
 
 spec:
   values:

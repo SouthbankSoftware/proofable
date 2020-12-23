@@ -1,5 +1,5 @@
 # this is an excerpt from provendb-releases/charts/provendb-anchor/values.yaml, which captures base
-# layer from proofable-manifests/bases/anchor/config.yaml
+# from proofable-manifests/bases/anchor/config.yaml
 
 anchor:
   eth:
